@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base styles */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply min-h-screen;
+  }
+
+  /* Focus styles for accessibility */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-500;
+  }
+}
+
+/* Component styles */
+@layer components {
+  /* Primary button */
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 
+           bg-brand-600 text-white font-medium rounded-lg
+           hover:bg-brand-700 focus:ring-4 focus:ring-brand-200
+           transition-colors duration-200 disabled:opacity-50 
+           disabled:cursor-not-allowed;
+  }
+
+  /* Secondary button */
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-6 py-3 
+           bg-white text-brand-600 font-medium rounded-lg
+           border-2 border-brand-600 hover:bg-brand-50
+           focus:ring-4 focus:ring-brand-200
+           transition-colors duration-200;
+  }
+
+  /* Form input */
+  .form-input {
+    @apply w-full px-4 py-3 border border-gray-300 rounded-lg
+           focus:ring-2 focus:ring-brand-500 focus:border-brand-500
+           transition-colors duration-200 bg-white;
+  }
+
+  /* Form label */
+  .form-label {
+    @apply block text-sm font-medium text-gray-700 mb-2;
+  }
+
+  /* Card component */
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-gray-100 p-6;
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    @apply h-3 bg-gray-200 rounded-full overflow-hidden;
+  }
+
+  .progress-bar-fill {
+    @apply h-full bg-gradient-to-r from-brand-500 to-trust-500 
+           rounded-full transition-all duration-500 ease-out;
+  }
+
+  /* Admin table */
+  .admin-table {
+    @apply w-full text-sm text-left;
+  }
+
+  .admin-table th {
+    @apply px-4 py-3 bg-gray-50 font-medium text-gray-700 
+           border-b border-gray-200;
+  }
+
+  .admin-table td {
+    @apply px-4 py-3 border-b border-gray-100;
+  }
+
+  .admin-table tr:hover td {
+    @apply bg-gray-50;
+  }
+}
+
+/* Utility styles */
+@layer utilities {
+  /* Gradient text */
+  .gradient-text {
+    @apply bg-gradient-to-r from-brand-600 to-brand-800 
+           bg-clip-text text-transparent;
+  }
+
+  /* Fade in animation */
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Skeleton loading */
+  .skeleton {
+    @apply bg-gray-200 animate-pulse rounded;
+  }
+}
+

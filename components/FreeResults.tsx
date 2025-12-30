@@ -1,0 +1,378 @@
+'use client';
+
+import { useState } from 'react';
+
+interface CalculatorResults {
+  readiness_score: number;
+  estimated_cost_low: number;
+  estimated_cost_high: number;
+  recommendations: string[];
+}
+
+interface FreeResultsProps {
+  results: CalculatorResults;
+  leadId: string | null;
+  companyName: string;
+}
+
+export default function FreeResults({
+  results,
+  leadId,
+  companyName,
+}: FreeResultsProps) {
+  const [email, setEmail] = useState('');
+  const [consent, setConsent] = useState(false);
+  const [isRequestingPdf, setIsRequestingPdf] = useState(false);
+  const [pdfSentTo, setPdfSentTo] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [showEmailForm, setShowEmailForm] = useState(false);
+
+  const getScoreColor = (score: number) => {
+    if (score >= 70) return 'text-trust-600';
+    if (score >= 40) return 'text-yellow-600';
+    return 'text-red-600';
+  };
+
+  const getScoreBgColor = (score: number) => {
+    if (score >= 70) return 'stroke-trust-500';
+    if (score >= 40) return 'stroke-yellow-500';
+    return 'stroke-red-500';
+  };
+
+  const getScoreLabel = (score: number) => {
+    if (score >= 70) return 'Good Progress';
+    if (score >= 40) return 'Getting Started';
+    return 'Needs Attention';
+  };
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
+
+  const isValidEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  const handleGetPdfClick = () => {
+    if (pdfSentTo) {
+      // Already sent, trigger resend
+      handleRequestPdf(pdfSentTo);
+    } else {
+      // Show email form
+      setShowEmailForm(true);
+    }
+  };
+
+  const handleRequestPdf = async (targetEmail: string) => {
+    if (!leadId) {
+      setError('Unable to generate PDF. Please try again.');
+      return;
+    }
+
+    if (!isValidEmail(targetEmail)) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+
+    setIsRequestingPdf(true);
+    setError(null);
+
+    try {
+      // Generate the PDF
+      const pdfResponse = await fetch('/api/generate-pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lead_id: leadId, email: targetEmail }),
+      });
+
+      if (!pdfResponse.ok) {
+        throw new Error('Failed to generate PDF');
+      }
+
+      const pdfData = await pdfResponse.json();
+
+      // Send the email
+      const emailResponse = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          lead_id: leadId,
+          email: targetEmail,
+          pdf_url: pdfData.pdf_url,
+        }),
+      });
+
+      if (!emailResponse.ok) {
+        throw new Error('Failed to send email');
+      }
+
+      setPdfSentTo(targetEmail);
+      setShowEmailForm(false);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setIsRequestingPdf(false);
+    }
+  };
+
+  const handleEmailSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!consent) {
+      setError('Please agree to receive the PDF report.');
+      return;
+    }
+    handleRequestPdf(email);
+  };
+
+  // Show only top 2 recommendations
+  const topRecommendations = results.recommendations.slice(0, 2);
+
+  return (
+    <div className="animate-fade-in">
+      {/* Score Card - Primary Focus */}
+      <div className="card mb-6 border-2 border-brand-200">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-1">
+            Your SOC 2 Readiness Score
+          </h2>
+          <p className="text-gray-500 mb-6">
+            Results for {companyName}
+          </p>
+
+          {/* Score Circle */}
+          <div className="relative inline-flex items-center justify-center mb-4">
+            <svg className="w-36 h-36 transform -rotate-90">
+              <circle
+                cx="72"
+                cy="72"
+                r="64"
+                stroke="currentColor"
+                strokeWidth="10"
+                fill="none"
+                className="text-gray-100"
+              />
+              <circle
+                cx="72"
+                cy="72"
+                r="64"
+                strokeWidth="10"
+                fill="none"
+                strokeDasharray={`${(results.readiness_score / 100) * 402} 402`}
+                strokeLinecap="round"
+                className={getScoreBgColor(results.readiness_score)}
+              />
+            </svg>
+            <div className="absolute flex flex-col items-center">
+              <span className={`text-5xl font-bold ${getScoreColor(results.readiness_score)}`}>
+                {results.readiness_score}
+              </span>
+              <span className="text-xs text-gray-400 uppercase tracking-wide">out of 100</span>
+            </div>
+          </div>
+
+          <div className={`inline-block px-4 py-1.5 rounded-full text-sm font-semibold ${
+            results.readiness_score >= 70 ? 'bg-green-100 text-green-700' :
+            results.readiness_score >= 40 ? 'bg-yellow-100 text-yellow-700' :
+            'bg-red-100 text-red-700'
+          }`}>
+            {getScoreLabel(results.readiness_score)}
+          </div>
+        </div>
+      </div>
+
+      {/* Cost Estimate */}
+      <div className="card mb-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          Estimated Compliance Cost
+        </h3>
+        <div className="flex items-center justify-center gap-4">
+          <div className="text-center">
+            <div className="text-2xl font-bold text-brand-600">
+              {formatCurrency(results.estimated_cost_low)}
+            </div>
+            <div className="text-sm text-gray-500">Low</div>
+          </div>
+          <div className="text-gray-300 text-2xl font-light">–</div>
+          <div className="text-center">
+            <div className="text-2xl font-bold text-brand-600">
+              {formatCurrency(results.estimated_cost_high)}
+            </div>
+            <div className="text-sm text-gray-500">High</div>
+          </div>
+        </div>
+        <p className="text-xs text-gray-400 text-center mt-3">
+          Based on company size, data types, and timeline
+        </p>
+      </div>
+
+      {/* Top Recommendations */}
+      <div className="card mb-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          Top Recommendations
+        </h3>
+        <ul className="space-y-3">
+          {topRecommendations.map((rec, index) => (
+            <li key={index} className="flex gap-3">
+              <span className="flex-shrink-0 w-6 h-6 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center text-sm font-medium">
+                {index + 1}
+              </span>
+              <span className="text-gray-700">{rec}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* PDF CTA Section */}
+      <div className="card bg-gradient-to-br from-brand-50 via-white to-brand-50 border-brand-100">
+        <div className="text-center">
+          {!pdfSentTo ? (
+            <>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Get the Full SOC 2 Roadmap as a PDF
+              </h3>
+              <p className="text-gray-600 text-sm mb-4">
+                Your score is already calculated. The PDF includes a detailed timeline, 
+                compliance checklist, and evidence templates.
+              </p>
+
+              {!showEmailForm ? (
+                <button
+                  onClick={handleGetPdfClick}
+                  className="btn-primary"
+                >
+                  <svg
+                    className="-ml-1 mr-2 h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
+                  </svg>
+                  Get Free PDF Report
+                </button>
+              ) : (
+                <form onSubmit={handleEmailSubmit} className="max-w-sm mx-auto text-left">
+                  <div className="mb-3">
+                    <label htmlFor="pdf-email" className="block text-sm font-medium text-gray-700 mb-1">
+                      Work Email
+                    </label>
+                    <input
+                      type="email"
+                      id="pdf-email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="form-input"
+                      placeholder="you@company.com"
+                      required
+                      autoFocus
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="flex items-start gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={consent}
+                        onChange={(e) => setConsent(e.target.checked)}
+                        className="w-4 h-4 text-brand-600 rounded focus:ring-brand-500 mt-0.5"
+                      />
+                      <span className="text-xs text-gray-500">
+                        I agree to receive my PDF report and occasional compliance tips. 
+                        Unsubscribe anytime.
+                      </span>
+                    </label>
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={isRequestingPdf || !email || !consent}
+                    className="btn-primary w-full"
+                  >
+                    {isRequestingPdf ? (
+                      <>
+                        <svg
+                          className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          />
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          />
+                        </svg>
+                        Sending PDF...
+                      </>
+                    ) : (
+                      'Send PDF to My Email'
+                    )}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowEmailForm(false)}
+                    className="w-full text-sm text-gray-500 hover:text-gray-700 mt-2"
+                  >
+                    Cancel
+                  </button>
+                </form>
+              )}
+            </>
+          ) : (
+            <div className="py-2">
+              <div className="inline-flex items-center text-trust-600 mb-2">
+                <svg
+                  className="w-6 h-6 mr-2"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+                <span className="font-semibold">PDF Sent!</span>
+              </div>
+              <p className="text-gray-600 mb-3">
+                Check your inbox at <span className="font-medium">{pdfSentTo}</span>
+                <br />
+                <span className="text-sm text-gray-500">(usually arrives under 1 minute)</span>
+              </p>
+              <button
+                onClick={() => handleRequestPdf(pdfSentTo)}
+                disabled={isRequestingPdf}
+                className="text-sm text-brand-600 hover:text-brand-700 font-medium"
+              >
+                {isRequestingPdf ? 'Resending...' : 'Resend PDF'}
+              </button>
+            </div>
+          )}
+
+          {error && (
+            <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+              {error}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
