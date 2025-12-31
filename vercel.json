@@ -1,19 +1,15 @@
 {
   "functions": {
     "app/api/generate-pdf/route.ts": {
-      "memory": 1024,
       "maxDuration": 30
     },
     "app/api/cron/day-3/route.ts": {
-      "memory": 512,
       "maxDuration": 60
     },
     "app/api/cron/day-7/route.ts": {
-      "memory": 512,
       "maxDuration": 60
     },
     "app/api/admin/export-csv/route.ts": {
-      "memory": 512,
       "maxDuration": 30
     }
   },
@@ -38,4 +34,3 @@
     }
   ]
 }
-
