@@ -7,11 +7,11 @@ import PDFTemplate, { PDFLeadData } from '@/pdf/PDFTemplate';
 // PDF GENERATION CONFIGURATION
 // =============================================================================
 
-// Use fallback if env var is set or if Playwright/Chromium fails
-const USE_FALLBACK = process.env.PDF_FALLBACK === 'true';
-
 // Storage configuration
-const STORAGE_BUCKET = process.env.SUPABASE_STORAGE_BUCKET || 'soc2-pdfs';
+const STORAGE_BUCKET = process.env.SUPABASE_STORAGE_BUCKET || 'leads-pdf';
+
+// Signed URL expiry: 7 days in seconds
+const SIGNED_URL_EXPIRY_SECONDS = 60 * 60 * 24 * 7;
 
 // =============================================================================
 // PDF GENERATION
@@ -21,7 +21,6 @@ export interface PDFGenerationResult {
   success: boolean;
   pdfBuffer?: Buffer;
   error?: string;
-  method: 'playwright' | 'fallback';
 }
 
 /**
@@ -29,86 +28,32 @@ export interface PDFGenerationResult {
  * Uses dynamic import to avoid bundling react-dom/server in RSC context
  */
 export async function renderPDFToHTML(lead: PDFLeadData): Promise<string> {
-  // Dynamic import to avoid RSC bundling issues with react-dom/server
   const { renderToStaticMarkup } = await import('react-dom/server');
   const element = React.createElement(PDFTemplate, { lead });
   return renderToStaticMarkup(element);
 }
 
 /**
- * Generate PDF from lead data
- * Attempts Playwright first, falls back to alternative method if it fails
+ * Generate PDF from HTML string using Playwright + Chromium
+ * Configured for Vercel serverless environment using @sparticuz/chromium
  */
-export async function generatePDF(lead: PDFLeadData): Promise<PDFGenerationResult> {
-  const html = await renderPDFToHTML(lead);
-
-  // Use fallback if explicitly configured
-  if (USE_FALLBACK) {
-    console.log('PDF_FALLBACK=true, using fallback method');
-    return generatePDFFallback(html);
-  }
-
-  // Try Playwright first
-  try {
-    const result = await generatePDFWithPlaywright(html);
-    return result;
-  } catch (error) {
-    console.error('Playwright PDF generation failed, using fallback:', error);
-    
-    // Log specific error for debugging
-    if (error instanceof Error) {
-      console.error('Error details:', error.message);
-      if (error.message.includes('Could not find browser')) {
-        console.log('NOTE: Set PDF_FALLBACK=true to skip Playwright, or configure Chromium binary for serverless.');
-      }
-    }
-
-    return generatePDFFallback(html);
-  }
-}
-
-/**
- * Generate PDF using Playwright + Chromium
- * 
- * NOTE: On Vercel, you may need to:
- * 1. Enable large binary support in vercel.json
- * 2. Use @sparticuz/chromium which provides serverless-compatible binaries
- * 3. Increase function memory to 1024MB+
- * 
- * If this consistently fails on your deployment, set PDF_FALLBACK=true
- */
-async function generatePDFWithPlaywright(html: string): Promise<PDFGenerationResult> {
-  // Dynamically import to avoid loading when not needed
+export async function generatePdf(html: string): Promise<Buffer> {
   const playwright = await import('playwright-core');
-  
-  let chromiumModule: Record<string, unknown> | null = null;
-  try {
-    // Try to use @sparticuz/chromium for serverless environments
-    chromiumModule = await import('@sparticuz/chromium');
-  } catch {
-    console.log('@sparticuz/chromium not available, using system chromium');
-  }
+  const chromium = await import('@sparticuz/chromium');
 
   let browser;
   try {
-    // Launch browser with appropriate configuration
-    const launchOptions: Parameters<typeof playwright.chromium.launch>[0] = {
+    // Configure chromium for serverless
+    chromium.default.setHeadlessMode = true;
+    chromium.default.setGraphicsMode = false;
+
+    // Launch browser with serverless-compatible configuration
+    browser = await playwright.chromium.launch({
+      args: chromium.default.args,
+      executablePath: await chromium.default.executablePath(),
       headless: true,
-    };
+    });
 
-    if (chromiumModule) {
-      // Serverless configuration with @sparticuz/chromium
-      const chromium = chromiumModule.default as {
-        args: string[];
-        executablePath: () => Promise<string>;
-      };
-      if (chromium && chromium.args && chromium.executablePath) {
-        launchOptions.args = chromium.args;
-        launchOptions.executablePath = await chromium.executablePath();
-      }
-    }
-
-    browser = await playwright.chromium.launch(launchOptions);
     const page = await browser.newPage();
 
     // Set content and wait for rendering
@@ -126,11 +71,7 @@ async function generatePDFWithPlaywright(html: string): Promise<PDFGenerationRes
       printBackground: true,
     });
 
-    return {
-      success: true,
-      pdfBuffer: Buffer.from(pdfBuffer),
-      method: 'playwright',
-    };
+    return Buffer.from(pdfBuffer);
   } finally {
     if (browser) {
       await browser.close();
@@ -139,47 +80,25 @@ async function generatePDFWithPlaywright(html: string): Promise<PDFGenerationRes
 }
 
 /**
- * Fallback PDF generation method
- * 
- * This uses a simpler approach that doesn't require Chromium.
- * For production, you might want to:
- * 1. Use a third-party PDF API (like PDFShift, DocRaptor, or Prince)
- * 2. Use a different library that doesn't need a browser
- * 
- * Current implementation returns a placeholder - implement your preferred fallback
+ * Generate PDF from lead data
  */
-async function generatePDFFallback(html: string): Promise<PDFGenerationResult> {
-  // PLACEHOLDER: Implement your preferred fallback method
-  // 
-  // Option 1: Use a third-party API
-  // const response = await fetch('https://api.pdfshift.io/v3/convert/pdf', {
-  //   method: 'POST',
-  //   headers: { 'Authorization': `Basic ${process.env.PDFSHIFT_API_KEY}` },
-  //   body: JSON.stringify({ source: html })
-  // });
-  // const pdfBuffer = Buffer.from(await response.arrayBuffer());
-  //
-  // Option 2: Use html-pdf-node (requires some system dependencies)
-  // const htmlPdf = require('html-pdf-node');
-  // const file = { content: html };
-  // const pdfBuffer = await htmlPdf.generatePdf(file, { format: 'Letter' });
-  //
-  // For now, we return an error indicating fallback needs configuration
-  
-  console.warn('PDF fallback method not fully implemented. Please configure a fallback provider.');
-  
-  // Create a minimal PDF with just text as a placeholder
-  // In production, implement one of the options above
-  
-  return {
-    success: false,
-    error: 'PDF fallback method needs configuration. See lib/pdf.ts for options.',
-    method: 'fallback',
-  };
-}
+export async function generatePDF(lead: PDFLeadData): Promise<PDFGenerationResult> {
+  try {
+    const html = await renderPDFToHTML(lead);
+    const pdfBuffer = await generatePdf(html);
 
-// Signed URL expiry: 7 days in seconds
-const SIGNED_URL_EXPIRY_SECONDS = 60 * 60 * 24 * 7;
+    return {
+      success: true,
+      pdfBuffer,
+    };
+  } catch (error) {
+    console.error('PDF generation failed:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'PDF generation failed',
+    };
+  }
+}
 
 /**
  * Upload PDF to Supabase Storage (private bucket)
@@ -190,7 +109,6 @@ export async function uploadPDFToStorage(
   fileName: string,
   leadId: string
 ): Promise<{ path: string; signedUrl: string }> {
-  // Dynamically import to avoid circular dependencies
   const { getSupabaseAdmin } = await import('./supabase');
   const supabase = getSupabaseAdmin();
 
@@ -285,4 +203,3 @@ export async function generateAndUploadPDF(lead: PDFLeadData): Promise<{
     };
   }
 }
-
