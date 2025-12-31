@@ -4,11 +4,11 @@ import './globals.css';
 export const metadata: Metadata = {
   metadataBase: new URL('https://risclens.com'),
   title: {
-    default: 'RiscLens | SOC 2 Cost Calculator',
+    default: 'SOC 2 Readiness Index for Early-Stage Companies | RiscLens',
     template: '%s | RiscLens',
   },
-  description: 'Calculate your SOC 2 compliance costs and get a personalized readiness assessment. Free instant results with detailed PDF report.',
-  keywords: ['SOC 2', 'compliance', 'cost calculator', 'audit', 'security', 'readiness assessment'],
+  description: 'Get a clear readiness score, cost estimate, and gap analysis in minutes. Free instant results for startups preparing for SOC 2.',
+  keywords: ['SOC 2', 'compliance', 'readiness', 'audit', 'security', 'startup', 'cost estimate', 'gap analysis'],
   authors: [{ name: 'RiscLens' }],
   creator: 'RiscLens',
   publisher: 'RiscLens',
@@ -21,21 +21,21 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://risclens.com',
     siteName: 'RiscLens',
-    title: 'RiscLens | SOC 2 Cost Calculator',
-    description: 'Calculate your SOC 2 compliance costs and get a personalized readiness assessment. Free instant results with detailed PDF report.',
+    title: 'SOC 2 Readiness Index for Early-Stage Companies',
+    description: 'Get a clear readiness score, cost estimate, and gap analysis in minutes. Free instant results for startups.',
     images: [
       {
         url: '/opengraph-image',
         width: 1200,
         height: 630,
-        alt: 'RiscLens - SOC 2 Cost Calculator',
+        alt: 'RiscLens - SOC 2 Readiness Index',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'RiscLens | SOC 2 Cost Calculator',
-    description: 'Calculate your SOC 2 compliance costs and get a personalized readiness assessment.',
+    title: 'SOC 2 Readiness Index for Early-Stage Companies',
+    description: 'Get a clear readiness score, cost estimate, and gap analysis in minutes.',
     images: ['/opengraph-image'],
   },
   robots: {
@@ -45,8 +45,8 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: '/favicon.svg', type: 'image/svg+xml' },
-      { url: '/icon.svg', type: 'image/svg+xml' },
     ],
+    shortcut: '/favicon.svg',
     apple: '/apple-icon',
   },
 };
