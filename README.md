@@ -338,7 +338,8 @@ The in-memory rate limiter resets on cold starts. For production with multiple i
 ```
 ├── app/
 │   ├── (public)/
-│   │   └── soc-2-cost-calculator/  # Calculator page
+│   │   ├── soc-2-readiness-index/  # Calculator page
+│   │   └── soc-2-cost-calculator/  # Redirect to new URL
 │   ├── admin/                       # Admin dashboard
 │   ├── api/                         # API routes
 │   │   ├── submit/                  # Form submission

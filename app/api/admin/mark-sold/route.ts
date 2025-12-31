@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
     await recordRevenueEvent({
       lead_id: leadId,
       keyword_id: null,
-      calculator_page: '/soc-2-cost-calculator',
+      calculator_page: '/soc-2-readiness-index',
       event_type: 'lead_sold',
       event_value: saleAmount,
       event_date: new Date().toISOString(),

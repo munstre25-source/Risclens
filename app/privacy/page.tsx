@@ -11,7 +11,7 @@ export default function PrivacyPage() {
     <main className="min-h-screen bg-gray-50">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
         <Link
-          href="/soc-2-cost-calculator"
+          href="/soc-2-readiness-index"
           className="text-brand-600 hover:text-brand-700 text-sm mb-8 inline-block"
         >
           ← Back to Calculator

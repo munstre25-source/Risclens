@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS "REVENUE_EVENTS" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     lead_id UUID REFERENCES "SOC2_Leads"(id) ON DELETE SET NULL,
     keyword_id UUID,
-    calculator_page TEXT NOT NULL DEFAULT '/soc-2-cost-calculator',
+    calculator_page TEXT NOT NULL DEFAULT '/soc-2-readiness-index',
     event_type TEXT NOT NULL,
     event_value NUMERIC(10, 2) NOT NULL DEFAULT 0,
     event_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
