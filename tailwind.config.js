@@ -8,7 +8,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Brand colors for SOC 2 Calculator
+        // Brand colors - Primary blue (used sparingly for CTAs)
         brand: {
           50: '#f0f9ff',
           100: '#e0f2fe',
@@ -21,7 +21,23 @@ module.exports = {
           800: '#075985',
           900: '#0c4a6e',
         },
-        // Trust/security accent
+        // Slate - Enterprise-grade neutral for backgrounds, borders, metadata
+        slate: {
+          50: '#f8fafc',
+          100: '#f1f5f9',
+          150: '#e9eef4', // Custom mid-tone for subtle backgrounds
+          200: '#e2e8f0',
+          300: '#cbd5e1',
+          400: '#94a3b8',
+          500: '#64748b',
+          600: '#475569',
+          700: '#334155',
+          800: '#1e293b',
+          850: '#162032', // Custom dark for footer
+          900: '#0f172a',
+          950: '#0a0f1a', // Extra dark for deep footer
+        },
+        // Trust/security accent (green - used minimally)
         trust: {
           500: '#10b981',
           600: '#059669',
@@ -30,8 +46,11 @@ module.exports = {
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
       },
+      spacing: {
+        '18': '4.5rem',
+        '22': '5.5rem',
+      },
     },
   },
   plugins: [],
 };
-

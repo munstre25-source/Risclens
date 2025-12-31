@@ -9,24 +9,24 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen flex flex-col">
+    <main className="min-h-screen flex flex-col bg-slate-100">
       {/* Header */}
-      <header className="bg-white border-b border-gray-100">
+      <header className="bg-white border-b border-slate-200">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4">
-          <Link href="/" className="text-xl font-bold text-gray-900">
+          <Link href="/" className="text-xl font-bold text-slate-900">
             RiscLens
           </Link>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-gray-50 via-white to-brand-50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-20 lg:py-28 text-center">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+      <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-24 lg:py-32 text-center">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 mb-8 leading-tight tracking-tight">
             SOC 2 Readiness Index<br className="hidden sm:block" />
             <span className="text-brand-600">for Early-Stage Companies</span>
           </h1>
-          <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto mb-10">
+          <p className="text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto mb-12 leading-relaxed">
             See where you stand before the auditor does. Get your readiness score, cost estimate, and a clear path forward — in under 2 minutes.
           </p>
           <Link
@@ -38,19 +38,19 @@ export default function HomePage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </Link>
-          <p className="mt-4 text-sm text-gray-500">
+          <p className="mt-5 text-sm text-slate-500">
             Free • No credit card • Instant results
           </p>
         </div>
       </section>
 
       {/* How It Works Section */}
-      <section className="py-16 bg-white border-t border-gray-100">
+      <section className="py-16 lg:py-20 bg-white border-t border-slate-200">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+          <h2 className="text-2xl font-bold text-slate-900 mb-8">
             How RiscLens Calculates Your SOC 2 Readiness
           </h2>
-          <div className="prose prose-gray max-w-none text-gray-600 space-y-4">
+          <div className="space-y-5 text-slate-600 leading-relaxed">
             <p>
               The RiscLens Readiness Index evaluates your organization across several key dimensions: 
               company size and team structure, types of data you handle (such as PII, financial, or health data), 
@@ -72,12 +72,12 @@ export default function HomePage() {
       </section>
 
       {/* About RiscLens Section */}
-      <section className="py-12 bg-gray-50 border-t border-gray-100">
+      <section className="py-14 bg-slate-50 border-t border-slate-200">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          <h2 className="text-xl font-semibold text-slate-900 mb-4">
             About RiscLens
           </h2>
-          <p className="text-gray-600 leading-relaxed">
+          <p className="text-slate-600 leading-relaxed">
             RiscLens provides compliance readiness tools for early-stage and growing technology companies. 
             Our focus is on helping teams understand what SOC 2 preparation involves — including realistic 
             cost ranges and common gaps — so they can plan effectively before committing to an audit 
@@ -87,37 +87,39 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 bg-gray-900 text-gray-400 text-sm">
+      <footer className="py-10 bg-slate-900 text-slate-400 text-sm">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
-              <p className="font-medium text-gray-300">RiscLens</p>
-              <p className="text-xs text-gray-500">Compliance readiness infrastructure</p>
+              <p className="font-semibold text-slate-200">RiscLens</p>
+              <p className="text-xs text-slate-500 mt-1 uppercase tracking-wide">
+                Compliance readiness infrastructure
+              </p>
             </div>
             <div className="flex items-center gap-6">
-              <Link href="/privacy" className="hover:text-white transition-colors">
+              <Link href="/privacy" className="text-slate-400 hover:text-slate-200 transition-colors">
                 Privacy
               </Link>
-              <Link href="/terms" className="hover:text-white transition-colors">
+              <Link href="/terms" className="text-slate-400 hover:text-slate-200 transition-colors">
                 Terms
               </Link>
-              <a href="mailto:reports@risclens.com" className="hover:text-white transition-colors">
+              <a href="mailto:reports@risclens.com" className="text-slate-400 hover:text-slate-200 transition-colors">
                 Contact
               </a>
             </div>
           </div>
           
           {/* Disclaimer */}
-          <div className="mt-8 pt-6 border-t border-gray-800">
-            <p className="text-xs text-gray-500 leading-relaxed max-w-3xl">
-              <strong className="text-gray-400">Disclaimer:</strong> RiscLens provides informational 
+          <div className="mt-10 pt-8 border-t border-slate-800">
+            <p className="text-xs text-slate-500 leading-relaxed max-w-3xl">
+              <strong className="text-slate-400">Disclaimer:</strong> RiscLens provides informational 
               estimates only. We do not provide legal advice, audit services, or SOC 2 certification. 
               All results are based on self-reported inputs and should be used for planning purposes only. 
               For formal compliance guidance, consult a qualified auditor or legal professional.
             </p>
           </div>
 
-          <p className="mt-6 text-center text-gray-500 text-xs">
+          <p className="mt-8 text-center text-slate-500 text-xs">
             © {new Date().getFullYear()} RiscLens. Your data is encrypted and never shared without consent.
           </p>
         </div>
