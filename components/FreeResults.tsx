@@ -23,9 +23,8 @@ export default function FreeResults({
   const [email, setEmail] = useState('');
   const [consent, setConsent] = useState(false);
   const [isRequestingPdf, setIsRequestingPdf] = useState(false);
-  const [pdfSentTo, setPdfSentTo] = useState<string | null>(null);
+  const [pdfSent, setPdfSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showEmailForm, setShowEmailForm] = useState(false);
 
   const getScoreColor = (score: number) => {
     if (score >= 70) return 'text-trust-600';
@@ -57,24 +56,21 @@ export default function FreeResults({
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
-  const handleGetPdfClick = () => {
-    if (pdfSentTo) {
-      // Already sent, trigger resend
-      handleRequestPdf(pdfSentTo);
-    } else {
-      // Show email form
-      setShowEmailForm(true);
-    }
-  };
+  const handleGetPdf = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  const handleRequestPdf = async (targetEmail: string) => {
     if (!leadId) {
       setError('Unable to generate PDF. Please try again.');
       return;
     }
 
-    if (!isValidEmail(targetEmail)) {
+    if (!email || !isValidEmail(email)) {
       setError('Please enter a valid email address.');
+      return;
+    }
+
+    if (!consent) {
+      setError('Please agree to receive the PDF report.');
       return;
     }
 
@@ -82,50 +78,52 @@ export default function FreeResults({
     setError(null);
 
     try {
-      // Generate the PDF
-      const pdfResponse = await fetch('/api/generate-pdf', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lead_id: leadId, email: targetEmail }),
-      });
-
-      if (!pdfResponse.ok) {
-        throw new Error('Failed to generate PDF');
-      }
-
-      const pdfData = await pdfResponse.json();
-
-      // Send the email
-      const emailResponse = await fetch('/api/send-email', {
+      // Step 1: Set email on the lead
+      const setEmailRes = await fetch('/api/lead/set-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           lead_id: leadId,
-          email: targetEmail,
-          pdf_url: pdfData.pdf_url,
+          email: email,
+          consent: consent,
         }),
       });
 
-      if (!emailResponse.ok) {
-        throw new Error('Failed to send email');
+      if (!setEmailRes.ok) {
+        const data = await setEmailRes.json();
+        throw new Error(data.error || 'Failed to save email');
       }
 
-      setPdfSentTo(targetEmail);
-      setShowEmailForm(false);
+      // Step 2: Generate PDF
+      const pdfResponse = await fetch('/api/generate-pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lead_id: leadId }),
+      });
+
+      if (!pdfResponse.ok) {
+        const pdfData = await pdfResponse.json();
+        throw new Error(pdfData.error || 'Failed to generate PDF');
+      }
+
+      // Step 3: Send email with PDF
+      const emailResponse = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lead_id: leadId }),
+      });
+
+      if (!emailResponse.ok) {
+        const emailData = await emailResponse.json();
+        throw new Error(emailData.error || 'Failed to send email');
+      }
+
+      setPdfSent(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setIsRequestingPdf(false);
     }
-  };
-
-  const handleEmailSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!consent) {
-      setError('Please agree to receive the PDF report.');
-      return;
-    }
-    handleRequestPdf(email);
   };
 
   // Show only top 2 recommendations
@@ -226,112 +224,104 @@ export default function FreeResults({
         </ul>
       </div>
 
-      {/* PDF CTA Section */}
+      {/* PDF CTA Section - Email Gate */}
       <div className="card bg-gradient-to-br from-brand-50 via-white to-brand-50 border-brand-100">
         <div className="text-center">
-          {!pdfSentTo ? (
+          {!pdfSent ? (
             <>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Get the Full SOC 2 Roadmap as a PDF
+                Get Your Full SOC 2 Roadmap PDF
               </h3>
               <p className="text-gray-600 text-sm mb-4">
-                Your score is already calculated. The PDF includes a detailed timeline, 
-                compliance checklist, and evidence templates.
+                The PDF includes a detailed timeline, compliance checklist, 
+                cost breakdown, and evidence templates.
               </p>
 
-              {!showEmailForm ? (
-                <button
-                  onClick={handleGetPdfClick}
-                  className="btn-primary"
-                >
-                  <svg
-                    className="-ml-1 mr-2 h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
-                  </svg>
-                  Get Free PDF Report
-                </button>
-              ) : (
-                <form onSubmit={handleEmailSubmit} className="max-w-sm mx-auto text-left">
-                  <div className="mb-3">
-                    <label htmlFor="pdf-email" className="block text-sm font-medium text-gray-700 mb-1">
-                      Work Email
-                    </label>
+              <form onSubmit={handleGetPdf} className="max-w-sm mx-auto text-left">
+                <div className="mb-3">
+                  <label htmlFor="pdf-email" className="block text-sm font-medium text-gray-700 mb-1">
+                    Work Email
+                  </label>
+                  <input
+                    type="email"
+                    id="pdf-email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="form-input"
+                    placeholder="you@company.com"
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="flex items-start gap-2 cursor-pointer">
                     <input
-                      type="email"
-                      id="pdf-email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="form-input"
-                      placeholder="you@company.com"
-                      required
-                      autoFocus
+                      type="checkbox"
+                      checked={consent}
+                      onChange={(e) => setConsent(e.target.checked)}
+                      className="w-4 h-4 text-brand-600 rounded focus:ring-brand-500 mt-0.5"
                     />
+                    <span className="text-xs text-gray-500">
+                      I agree to receive my PDF report and occasional compliance tips. 
+                      Unsubscribe anytime.
+                    </span>
+                  </label>
+                </div>
+
+                {error && (
+                  <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                    {error}
                   </div>
-                  <div className="mb-4">
-                    <label className="flex items-start gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={consent}
-                        onChange={(e) => setConsent(e.target.checked)}
-                        className="w-4 h-4 text-brand-600 rounded focus:ring-brand-500 mt-0.5"
-                      />
-                      <span className="text-xs text-gray-500">
-                        I agree to receive my PDF report and occasional compliance tips. 
-                        Unsubscribe anytime.
-                      </span>
-                    </label>
-                  </div>
-                  <button
-                    type="submit"
-                    disabled={isRequestingPdf || !email || !consent}
-                    className="btn-primary w-full"
-                  >
-                    {isRequestingPdf ? (
-                      <>
-                        <svg
-                          className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <circle
-                            className="opacity-25"
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="4"
-                          />
-                          <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                          />
-                        </svg>
-                        Sending PDF...
-                      </>
-                    ) : (
-                      'Send PDF to My Email'
-                    )}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setShowEmailForm(false)}
-                    className="w-full text-sm text-gray-500 hover:text-gray-700 mt-2"
-                  >
-                    Cancel
-                  </button>
-                </form>
-              )}
+                )}
+
+                <button
+                  type="submit"
+                  disabled={isRequestingPdf || !email || !consent}
+                  className="btn-primary w-full"
+                >
+                  {isRequestingPdf ? (
+                    <>
+                      <svg
+                        className="animate-spin -ml-1 mr-2 h-5 w-5 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        />
+                      </svg>
+                      Generating PDF...
+                    </>
+                  ) : (
+                    <>
+                      <svg
+                        className="-ml-1 mr-2 h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        />
+                      </svg>
+                      Send Me the Full PDF
+                    </>
+                  )}
+                </button>
+              </form>
             </>
           ) : (
             <div className="py-2">
@@ -351,24 +341,12 @@ export default function FreeResults({
                 </svg>
                 <span className="font-semibold">PDF Sent!</span>
               </div>
-              <p className="text-gray-600 mb-3">
-                Check your inbox at <span className="font-medium">{pdfSentTo}</span>
-                <br />
-                <span className="text-sm text-gray-500">(usually arrives under 1 minute)</span>
+              <p className="text-gray-600 mb-1">
+                Check your inbox at <span className="font-medium">{email}</span>
               </p>
-              <button
-                onClick={() => handleRequestPdf(pdfSentTo)}
-                disabled={isRequestingPdf}
-                className="text-sm text-brand-600 hover:text-brand-700 font-medium"
-              >
-                {isRequestingPdf ? 'Resending...' : 'Resend PDF'}
-              </button>
-            </div>
-          )}
-
-          {error && (
-            <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-              {error}
+              <p className="text-sm text-gray-500">
+                (Usually arrives within 1-2 minutes)
+              </p>
             </div>
           )}
         </div>

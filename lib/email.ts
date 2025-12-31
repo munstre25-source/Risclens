@@ -1,5 +1,8 @@
+import 'server-only';
+
 import sgMail from '@sendgrid/mail';
 import nodemailer from 'nodemailer';
+import { getSupabaseAdmin } from './supabase';
 
 // =============================================================================
 // EMAIL CONFIGURATION
@@ -11,8 +14,9 @@ if (sendgridApiKey) {
   sgMail.setApiKey(sendgridApiKey);
 }
 
-// Email sender address
+// Email sender addresses
 const EMAIL_FROM = process.env.EMAIL_FROM || 'noreply@risclens.com';
+const EMAIL_REPLY_TO = process.env.EMAIL_REPLY_TO || EMAIL_FROM;
 
 // App URL for links
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
@@ -36,7 +40,7 @@ function getEmail1Template(data: EmailTemplateData): { subject: string; html: st
   const unsubscribeUrl = `${APP_URL}/api/unsubscribe?email=${encodeURIComponent(data.email)}&token=${data.unsubscribe_token || 'placeholder'}`;
 
   return {
-    subject: `Your SOC 2 Readiness Report for ${data.company_name}`,
+    subject: `Your SOC 2 Cost Estimate + Roadmap (PDF)`,
     html: `
       <!DOCTYPE html>
       <html>
@@ -336,6 +340,7 @@ async function sendWithSendGrid(
   const msg = {
     to,
     from: EMAIL_FROM,
+    replyTo: EMAIL_REPLY_TO,
     subject: template.subject,
     text: template.text,
     html: template.html,
@@ -378,6 +383,7 @@ async function sendWithSMTP(
 
   const result = await transporter.sendMail({
     from: EMAIL_FROM,
+    replyTo: EMAIL_REPLY_TO,
     to,
     subject: template.subject,
     text: template.text,
@@ -393,20 +399,55 @@ async function sendWithSMTP(
 
 /**
  * Check if email is unsubscribed
- * Placeholder - will query unsubscribed_emails table in Pass B
  */
 export async function isUnsubscribed(email: string): Promise<boolean> {
-  // TODO: Implement database check in Pass B
-  console.log('Checking unsubscribe status for:', email);
-  return false;
+  try {
+    const supabase = getSupabaseAdmin();
+    
+    const { data, error } = await supabase
+      .from('UNSUBSCRIBED_EMAILS')
+      .select('id')
+      .eq('email', email.toLowerCase())
+      .single();
+
+    if (error) {
+      // PGRST116 = no rows found, which means not unsubscribed
+      if (error.code === 'PGRST116') {
+        return false;
+      }
+      console.error('Error checking unsubscribe status:', error);
+      return false; // Fail open - allow sending if check fails
+    }
+
+    return !!data;
+  } catch (error) {
+    console.error('isUnsubscribed error:', error);
+    return false; // Fail open
+  }
 }
 
 /**
  * Add email to unsubscribe list
- * Placeholder - will insert into unsubscribed_emails table in Pass B
  */
 export async function addToUnsubscribeList(email: string): Promise<void> {
-  // TODO: Implement database insert in Pass B
-  console.log('Adding to unsubscribe list:', email);
-}
+  try {
+    const supabase = getSupabaseAdmin();
+    
+    const { error } = await supabase
+      .from('UNSUBSCRIBED_EMAILS')
+      .upsert(
+        { email: email.toLowerCase(), unsubscribed_at: new Date().toISOString() },
+        { onConflict: 'email' }
+      );
 
+    if (error) {
+      console.error('Failed to add to unsubscribe list:', error);
+      throw error;
+    }
+
+    console.log('Added to unsubscribe list:', email);
+  } catch (error) {
+    console.error('addToUnsubscribeList error:', error);
+    throw error;
+  }
+}

@@ -1,3 +1,12 @@
-# This directory will contain sample-lead.pdf after first PDF generation
-# The sample PDF is generated during the build process or first run
+# Sample files directory
+# PDFs will be generated here during testing
 
+# To generate a sample PDF:
+# 1. Run npm run seed to create test leads
+# 2. Use the calculator at /soc-2-cost-calculator
+# 3. Click "Send Me the Full PDF" to generate and email PDF
+
+# Or use the API directly:
+# curl -X POST http://localhost:3000/api/generate-pdf \
+#   -H "Content-Type: application/json" \
+#   -d '{"lead_id": "<your-lead-id>"}'

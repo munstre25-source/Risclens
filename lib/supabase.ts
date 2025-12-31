@@ -83,7 +83,7 @@ export interface SOC2Lead {
   data_types: string[];
   audit_date: string;
   role: string;
-  email: string;
+  email: string | null; // Nullable - can be set later via /api/lead/set-email
   utm_source: string | null;
   variation_id: string | null;
   readiness_score: number;
@@ -91,13 +91,16 @@ export interface SOC2Lead {
   estimated_cost_high: number;
   lead_score: number;
   keep_or_sell: 'keep' | 'sell';
-  pdf_url: string | null;
+  pdf_path: string | null; // Storage object path for private bucket access
+  pdf_url: string | null; // Signed URL (cached, may expire)
   email_sent: boolean;
   email_delivery_status: string | null;
   consent: boolean;
   sold: boolean;
   buyer_email: string | null;
   sale_amount: number | null;
+  followup_day3_sent: boolean;
+  followup_day7_sent: boolean;
   created_at: string;
   updated_at: string;
 }

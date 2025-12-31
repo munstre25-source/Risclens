@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS "SOC2_Leads" (
     data_types TEXT[] NOT NULL DEFAULT '{}',
     audit_date DATE NOT NULL,
     role TEXT NOT NULL,
-    email TEXT NOT NULL,
+    email TEXT, -- NULLABLE: email collected after showing results
     utm_source TEXT,
     variation_id TEXT,
     readiness_score INTEGER NOT NULL DEFAULT 0,
@@ -218,6 +218,25 @@ INSERT INTO "KEYWORDS" (keyword, category, intent_type, revenue_score) VALUES
     ('soc 2 type 2 vs type 1', 'compliance', 'informational', 4),
     ('how long does soc 2 take', 'compliance', 'informational', 6)
 ON CONFLICT DO NOTHING;
+
+-- =============================================================================
+-- MIGRATION: Make email nullable (for existing databases)
+-- =============================================================================
+-- If you already have a SOC2_Leads table with email NOT NULL, run this:
+--
+-- ALTER TABLE "SOC2_Leads" ALTER COLUMN email DROP NOT NULL;
+--
+-- This allows leads to be created without email (results shown first,
+-- email collected when user requests PDF).
+
+-- =============================================================================
+-- MIGRATION: Add pdf_path column for private storage
+-- =============================================================================
+-- The pdf_path column stores the Supabase Storage object path.
+-- We generate signed URLs from this path when sending emails.
+-- pdf_url is kept for cached signed URL but may expire.
+
+ALTER TABLE "SOC2_Leads" ADD COLUMN IF NOT EXISTS pdf_path TEXT;
 
 -- =============================================================================
 -- VERIFICATION QUERIES

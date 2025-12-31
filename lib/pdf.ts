@@ -1,4 +1,5 @@
-import { renderToStaticMarkup } from 'react-dom/server';
+import 'server-only';
+
 import React from 'react';
 import PDFTemplate, { PDFLeadData } from '@/pdf/PDFTemplate';
 
@@ -25,8 +26,11 @@ export interface PDFGenerationResult {
 
 /**
  * Render PDF Template to HTML string
+ * Uses dynamic import to avoid bundling react-dom/server in RSC context
  */
-export function renderPDFToHTML(lead: PDFLeadData): string {
+export async function renderPDFToHTML(lead: PDFLeadData): Promise<string> {
+  // Dynamic import to avoid RSC bundling issues with react-dom/server
+  const { renderToStaticMarkup } = await import('react-dom/server');
   const element = React.createElement(PDFTemplate, { lead });
   return renderToStaticMarkup(element);
 }
@@ -36,7 +40,7 @@ export function renderPDFToHTML(lead: PDFLeadData): string {
  * Attempts Playwright first, falls back to alternative method if it fails
  */
 export async function generatePDF(lead: PDFLeadData): Promise<PDFGenerationResult> {
-  const html = renderPDFToHTML(lead);
+  const html = await renderPDFToHTML(lead);
 
   // Use fallback if explicitly configured
   if (USE_FALLBACK) {
@@ -174,44 +178,82 @@ async function generatePDFFallback(html: string): Promise<PDFGenerationResult> {
   };
 }
 
+// Signed URL expiry: 7 days in seconds
+const SIGNED_URL_EXPIRY_SECONDS = 60 * 60 * 24 * 7;
+
 /**
- * Upload PDF to Supabase Storage
+ * Upload PDF to Supabase Storage (private bucket)
+ * Returns the storage path and a signed URL for download
  */
 export async function uploadPDFToStorage(
   pdfBuffer: Buffer,
-  fileName: string
-): Promise<{ url: string }> {
+  fileName: string,
+  leadId: string
+): Promise<{ path: string; signedUrl: string }> {
   // Dynamically import to avoid circular dependencies
   const { getSupabaseAdmin } = await import('./supabase');
   const supabase = getSupabaseAdmin();
 
   const filePath = `pdfs/${fileName}`;
 
-  const { error } = await supabase.storage
+  const { error: uploadError } = await supabase.storage
     .from(STORAGE_BUCKET)
     .upload(filePath, pdfBuffer, {
       contentType: 'application/pdf',
       upsert: true,
     });
 
-  if (error) {
-    console.error('Failed to upload PDF:', error);
-    throw new Error(`Storage error: ${error.message}`);
+  if (uploadError) {
+    console.error('Failed to upload PDF:', uploadError);
+    throw new Error(`Storage error: ${uploadError.message}`);
   }
 
-  // Get public URL
-  const { data: urlData } = supabase.storage
-    .from(STORAGE_BUCKET)
-    .getPublicUrl(filePath);
+  console.log('PDF uploaded', leadId, filePath);
 
-  return { url: urlData.publicUrl };
+  // Generate signed URL (7 days)
+  const { data: signedData, error: signedError } = await supabase.storage
+    .from(STORAGE_BUCKET)
+    .createSignedUrl(filePath, SIGNED_URL_EXPIRY_SECONDS);
+
+  if (signedError || !signedData?.signedUrl) {
+    console.error('Failed to create signed URL:', signedError);
+    throw new Error(`Signed URL error: ${signedError?.message || 'Unknown error'}`);
+  }
+
+  console.log('Signed URL generated', leadId);
+
+  return { path: filePath, signedUrl: signedData.signedUrl };
+}
+
+/**
+ * Generate a fresh signed URL from an existing pdf_path
+ * Use this when sending emails to ensure the URL is valid
+ */
+export async function createSignedUrlFromPath(pdfPath: string, leadId: string): Promise<string> {
+  const { getSupabaseAdmin } = await import('./supabase');
+  const supabase = getSupabaseAdmin();
+
+  const { data: signedData, error: signedError } = await supabase.storage
+    .from(STORAGE_BUCKET)
+    .createSignedUrl(pdfPath, SIGNED_URL_EXPIRY_SECONDS);
+
+  if (signedError || !signedData?.signedUrl) {
+    console.error('Failed to create signed URL from path:', signedError);
+    throw new Error(`Signed URL error: ${signedError?.message || 'Unknown error'}`);
+  }
+
+  console.log('Signed URL generated', leadId);
+
+  return signedData.signedUrl;
 }
 
 /**
  * Generate PDF for a lead and upload to storage
+ * Returns both the storage path (for DB) and a signed URL (for immediate use)
  */
 export async function generateAndUploadPDF(lead: PDFLeadData): Promise<{
   success: boolean;
+  pdfPath?: string;
   pdfUrl?: string;
   error?: string;
 }> {
@@ -228,11 +270,12 @@ export async function generateAndUploadPDF(lead: PDFLeadData): Promise<{
   // Upload to storage
   try {
     const fileName = `${lead.id}-${Date.now()}.pdf`;
-    const { url } = await uploadPDFToStorage(result.pdfBuffer, fileName);
+    const { path, signedUrl } = await uploadPDFToStorage(result.pdfBuffer, fileName, lead.id);
 
     return {
       success: true,
-      pdfUrl: url,
+      pdfPath: path,
+      pdfUrl: signedUrl,
     };
   } catch (error) {
     console.error('PDF upload failed:', error);

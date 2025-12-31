@@ -76,16 +76,15 @@ export default function CalculatorForm() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     setUtmSource(params.get('utm_source') || '');
-    setVariationId(params.get('v') || 'default');
+    const variation = params.get('v') || 'default';
+    setVariationId(variation);
 
     // Record A/B impression
-    if (params.get('v')) {
-      fetch('/api/ab/impression', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ variation_id: params.get('v') }),
-      }).catch(console.error);
-    }
+    fetch('/api/ab/impression', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ variation_id: variation }),
+    }).catch(console.error);
   }, []);
 
   const handleInputChange = (
@@ -141,6 +140,7 @@ export default function CalculatorForm() {
     setError(null);
 
     try {
+      // Submit WITHOUT email - email will be collected on results page
       const response = await fetch('/api/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -149,6 +149,7 @@ export default function CalculatorForm() {
           num_employees: parseInt(formData.num_employees, 10),
           utm_source: utmSource,
           variation_id: variationId,
+          // email and consent are NOT sent - collected later for PDF
         }),
       });
 
@@ -158,7 +159,7 @@ export default function CalculatorForm() {
         throw new Error(data.error || 'Submission failed');
       }
 
-      // Record A/B submission
+      // Record A/B submission if not default
       if (variationId !== 'default') {
         fetch('/api/ab/submit', {
           method: 'POST',
@@ -302,7 +303,7 @@ export default function CalculatorForm() {
           </div>
         )}
 
-        {/* Step 3: Timeline & Role */}
+        {/* Step 3: Timeline & Role (NO email here - collected after results) */}
         {step === 3 && (
           <div className="animate-fade-in">
             <h2 className="text-xl font-semibold text-gray-900 mb-6">

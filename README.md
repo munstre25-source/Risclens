@@ -5,12 +5,14 @@ A production-ready SOC 2 compliance cost calculator built with Next.js (App Rout
 ## Features
 
 - 📊 **Interactive Calculator**: Multi-step form with real-time validation
-- 📈 **Lead Scoring**: Deterministic scoring logic for lead qualification
-- 📄 **PDF Generation**: Automated PDF report generation with Playwright
-- 📧 **Email Automation**: SendGrid + SMTP fallback with follow-up sequences
-- 👤 **Admin Dashboard**: Lead management, CSV export, A/B testing controls
+- 📈 **Lead Scoring**: Deterministic scoring logic for lead qualification (1-10 scale)
+- 📄 **PDF Generation**: Automated PDF report generation with Playwright/Chromium
+- 📧 **Email Automation**: SendGrid + SMTP fallback with day-3/day-7 follow-ups
+- 👤 **Admin Dashboard**: Lead management, CSV export, A/B testing controls, mark sold
 - 🔄 **A/B Testing**: Built-in variation tracking and conversion metrics
-- ⏰ **Scheduled Follow-ups**: Vercel Cron-compatible day-3 and day-7 emails
+- ⏰ **Scheduled Follow-ups**: Vercel Cron-compatible batch email jobs
+- 🔒 **Rate Limiting**: In-memory rate limiting on all write endpoints
+- 📝 **Audit Logging**: Complete audit trail for all major events
 
 ## Tech Stack
 
@@ -30,7 +32,7 @@ A production-ready SOC 2 compliance cost calculator built with Next.js (App Rout
 - Node.js 18+
 - npm or yarn
 - Supabase account
-- SendGrid account (optional, for email)
+- SendGrid account (for email features)
 
 ### Installation
 
@@ -48,41 +50,34 @@ cp env.example .env.local
 # Edit .env.local with your credentials
 ```
 
-### Environment Variables
-
-Create `.env.local` with these required variables:
+### Required Environment Variables
 
 ```env
-# Supabase
+# Supabase (Required)
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 SUPABASE_STORAGE_BUCKET=soc2-pdfs
 
-# Admin
+# Admin (Required)
 ADMIN_SECRET=your-secure-admin-secret
 
-# App URL
+# App URL (Required)
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 
-# Email (optional for local dev)
+# Email (Required for PDF delivery)
 SENDGRID_API_KEY=SG.xxx
 EMAIL_FROM=noreply@yourdomain.com
+EMAIL_REPLY_TO=hello@yourdomain.com
 
-# Optional SMTP fallback
-SMTP_HOST=smtp.example.com
-SMTP_PORT=587
-SMTP_USER=user
-SMTP_PASS=pass
-
-# PDF (set to true if Playwright fails)
-PDF_FALLBACK=false
-
-# Cron authentication
+# Cron (Required for follow-up emails)
 CRON_SECRET=your-cron-secret
 
-# Rate limiting
+# Rate Limiting
 RATE_LIMIT_PER_MIN=60
+
+# PDF (Optional - set to true if Playwright fails)
+PDF_FALLBACK=false
 ```
 
 ### Database Setup
@@ -91,18 +86,15 @@ RATE_LIMIT_PER_MIN=60
 
 2. **Run Migrations**:
    ```bash
-   # Option A: Using psql
-   export DATABASE_URL='postgresql://postgres:password@db.xxx.supabase.co:5432/postgres'
-   npm run migrate
-   
-   # Option B: Using Supabase Dashboard
-   # Copy contents of sql/00_init.sql and run in SQL Editor
+   # Copy contents of sql/00_init.sql and run in Supabase SQL Editor
+   # OR use psql:
+   psql $DATABASE_URL -f sql/00_init.sql
    ```
 
 3. **Create Storage Bucket**:
    - Go to Supabase Dashboard > Storage
    - Create bucket named `soc2-pdfs`
-   - Set as public bucket
+   - Set as **public bucket** (for PDF links to work)
 
 4. **Seed Test Data** (optional):
    ```bash
@@ -125,23 +117,49 @@ npm run lint
 npm run build
 ```
 
-### Local Smoke Tests
+## Local Smoke Tests
 
-1. **Calculator Flow**:
-   - Visit `http://localhost:3000/soc-2-cost-calculator`
-   - Complete the form with test data
-   - Verify results display correctly
-   - Click "Send Me the Full PDF" (requires email setup)
+After setup, verify the system works:
 
-2. **Admin Panel**:
-   - Visit `http://localhost:3000/admin`
-   - Enter your ADMIN_SECRET to login
-   - View leads, export CSV, test resend
+### 1. Submit a Lead
+```bash
+curl -X POST http://localhost:3000/api/submit \
+  -H "Content-Type: application/json" \
+  -d '{
+    "company_name": "Test Company",
+    "industry": "saas",
+    "num_employees": 25,
+    "data_types": ["pii", "financial"],
+    "planned_audit_date": "2025-06-15",
+    "role": "cto",
+    "email": "test@example.com",
+    "consent": true
+  }'
+```
 
-3. **API Health**:
-   ```bash
-   curl http://localhost:3000/api/health
-   ```
+### 2. Generate PDF
+```bash
+curl -X POST http://localhost:3000/api/generate-pdf \
+  -H "Content-Type: application/json" \
+  -d '{"lead_id": "<lead_id_from_step_1>"}'
+```
+
+### 3. Send Email
+```bash
+curl -X POST http://localhost:3000/api/send-email \
+  -H "Content-Type: application/json" \
+  -d '{"lead_id": "<lead_id_from_step_1>"}'
+```
+
+### 4. Check Health
+```bash
+curl http://localhost:3000/api/health
+```
+
+### 5. Admin Dashboard
+- Visit `http://localhost:3000/admin`
+- Enter your ADMIN_SECRET to login
+- View leads, export CSV, manage A/B variants
 
 ## Vercel Deployment
 
@@ -159,29 +177,161 @@ vercel
 
 ### Configure Cron Jobs
 
-The project includes two cron endpoints for follow-up emails. To enable them:
+Add to `vercel.json` (already configured):
 
-1. Go to Vercel Dashboard > Your Project > Settings > Cron Jobs
-2. Add these cron jobs (or they're auto-configured via vercel.json):
+```json
+{
+  "crons": [
+    {
+      "path": "/api/cron/day-3",
+      "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/cron/day-7", 
+      "schedule": "0 9 * * *"
+    }
+  ]
+}
+```
 
-| Path | Schedule | Description |
-|------|----------|-------------|
-| `/api/cron/day-3` | `0 9 * * *` | Day 3 follow-up emails |
-| `/api/cron/day-7` | `0 9 * * *` | Day 7 beta invite emails |
-
-3. Set `CRON_SECRET` in environment variables
-4. The cron endpoints verify the secret via Authorization header
+The cron endpoints accept:
+- Vercel cron header (`x-vercel-cron`)
+- `Authorization: Bearer <CRON_SECRET>`
+- `Authorization: Bearer <ADMIN_SECRET>` (fallback)
 
 ### PDF Generation on Vercel
 
-The project uses Playwright + @sparticuz/chromium for PDF generation. This works on Vercel but requires:
+The project uses Playwright + @sparticuz/chromium for PDF generation. Configure in `vercel.json`:
 
-1. Function memory set to 1024MB+ (configured in vercel.json)
-2. If issues occur, set `PDF_FALLBACK=true` to use alternative method
+```json
+{
+  "functions": {
+    "app/api/generate-pdf/route.ts": {
+      "memory": 1024,
+      "maxDuration": 30
+    }
+  }
+}
+```
 
-### Environment Variables on Vercel
+If PDF generation fails, set `PDF_FALLBACK=true` in environment.
 
-Add all variables from `.env.local` to Vercel Dashboard > Settings > Environment Variables.
+## API Reference
+
+### Public Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/submit` | Submit calculator form, returns results |
+| POST | `/api/generate-pdf` | Generate PDF for lead |
+| POST | `/api/send-email` | Send email with PDF link |
+| GET | `/api/health` | Health check with metrics |
+| GET | `/api/unsubscribe` | Handle email unsubscribe |
+
+### A/B Testing Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/ab/impression` | Record variant impression |
+| POST | `/api/ab/submit` | Record variant submission |
+
+### Admin Endpoints (require ADMIN_SECRET)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/admin/leads` | List leads with filters |
+| GET | `/api/admin/variants` | List A/B variants |
+| GET | `/api/admin/export-csv` | Export leads to CSV |
+| POST | `/api/admin/resend-email` | Resend PDF email |
+| POST | `/api/admin/mark-sold` | Mark lead as sold |
+| POST | `/api/admin/toggle-variant` | Toggle A/B variant |
+| POST | `/api/admin/purge-retention` | Delete old leads |
+
+### Cron Endpoints (require CRON_SECRET)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST/GET | `/api/cron/day-3` | Day 3 follow-up emails |
+| POST/GET | `/api/cron/day-7` | Day 7 beta invite emails |
+
+### Webhook Schema
+
+`POST /api/webhook/new-lead` receives:
+
+```json
+{
+  "event_type": "new_lead",
+  "timestamp": "2024-01-15T10:30:00.000Z",
+  "lead": {
+    "id": "uuid",
+    "company_name": "Acme Inc",
+    "industry": "saas",
+    "num_employees": 25,
+    "data_types": ["pii", "financial"],
+    "audit_date": "2024-06-15",
+    "role": "cto",
+    "email": "user@example.com",
+    "utm_source": "google",
+    "variation_id": "default",
+    "readiness_score": 65,
+    "estimated_cost_low": 15000,
+    "estimated_cost_high": 45000,
+    "lead_score": 7,
+    "keep_or_sell": "keep"
+  }
+}
+```
+
+## Lead Scoring Logic
+
+Leads are scored 1-10 based on:
+
+| Factor | Points |
+|--------|--------|
+| 1-5 employees | +3 |
+| 6-20 employees | +6 |
+| 21+ employees | +9 |
+| Audit ≤6 months | +2 |
+| Audit ≤12 months | +1 |
+| PII data | +1 |
+| Financial data | +1 |
+| Health data | +1 |
+| CTO/CEO/Founder/Security role | +2 |
+
+**Score normalization**: Raw score (3-16) → normalized to 1-10 scale
+
+**Keep threshold**: Score ≥ 5 = "keep", otherwise "sell"
+
+**Readiness score**: `50 + (lead_score - 5) * 10`, clamped to 0-100
+
+**Cost estimate**: Base + per-employee + per-data-type, with urgency multiplier
+
+## Troubleshooting
+
+### PDF Generation Fails
+
+1. Check function memory is 1024MB+ in `vercel.json`
+2. Set `PDF_FALLBACK=true` to use alternative method
+3. Check Vercel function logs for specific errors
+
+### Emails Not Sending
+
+1. Verify SENDGRID_API_KEY is set correctly
+2. Ensure sender email is verified in SendGrid
+3. Check EMAIL_FROM matches a verified sender
+4. View AUDIT_LOGS table for email send attempts
+
+### Database Connection Issues
+
+1. Verify SUPABASE_SERVICE_ROLE_KEY is correct
+2. Ensure RLS policies are applied (run `00_init.sql`)
+3. Check storage bucket exists and is public
+
+### Rate Limiting
+
+The in-memory rate limiter resets on cold starts. For production with multiple instances, consider using:
+- Upstash Redis + @upstash/ratelimit
+- See comments in `lib/rate-limit.ts`
 
 ## Project Structure
 
@@ -222,139 +372,6 @@ Add all variables from `.env.local` to Vercel Dashboard > Settings > Environment
     └── sample-lead.pdf              # Generated sample
 ```
 
-## API Reference
-
-### Public Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/submit` | Submit calculator form |
-| POST | `/api/generate-pdf` | Generate PDF for lead |
-| POST | `/api/send-email` | Send email with PDF |
-| GET | `/api/health` | Health check |
-| GET | `/api/unsubscribe` | Handle unsubscribe |
-
-### Admin Endpoints (require ADMIN_SECRET)
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/admin/resend-email` | Resend PDF email |
-| GET | `/api/admin/export-csv` | Export leads to CSV |
-
-### A/B Testing Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/ab/impression` | Record variant impression |
-| POST | `/api/ab/submit` | Record variant submission |
-
-### Webhook Schema
-
-`POST /api/webhook/new-lead` receives:
-
-```json
-{
-  "event_type": "new_lead",
-  "timestamp": "2024-01-15T10:30:00.000Z",
-  "lead": {
-    "id": "uuid",
-    "company_name": "Acme Inc",
-    "industry": "saas",
-    "num_employees": 25,
-    "data_types": ["pii", "financial"],
-    "audit_date": "2024-06-15",
-    "role": "cto",
-    "email": "user@example.com",
-    "utm_source": "google",
-    "variation_id": "default",
-    "readiness_score": 65,
-    "estimated_cost_low": 15000,
-    "estimated_cost_high": 45000,
-    "lead_score": 7,
-    "keep_or_sell": "keep"
-  }
-}
-```
-
-## Admin Runbook
-
-### Viewing Leads
-
-1. Go to `/admin`
-2. Login with ADMIN_SECRET
-3. Use filters to find specific leads
-4. Click row to expand details
-
-### Exporting Leads
-
-1. Apply desired filters
-2. Click "Export CSV"
-3. CSV downloads with filtered leads
-
-### Selling a Lead
-
-1. Find lead marked as "sell"
-2. Click "Sell" button
-3. Enter sale amount and buyer email
-4. Click "Confirm Sale"
-5. Revenue event is recorded
-
-### Resending PDF Email
-
-1. Find lead in admin panel
-2. Click "Resend" button
-3. Email is re-sent with PDF link
-
-### Data Retention
-
-To purge old leads (implement in admin UI):
-
-```sql
--- Delete leads older than 90 days
-DELETE FROM "SOC2_Leads" 
-WHERE created_at < NOW() - INTERVAL '90 days'
-  AND sold = false;
-```
-
-## Lead Scoring Logic
-
-Leads are scored 1-10 based on:
-
-| Factor | Points |
-|--------|--------|
-| 1-5 employees | +3 |
-| 6-20 employees | +6 |
-| 21+ employees | +9 |
-| Audit ≤6 months | +2 |
-| Audit ≤12 months | +1 |
-| PII data | +1 |
-| Financial data | +1 |
-| Health data | +1 |
-| CTO/CEO/Security role | +2 |
-
-**Keep threshold**: Score ≥ 5 = "keep", otherwise "sell"
-
-## Troubleshooting
-
-### PDF Generation Fails
-
-1. Check function memory is 1024MB+
-2. Set `PDF_FALLBACK=true` to use alternative method
-3. Check Vercel function logs for specific errors
-
-### Emails Not Sending
-
-1. Verify SENDGRID_API_KEY is set
-2. Check sender email is verified in SendGrid
-3. Check SMTP fallback configuration
-4. View AUDIT_LOGS for email send attempts
-
-### Database Connection Issues
-
-1. Verify SUPABASE_SERVICE_ROLE_KEY is correct
-2. Check RLS policies are applied
-3. Ensure storage bucket exists and is public
-
 ## License
 
 Private - RiscLens
@@ -362,4 +379,3 @@ Private - RiscLens
 ## Support
 
 For issues, contact: support@risclens.com
-

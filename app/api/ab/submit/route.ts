@@ -1,10 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { incrementABCounter } from '@/lib/supabase';
+import { applyRateLimit } from '@/lib/rate-limit';
+import { sanitizeString } from '@/lib/validation';
 
 // POST /api/ab/submit - Record A/B variant submission
-// Full implementation in Pass B
 export async function POST(request: NextRequest) {
+  // Apply rate limiting
+  const rateLimitResponse = applyRateLimit(request);
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
-    const { variation_id } = await request.json();
+    const body = await request.json();
+    const variation_id = sanitizeString(body.variation_id);
 
     if (!variation_id) {
       return NextResponse.json(
@@ -13,8 +20,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Placeholder - will increment AB_VARIANTS.submissions in Pass B
-    console.log('A/B submission recorded for variation:', variation_id);
+    // Increment submissions counter atomically
+    await incrementABCounter(variation_id, 'submissions');
+
+    console.log('A/B submission recorded:', variation_id);
 
     return NextResponse.json({
       success: true,
@@ -28,4 +37,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
