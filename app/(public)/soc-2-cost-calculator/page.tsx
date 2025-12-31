@@ -69,9 +69,22 @@ export default function SOC2CalculatorPage() {
 
       {/* Footer */}
       <footer className="py-8 bg-gray-900 text-gray-400 text-sm">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          <p>&copy; {new Date().getFullYear()} RiscLens. All rights reserved.</p>
-          <p className="mt-2">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p>&copy; {new Date().getFullYear()} RiscLens. All rights reserved.</p>
+            <div className="flex items-center gap-6">
+              <a href="/privacy" className="hover:text-white transition-colors">
+                Privacy
+              </a>
+              <a href="/terms" className="hover:text-white transition-colors">
+                Terms
+              </a>
+              <a href="mailto:reports@risclens.com" className="hover:text-white transition-colors">
+                Contact
+              </a>
+            </div>
+          </div>
+          <p className="mt-4 text-center text-gray-500 text-xs">
             Your data is protected and never shared without consent.
           </p>
         </div>
