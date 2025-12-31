@@ -3,8 +3,8 @@ import { Metadata } from 'next';
 import CalculatorForm from '@/components/CalculatorForm';
 
 export const metadata: Metadata = {
-  title: 'Free SOC 2 Cost Calculator | Get Your Readiness Score',
-  description: 'Calculate your SOC 2 compliance costs in 2 minutes. Get instant readiness score, cost estimates, and a personalized PDF roadmap.',
+  title: 'SOC 2 Readiness Index | Free Assessment for Startups',
+  description: 'Get your SOC 2 readiness score and cost estimate in under 2 minutes. Built for early-stage companies preparing for their first audit.',
 };
 
 // Loading fallback for the form
@@ -29,11 +29,10 @@ export default function SOC2CalculatorPage() {
       <section className="bg-gradient-to-br from-brand-600 via-brand-700 to-brand-900 text-white py-16 lg:py-24">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
-            How Much Will Your SOC 2 Compliance Cost?
+            SOC 2 Readiness Index for Early-Stage Companies
           </h1>
           <p className="text-lg sm:text-xl text-brand-100 max-w-2xl mx-auto">
-            Get your personalized readiness score and cost estimate in under 2 minutes.
-            No credit card required.
+            See where you stand in under 2 minutes. Get your readiness score, cost estimate, and a clear path forward.
           </p>
         </div>
       </section>
@@ -52,16 +51,16 @@ export default function SOC2CalculatorPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div>
-              <div className="text-3xl font-bold text-brand-600 mb-2">500+</div>
-              <div className="text-gray-600">Companies Assessed</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-brand-600 mb-2">100%</div>
-              <div className="text-gray-600">Free Assessment</div>
-            </div>
-            <div>
               <div className="text-3xl font-bold text-brand-600 mb-2">2 min</div>
               <div className="text-gray-600">Time to Complete</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold text-brand-600 mb-2">Free</div>
+              <div className="text-gray-600">No Credit Card</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold text-brand-600 mb-2">Instant</div>
+              <div className="text-gray-600">Results + PDF Roadmap</div>
             </div>
           </div>
         </div>
@@ -71,7 +70,10 @@ export default function SOC2CalculatorPage() {
       <footer className="py-8 bg-gray-900 text-gray-400 text-sm">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p>&copy; {new Date().getFullYear()} RiscLens. All rights reserved.</p>
+            <div>
+              <p className="font-medium text-gray-300">RiscLens</p>
+              <p className="text-xs text-gray-500">Compliance readiness infrastructure</p>
+            </div>
             <div className="flex items-center gap-6">
               <a href="/privacy" className="hover:text-white transition-colors">
                 Privacy
@@ -84,8 +86,8 @@ export default function SOC2CalculatorPage() {
               </a>
             </div>
           </div>
-          <p className="mt-4 text-center text-gray-500 text-xs">
-            Your data is protected and never shared without consent.
+          <p className="mt-6 text-center text-gray-500 text-xs">
+            &copy; {new Date().getFullYear()} RiscLens. Your data is encrypted and never shared without consent.
           </p>
         </div>
       </footer>
