@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import Header from '@/components/Header';
 
 export const metadata: Metadata = {
   title: 'SOC 2 Readiness for SaaS Companies | RiscLens',
@@ -10,14 +11,7 @@ export const metadata: Metadata = {
 export default function SaaSSoc2ReadinessPage() {
   return (
     <main className="min-h-screen flex flex-col bg-slate-100">
-      {/* Header */}
-      <header className="bg-white border-b border-slate-200">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4">
-          <Link href="/" className="text-xl font-bold text-slate-900">
-            RiscLens
-          </Link>
-        </div>
-      </header>
+      <Header />
 
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
