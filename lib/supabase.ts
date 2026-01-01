@@ -75,6 +75,9 @@ export function getSupabaseAdmin(): SupabaseClient {
 // TYPE DEFINITIONS
 // =============================================================================
 
+// Lead status state machine
+export type LeadStatus = 'new' | 'qualified' | 'contacted' | 'in_conversation' | 'closed_won' | 'closed_lost';
+
 export interface SOC2Lead {
   id: string;
   company_name: string;
@@ -87,6 +90,8 @@ export interface SOC2Lead {
   utm_source: string | null;
   variation_id: string | null;
   context_note: string | null; // Optional free-text context from user (not used in scoring)
+  soc2_requirers: string[]; // Array of SOC 2 requirement sources
+  lead_status: LeadStatus; // Lead lifecycle status
   readiness_score: number;
   estimated_cost_low: number;
   estimated_cost_high: number;
@@ -134,6 +139,22 @@ export interface ABVariant {
   submissions: number;
   active: boolean;
   created_at: string;
+}
+
+export interface AdminNote {
+  id: string;
+  lead_id: string;
+  note: string;
+  author: string;
+  created_at: string;
+}
+
+export interface SavedFilter {
+  id: string;
+  name: string;
+  filter_config: Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
 }
 
 // =============================================================================
@@ -348,3 +369,219 @@ export async function getHealthMetrics(): Promise<{ lead_count: number; pdf_coun
   };
 }
 
+// =============================================================================
+// ADMIN NOTES FUNCTIONS
+// =============================================================================
+
+/**
+ * Get admin notes for a lead
+ */
+export async function getAdminNotes(leadId: string): Promise<AdminNote[]> {
+  const supabase = getSupabaseAdmin();
+
+  const { data, error } = await supabase
+    .from('ADMIN_NOTES')
+    .select('*')
+    .eq('lead_id', leadId)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Failed to get admin notes:', error);
+    return [];
+  }
+
+  return data || [];
+}
+
+/**
+ * Add an admin note to a lead (append-only)
+ */
+export async function addAdminNote(
+  leadId: string,
+  note: string,
+  author: string = 'admin'
+): Promise<AdminNote | null> {
+  const supabase = getSupabaseAdmin();
+
+  const { data, error } = await supabase
+    .from('ADMIN_NOTES')
+    .insert({ lead_id: leadId, note, author })
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Failed to add admin note:', error);
+    return null;
+  }
+
+  return data;
+}
+
+/**
+ * Update lead status
+ */
+export async function updateLeadStatus(
+  leadId: string,
+  status: LeadStatus
+): Promise<SOC2Lead | null> {
+  const supabase = getSupabaseAdmin();
+
+  const { data, error } = await supabase
+    .from('SOC2_Leads')
+    .update({ lead_status: status, updated_at: new Date().toISOString() })
+    .eq('id', leadId)
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Failed to update lead status:', error);
+    return null;
+  }
+
+  return data;
+}
+
+// =============================================================================
+// SAVED FILTERS FUNCTIONS
+// =============================================================================
+
+/**
+ * Get all saved filters
+ */
+export async function getSavedFilters(): Promise<SavedFilter[]> {
+  const supabase = getSupabaseAdmin();
+
+  const { data, error } = await supabase
+    .from('SAVED_FILTERS')
+    .select('*')
+    .order('created_at', { ascending: true });
+
+  if (error) {
+    console.error('Failed to get saved filters:', error);
+    return [];
+  }
+
+  return data || [];
+}
+
+/**
+ * Create a saved filter
+ */
+export async function createSavedFilter(
+  name: string,
+  filterConfig: Record<string, unknown>
+): Promise<SavedFilter | null> {
+  const supabase = getSupabaseAdmin();
+
+  const { data, error } = await supabase
+    .from('SAVED_FILTERS')
+    .insert({ name, filter_config: filterConfig })
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Failed to create saved filter:', error);
+    return null;
+  }
+
+  return data;
+}
+
+/**
+ * Delete a saved filter
+ */
+export async function deleteSavedFilter(id: string): Promise<boolean> {
+  const supabase = getSupabaseAdmin();
+
+  const { error } = await supabase
+    .from('SAVED_FILTERS')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    console.error('Failed to delete saved filter:', error);
+    return false;
+  }
+
+  return true;
+}
+
+// =============================================================================
+// ENHANCED METRICS FUNCTIONS
+// =============================================================================
+
+export interface EnhancedMetrics {
+  total_leads: number;
+  avg_readiness_score: number;
+  avg_estimated_cost: number;
+  pct_enterprise_driven: number;
+  pct_urgent: number;
+  lead_to_sale_rate: number;
+  total_revenue: number;
+}
+
+/**
+ * Get enhanced metrics for admin dashboard
+ */
+export async function getEnhancedMetrics(): Promise<EnhancedMetrics> {
+  const supabase = getSupabaseAdmin();
+
+  const { data: leads, error } = await supabase
+    .from('SOC2_Leads')
+    .select('readiness_score, estimated_cost_low, estimated_cost_high, soc2_requirers, audit_date, sold, sale_amount');
+
+  if (error || !leads) {
+    return {
+      total_leads: 0,
+      avg_readiness_score: 0,
+      avg_estimated_cost: 0,
+      pct_enterprise_driven: 0,
+      pct_urgent: 0,
+      lead_to_sale_rate: 0,
+      total_revenue: 0,
+    };
+  }
+
+  const total = leads.length;
+  if (total === 0) {
+    return {
+      total_leads: 0,
+      avg_readiness_score: 0,
+      avg_estimated_cost: 0,
+      pct_enterprise_driven: 0,
+      pct_urgent: 0,
+      lead_to_sale_rate: 0,
+      total_revenue: 0,
+    };
+  }
+
+  const now = new Date();
+  
+  // Calculate metrics
+  const avgReadiness = leads.reduce((sum, l) => sum + (l.readiness_score || 0), 0) / total;
+  const avgCost = leads.reduce((sum, l) => sum + ((l.estimated_cost_low + l.estimated_cost_high) / 2 || 0), 0) / total;
+  
+  const enterpriseCount = leads.filter(l => 
+    Array.isArray(l.soc2_requirers) && l.soc2_requirers.includes('enterprise')
+  ).length;
+  
+  const urgentCount = leads.filter(l => {
+    if (!l.audit_date) return false;
+    const audit = new Date(l.audit_date);
+    const daysUntil = (audit.getTime() - now.getTime()) / (1000 * 60 * 60 * 24);
+    return daysUntil < 90;
+  }).length;
+  
+  const soldCount = leads.filter(l => l.sold).length;
+  const totalRevenue = leads.reduce((sum, l) => sum + (l.sale_amount || 0), 0);
+
+  return {
+    total_leads: total,
+    avg_readiness_score: Math.round(avgReadiness),
+    avg_estimated_cost: Math.round(avgCost),
+    pct_enterprise_driven: Math.round((enterpriseCount / total) * 100),
+    pct_urgent: Math.round((urgentCount / total) * 100),
+    lead_to_sale_rate: Math.round((soldCount / total) * 100),
+    total_revenue: totalRevenue,
+  };
+}

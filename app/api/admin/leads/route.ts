@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSupabaseAdmin } from '@/lib/supabase';
+import { getSupabaseAdmin, getEnhancedMetrics } from '@/lib/supabase';
 import { validateAdminAuth, sanitizeString } from '@/lib/validation';
 
-// GET /api/admin/leads - Get leads with filters
+// GET /api/admin/leads - Get leads with filters and enhanced metrics
 export async function GET(request: NextRequest) {
   try {
     // Admin auth check - supports both cookie and header auth
@@ -26,6 +26,8 @@ export async function GET(request: NextRequest) {
     const industry = sanitizeString(searchParams.get('industry') || '');
     const search = sanitizeString(searchParams.get('search') || '');
     const sold = searchParams.get('sold');
+    const leadStatus = sanitizeString(searchParams.get('lead_status') || '');
+    const urgency = sanitizeString(searchParams.get('urgency') || '');
     const limit = parseInt(searchParams.get('limit') || '100', 10);
     const offset = parseInt(searchParams.get('offset') || '0', 10);
 
@@ -51,8 +53,12 @@ export async function GET(request: NextRequest) {
     if (sold !== null && sold !== '') {
       query = query.eq('sold', sold === 'true');
     }
+    if (leadStatus) {
+      query = query.eq('lead_status', leadStatus);
+    }
 
-    const { data: leads, error, count } = await query;
+    // Urgency filter requires post-filtering
+    let { data: leads, error, count } = await query;
 
     if (error) {
       console.error('Failed to fetch leads:', error);
@@ -62,7 +68,28 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Calculate stats
+    // Apply urgency filter (requires date calculation)
+    if (urgency && leads) {
+      const now = new Date();
+      leads = leads.filter((lead) => {
+        if (!lead.audit_date) return false;
+        const audit = new Date(lead.audit_date);
+        const daysUntil = (audit.getTime() - now.getTime()) / (1000 * 60 * 60 * 24);
+        
+        switch (urgency) {
+          case 'urgent':
+            return daysUntil < 90;
+          case 'soon':
+            return daysUntil >= 90 && daysUntil < 180;
+          case 'later':
+            return daysUntil >= 180;
+          default:
+            return true;
+        }
+      });
+    }
+
+    // Calculate basic stats
     const statsQuery = await supabase
       .from('SOC2_Leads')
       .select('keep_or_sell, sold, sale_amount');
@@ -77,11 +104,15 @@ export async function GET(request: NextRequest) {
         .reduce((sum, l) => sum + (l.sale_amount || 0), 0),
     };
 
+    // Get enhanced metrics
+    const metrics = await getEnhancedMetrics();
+
     return NextResponse.json({
       success: true,
       leads: leads || [],
       total: count || 0,
       stats,
+      metrics,
     });
   } catch (error) {
     console.error('Admin leads error:', error);

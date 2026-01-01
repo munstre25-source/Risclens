@@ -35,6 +35,7 @@ export interface CalculatorFormInputWithoutEmail {
   variation_id?: string;
   consent?: boolean; // Optional
   specific_requests?: string; // Optional free-text context (not validated, not used in scoring)
+  soc2_requirers?: string[]; // Optional array of SOC 2 requirement sources
 }
 
 export interface ValidationResult<T> {
@@ -291,6 +292,7 @@ export function validateCalculatorFormWithoutEmail(input: unknown): ValidationRe
   // Sanitize all inputs
   const emailValue = sanitizeString(raw.email).toLowerCase();
   const specificRequestsValue = sanitizeString(raw.specific_requests);
+  const soc2RequirersValue = sanitizeStringArray(raw.soc2_requirers).map((s) => s.toLowerCase());
   const sanitized = {
     company_name: sanitizeString(raw.company_name),
     industry: sanitizeString(raw.industry).toLowerCase(),
@@ -303,6 +305,7 @@ export function validateCalculatorFormWithoutEmail(input: unknown): ValidationRe
     variation_id: sanitizeString(raw.variation_id) || undefined,
     consent: sanitizeBoolean(raw.consent) || undefined, // Optional
     specific_requests: specificRequestsValue || undefined, // Optional - not validated, not used in scoring
+    soc2_requirers: soc2RequirersValue.length > 0 ? soc2RequirersValue : undefined, // Optional
   };
 
   // Validate company_name

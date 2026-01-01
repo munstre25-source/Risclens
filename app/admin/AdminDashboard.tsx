@@ -2,15 +2,24 @@
 
 import { useState, useEffect, useCallback } from 'react';
 
+// =============================================================================
+// TYPE DEFINITIONS
+// =============================================================================
+
+type LeadStatus = 'new' | 'qualified' | 'contacted' | 'in_conversation' | 'closed_won' | 'closed_lost';
+
 interface Lead {
   id: string;
   company_name: string;
-  email: string;
+  email: string | null;
   industry: string;
   num_employees: number;
   role: string;
   audit_date: string;
   data_types: string[];
+  soc2_requirers: string[];
+  context_note: string | null;
+  lead_status: LeadStatus;
   lead_score: number;
   readiness_score: number;
   estimated_cost_low: number;
@@ -26,6 +35,20 @@ interface Lead {
   created_at: string;
 }
 
+interface AdminNote {
+  id: string;
+  lead_id: string;
+  note: string;
+  author: string;
+  created_at: string;
+}
+
+interface SavedFilter {
+  id: string;
+  name: string;
+  filter_config: Record<string, string | number | boolean>;
+}
+
 interface ABVariant {
   id: string;
   variation_id: string;
@@ -37,12 +60,26 @@ interface ABVariant {
   active: boolean;
 }
 
+interface EnhancedMetrics {
+  total_leads: number;
+  avg_readiness_score: number;
+  avg_estimated_cost: number;
+  pct_enterprise_driven: number;
+  pct_urgent: number;
+  lead_to_sale_rate: number;
+  total_revenue: number;
+}
+
 interface Stats {
   total: number;
   keep: number;
   sell: number;
   revenue: number;
 }
+
+// =============================================================================
+// CONSTANTS
+// =============================================================================
 
 const INDUSTRIES = [
   { value: '', label: 'All Industries' },
@@ -55,14 +92,74 @@ const INDUSTRIES = [
   { value: 'other', label: 'Other' },
 ];
 
+const LEAD_STATUSES: { value: LeadStatus; label: string; color: string }[] = [
+  { value: 'new', label: 'New', color: 'bg-blue-100 text-blue-700' },
+  { value: 'qualified', label: 'Qualified', color: 'bg-purple-100 text-purple-700' },
+  { value: 'contacted', label: 'Contacted', color: 'bg-yellow-100 text-yellow-700' },
+  { value: 'in_conversation', label: 'In Conversation', color: 'bg-orange-100 text-orange-700' },
+  { value: 'closed_won', label: 'Closed Won', color: 'bg-green-100 text-green-700' },
+  { value: 'closed_lost', label: 'Closed Lost', color: 'bg-gray-100 text-gray-600' },
+];
+
+const URGENCY_BANDS = [
+  { max: 90, label: 'Urgent', color: 'text-red-600 bg-red-50', badge: '🔴' },
+  { max: 180, label: '90-180 days', color: 'text-yellow-600 bg-yellow-50', badge: '🟡' },
+  { max: Infinity, label: 'Exploratory', color: 'text-gray-500 bg-gray-50', badge: '⚪' },
+];
+
+// =============================================================================
+// HELPER FUNCTIONS
+// =============================================================================
+
+function getDaysUntilAudit(auditDate: string): number {
+  const now = new Date();
+  const audit = new Date(auditDate);
+  return Math.ceil((audit.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+}
+
+function getUrgencyBand(auditDate: string) {
+  const days = getDaysUntilAudit(auditDate);
+  return URGENCY_BANDS.find(b => days < b.max) || URGENCY_BANDS[2];
+}
+
+function getReadinessBand(score: number): { label: string; color: string } {
+  if (score <= 30) return { label: 'Pre-audit', color: 'text-red-600' };
+  if (score <= 60) return { label: 'Early-stage', color: 'text-yellow-600' };
+  if (score <= 80) return { label: 'Near-ready', color: 'text-blue-600' };
+  return { label: 'Audit-ready', color: 'text-green-600' };
+}
+
+function formatDate(dateStr: string) {
+  return new Date(dateStr).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+}
+
+function formatCurrency(amount: number) {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0,
+  }).format(amount);
+}
+
+// =============================================================================
+// MAIN COMPONENT
+// =============================================================================
+
 interface AdminDashboardProps {
   onLogout: () => void;
 }
 
 export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
+  // Data state
   const [leads, setLeads] = useState<Lead[]>([]);
   const [variants, setVariants] = useState<ABVariant[]>([]);
   const [stats, setStats] = useState<Stats>({ total: 0, keep: 0, sell: 0, revenue: 0 });
+  const [metrics, setMetrics] = useState<EnhancedMetrics | null>(null);
+  const [savedFilters, setSavedFilters] = useState<SavedFilter[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -71,32 +168,46 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
   const [keepOrSell, setKeepOrSell] = useState('');
   const [industry, setIndustry] = useState('');
   const [soldFilter, setSoldFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
+  const [urgencyFilter, setUrgencyFilter] = useState('');
 
-  // Modal state
+  // Detail panel
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
+  const [leadNotes, setLeadNotes] = useState<AdminNote[]>([]);
+  const [newNote, setNewNote] = useState('');
+  const [showDetailPanel, setShowDetailPanel] = useState(false);
+
+  // Modals
   const [showSellModal, setShowSellModal] = useState(false);
   const [sellAmount, setSellAmount] = useState('');
   const [buyerEmail, setBuyerEmail] = useState('');
   const [actionLoading, setActionLoading] = useState(false);
 
-  // Get admin token from cookie for API calls
+  // Save filter modal
+  const [showSaveFilterModal, setShowSaveFilterModal] = useState(false);
+  const [newFilterName, setNewFilterName] = useState('');
+
   const getAdminToken = () => {
     const match = document.cookie.match(/admin_token=([^;]+)/);
     return match ? match[1] : '';
   };
 
+  // ==========================================================================
+  // DATA FETCHING
+  // ==========================================================================
+
   const fetchData = useCallback(async () => {
     try {
       const token = getAdminToken();
       
-      // Build query params
       const params = new URLSearchParams();
       if (search) params.append('search', search);
       if (keepOrSell) params.append('keep_or_sell', keepOrSell);
       if (industry) params.append('industry', industry);
       if (soldFilter) params.append('sold', soldFilter);
+      if (statusFilter) params.append('lead_status', statusFilter);
+      if (urgencyFilter) params.append('urgency', urgencyFilter);
 
-      // Fetch leads
       const leadsRes = await fetch(`/api/admin/leads?${params.toString()}`, {
         headers: { 'Authorization': `Bearer ${token}` },
         credentials: 'include',
@@ -106,6 +217,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
       const leadsData = await leadsRes.json();
       setLeads(leadsData.leads || []);
       setStats(leadsData.stats || { total: 0, keep: 0, sell: 0, revenue: 0 });
+      if (leadsData.metrics) setMetrics(leadsData.metrics);
 
       // Fetch A/B variants
       const variantsRes = await fetch('/api/admin/variants', {
@@ -117,16 +229,105 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
         const variantsData = await variantsRes.json();
         setVariants(variantsData.variants || []);
       }
+
+      // Fetch saved filters
+      const filtersRes = await fetch('/api/admin/filters', {
+        headers: { 'Authorization': `Bearer ${token}` },
+        credentials: 'include',
+      });
+
+      if (filtersRes.ok) {
+        const filtersData = await filtersRes.json();
+        setSavedFilters(filtersData.filters || []);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load data');
     } finally {
       setLoading(false);
     }
-  }, [search, keepOrSell, industry, soldFilter]);
+  }, [search, keepOrSell, industry, soldFilter, statusFilter, urgencyFilter]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  // ==========================================================================
+  // LEAD DETAIL PANEL
+  // ==========================================================================
+
+  const openLeadDetail = async (lead: Lead) => {
+    setSelectedLead(lead);
+    setShowDetailPanel(true);
+    
+    // Fetch notes for this lead
+    const token = getAdminToken();
+    try {
+      const res = await fetch(`/api/admin/leads/${lead.id}/notes`, {
+        headers: { 'Authorization': `Bearer ${token}` },
+        credentials: 'include',
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setLeadNotes(data.notes || []);
+      }
+    } catch {
+      // Ignore errors for notes
+    }
+  };
+
+  const handleAddNote = async () => {
+    if (!selectedLead || !newNote.trim()) return;
+    
+    const token = getAdminToken();
+    try {
+      const res = await fetch(`/api/admin/leads/${selectedLead.id}/notes`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        credentials: 'include',
+        body: JSON.stringify({ note: newNote.trim() }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setLeadNotes([data.note, ...leadNotes]);
+        setNewNote('');
+      }
+    } catch {
+      alert('Failed to add note');
+    }
+  };
+
+  const handleStatusChange = async (leadId: string, status: LeadStatus) => {
+    const token = getAdminToken();
+    try {
+      const res = await fetch(`/api/admin/leads/${leadId}/status`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        credentials: 'include',
+        body: JSON.stringify({ status }),
+      });
+
+      if (res.ok) {
+        // Update local state
+        setLeads(leads.map(l => l.id === leadId ? { ...l, lead_status: status } : l));
+        if (selectedLead?.id === leadId) {
+          setSelectedLead({ ...selectedLead, lead_status: status });
+        }
+      }
+    } catch {
+      alert('Failed to update status');
+    }
+  };
+
+  // ==========================================================================
+  // ACTIONS
+  // ==========================================================================
 
   const handleResendEmail = async (leadId: string) => {
     setActionLoading(true);
@@ -184,7 +385,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
       setSelectedLead(null);
       setSellAmount('');
       setBuyerEmail('');
-      fetchData(); // Refresh data
+      fetchData();
     } catch (err) {
       alert(err instanceof Error ? err.message : 'Failed to mark as sold');
     } finally {
@@ -193,19 +394,61 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
   };
 
   const handleExportCSV = async () => {
-    try {
-      const token = getAdminToken();
-      const params = new URLSearchParams();
-      if (search) params.append('search', search);
-      if (keepOrSell) params.append('keep_or_sell', keepOrSell);
-      if (industry) params.append('industry', industry);
-      if (soldFilter) params.append('sold', soldFilter);
-      params.append('secret', token);
+    const token = getAdminToken();
+    const params = new URLSearchParams();
+    if (search) params.append('search', search);
+    if (keepOrSell) params.append('keep_or_sell', keepOrSell);
+    if (industry) params.append('industry', industry);
+    if (soldFilter) params.append('sold', soldFilter);
+    if (statusFilter) params.append('lead_status', statusFilter);
+    if (urgencyFilter) params.append('urgency', urgencyFilter);
+    params.append('secret', token);
 
-      window.open(`/api/admin/export-csv?${params.toString()}`, '_blank');
-    } catch (err) {
-      alert('Failed to export CSV');
+    window.open(`/api/admin/export-csv?${params.toString()}`, '_blank');
+  };
+
+  const handleSaveFilter = async () => {
+    if (!newFilterName.trim()) return;
+    
+    const filterConfig: Record<string, string> = {};
+    if (search) filterConfig.search = search;
+    if (keepOrSell) filterConfig.keep_or_sell = keepOrSell;
+    if (industry) filterConfig.industry = industry;
+    if (soldFilter) filterConfig.sold = soldFilter;
+    if (statusFilter) filterConfig.lead_status = statusFilter;
+    if (urgencyFilter) filterConfig.urgency = urgencyFilter;
+
+    const token = getAdminToken();
+    try {
+      const res = await fetch('/api/admin/filters', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        credentials: 'include',
+        body: JSON.stringify({ name: newFilterName, filter_config: filterConfig }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setSavedFilters([...savedFilters, data.filter]);
+        setShowSaveFilterModal(false);
+        setNewFilterName('');
+      }
+    } catch {
+      alert('Failed to save filter');
     }
+  };
+
+  const applyFilter = (filter: SavedFilter) => {
+    const config = filter.filter_config;
+    if (config.search) setSearch(config.search as string);
+    if (config.keep_or_sell) setKeepOrSell(config.keep_or_sell as string);
+    if (config.industry) setIndustry(config.industry as string);
+    if (config.sold) setSoldFilter(config.sold as string);
+    if (config.lead_status) setStatusFilter(config.lead_status as string);
+    if (config.urgency) setUrgencyFilter(config.urgency as string);
   };
 
   const handleToggleVariant = async (variantId: string, active: boolean) => {
@@ -223,26 +466,14 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
 
       if (!res.ok) throw new Error('Failed to toggle variant');
       fetchData();
-    } catch (err) {
+    } catch {
       alert('Failed to toggle variant');
     }
   };
 
-  const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    });
-  };
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      maximumFractionDigits: 0,
-    }).format(amount);
-  };
+  // ==========================================================================
+  // RENDER
+  // ==========================================================================
 
   if (loading) {
     return (
@@ -260,10 +491,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
           <h1 className="text-xl font-bold text-gray-900">
             RiscLens Admin Dashboard
           </h1>
-          <button
-            onClick={onLogout}
-            className="text-sm text-gray-600 hover:text-gray-900"
-          >
+          <button onClick={onLogout} className="text-sm text-gray-600 hover:text-gray-900">
             Logout
           </button>
         </div>
@@ -277,25 +505,55 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
           </div>
         )}
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="card">
-            <div className="text-sm text-gray-500 mb-1">Total Leads</div>
-            <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
+        {/* Enhanced Metrics */}
+        {metrics && (
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-8">
+            <div className="card p-4">
+              <div className="text-xs text-gray-500 mb-1">Total Leads</div>
+              <div className="text-xl font-bold text-gray-900">{metrics.total_leads}</div>
+            </div>
+            <div className="card p-4">
+              <div className="text-xs text-gray-500 mb-1">Avg Readiness</div>
+              <div className="text-xl font-bold text-brand-600">{metrics.avg_readiness_score}%</div>
+            </div>
+            <div className="card p-4">
+              <div className="text-xs text-gray-500 mb-1">Avg Est. Cost</div>
+              <div className="text-xl font-bold text-gray-900">{formatCurrency(metrics.avg_estimated_cost)}</div>
+            </div>
+            <div className="card p-4">
+              <div className="text-xs text-gray-500 mb-1">Enterprise-driven</div>
+              <div className="text-xl font-bold text-purple-600">{metrics.pct_enterprise_driven}%</div>
+            </div>
+            <div className="card p-4">
+              <div className="text-xs text-gray-500 mb-1">Urgent (&lt;90d)</div>
+              <div className="text-xl font-bold text-red-600">{metrics.pct_urgent}%</div>
+            </div>
+            <div className="card p-4">
+              <div className="text-xs text-gray-500 mb-1">Conversion</div>
+              <div className="text-xl font-bold text-green-600">{metrics.lead_to_sale_rate}%</div>
+            </div>
+            <div className="card p-4">
+              <div className="text-xs text-gray-500 mb-1">Revenue</div>
+              <div className="text-xl font-bold text-trust-600">{formatCurrency(metrics.total_revenue)}</div>
+            </div>
           </div>
-          <div className="card">
-            <div className="text-sm text-gray-500 mb-1">Keep Leads</div>
-            <div className="text-2xl font-bold text-trust-600">{stats.keep}</div>
+        )}
+
+        {/* Saved Filters */}
+        {savedFilters.length > 0 && (
+          <div className="mb-4 flex flex-wrap gap-2">
+            <span className="text-sm text-gray-500 py-1">Saved filters:</span>
+            {savedFilters.map(filter => (
+              <button
+                key={filter.id}
+                onClick={() => applyFilter(filter)}
+                className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
+              >
+                {filter.name}
+              </button>
+            ))}
           </div>
-          <div className="card">
-            <div className="text-sm text-gray-500 mb-1">Sell Leads</div>
-            <div className="text-2xl font-bold text-orange-600">{stats.sell}</div>
-          </div>
-          <div className="card">
-            <div className="text-sm text-gray-500 mb-1">Revenue</div>
-            <div className="text-2xl font-bold text-brand-600">{formatCurrency(stats.revenue)}</div>
-          </div>
-        </div>
+        )}
 
         {/* Filters */}
         <div className="card mb-6">
@@ -312,11 +570,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
             </div>
             <div>
               <label className="form-label">Type</label>
-              <select
-                className="form-input"
-                value={keepOrSell}
-                onChange={(e) => setKeepOrSell(e.target.value)}
-              >
+              <select className="form-input" value={keepOrSell} onChange={(e) => setKeepOrSell(e.target.value)}>
                 <option value="">All</option>
                 <option value="keep">Keep</option>
                 <option value="sell">Sell</option>
@@ -324,30 +578,33 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
             </div>
             <div>
               <label className="form-label">Industry</label>
-              <select
-                className="form-input"
-                value={industry}
-                onChange={(e) => setIndustry(e.target.value)}
-              >
+              <select className="form-input" value={industry} onChange={(e) => setIndustry(e.target.value)}>
                 {INDUSTRIES.map((ind) => (
-                  <option key={ind.value} value={ind.value}>
-                    {ind.label}
-                  </option>
+                  <option key={ind.value} value={ind.value}>{ind.label}</option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="form-label">Sold</label>
-              <select
-                className="form-input"
-                value={soldFilter}
-                onChange={(e) => setSoldFilter(e.target.value)}
-              >
+              <label className="form-label">Status</label>
+              <select className="form-input" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
                 <option value="">All</option>
-                <option value="true">Sold</option>
-                <option value="false">Not Sold</option>
+                {LEAD_STATUSES.map((s) => (
+                  <option key={s.value} value={s.value}>{s.label}</option>
+                ))}
               </select>
             </div>
+            <div>
+              <label className="form-label">Urgency</label>
+              <select className="form-input" value={urgencyFilter} onChange={(e) => setUrgencyFilter(e.target.value)}>
+                <option value="">All</option>
+                <option value="urgent">Urgent (&lt;90d)</option>
+                <option value="soon">90-180 days</option>
+                <option value="later">180+ days</option>
+              </select>
+            </div>
+            <button onClick={() => setShowSaveFilterModal(true)} className="btn-secondary text-sm">
+              Save Filter
+            </button>
             <button onClick={handleExportCSV} className="btn-secondary">
               Export CSV
             </button>
@@ -361,11 +618,12 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
               <thead>
                 <tr>
                   <th>Company</th>
-                  <th>Email</th>
+                  <th>Contact</th>
                   <th>Industry</th>
-                  <th>Score</th>
-                  <th>Type</th>
+                  <th>Readiness</th>
+                  <th>Urgency</th>
                   <th>Status</th>
+                  <th>Type</th>
                   <th>Created</th>
                   <th>Actions</th>
                 </tr>
@@ -373,77 +631,82 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
               <tbody>
                 {leads.length === 0 ? (
                   <tr>
-                    <td colSpan={8} className="text-center py-8 text-gray-500">
+                    <td colSpan={9} className="text-center py-8 text-gray-500">
                       No leads found.
                     </td>
                   </tr>
                 ) : (
-                  leads.map((lead) => (
-                    <tr key={lead.id} className="hover:bg-gray-50">
-                      <td className="font-medium">{lead.company_name}</td>
-                      <td className="text-gray-600">{lead.email}</td>
-                      <td className="capitalize">{lead.industry}</td>
-                      <td>
-                        <span className="font-semibold">{lead.lead_score}</span>
-                        <span className="text-gray-400">/10</span>
-                      </td>
-                      <td>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          lead.keep_or_sell === 'keep' 
-                            ? 'bg-green-100 text-green-700' 
-                            : 'bg-orange-100 text-orange-700'
-                        }`}>
-                          {lead.keep_or_sell}
-                        </span>
-                      </td>
-                      <td>
-                        {lead.sold ? (
-                          <span className="text-trust-600 font-medium">
-                            Sold {lead.sale_amount ? formatCurrency(lead.sale_amount) : ''}
+                  leads.map((lead) => {
+                    const urgency = getUrgencyBand(lead.audit_date);
+                    const readiness = getReadinessBand(lead.readiness_score);
+                    const status = LEAD_STATUSES.find(s => s.value === lead.lead_status) || LEAD_STATUSES[0];
+                    const daysUntil = getDaysUntilAudit(lead.audit_date);
+
+                    return (
+                      <tr 
+                        key={lead.id} 
+                        className="hover:bg-gray-50 cursor-pointer"
+                        onClick={() => openLeadDetail(lead)}
+                      >
+                        <td className="font-medium">{lead.company_name}</td>
+                        <td className="text-gray-600 text-sm">
+                          {lead.email || <span className="text-gray-400">No email</span>}
+                        </td>
+                        <td className="capitalize">{lead.industry}</td>
+                        <td>
+                          <div className="flex flex-col">
+                            <span className={`font-semibold ${readiness.color}`}>
+                              {lead.readiness_score}%
+                            </span>
+                            <span className="text-xs text-gray-400">{readiness.label}</span>
+                          </div>
+                        </td>
+                        <td>
+                          <span className={`text-xs px-2 py-1 rounded ${urgency.color}`}>
+                            {urgency.badge} {daysUntil}d
                           </span>
-                        ) : lead.email_sent ? (
-                          <span className="text-gray-500">Email sent</span>
-                        ) : (
-                          <span className="text-gray-400">Pending</span>
-                        )}
-                      </td>
-                      <td className="text-gray-500">{formatDate(lead.created_at)}</td>
-                      <td>
-                        <div className="flex gap-2">
-                          {lead.pdf_url && (
-                            <a
-                              href={lead.pdf_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-brand-600 hover:text-brand-700 text-sm"
-                            >
-                              PDF
-                            </a>
-                          )}
-                          {lead.email_sent && (
-                            <button
-                              onClick={() => handleResendEmail(lead.id)}
-                              disabled={actionLoading}
-                              className="text-brand-600 hover:text-brand-700 text-sm"
-                            >
-                              Resend
-                            </button>
-                          )}
-                          {!lead.sold && lead.keep_or_sell === 'sell' && (
-                            <button
-                              onClick={() => {
-                                setSelectedLead(lead);
-                                setShowSellModal(true);
-                              }}
-                              className="text-trust-600 hover:text-trust-700 text-sm"
-                            >
-                              Sell
-                            </button>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  ))
+                        </td>
+                        <td>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${status.color}`}>
+                            {status.label}
+                          </span>
+                        </td>
+                        <td>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            lead.keep_or_sell === 'keep' 
+                              ? 'bg-green-100 text-green-700' 
+                              : 'bg-orange-100 text-orange-700'
+                          }`}>
+                            {lead.keep_or_sell}
+                          </span>
+                        </td>
+                        <td className="text-gray-500 text-sm">{formatDate(lead.created_at)}</td>
+                        <td onClick={(e) => e.stopPropagation()}>
+                          <div className="flex gap-2">
+                            {lead.pdf_url && (
+                              <a
+                                href={lead.pdf_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-brand-600 hover:text-brand-700 text-sm"
+                              >
+                                PDF
+                              </a>
+                            )}
+                            {lead.email_sent && (
+                              <button
+                                onClick={() => handleResendEmail(lead.id)}
+                                disabled={actionLoading}
+                                className="text-brand-600 hover:text-brand-700 text-sm"
+                              >
+                                Resend
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
                 )}
               </tbody>
             </table>
@@ -509,13 +772,179 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
         </div>
       </main>
 
+      {/* Lead Detail Panel */}
+      {showDetailPanel && selectedLead && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50" onClick={() => setShowDetailPanel(false)}>
+          <div 
+            className="absolute right-0 top-0 h-full w-full max-w-2xl bg-white shadow-xl overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="p-6">
+              {/* Header */}
+              <div className="flex justify-between items-start mb-6">
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900">{selectedLead.company_name}</h2>
+                  <p className="text-gray-500">{selectedLead.email || 'No email'}</p>
+                </div>
+                <button 
+                  onClick={() => setShowDetailPanel(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Score Breakdown */}
+              <div className="bg-gray-50 rounded-lg p-4 mb-6">
+                <h3 className="font-semibold text-gray-900 mb-3">Score Breakdown</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <div className="text-sm text-gray-500">Readiness Score</div>
+                    <div className={`text-2xl font-bold ${getReadinessBand(selectedLead.readiness_score).color}`}>
+                      {selectedLead.readiness_score}%
+                    </div>
+                    <div className="text-xs text-gray-400">{getReadinessBand(selectedLead.readiness_score).label}</div>
+                  </div>
+                  <div>
+                    <div className="text-sm text-gray-500">Lead Score</div>
+                    <div className="text-2xl font-bold text-gray-900">{selectedLead.lead_score}/10</div>
+                    <div className="text-xs text-gray-400">{selectedLead.keep_or_sell === 'keep' ? 'Keep' : 'Sell'}</div>
+                  </div>
+                  <div>
+                    <div className="text-sm text-gray-500">Cost Estimate</div>
+                    <div className="text-lg font-semibold text-gray-900">
+                      {formatCurrency(selectedLead.estimated_cost_low)} - {formatCurrency(selectedLead.estimated_cost_high)}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-sm text-gray-500">Days Until Audit</div>
+                    <div className={`text-lg font-semibold ${getUrgencyBand(selectedLead.audit_date).color.split(' ')[0]}`}>
+                      {getDaysUntilAudit(selectedLead.audit_date)} days
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Score Drivers */}
+              <div className="bg-gray-50 rounded-lg p-4 mb-6">
+                <h3 className="font-semibold text-gray-900 mb-3">Score Drivers</h3>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Employees</span>
+                    <span className="font-medium">{selectedLead.num_employees}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Industry</span>
+                    <span className="font-medium capitalize">{selectedLead.industry}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Data Types</span>
+                    <span className="font-medium">{selectedLead.data_types.join(', ').toUpperCase()}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Role</span>
+                    <span className="font-medium capitalize">{selectedLead.role}</span>
+                  </div>
+                  {selectedLead.soc2_requirers && selectedLead.soc2_requirers.length > 0 && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Required By</span>
+                      <span className="font-medium capitalize">{selectedLead.soc2_requirers.join(', ')}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* User Context Note */}
+              {selectedLead.context_note && (
+                <div className="bg-blue-50 rounded-lg p-4 mb-6">
+                  <h3 className="font-semibold text-gray-900 mb-2">User Context</h3>
+                  <p className="text-sm text-gray-700">{selectedLead.context_note}</p>
+                </div>
+              )}
+
+              {/* Status */}
+              <div className="mb-6">
+                <h3 className="font-semibold text-gray-900 mb-3">Lead Status</h3>
+                <div className="flex flex-wrap gap-2">
+                  {LEAD_STATUSES.map((s) => (
+                    <button
+                      key={s.value}
+                      onClick={() => handleStatusChange(selectedLead.id, s.value)}
+                      className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+                        selectedLead.lead_status === s.value
+                          ? s.color + ' ring-2 ring-offset-1 ring-gray-400'
+                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                    >
+                      {s.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Admin Notes */}
+              <div className="mb-6">
+                <h3 className="font-semibold text-gray-900 mb-3">Admin Notes</h3>
+                <div className="flex gap-2 mb-4">
+                  <input
+                    type="text"
+                    value={newNote}
+                    onChange={(e) => setNewNote(e.target.value)}
+                    placeholder="Add a note..."
+                    className="form-input flex-1"
+                    onKeyPress={(e) => e.key === 'Enter' && handleAddNote()}
+                  />
+                  <button onClick={handleAddNote} className="btn-primary">
+                    Add
+                  </button>
+                </div>
+                <div className="space-y-3 max-h-60 overflow-y-auto">
+                  {leadNotes.length === 0 ? (
+                    <p className="text-sm text-gray-400">No notes yet.</p>
+                  ) : (
+                    leadNotes.map((note) => (
+                      <div key={note.id} className="bg-gray-50 rounded p-3">
+                        <p className="text-sm text-gray-700">{note.note}</p>
+                        <p className="text-xs text-gray-400 mt-1">
+                          {note.author} • {formatDate(note.created_at)}
+                        </p>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="flex gap-3">
+                {selectedLead.pdf_url && (
+                  <a
+                    href={selectedLead.pdf_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-secondary"
+                  >
+                    View PDF
+                  </a>
+                )}
+                {!selectedLead.sold && selectedLead.keep_or_sell === 'sell' && (
+                  <button
+                    onClick={() => setShowSellModal(true)}
+                    className="btn-primary"
+                  >
+                    Mark as Sold
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Sell Modal */}
       {showSellModal && selectedLead && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-            <h3 className="text-lg font-semibold mb-4">
-              Mark Lead as Sold
-            </h3>
+            <h3 className="text-lg font-semibold mb-4">Mark Lead as Sold</h3>
             <p className="text-gray-600 mb-4">
               <strong>{selectedLead.company_name}</strong> ({selectedLead.email})
             </p>
@@ -545,7 +974,8 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
               <button
                 onClick={() => {
                   setShowSellModal(false);
-                  setSelectedLead(null);
+                  setSellAmount('');
+                  setBuyerEmail('');
                 }}
                 className="btn-secondary"
               >
@@ -562,7 +992,33 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
           </div>
         </div>
       )}
+
+      {/* Save Filter Modal */}
+      {showSaveFilterModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-lg font-semibold mb-4">Save Current Filter</h3>
+            <div>
+              <label className="form-label">Filter Name</label>
+              <input
+                type="text"
+                className="form-input"
+                placeholder="e.g., Enterprise + Urgent"
+                value={newFilterName}
+                onChange={(e) => setNewFilterName(e.target.value)}
+              />
+            </div>
+            <div className="flex justify-end gap-3 mt-6">
+              <button onClick={() => setShowSaveFilterModal(false)} className="btn-secondary">
+                Cancel
+              </button>
+              <button onClick={handleSaveFilter} disabled={!newFilterName.trim()} className="btn-primary">
+                Save Filter
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
-
