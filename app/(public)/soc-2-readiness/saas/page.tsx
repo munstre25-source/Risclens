@@ -264,6 +264,19 @@ export default function SaaSSoc2ReadinessPage() {
               </svg>
             </Link>
           </div>
+
+          {/* Cross-link to other industries */}
+          <div className="mt-8 pt-6 border-t border-slate-100">
+            <p className="text-sm text-slate-500">
+              SOC 2 readiness for other industries:{" "}
+              <Link 
+                href="/soc-2-readiness/fintech"
+                className="text-slate-600 hover:text-brand-600 transition-colors underline underline-offset-2"
+              >
+                Fintech Companies
+              </Link>
+            </p>
+          </div>
         </div>
       </section>
 

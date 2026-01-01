@@ -42,6 +42,28 @@ export default function HomePage() {
           <p className="mt-5 text-sm text-slate-500">
             Free • No credit card • Instant results
           </p>
+
+          {/* Industry Links */}
+          <div className="mt-10 pt-8 border-t border-slate-200/50">
+            <p className="text-sm text-slate-500 mb-3">
+              SOC 2 readiness by industry:
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link 
+                href="/soc-2-readiness/saas"
+                className="text-sm text-slate-600 hover:text-brand-600 transition-colors underline underline-offset-2"
+              >
+                SaaS Companies
+              </Link>
+              <span className="text-slate-300">•</span>
+              <Link 
+                href="/soc-2-readiness/fintech"
+                className="text-sm text-slate-600 hover:text-brand-600 transition-colors underline underline-offset-2"
+              >
+                Fintech Companies
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 
