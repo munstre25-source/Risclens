@@ -197,6 +197,178 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* FAQ Section */}
+      <section className="py-16 lg:py-20 bg-white border-t border-slate-200">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <h2 className="text-2xl font-bold text-slate-900 mb-10">
+            Frequently Asked Questions
+          </h2>
+          
+          <div className="space-y-8">
+            {/* FAQ 1 */}
+            <div>
+              <h3 className="text-lg font-semibold text-slate-800 mb-3">
+                What is SOC 2 readiness?
+              </h3>
+              <p className="text-slate-600 leading-relaxed">
+                SOC 2 readiness refers to an organization&apos;s preparedness to undergo a SOC 2 audit. It encompasses having the necessary policies, procedures, technical controls, and documentation in place to satisfy the Trust Service Criteria — Security, Availability, Processing Integrity, Confidentiality, and Privacy. A readiness assessment helps identify gaps before engaging an auditor, reducing the risk of failed audits or costly remediation cycles.
+              </p>
+            </div>
+
+            {/* FAQ 2 */}
+            <div>
+              <h3 className="text-lg font-semibold text-slate-800 mb-3">
+                How is SOC 2 readiness calculated?
+              </h3>
+              <p className="text-slate-600 leading-relaxed mb-3">
+                RiscLens calculates SOC 2 readiness using a deterministic, rules-based algorithm. There is no AI reasoning or probabilistic modeling — every score is derived from explicit weights applied to your inputs:
+              </p>
+              <ul className="space-y-2 text-slate-600 mb-3">
+                <li className="flex gap-3">
+                  <span className="text-brand-600 font-medium">•</span>
+                  <span>Company size and team structure affect documentation scope</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-brand-600 font-medium">•</span>
+                  <span>Data types (PII, financial, health) determine required controls</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-brand-600 font-medium">•</span>
+                  <span>Audit timeline urgency impacts cost and resource intensity</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-brand-600 font-medium">•</span>
+                  <span>Industry vertical influences baseline compliance expectations</span>
+                </li>
+              </ul>
+              <p className="text-slate-600 leading-relaxed">
+                The result is a readiness band (Pre-audit, Early-stage, Near-ready, or Audit-ready) and a cost range estimate. Each element of the score can be traced back to specific inputs.
+              </p>
+            </div>
+
+            {/* FAQ 3 */}
+            <div>
+              <h3 className="text-lg font-semibold text-slate-800 mb-3">
+                How long does SOC 2 take?
+              </h3>
+              <p className="text-slate-600 leading-relaxed mb-3">
+                SOC 2 timelines vary significantly based on your starting point and audit type:
+              </p>
+              <ul className="space-y-2 text-slate-600 mb-3">
+                <li className="flex gap-3">
+                  <span className="text-brand-600 font-medium">•</span>
+                  <span><strong>Readiness phase:</strong> 2–6 months depending on existing controls and gaps</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-brand-600 font-medium">•</span>
+                  <span><strong>Type I audit:</strong> Typically 4–8 weeks once controls are in place</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-brand-600 font-medium">•</span>
+                  <span><strong>Type II audit:</strong> Requires a 3–12 month observation period</span>
+                </li>
+              </ul>
+              <p className="text-slate-600 leading-relaxed">
+                For most early-stage companies with limited existing controls, expect 3–6 months of preparation before a Type I audit is feasible. Compressed timelines are possible but typically increase cost.
+              </p>
+            </div>
+
+            {/* FAQ 4 */}
+            <div>
+              <h3 className="text-lg font-semibold text-slate-800 mb-3">
+                How much does SOC 2 cost?
+              </h3>
+              <p className="text-slate-600 leading-relaxed mb-3">
+                SOC 2 costs depend on company size, complexity, and timeline. A typical first-time SOC 2 engagement includes:
+              </p>
+              <ul className="space-y-2 text-slate-600 mb-3">
+                <li className="flex gap-3">
+                  <span className="text-brand-600 font-medium">•</span>
+                  <span><strong>Auditor fees:</strong> $15,000–$50,000+ depending on scope and firm</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-brand-600 font-medium">•</span>
+                  <span><strong>Compliance tooling:</strong> $5,000–$30,000/year for automation platforms</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-brand-600 font-medium">•</span>
+                  <span><strong>Internal effort:</strong> Engineering and operational time for remediation</span>
+                </li>
+              </ul>
+              <p className="text-slate-600 leading-relaxed">
+                RiscLens estimates total cost ranges based on your inputs, including auditor fees, tooling, and internal preparation effort. These are planning estimates — actual costs depend on vendor selection and organizational factors.
+              </p>
+            </div>
+
+            {/* FAQ 5 */}
+            <div>
+              <h3 className="text-lg font-semibold text-slate-800 mb-3">
+                SOC 2 Type I vs Type II: What&apos;s the difference?
+              </h3>
+              <p className="text-slate-600 leading-relaxed mb-3">
+                Both audit types evaluate your controls against the Trust Service Criteria, but differ in scope:
+              </p>
+              <ul className="space-y-2 text-slate-600 mb-3">
+                <li className="flex gap-3">
+                  <span className="text-brand-600 font-medium">•</span>
+                  <span><strong>Type I:</strong> Point-in-time assessment of whether controls are designed and implemented</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-brand-600 font-medium">•</span>
+                  <span><strong>Type II:</strong> Evaluates whether controls operated effectively over a period (typically 3–12 months)</span>
+                </li>
+              </ul>
+              <p className="text-slate-600 leading-relaxed">
+                Most enterprise customers prefer Type II reports. Many companies start with Type I to demonstrate initial compliance, then progress to Type II. The choice depends on customer requirements and your compliance timeline.
+              </p>
+            </div>
+
+            {/* FAQ 6 */}
+            <div>
+              <h3 className="text-lg font-semibold text-slate-800 mb-3">
+                Is this a SOC 2 audit or certification?
+              </h3>
+              <p className="text-slate-600 leading-relaxed mb-3">
+                No. RiscLens provides a <strong>readiness assessment</strong>, not an audit or certification.
+              </p>
+              <ul className="space-y-2 text-slate-600 mb-3">
+                <li className="flex gap-3">
+                  <span className="text-brand-600 font-medium">•</span>
+                  <span><strong>SOC 2 audits</strong> must be performed by licensed CPA firms</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-brand-600 font-medium">•</span>
+                  <span><strong>SOC 2 reports</strong> (often called &quot;certifications&quot;) are formal attestations issued by auditors</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-brand-600 font-medium">•</span>
+                  <span><strong>Readiness assessments</strong> help organizations prepare before engaging auditors</span>
+                </li>
+              </ul>
+              <p className="text-slate-600 leading-relaxed">
+                Our assessment provides planning estimates and identifies potential gaps — it is not a substitute for a formal SOC 2 engagement with a qualified auditor.
+              </p>
+            </div>
+          </div>
+
+          {/* FAQ CTA */}
+          <div className="mt-12 pt-6 border-t border-slate-200">
+            <p className="text-slate-600 mb-4">
+              Ready to assess your SOC 2 readiness?
+            </p>
+            <Link 
+              href="/soc-2-readiness-index"
+              className="inline-flex items-center text-brand-600 hover:text-brand-700 font-medium transition-colors"
+            >
+              Start your free assessment
+              <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="py-10 bg-slate-900 text-slate-400 text-sm">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
