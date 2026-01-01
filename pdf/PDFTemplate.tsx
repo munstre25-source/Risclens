@@ -1,6 +1,29 @@
 import React from 'react';
 
-// Lead data interface for PDF generation
+/**
+ * ENTERPRISE-GRADE PDF TEMPLATE
+ * 
+ * This template is fully structured and deterministic.
+ * 
+ * CRITICAL RULES:
+ * - All content is templated or derived from deterministic inputs
+ * - No free-form AI-generated sections
+ * - AI may only fill predefined sections with formatted data
+ * - Disclaimer is mandatory and cannot be removed
+ * 
+ * STRUCTURE:
+ * 1. Executive Summary (templated)
+ * 2. Readiness Band Explanation (templated per band)
+ * 3. Cost Range Explanation (templated)
+ * 4. Control Gap Sections (conditional, from input data)
+ * 5. Next-Step Checklist (templated)
+ * 6. Disclaimer Footer (mandatory)
+ */
+
+// =============================================================================
+// INTERFACES
+// =============================================================================
+
 export interface PDFLeadData {
   id: string;
   company_name: string;
@@ -20,7 +43,159 @@ interface PDFTemplateProps {
   lead: PDFLeadData;
 }
 
-// Helper to format currency
+// =============================================================================
+// TEMPLATED CONTENT
+// =============================================================================
+
+// Readiness band templates - deterministic text based on score ranges
+const READINESS_BAND_TEMPLATES = {
+  PRE_AUDIT: {
+    min: 0,
+    max: 30,
+    label: 'Pre-audit',
+    summary: 'Your organization is in the pre-audit phase.',
+    detail: 'This means foundational security controls, policies, and documentation are not yet in place. Significant preparation is required before engaging an auditor. Focus on establishing baseline security practices and policy frameworks.',
+    priorities: [
+      'Establish basic security policies',
+      'Implement access control management',
+      'Create incident response procedures',
+      'Document data handling practices',
+    ],
+  },
+  EARLY_STAGE: {
+    min: 31,
+    max: 60,
+    label: 'Early-stage readiness',
+    summary: 'Your organization shows early-stage SOC 2 readiness.',
+    detail: 'Some controls may be in place, but gaps exist in policy documentation, evidence collection, or control implementation. A formal gap assessment is recommended to identify specific areas requiring attention.',
+    priorities: [
+      'Conduct gap assessment',
+      'Document existing controls',
+      'Begin evidence collection process',
+      'Assign control ownership',
+    ],
+  },
+  NEAR_READY: {
+    min: 61,
+    max: 80,
+    label: 'Near-ready',
+    summary: 'Your organization is near-ready for SOC 2 audit.',
+    detail: 'Most controls are implemented, but some refinement or evidence collection may be needed. Consider a pre-audit readiness review to identify any remaining gaps before auditor engagement.',
+    priorities: [
+      'Complete evidence collection',
+      'Address remaining control gaps',
+      'Conduct pre-audit review',
+      'Prepare for auditor walkthrough',
+    ],
+  },
+  AUDIT_READY: {
+    min: 81,
+    max: 100,
+    label: 'Audit-ready',
+    summary: 'Your organization appears audit-ready.',
+    detail: 'Controls are in place, policies are documented, and evidence collection processes are established. You are ready to proceed with auditor selection and engagement.',
+    priorities: [
+      'Select and engage auditor',
+      'Finalize evidence packages',
+      'Schedule audit kickoff',
+      'Prepare stakeholder briefings',
+    ],
+  },
+};
+
+// Cost explanation template
+const COST_EXPLANATION_TEMPLATE = {
+  intro: 'The estimated cost range is based on:',
+  factors: [
+    'Base auditor engagement and compliance platform fees',
+    'Organization size and complexity (employee count)',
+    'Data sensitivity and regulatory requirements (data types handled)',
+    'Timeline urgency (audit deadline)',
+    'Industry-specific compliance complexity',
+  ],
+  note: 'Actual costs may vary based on auditor selection, scope changes, and remediation requirements.',
+  includes: 'This estimate includes: auditor fees, compliance tooling, and internal preparation effort.',
+};
+
+// Next steps checklist (templated)
+const NEXT_STEPS_CHECKLIST = [
+  { step: 'Review this report with your compliance or security team', priority: 1 },
+  { step: 'Conduct or schedule a detailed gap assessment', priority: 2 },
+  { step: 'Assign ownership for each SOC 2 control category', priority: 3 },
+  { step: 'Begin policy documentation if not already in place', priority: 4 },
+  { step: 'Establish evidence collection processes', priority: 5 },
+  { step: 'Evaluate compliance automation tools', priority: 6 },
+  { step: 'Consider engaging a SOC 2 readiness consultant', priority: 7 },
+  { step: 'Select and engage auditor when ready', priority: 8 },
+];
+
+// Control areas based on data types (conditional sections)
+const CONTROL_AREA_TEMPLATES: Record<string, { title: string; controls: string[] }> = {
+  pii: {
+    title: 'PII / Personal Data Controls',
+    controls: [
+      'Data classification and inventory',
+      'Encryption at rest and in transit',
+      'Access logging and monitoring',
+      'Data retention and disposal procedures',
+      'Privacy notice and consent management',
+    ],
+  },
+  financial: {
+    title: 'Financial Data Controls',
+    controls: [
+      'Financial data access restrictions',
+      'Transaction logging and audit trails',
+      'Segregation of duties',
+      'Financial system access reviews',
+      'Encryption for financial data at rest',
+    ],
+  },
+  health: {
+    title: 'Health / PHI Data Controls',
+    controls: [
+      'HIPAA-aligned access controls',
+      'PHI-specific audit logging',
+      'Business associate agreements (BAAs)',
+      'PHI encryption requirements',
+      'Minimum necessary access principle',
+    ],
+  },
+  intellectual_property: {
+    title: 'Intellectual Property Controls',
+    controls: [
+      'Source code access restrictions',
+      'Code repository security',
+      'IP classification and handling',
+      'NDA management',
+      'DLP controls for sensitive IP',
+    ],
+  },
+  customer_data: {
+    title: 'Customer Data Controls',
+    controls: [
+      'Customer data segregation',
+      'Access control by customer',
+      'Data confidentiality agreements',
+      'Secure data sharing procedures',
+      'Customer data backup and recovery',
+    ],
+  },
+};
+
+// Evidence categories (templated)
+const EVIDENCE_TEMPLATES = [
+  { category: 'Access Control', examples: ['User access reviews', 'Role-based access matrix', 'Termination checklists', 'Access request tickets'] },
+  { category: 'Security Monitoring', examples: ['Security event logs', 'Vulnerability scan reports', 'Penetration test results', 'SIEM dashboards'] },
+  { category: 'Change Management', examples: ['Change request tickets', 'Code review documentation', 'Deployment logs', 'Rollback procedures'] },
+  { category: 'Incident Response', examples: ['Incident response plan', 'Incident tickets', 'Post-mortem reports', 'Escalation procedures'] },
+  { category: 'Policy & Governance', examples: ['Security policies', 'Employee handbook', 'Training records', 'Board meeting minutes'] },
+];
+
+// =============================================================================
+// HELPER FUNCTIONS
+// =============================================================================
+
 const formatCurrency = (amount: number) => {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -29,7 +204,6 @@ const formatCurrency = (amount: number) => {
   }).format(amount);
 };
 
-// Helper to format date
 const formatDate = (dateStr: string) => {
   return new Date(dateStr).toLocaleDateString('en-US', {
     month: 'long',
@@ -38,7 +212,13 @@ const formatDate = (dateStr: string) => {
   });
 };
 
-// Generate timeline months based on audit date
+const getReadinessBand = (score: number) => {
+  if (score <= 30) return READINESS_BAND_TEMPLATES.PRE_AUDIT;
+  if (score <= 60) return READINESS_BAND_TEMPLATES.EARLY_STAGE;
+  if (score <= 80) return READINESS_BAND_TEMPLATES.NEAR_READY;
+  return READINESS_BAND_TEMPLATES.AUDIT_READY;
+};
+
 const generateTimeline = (auditDate: string) => {
   const audit = new Date(auditDate);
   const today = new Date();
@@ -68,61 +248,16 @@ const generateTimeline = (auditDate: string) => {
   });
 };
 
-// Generate checklist based on data types
-const generateChecklist = (dataTypes: string[]) => {
-  const baseItems = [
-    { item: 'Define security policies and procedures', priority: 'High' },
-    { item: 'Implement access control management', priority: 'High' },
-    { item: 'Set up security monitoring and logging', priority: 'High' },
-    { item: 'Establish incident response procedures', priority: 'Medium' },
-    { item: 'Configure network security controls', priority: 'Medium' },
-    { item: 'Implement change management process', priority: 'Medium' },
-    { item: 'Create employee security training program', priority: 'Medium' },
-    { item: 'Set up vendor management process', priority: 'Low' },
-  ];
+// =============================================================================
+// PDF TEMPLATE COMPONENT
+// =============================================================================
 
-  const additionalItems: { item: string; priority: string }[] = [];
-
-  if (dataTypes.includes('pii')) {
-    additionalItems.push(
-      { item: 'Implement data classification for PII', priority: 'High' },
-      { item: 'Set up data encryption at rest and in transit', priority: 'High' }
-    );
-  }
-
-  if (dataTypes.includes('financial')) {
-    additionalItems.push(
-      { item: 'Implement financial data access controls', priority: 'High' },
-      { item: 'Set up transaction logging and monitoring', priority: 'High' }
-    );
-  }
-
-  if (dataTypes.includes('health')) {
-    additionalItems.push(
-      { item: 'Review HIPAA compliance requirements', priority: 'High' },
-      { item: 'Implement PHI-specific access controls', priority: 'High' }
-    );
-  }
-
-  return [...additionalItems, ...baseItems].slice(0, 10);
-};
-
-// Evidence examples
-const EVIDENCE_EXAMPLES = [
-  { category: 'Access Control', examples: ['User access reviews', 'Role-based access matrix', 'Termination checklists'] },
-  { category: 'Security Monitoring', examples: ['Security event logs', 'Vulnerability scan reports', 'Penetration test results'] },
-  { category: 'Change Management', examples: ['Change request tickets', 'Code review documentation', 'Deployment logs'] },
-  { category: 'Incident Response', examples: ['Incident response plan', 'Incident tickets', 'Post-mortem reports'] },
-];
-
-/**
- * PDFTemplate - React component for rendering PDF content
- * This component is designed to be rendered server-side to HTML,
- * then converted to PDF using Playwright or fallback HTML-PDF library.
- */
 export default function PDFTemplate({ lead }: PDFTemplateProps) {
+  const readinessBand = getReadinessBand(lead.readiness_score);
   const timeline = generateTimeline(lead.audit_date);
-  const checklist = generateChecklist(lead.data_types);
+  const applicableControlAreas = lead.data_types
+    .filter(dt => CONTROL_AREA_TEMPLATES[dt])
+    .map(dt => CONTROL_AREA_TEMPLATES[dt]);
 
   return (
     <html>
@@ -181,8 +316,18 @@ export default function PDFTemplate({ lead }: PDFTemplateProps) {
             font-weight: bold;
           }
           .score-box .label {
-            font-size: 12pt;
+            font-size: 14pt;
             opacity: 0.9;
+            margin-top: 5px;
+          }
+          .score-box .band {
+            font-size: 12pt;
+            opacity: 0.8;
+            margin-top: 10px;
+            padding: 5px 15px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            display: inline-block;
           }
           .summary-grid {
             display: grid;
@@ -206,6 +351,20 @@ export default function PDFTemplate({ lead }: PDFTemplateProps) {
             color: #6b7280;
             text-transform: uppercase;
           }
+          .executive-summary {
+            background: #f0f9ff;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #0ea5e9;
+            margin-bottom: 25px;
+          }
+          .executive-summary h3 {
+            color: #0369a1;
+            margin-bottom: 10px;
+          }
+          .executive-summary p {
+            margin-bottom: 10px;
+          }
           table {
             width: 100%;
             border-collapse: collapse;
@@ -221,9 +380,21 @@ export default function PDFTemplate({ lead }: PDFTemplateProps) {
             font-weight: 600;
             color: #374151;
           }
-          .priority-high { color: #dc2626; }
-          .priority-medium { color: #d97706; }
-          .priority-low { color: #059669; }
+          .priority-list {
+            list-style: none;
+            padding: 0;
+          }
+          .priority-list li {
+            padding: 8px 0 8px 25px;
+            position: relative;
+          }
+          .priority-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #0ea5e9;
+            font-weight: bold;
+          }
           .timeline-item {
             padding: 12px 0;
             border-left: 3px solid #0ea5e9;
@@ -238,7 +409,24 @@ export default function PDFTemplate({ lead }: PDFTemplateProps) {
             font-size: 10pt;
             color: #6b7280;
           }
-          .evidence-list {
+          .control-area {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+          }
+          .control-area h4 {
+            color: #0369a1;
+            margin-bottom: 10px;
+          }
+          .control-area ul {
+            padding-left: 20px;
+            font-size: 10pt;
+          }
+          .control-area li {
+            margin-bottom: 4px;
+          }
+          .evidence-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
@@ -275,8 +463,45 @@ export default function PDFTemplate({ lead }: PDFTemplateProps) {
           .next-steps li {
             margin-bottom: 6px;
           }
-          .footer {
+          .cost-explanation {
+            background: #fefce8;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #eab308;
+            margin-top: 15px;
+          }
+          .cost-explanation h4 {
+            color: #a16207;
+            margin-bottom: 8px;
+          }
+          .cost-explanation ul {
+            padding-left: 20px;
+            font-size: 10pt;
+          }
+          .cost-explanation li {
+            margin-bottom: 3px;
+          }
+          .cost-explanation .note {
+            font-size: 9pt;
+            color: #92400e;
+            margin-top: 10px;
+            font-style: italic;
+          }
+          .disclaimer {
             margin-top: 30px;
+            padding: 15px;
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 8px;
+            font-size: 9pt;
+            color: #92400e;
+          }
+          .disclaimer strong {
+            display: block;
+            margin-bottom: 5px;
+          }
+          .footer {
+            margin-top: 20px;
             padding-top: 20px;
             border-top: 1px solid #e5e7eb;
             text-align: center;
@@ -290,7 +515,9 @@ export default function PDFTemplate({ lead }: PDFTemplateProps) {
         `}</style>
       </head>
       <body>
-        {/* Header */}
+        {/* ============================================================= */}
+        {/* HEADER */}
+        {/* ============================================================= */}
         <div className="header">
           <h1>SOC 2 Readiness Report</h1>
           <div className="subtitle">
@@ -298,10 +525,19 @@ export default function PDFTemplate({ lead }: PDFTemplateProps) {
           </div>
         </div>
 
-        {/* Executive Summary - Score */}
+        {/* ============================================================= */}
+        {/* SECTION 1: EXECUTIVE SUMMARY (TEMPLATED) */}
+        {/* ============================================================= */}
         <div className="score-box">
           <div className="score">{lead.readiness_score}</div>
           <div className="label">Readiness Score (out of 100)</div>
+          <div className="band">{readinessBand.label}</div>
+        </div>
+
+        <div className="executive-summary">
+          <h3>Executive Summary</h3>
+          <p><strong>{readinessBand.summary}</strong></p>
+          <p>{readinessBand.detail}</p>
         </div>
 
         {/* Summary Grid */}
@@ -320,60 +556,105 @@ export default function PDFTemplate({ lead }: PDFTemplateProps) {
           </div>
         </div>
 
-        {/* Scope Definition */}
+        {/* ============================================================= */}
+        {/* SECTION 2: READINESS BAND EXPLANATION (TEMPLATED) */}
+        {/* ============================================================= */}
         <div className="section">
-          <h2 className="section-title">Scope Definition</h2>
-          <p style={{ marginBottom: '10px' }}>
-            Based on your inputs, your SOC 2 Type II audit should cover the following:
+          <h2 className="section-title">Readiness Assessment</h2>
+          <p style={{ marginBottom: '15px' }}>
+            Based on your inputs, your organization is at the <strong>{readinessBand.label}</strong> stage 
+            (score: {readinessBand.min}–{readinessBand.max} range).
           </p>
-          <ul style={{ paddingLeft: '20px' }}>
-            <li><strong>Industry:</strong> {lead.industry.charAt(0).toUpperCase() + lead.industry.slice(1)}</li>
-            <li><strong>Data Types:</strong> {lead.data_types.map(d => d.toUpperCase()).join(', ')}</li>
-            <li><strong>Trust Service Criteria:</strong> Security (required), plus Availability and Confidentiality based on your data types</li>
+          <h4 style={{ color: '#0369a1', marginBottom: '10px' }}>Immediate Priorities:</h4>
+          <ul className="priority-list">
+            {readinessBand.priorities.map((priority, index) => (
+              <li key={index}>{priority}</li>
+            ))}
           </ul>
         </div>
 
-        {/* Compliance Checklist */}
+        {/* ============================================================= */}
+        {/* SECTION 3: COST RANGE EXPLANATION (TEMPLATED) */}
+        {/* ============================================================= */}
         <div className="section">
-          <h2 className="section-title">Compliance Checklist</h2>
-          <table>
-            <thead>
-              <tr>
-                <th style={{ width: '60%' }}>Action Item</th>
-                <th style={{ width: '20%' }}>Priority</th>
-                <th style={{ width: '20%' }}>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {checklist.map((item, index) => (
-                <tr key={index}>
-                  <td>{item.item}</td>
-                  <td className={`priority-${item.priority.toLowerCase()}`}>{item.priority}</td>
-                  <td>☐ Not Started</td>
-                </tr>
+          <h2 className="section-title">Cost Estimate Breakdown</h2>
+          <div className="summary-grid" style={{ marginBottom: '15px' }}>
+            <div className="summary-item">
+              <div className="value">{formatCurrency(lead.estimated_cost_low)}</div>
+              <div className="label">Low Estimate</div>
+            </div>
+            <div className="summary-item">
+              <div className="value">{formatCurrency(lead.estimated_cost_high)}</div>
+              <div className="label">High Estimate</div>
+            </div>
+            <div className="summary-item">
+              <div className="value">{formatCurrency((lead.estimated_cost_low + lead.estimated_cost_high) / 2)}</div>
+              <div className="label">Midpoint</div>
+            </div>
+          </div>
+          <div className="cost-explanation">
+            <h4>{COST_EXPLANATION_TEMPLATE.intro}</h4>
+            <ul>
+              {COST_EXPLANATION_TEMPLATE.factors.map((factor, index) => (
+                <li key={index}>{factor}</li>
               ))}
-            </tbody>
-          </table>
+            </ul>
+            <p className="note">{COST_EXPLANATION_TEMPLATE.note}</p>
+            <p style={{ marginTop: '10px', fontSize: '10pt' }}><strong>{COST_EXPLANATION_TEMPLATE.includes}</strong></p>
+          </div>
         </div>
 
-        {/* Timeline */}
+        {/* ============================================================= */}
+        {/* SECTION 4: CONTROL GAP SECTIONS (CONDITIONAL) */}
+        {/* ============================================================= */}
+        {applicableControlAreas.length > 0 && (
+          <div className="section">
+            <h2 className="section-title">Control Areas Based on Your Data Types</h2>
+            <p style={{ marginBottom: '15px' }}>
+              Based on the data types you handle ({lead.data_types.map(d => d.toUpperCase()).join(', ')}), 
+              the following control areas require attention:
+            </p>
+            {applicableControlAreas.map((area, index) => (
+              <div key={index} className="control-area">
+                <h4>{area.title}</h4>
+                <ul>
+                  {area.controls.map((control, i) => (
+                    <li key={i}>{control}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* ============================================================= */}
+        {/* SECTION 5: RECOMMENDED TIMELINE (TEMPLATED) */}
+        {/* ============================================================= */}
         <div className="section">
           <h2 className="section-title">Recommended Timeline</h2>
+          <p style={{ marginBottom: '15px' }}>
+            Based on your target audit date of {formatDate(lead.audit_date)}:
+          </p>
           {timeline.map((phase, index) => (
             <div key={index} className="timeline-item">
               <div className="phase">{phase.name}</div>
               <div className="months">
-                Month {phase.startMonth} - Month {phase.endMonth}
+                Month {phase.startMonth} – Month {phase.endMonth}
               </div>
             </div>
           ))}
         </div>
 
-        {/* Evidence Examples */}
+        {/* ============================================================= */}
+        {/* SECTION 6: EVIDENCE EXAMPLES (TEMPLATED) */}
+        {/* ============================================================= */}
         <div className="section">
-          <h2 className="section-title">Evidence Examples & Templates</h2>
-          <div className="evidence-list">
-            {EVIDENCE_EXAMPLES.map((cat, index) => (
+          <h2 className="section-title">Evidence Examples</h2>
+          <p style={{ marginBottom: '15px' }}>
+            Auditors will request evidence in the following categories:
+          </p>
+          <div className="evidence-grid">
+            {EVIDENCE_TEMPLATES.map((cat, index) => (
               <div key={index} className="evidence-category">
                 <h4>{cat.category}</h4>
                 <ul>
@@ -386,28 +667,40 @@ export default function PDFTemplate({ lead }: PDFTemplateProps) {
           </div>
         </div>
 
-        {/* Next Steps */}
+        {/* ============================================================= */}
+        {/* SECTION 7: NEXT-STEP CHECKLIST (TEMPLATED) */}
+        {/* ============================================================= */}
         <div className="section">
           <div className="next-steps">
-            <h3>Recommended Next Steps</h3>
+            <h3>Next Steps Checklist</h3>
             <ol>
-              <li>Review this report and share with your compliance team</li>
-              <li>Conduct a detailed gap assessment using the checklist above</li>
-              <li>Prioritize high-priority items and assign ownership</li>
-              <li>Begin policy documentation if not already in place</li>
-              <li>Consider engaging a SOC 2 readiness consultant for guidance</li>
+              {NEXT_STEPS_CHECKLIST.map((item, index) => (
+                <li key={index}>{item.step}</li>
+              ))}
             </ol>
           </div>
         </div>
 
-        {/* Footer */}
+        {/* ============================================================= */}
+        {/* SECTION 8: DISCLAIMER (MANDATORY) */}
+        {/* ============================================================= */}
+        <div className="disclaimer">
+          <strong>⚠️ Important Disclaimer</strong>
+          This report provides a readiness estimate based on provided inputs and does not constitute 
+          an audit opinion. RiscLens does not provide legal advice, audit services, or SOC 2 certification. 
+          All results are based on self-reported inputs and should be used for internal planning purposes only. 
+          For formal compliance guidance, please consult a qualified auditor or legal professional.
+        </div>
+
+        {/* ============================================================= */}
+        {/* FOOTER */}
+        {/* ============================================================= */}
         <div className="footer">
-          <p>This report was generated by RiscLens SOC 2 Calculator</p>
+          <p>This report was generated by RiscLens SOC 2 Readiness Index</p>
           <p>Report ID: {lead.id} | Generated: {formatDate(new Date().toISOString())}</p>
-          <p>For questions, contact support@risclens.com</p>
+          <p>Questions? Contact reports@risclens.com</p>
         </div>
       </body>
     </html>
   );
 }
-

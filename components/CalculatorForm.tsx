@@ -23,6 +23,14 @@ const DATA_TYPES = [
   { value: 'customer_data', label: 'Customer Business Data' },
 ];
 
+// SOC 2 requirement sources (optional)
+const SOC2_REQUIRERS = [
+  { value: 'enterprise', label: 'Enterprise customers' },
+  { value: 'midmarket', label: 'Mid-market customers' },
+  { value: 'investors', label: 'Investors' },
+  { value: 'exploratory', label: 'Not required yet / exploratory' },
+];
+
 // Role options
 const ROLES = [
   { value: 'cto', label: 'CTO / VP Engineering' },
@@ -38,8 +46,10 @@ interface FormData {
   industry: string;
   num_employees: string;
   data_types: string[];
+  soc2_requirers: string[];
   planned_audit_date: string;
   role: string;
+  specific_requests: string;
 }
 
 interface CalculatorResults {
@@ -68,8 +78,10 @@ export default function CalculatorForm() {
     industry: '',
     num_employees: '',
     data_types: [],
+    soc2_requirers: [],
     planned_audit_date: '',
     role: '',
+    specific_requests: '',
   });
 
   // Track UTM parameters and variation on mount
@@ -88,7 +100,7 @@ export default function CalculatorForm() {
   }, []);
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -100,6 +112,15 @@ export default function CalculatorForm() {
       data_types: prev.data_types.includes(value)
         ? prev.data_types.filter((t) => t !== value)
         : [...prev.data_types, value],
+    }));
+  };
+
+  const handleRequirerChange = (value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      soc2_requirers: prev.soc2_requirers.includes(value)
+        ? prev.soc2_requirers.filter((r) => r !== value)
+        : [...prev.soc2_requirers, value],
     }));
   };
 
@@ -246,6 +267,9 @@ export default function CalculatorForm() {
                     </option>
                   ))}
                 </select>
+                <p className="mt-1.5 text-xs text-gray-500">
+                  Used to calibrate audit scope and control depth.
+                </p>
               </div>
             </div>
           </div>
@@ -299,6 +323,27 @@ export default function CalculatorForm() {
                   ))}
                 </div>
               </div>
+              <div>
+                <label className="form-label">
+                  Who requires SOC 2 from you? <span className="text-gray-400 text-xs font-normal">(optional)</span>
+                </label>
+                <div className="space-y-2 mt-2">
+                  {SOC2_REQUIRERS.map((req) => (
+                    <label
+                      key={req.value}
+                      className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={formData.soc2_requirers.includes(req.value)}
+                        onChange={() => handleRequirerChange(req.value)}
+                        className="w-4 h-4 text-brand-600 rounded focus:ring-brand-500"
+                      />
+                      <span className="ml-3 text-gray-700">{req.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -307,7 +352,7 @@ export default function CalculatorForm() {
         {step === 3 && (
           <div className="animate-fade-in">
             <h2 className="text-xl font-semibold text-gray-900 mb-6">
-              Timeline and your role
+              Audit timing and responsibility
             </h2>
             <div className="space-y-4">
               <div>
@@ -344,6 +389,21 @@ export default function CalculatorForm() {
                     </option>
                   ))}
                 </select>
+              </div>
+              <div>
+                <label htmlFor="specific_requests" className="form-label">
+                  Anything specific an auditor, customer, or investor has already asked for?{" "}
+                  <span className="text-gray-400 text-xs font-normal">(optional)</span>
+                </label>
+                <textarea
+                  id="specific_requests"
+                  name="specific_requests"
+                  value={formData.specific_requests}
+                  onChange={handleInputChange}
+                  className="form-input"
+                  rows={3}
+                  placeholder="e.g. security questionnaire, enterprise deal requirement, due diligence request, tight deadline…"
+                />
               </div>
             </div>
           </div>

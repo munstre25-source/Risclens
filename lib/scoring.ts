@@ -1,23 +1,59 @@
 /**
- * Lead Scoring Logic for SOC 2 Calculator
+ * ENTERPRISE-GRADE SOC 2 SCORING ENGINE
  * 
- * This module implements deterministic scoring rules for lead qualification
- * and readiness assessment. All scoring logic is centralized here for
- * easy tuning and consistent application across the application.
+ * This module implements DETERMINISTIC scoring rules for SOC 2 readiness assessment.
+ * 
+ * CRITICAL RULES:
+ * - All scoring is rules-based and inspectable.
+ * - No LLM/AI reasoning for scores.
+ * - No probabilistic or "confidence" logic.
+ * - Every score can be explained as: Input → Weight → Adjustment → Final score
+ * 
+ * AI is ONLY allowed to:
+ * - Explain scores in natural language
+ * - Rewrite deterministic explanations for clarity
+ * 
+ * AI may NOT:
+ * - Decide scores
+ * - Identify compliance gaps
+ * - Generate unbounded compliance advice
  */
+
+import {
+  READINESS_BANDS,
+  SCORING_WEIGHTS,
+  COST_PARAMETERS,
+  SCORE_BOUNDS,
+  type ReadinessBand,
+  type ScoreExplanation,
+  type DetailedScoringResult,
+} from './scoring-config';
+
+import {
+  selectRecommendations,
+  formatRecommendationsForDisplay,
+  type RecommendationInput,
+} from './recommendations-library';
+
+// =============================================================================
+// INPUT INTERFACES
+// =============================================================================
 
 export interface ScoringInput {
   num_employees: number;
   audit_date: string; // ISO date string
   data_types: string[]; // e.g., ['pii', 'financial', 'health']
   role: string;
+  industry?: string;
+  soc2_requirers?: string[];
 }
 
+// Legacy interface for backward compatibility
 export interface ScoringResult {
-  lead_score: number; // 1-10 normalized
-  raw_score: number; // Actual sum before normalization
+  lead_score: number;
+  raw_score: number;
   keep_or_sell: 'keep' | 'sell';
-  readiness_score: number; // 0-100
+  readiness_score: number;
   estimated_cost_low: number;
   estimated_cost_high: number;
   score_breakdown: ScoreBreakdown;
@@ -31,237 +67,301 @@ export interface ScoreBreakdown {
 }
 
 // =============================================================================
-// SCORING CONFIGURATION
-// Adjust these values to tune the scoring algorithm
-// =============================================================================
-
-const SCORING_CONFIG = {
-  // Company size thresholds and points
-  companySize: {
-    small: { max: 5, points: 3 },      // 1-5 employees
-    medium: { max: 20, points: 6 },    // 6-20 employees
-    large: { min: 21, points: 9 },     // >20 employees
-  },
-
-  // Audit urgency thresholds (months from today)
-  auditUrgency: {
-    urgent: { months: 6, points: 2 },   // <= 6 months
-    soon: { months: 12, points: 1 },    // <= 12 months
-    later: { points: 0 },               // > 12 months
-  },
-
-  // Data type points (1 point each if present)
-  dataTypesWithPoints: ['pii', 'financial', 'health'],
-
-  // High-value roles (case-insensitive match)
-  highValueRoles: ['cto', 'ceo', 'founder', 'security'],
-  rolePoints: 2,
-
-  // Score normalization
-  minNormalizedScore: 1,
-  maxNormalizedScore: 10,
-
-  // Keep/Sell threshold (leads with score >= this are kept)
-  keepThreshold: 5,
-
-  // Readiness score formula parameters
-  readinessBase: 50,
-  readinessMultiplier: 10, // (lead_score - 5) * multiplier
-
-  // Cost estimation parameters (USD)
-  costBase: {
-    low: 8000,
-    high: 15000,
-  },
-  costPerEmployee: {
-    low: 100,
-    high: 250,
-  },
-  costPerDataType: {
-    low: 2000,
-    high: 5000,
-  },
-  urgencyMultiplier: {
-    urgent: 1.3,   // Rush jobs cost more
-    soon: 1.1,
-    later: 1.0,
-  },
-};
-
-// =============================================================================
-// SCORING FUNCTIONS
+// HELPER FUNCTIONS
 // =============================================================================
 
 /**
- * Calculate company size points based on number of employees
+ * Calculate months until audit from date string.
+ * Deterministic calculation.
  */
-function calculateCompanySizePoints(numEmployees: number): number {
-  const { companySize } = SCORING_CONFIG;
-  
-  if (numEmployees <= companySize.small.max) {
-    return companySize.small.points;
-  } else if (numEmployees <= companySize.medium.max) {
-    return companySize.medium.points;
-  } else {
-    return companySize.large.points;
-  }
-}
-
-/**
- * Calculate audit urgency points based on planned audit date
- */
-function calculateAuditUrgencyPoints(auditDate: string): number {
-  const { auditUrgency } = SCORING_CONFIG;
-  
+function calculateMonthsUntilAudit(auditDate: string): number {
   const today = new Date();
   const audit = new Date(auditDate);
-  const monthsUntilAudit = (audit.getTime() - today.getTime()) / (1000 * 60 * 60 * 24 * 30);
+  return (audit.getTime() - today.getTime()) / (1000 * 60 * 60 * 24 * 30);
+}
 
-  if (monthsUntilAudit <= auditUrgency.urgent.months) {
-    return auditUrgency.urgent.points;
-  } else if (monthsUntilAudit <= auditUrgency.soon.months) {
-    return auditUrgency.soon.points;
-  } else {
-    return auditUrgency.later.points;
+/**
+ * Find weight for numeric range input.
+ */
+function findRangeWeight(
+  weights: readonly { range: readonly [number, number]; points: number; label: string; rationale: string }[],
+  value: number
+): { points: number; label: string; rationale: string } {
+  for (const w of weights) {
+    if (value >= w.range[0] && value <= w.range[1]) {
+      return { points: w.points, label: w.label, rationale: w.rationale };
+    }
   }
+  // Fallback to last weight
+  const last = weights[weights.length - 1];
+  return { points: last.points, label: last.label, rationale: last.rationale };
 }
 
 /**
- * Calculate data type points (+1 for each PII, Financial, Health present)
+ * Find weight for timeline (months) input.
  */
-function calculateDataTypesPoints(dataTypes: string[]): number {
-  const { dataTypesWithPoints } = SCORING_CONFIG;
-  
-  return dataTypes.filter((dt) => 
-    dataTypesWithPoints.includes(dt.toLowerCase())
-  ).length;
-}
-
-/**
- * Calculate role points based on seniority/decision-making power
- */
-function calculateRolePoints(role: string): number {
-  const { highValueRoles, rolePoints } = SCORING_CONFIG;
-  
-  const roleLower = role.toLowerCase();
-  const isHighValue = highValueRoles.some((hvr) => roleLower.includes(hvr));
-  
-  return isHighValue ? rolePoints : 0;
-}
-
-/**
- * Normalize raw score to 1-10 range
- */
-function normalizeScore(rawScore: number): number {
-  const { minNormalizedScore, maxNormalizedScore } = SCORING_CONFIG;
-  
-  // Max possible raw score: 9 (size) + 2 (urgency) + 3 (data) + 2 (role) = 16
-  // Min possible raw score: 3 (size) + 0 (urgency) + 0 (data) + 0 (role) = 3
-  const minRaw = 3;
-  const maxRaw = 16;
-  
-  const normalized = minNormalizedScore + 
-    ((rawScore - minRaw) / (maxRaw - minRaw)) * (maxNormalizedScore - minNormalizedScore);
-  
-  return Math.max(minNormalizedScore, Math.min(maxNormalizedScore, Math.round(normalized)));
-}
-
-/**
- * Calculate readiness score (0-100)
- * 
- * Formula: base + (lead_score - 5) * multiplier, clamped to 0-100
- * Tune readinessBase and readinessMultiplier in SCORING_CONFIG to adjust
- */
-function calculateReadinessScore(leadScore: number): number {
-  const { readinessBase, readinessMultiplier } = SCORING_CONFIG;
-  
-  const score = readinessBase + (leadScore - 5) * readinessMultiplier;
-  
-  return Math.max(0, Math.min(100, Math.round(score)));
-}
-
-/**
- * Calculate estimated cost range based on inputs
- */
-function calculateCostEstimate(
-  numEmployees: number,
-  dataTypes: string[],
-  auditDate: string
-): { low: number; high: number } {
-  const { costBase, costPerEmployee, costPerDataType, urgencyMultiplier, auditUrgency } = SCORING_CONFIG;
-
-  // Base cost
-  let low = costBase.low;
-  let high = costBase.high;
-
-  // Add employee-based cost
-  low += numEmployees * costPerEmployee.low;
-  high += numEmployees * costPerEmployee.high;
-
-  // Add data type complexity cost
-  const dataTypeCount = dataTypes.length;
-  low += dataTypeCount * costPerDataType.low;
-  high += dataTypeCount * costPerDataType.high;
-
-  // Apply urgency multiplier
-  const today = new Date();
-  const audit = new Date(auditDate);
-  const monthsUntilAudit = (audit.getTime() - today.getTime()) / (1000 * 60 * 60 * 24 * 30);
-
-  let multiplier = urgencyMultiplier.later;
-  if (monthsUntilAudit <= auditUrgency.urgent.months) {
-    multiplier = urgencyMultiplier.urgent;
-  } else if (monthsUntilAudit <= auditUrgency.soon.months) {
-    multiplier = urgencyMultiplier.soon;
+function findTimelineWeight(
+  weights: readonly { monthsRange: readonly [number, number]; points: number; label: string; rationale: string }[],
+  months: number
+): { points: number; label: string; rationale: string } {
+  for (const w of weights) {
+    if (months >= w.monthsRange[0] && months < w.monthsRange[1]) {
+      return { points: w.points, label: w.label, rationale: w.rationale };
+    }
   }
+  // Fallback to last weight
+  const last = weights[weights.length - 1];
+  return { points: last.points, label: last.label, rationale: last.rationale };
+}
 
-  low = Math.round(low * multiplier);
-  high = Math.round(high * multiplier);
+/**
+ * Find weight for string value input.
+ */
+function findValueWeight(
+  weights: readonly { value: string; points: number; label: string; rationale: string }[],
+  value: string
+): { points: number; label: string; rationale: string } | null {
+  const match = weights.find(w => w.value === value.toLowerCase());
+  return match ? { points: match.points, label: match.label, rationale: match.rationale } : null;
+}
 
-  return { low, high };
+/**
+ * Determine readiness band from normalized score.
+ */
+function determineReadinessBand(score: number): ReadinessBand {
+  if (score <= READINESS_BANDS.PRE_AUDIT.max) return 'PRE_AUDIT';
+  if (score <= READINESS_BANDS.EARLY_STAGE.max) return 'EARLY_STAGE';
+  if (score <= READINESS_BANDS.NEAR_READY.max) return 'NEAR_READY';
+  return 'AUDIT_READY';
+}
+
+/**
+ * Normalize raw score to 0-100 scale.
+ * Formula: ((raw - min) / (max - min)) * 100
+ */
+function normalizeToHundred(rawScore: number): number {
+  const { minRawScore, maxRawScore } = SCORE_BOUNDS;
+  const normalized = ((rawScore - minRawScore) / (maxRawScore - minRawScore)) * 100;
+  return Math.max(0, Math.min(100, Math.round(normalized)));
 }
 
 // =============================================================================
-// MAIN SCORING FUNCTION
+// MAIN SCORING FUNCTION (ENTERPRISE-GRADE)
 // =============================================================================
 
 /**
- * Calculate lead score and all derived metrics
+ * Calculate detailed scoring result with full breakdown.
+ * This is the primary enterprise-grade scoring function.
  * 
- * @param input - Scoring input data
- * @returns Complete scoring result with breakdown
+ * DETERMINISTIC: Same inputs always produce same outputs.
+ * INSPECTABLE: Every point can be traced to explicit rules.
  */
-export function calculateLeadScore(input: ScoringInput): ScoringResult {
-  // Calculate individual score components
-  const companySizePoints = calculateCompanySizePoints(input.num_employees);
-  const auditUrgencyPoints = calculateAuditUrgencyPoints(input.audit_date);
-  const dataTypesPoints = calculateDataTypesPoints(input.data_types);
-  const rolePoints = calculateRolePoints(input.role);
+export function calculateDetailedScore(input: ScoringInput): DetailedScoringResult {
+  const breakdown: ScoreExplanation[] = [];
+  let rawScore = 0;
+  const monthsUntilAudit = calculateMonthsUntilAudit(input.audit_date);
 
-  // Calculate raw and normalized scores
-  const rawScore = companySizePoints + auditUrgencyPoints + dataTypesPoints + rolePoints;
-  const leadScore = normalizeScore(rawScore);
+  // 1. Company Size Score
+  const sizeWeight = findRangeWeight(
+    SCORING_WEIGHTS.companySize.weights,
+    input.num_employees
+  );
+  rawScore += sizeWeight.points;
+  breakdown.push({
+    input: 'Company Size',
+    value: input.num_employees,
+    points: sizeWeight.points,
+    maxPoints: SCORING_WEIGHTS.companySize.maxPoints,
+    rationale: `${sizeWeight.label}: ${sizeWeight.rationale}`,
+  });
 
-  // Determine keep or sell
-  const keepOrSell = leadScore >= SCORING_CONFIG.keepThreshold ? 'keep' : 'sell';
+  // 2. Audit Timeline Score
+  const timelineWeight = findTimelineWeight(
+    SCORING_WEIGHTS.auditTimeline.weights,
+    monthsUntilAudit
+  );
+  rawScore += timelineWeight.points;
+  breakdown.push({
+    input: 'Audit Timeline',
+    value: `${Math.round(monthsUntilAudit)} months`,
+    points: timelineWeight.points,
+    maxPoints: SCORING_WEIGHTS.auditTimeline.maxPoints,
+    rationale: `${timelineWeight.label}: ${timelineWeight.rationale}`,
+  });
 
-  // Calculate readiness score
-  const readinessScore = calculateReadinessScore(leadScore);
+  // 3. Data Types Score (cumulative)
+  let dataTypePoints = 0;
+  const matchedDataTypes: string[] = [];
+  for (const dt of input.data_types) {
+    const weight = SCORING_WEIGHTS.dataTypes.weights.find(
+      w => w.value === dt.toLowerCase()
+    );
+    if (weight) {
+      dataTypePoints += weight.points;
+      matchedDataTypes.push(weight.label);
+    }
+  }
+  rawScore += dataTypePoints;
+  breakdown.push({
+    input: 'Data Types',
+    value: input.data_types,
+    points: dataTypePoints,
+    maxPoints: SCORING_WEIGHTS.dataTypes.maxPoints,
+    rationale: matchedDataTypes.length > 0
+      ? `Handling: ${matchedDataTypes.join(', ')}`
+      : 'No sensitive data types selected',
+  });
+
+  // 4. Requester Type Score (optional, cumulative)
+  let requesterPoints = 0;
+  const matchedRequirers: string[] = [];
+  if (input.soc2_requirers && input.soc2_requirers.length > 0) {
+    for (const req of input.soc2_requirers) {
+      const weight = SCORING_WEIGHTS.requesterType.weights.find(
+        w => w.value === req.toLowerCase()
+      );
+      if (weight) {
+        requesterPoints += weight.points;
+        matchedRequirers.push(weight.label);
+      }
+    }
+  }
+  rawScore += requesterPoints;
+  breakdown.push({
+    input: 'SOC 2 Requesters',
+    value: input.soc2_requirers || [],
+    points: requesterPoints,
+    maxPoints: SCORING_WEIGHTS.requesterType.maxPoints,
+    rationale: matchedRequirers.length > 0
+      ? `Required by: ${matchedRequirers.join(', ')}`
+      : 'No external requirements specified',
+  });
+
+  // 5. Role Score
+  const roleWeight = findValueWeight(SCORING_WEIGHTS.role.weights, input.role);
+  const rolePoints = roleWeight?.points || 1;
+  rawScore += rolePoints;
+  breakdown.push({
+    input: 'Role',
+    value: input.role,
+    points: rolePoints,
+    maxPoints: SCORING_WEIGHTS.role.maxPoints,
+    rationale: roleWeight?.rationale || 'Role not specified',
+  });
+
+  // 6. Industry Score
+  const industry = input.industry || 'other';
+  const industryWeight = findValueWeight(SCORING_WEIGHTS.industry.weights, industry);
+  const industryPoints = industryWeight?.points || 2;
+  rawScore += industryPoints;
+  breakdown.push({
+    input: 'Industry',
+    value: industry,
+    points: industryPoints,
+    maxPoints: SCORING_WEIGHTS.industry.maxPoints,
+    rationale: industryWeight?.rationale || 'Industry profile applied',
+  });
+
+  // Normalize to 0-100
+  const normalizedScore = normalizeToHundred(rawScore);
+  const readinessBand = determineReadinessBand(normalizedScore);
+  const bandInfo = READINESS_BANDS[readinessBand];
 
   // Calculate cost estimate
-  const costEstimate = calculateCostEstimate(
-    input.num_employees,
-    input.data_types,
-    input.audit_date
-  );
+  const costEstimate = calculateCostEstimateDetailed(input, monthsUntilAudit);
+
+  return {
+    rawScore,
+    normalizedScore,
+    readinessBand,
+    bandLabel: bandInfo.label,
+    bandDescription: bandInfo.description,
+    bandTemplateText: bandInfo.templateText,
+    breakdown,
+    costEstimate,
+    isFullyDeterministic: true,
+    calculatedAt: new Date().toISOString(),
+  };
+}
+
+/**
+ * Calculate cost estimate with detailed explanation.
+ */
+function calculateCostEstimateDetailed(
+  input: ScoringInput,
+  monthsUntilAudit: number
+): { low: number; high: number; explanation: string } {
+  const { baseCost, perEmployee, perDataType, urgencyMultipliers, industryMultipliers } = COST_PARAMETERS;
+
+  // Base cost
+  let low = baseCost.low;
+  let high = baseCost.high;
+
+  // Employee-based cost
+  low += input.num_employees * perEmployee.low;
+  high += input.num_employees * perEmployee.high;
+
+  // Data type complexity
+  const dataTypeCount = input.data_types.length;
+  low += dataTypeCount * perDataType.low;
+  high += dataTypeCount * perDataType.high;
+
+  // Urgency multiplier
+  let urgencyMult = urgencyMultipliers.over12Months.multiplier;
+  let urgencyLabel = urgencyMultipliers.over12Months.label;
+  if (monthsUntilAudit < 3) {
+    urgencyMult = urgencyMultipliers.under90Days.multiplier;
+    urgencyLabel = urgencyMultipliers.under90Days.label;
+  } else if (monthsUntilAudit < 6) {
+    urgencyMult = urgencyMultipliers.under6Months.multiplier;
+    urgencyLabel = urgencyMultipliers.under6Months.label;
+  } else if (monthsUntilAudit < 12) {
+    urgencyMult = urgencyMultipliers.under12Months.multiplier;
+    urgencyLabel = urgencyMultipliers.under12Months.label;
+  }
+
+  low = Math.round(low * urgencyMult);
+  high = Math.round(high * urgencyMult);
+
+  // Industry multiplier
+  const industry = (input.industry || 'other') as keyof typeof industryMultipliers;
+  const industryMult = industryMultipliers[industry] || 1.0;
+  low = Math.round(low * industryMult);
+  high = Math.round(high * industryMult);
+
+  const explanation = `Base costs + ${input.num_employees} employees + ${dataTypeCount} data types × ${urgencyLabel} (${urgencyMult}x) × industry factor (${industryMult}x)`;
+
+  return { low, high, explanation };
+}
+
+// =============================================================================
+// LEGACY SCORING FUNCTION (BACKWARD COMPATIBILITY)
+// =============================================================================
+
+/**
+ * Calculate lead score using legacy format.
+ * Maintained for backward compatibility with existing API.
+ */
+export function calculateLeadScore(input: ScoringInput): ScoringResult {
+  const detailed = calculateDetailedScore(input);
+  
+  // Convert to legacy 1-10 scale
+  const leadScore = Math.max(1, Math.min(10, Math.round(detailed.normalizedScore / 10)));
+  
+  // Calculate legacy breakdown
+  const monthsUntilAudit = calculateMonthsUntilAudit(input.audit_date);
+  const companySizePoints = detailed.breakdown.find(b => b.input === 'Company Size')?.points || 0;
+  const auditUrgencyPoints = detailed.breakdown.find(b => b.input === 'Audit Timeline')?.points || 0;
+  const dataTypesPoints = detailed.breakdown.find(b => b.input === 'Data Types')?.points || 0;
+  const rolePoints = detailed.breakdown.find(b => b.input === 'Role')?.points || 0;
 
   return {
     lead_score: leadScore,
-    raw_score: rawScore,
-    keep_or_sell: keepOrSell,
-    readiness_score: readinessScore,
-    estimated_cost_low: costEstimate.low,
-    estimated_cost_high: costEstimate.high,
+    raw_score: detailed.rawScore,
+    keep_or_sell: leadScore >= 5 ? 'keep' : 'sell',
+    readiness_score: detailed.normalizedScore,
+    estimated_cost_low: detailed.costEstimate.low,
+    estimated_cost_high: detailed.costEstimate.high,
     score_breakdown: {
       company_size_points: companySizePoints,
       audit_urgency_points: auditUrgencyPoints,
@@ -271,64 +371,35 @@ export function calculateLeadScore(input: ScoringInput): ScoringResult {
   };
 }
 
+// =============================================================================
+// RECOMMENDATIONS FUNCTION
+// =============================================================================
+
 /**
- * Generate personalized recommendations based on scoring input
+ * Generate recommendations based on deterministic rules.
+ * Uses the recommendation library - no AI-generated recommendations.
  */
 export function generateRecommendations(input: ScoringInput, result: ScoringResult): string[] {
-  const recommendations: string[] = [];
+  const monthsUntilAudit = calculateMonthsUntilAudit(input.audit_date);
+  const readinessBand = determineReadinessBand(result.readiness_score);
 
-  // Urgency-based recommendations
-  const today = new Date();
-  const audit = new Date(input.audit_date);
-  const monthsUntilAudit = (audit.getTime() - today.getTime()) / (1000 * 60 * 60 * 24 * 30);
+  const recInput: RecommendationInput = {
+    monthsUntilAudit,
+    dataTypes: input.data_types,
+    employeeCount: input.num_employees,
+    industry: input.industry || 'other',
+    requirers: input.soc2_requirers || [],
+    readinessBand,
+  };
 
-  if (monthsUntilAudit <= 6) {
-    recommendations.push(
-      'Your audit timeline is tight. Consider engaging a SOC 2 readiness consultant immediately.'
-    );
-  } else if (monthsUntilAudit <= 12) {
-    recommendations.push(
-      'Start with a gap assessment to identify current compliance status.'
-    );
-  }
-
-  // Data type recommendations
-  if (input.data_types.includes('pii')) {
-    recommendations.push(
-      'Implement comprehensive data classification and PII handling procedures.'
-    );
-  }
-  if (input.data_types.includes('health')) {
-    recommendations.push(
-      'Review HIPAA requirements alongside SOC 2 for healthcare data handling.'
-    );
-  }
-  if (input.data_types.includes('financial')) {
-    recommendations.push(
-      'Ensure robust financial data encryption and access logging mechanisms.'
-    );
-  }
-
-  // Size-based recommendations
-  if (input.num_employees <= 20) {
-    recommendations.push(
-      'As a smaller team, leverage automation tools to streamline evidence collection.'
-    );
-  } else {
-    recommendations.push(
-      'Assign clear ownership for each SOC 2 control area across your team.'
-    );
-  }
-
-  // General best practice
-  recommendations.push(
-    'Prioritize policy documentation and access controls as foundational elements.'
-  );
-
-  // Return top 4 recommendations
-  return recommendations.slice(0, 4);
+  const recommendations = selectRecommendations(recInput, 4);
+  return formatRecommendationsForDisplay(recommendations);
 }
 
-// Export configuration for potential admin tuning
-export { SCORING_CONFIG };
+// =============================================================================
+// EXPORTS
+// =============================================================================
 
+// Re-export for convenience
+export { READINESS_BANDS, SCORING_WEIGHTS, COST_PARAMETERS } from './scoring-config';
+export { RECOMMENDATION_LIBRARY, SOC2_CONTROL_CATEGORIES } from './recommendations-library';

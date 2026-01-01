@@ -23,8 +23,9 @@ export default function HomePage() {
       <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-24 lg:py-32 text-center">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 mb-8 leading-tight tracking-tight">
-            SOC 2 Readiness Index<br className="hidden sm:block" />
-            <span className="text-brand-600">for Early-Stage Companies</span>
+            <span className="block sm:inline">SOC 2 Readiness</span>{" "}
+            <span className="block sm:inline">Index for{" "}</span>
+            <span className="block sm:inline text-brand-600">Early-Stage Companies</span>
           </h1>
           <p className="text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto mb-12 leading-relaxed">
             See where you stand before the auditor does. Get your readiness score, cost estimate, and a clear path forward — in under 2 minutes.

@@ -40,7 +40,7 @@ export default function FreeResults({
 
   const getScoreLabel = (score: number) => {
     if (score >= 70) return 'Good Progress';
-    if (score >= 40) return 'Getting Started';
+    if (score >= 40) return 'Early-stage readiness';
     return 'Needs Attention';
   };
 
@@ -205,6 +205,9 @@ export default function FreeResults({
         <p className="text-xs text-gray-400 text-center mt-3">
           Based on company size, data types, and timeline
         </p>
+        <p className="text-xs text-gray-500 text-center mt-2">
+          Includes auditor fees, tooling, and internal preparation effort.
+        </p>
       </div>
 
       {/* Top Recommendations */}
@@ -232,9 +235,12 @@ export default function FreeResults({
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 Get Your Full SOC 2 Roadmap PDF
               </h3>
-              <p className="text-gray-600 text-sm mb-4">
+              <p className="text-gray-600 text-sm mb-2">
                 The PDF includes a detailed timeline, compliance checklist, 
                 cost breakdown, and evidence templates.
+              </p>
+              <p className="text-xs text-gray-500 mb-4">
+                Used by auditors, founders, and security leads preparing for SOC 2.
               </p>
 
               <form onSubmit={handleGetPdf} className="max-w-sm mx-auto text-left">
