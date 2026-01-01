@@ -1,7 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <!-- RiscLens Favicon 32x32 - Blue background with white lens -->
-  <rect width="32" height="32" rx="6" fill="#2563EB"/>
-  <circle cx="16" cy="16" r="10" stroke="white" stroke-width="2" fill="none"/>
-  <circle cx="16" cy="16" r="5" stroke="white" stroke-width="1.5" fill="none"/>
-  <circle cx="16" cy="16" r="1.5" fill="white"/>
+  <!-- RiscLens Favicon 32x32 -->
+  <rect width="32" height="32" rx="6" fill="#0F172A"/>
+  <text 
+    x="7" 
+    y="24" 
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif" 
+    font-size="22" 
+    font-weight="600"
+    fill="#F8FAFC"
+  >R</text>
 </svg>
