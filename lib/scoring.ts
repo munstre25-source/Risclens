@@ -294,8 +294,8 @@ function calculateCostEstimateDetailed(
   const { baseCost, perEmployee, perDataType, urgencyMultipliers, industryMultipliers } = COST_PARAMETERS;
 
   // Base cost
-  let low = baseCost.low;
-  let high = baseCost.high;
+  let low: number = baseCost.low;
+  let high: number = baseCost.high;
 
   // Employee-based cost
   low += input.num_employees * perEmployee.low;
@@ -307,8 +307,8 @@ function calculateCostEstimateDetailed(
   high += dataTypeCount * perDataType.high;
 
   // Urgency multiplier
-  let urgencyMult = urgencyMultipliers.over12Months.multiplier;
-  let urgencyLabel = urgencyMultipliers.over12Months.label;
+  let urgencyMult: number = urgencyMultipliers.over12Months.multiplier;
+  let urgencyLabel: string = urgencyMultipliers.over12Months.label;
   if (monthsUntilAudit < 3) {
     urgencyMult = urgencyMultipliers.under90Days.multiplier;
     urgencyLabel = urgencyMultipliers.under90Days.label;
