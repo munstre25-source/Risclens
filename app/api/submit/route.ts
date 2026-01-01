@@ -54,6 +54,7 @@ export async function POST(request: NextRequest) {
       email: input.email || null, // Optional - can be set later
       utm_source: input.utm_source || null,
       variation_id: input.variation_id || 'default',
+      context_note: input.specific_requests?.trim() || null, // Optional free-text context (not used in scoring)
       readiness_score: scoringResult.readiness_score,
       estimated_cost_low: scoringResult.estimated_cost_low,
       estimated_cost_high: scoringResult.estimated_cost_high,

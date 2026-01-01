@@ -34,6 +34,7 @@ export interface CalculatorFormInputWithoutEmail {
   utm_source?: string;
   variation_id?: string;
   consent?: boolean; // Optional
+  specific_requests?: string; // Optional free-text context (not validated, not used in scoring)
 }
 
 export interface ValidationResult<T> {
@@ -289,6 +290,7 @@ export function validateCalculatorFormWithoutEmail(input: unknown): ValidationRe
 
   // Sanitize all inputs
   const emailValue = sanitizeString(raw.email).toLowerCase();
+  const specificRequestsValue = sanitizeString(raw.specific_requests);
   const sanitized = {
     company_name: sanitizeString(raw.company_name),
     industry: sanitizeString(raw.industry).toLowerCase(),
@@ -300,6 +302,7 @@ export function validateCalculatorFormWithoutEmail(input: unknown): ValidationRe
     utm_source: sanitizeString(raw.utm_source) || undefined,
     variation_id: sanitizeString(raw.variation_id) || undefined,
     consent: sanitizeBoolean(raw.consent) || undefined, // Optional
+    specific_requests: specificRequestsValue || undefined, // Optional - not validated, not used in scoring
   };
 
   // Validate company_name

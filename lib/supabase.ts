@@ -86,6 +86,7 @@ export interface SOC2Lead {
   email: string | null; // Nullable - can be set later via /api/lead/set-email
   utm_source: string | null;
   variation_id: string | null;
+  context_note: string | null; // Optional free-text context from user (not used in scoring)
   readiness_score: number;
   estimated_cost_low: number;
   estimated_cost_high: number;
