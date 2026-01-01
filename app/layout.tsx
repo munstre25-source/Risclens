@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import Script from "next/script";
+
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://risclens.com'),
@@ -58,9 +60,22 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="antialiased bg-gray-50 text-gray-900">
-        {children}
-      </body>
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-N2R08RMLTN"
+          strategy="afterInteractive"
+        />
+        <Script id="ga-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-N2R08RMLTN');
+          `}
+        </Script>
+      </head>
+      <body>{children}</body>
     </html>
   );
 }
+
