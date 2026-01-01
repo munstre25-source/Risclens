@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import Script from 'next/script';
 
 export const metadata: Metadata = {
   title: 'SOC 2 Readiness Index for Early-Stage Companies | RiscLens',
@@ -7,9 +8,74 @@ export const metadata: Metadata = {
   keywords: ['SOC 2', 'compliance', 'cost calculator', 'audit', 'security', 'readiness', 'startup', 'saas'],
 };
 
+// FAQ Schema for SEO - aligned with on-page FAQ content
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is SOC 2 readiness?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "SOC 2 readiness refers to an organization's preparedness to undergo a SOC 2 audit. It encompasses having the necessary policies, procedures, technical controls, and documentation in place to satisfy the Trust Service Criteria — Security, Availability, Processing Integrity, Confidentiality, and Privacy. A readiness assessment helps identify gaps before engaging an auditor, reducing the risk of failed audits or costly remediation cycles."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How is SOC 2 readiness calculated?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "RiscLens calculates SOC 2 readiness using a deterministic, rules-based scoring method. Each score is derived from explicit weights applied to inputs including company size and team structure, data types handled (PII, financial, health), audit timeline urgency, and industry vertical. The result is a readiness band (Pre-audit, Early-stage, Near-ready, or Audit-ready) and a cost range estimate. Each element of the score can be traced back to specific inputs."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long does SOC 2 take?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "SOC 2 timelines vary based on your starting point and audit type. The readiness phase typically takes 2–6 months depending on existing controls and gaps. A Type I audit takes 4–8 weeks once controls are in place. A Type II audit requires a 3–12 month observation period. For most early-stage companies with limited existing controls, expect 3–6 months of preparation before a Type I audit is feasible."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much does SOC 2 cost?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "SOC 2 costs depend on company size, complexity, and timeline. A typical first-time engagement includes auditor fees ($15,000–$50,000+ depending on scope), compliance tooling ($5,000–$30,000/year), and internal engineering and operational effort for remediation. RiscLens provides planning estimates based on your inputs — actual costs depend on vendor selection and organizational factors."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do startups need SOC 2?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Many startups pursue SOC 2 when enterprise customers or partners require it as part of vendor due diligence. It is not legally mandatory, but increasingly expected for B2B SaaS, fintech, and companies handling sensitive data. The decision depends on your sales cycle, customer requirements, and data handling practices. A readiness assessment can help determine timing and scope."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this a SOC 2 audit or certification?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. RiscLens provides a readiness assessment, not an audit or certification. SOC 2 audits must be performed by licensed CPA firms. SOC 2 reports (often called certifications) are formal attestations issued by auditors. Our assessment provides planning estimates and identifies potential gaps — it is not a substitute for a formal SOC 2 engagement with a qualified auditor."
+      }
+    }
+  ]
+};
+
 export default function HomePage() {
   return (
-    <main className="min-h-screen flex flex-col bg-slate-100">
+    <>
+      {/* FAQ Schema JSON-LD */}
+      <Script
+        id="faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        strategy="afterInteractive"
+      />
+      
+      <main className="min-h-screen flex flex-col bg-slate-100">
       {/* Header */}
       <header className="bg-white border-b border-slate-200">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4">
@@ -430,5 +496,6 @@ export default function HomePage() {
         </div>
       </footer>
     </main>
+    </>
   );
 }
