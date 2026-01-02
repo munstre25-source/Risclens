@@ -142,13 +142,13 @@ export default function AdminLayout({
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="flex min-h-screen">
-        <aside className="w-56 bg-white border-r border-slate-200 hidden md:flex flex-col">
+        <aside className="w-56 bg-white border-r border-slate-200 flex flex-col">
           <div className="px-4 py-5 border-b border-slate-200">
             <Link href="/admin" className="text-lg font-semibold text-slate-900">
               RiscLens Admin
             </Link>
           </div>
-          <nav className="flex-1 py-4">
+          <nav className="flex-1 py-4 overflow-y-auto">
             <ul className="space-y-1">
               {NAV_ITEMS.map((item) => {
                 const active = pathname === item.href;
@@ -172,27 +172,6 @@ export default function AdminLayout({
         </aside>
 
         <div className="flex-1">
-          <header className="md:hidden bg-white border-b border-slate-200 px-4 py-3">
-            <div className="flex items-center justify-between">
-              <Link href="/admin" className="text-base font-semibold text-slate-900">
-                RiscLens Admin
-              </Link>
-              <div className="flex items-center gap-2 text-xs text-slate-500">
-                {NAV_ITEMS.map((item) => {
-                  const active = pathname === item.href;
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className={active ? 'text-brand-700 font-semibold' : 'text-slate-600'}
-                    >
-                      {item.label}
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
-          </header>
 
           <main className="p-4 md:p-6 lg:p-8 space-y-4">
             {testMode && (
