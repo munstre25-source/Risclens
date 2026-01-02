@@ -614,7 +614,7 @@ export default function AdminDashboard({ onLogout = () => {} }: AdminDashboardPr
         {/* Leads Table */}
         <div className="card overflow-hidden p-0 mb-8">
           <div className="overflow-x-auto">
-            <table className="admin-table min-w-[960px]">
+            <table className="admin-table min-w-[720px]">
               <thead>
                 <tr>
                   <th>Company</th>
@@ -719,7 +719,7 @@ export default function AdminDashboard({ onLogout = () => {} }: AdminDashboardPr
           <h2 className="text-lg font-semibold text-gray-900 mb-4">A/B Variants</h2>
           <div className="card overflow-hidden p-0">
             <div className="overflow-x-auto">
-              <table className="admin-table min-w-[720px]">
+              <table className="admin-table min-w-[640px]">
                 <thead>
                   <tr>
                     <th>Variant</th>

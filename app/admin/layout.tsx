@@ -200,14 +200,16 @@ export default function AdminLayout({
               </div>
             </div>
           </header>
-          <main className="p-4 md:p-6 lg:p-8 space-y-4">
-            {testMode && (
-              <div className="inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-800 border border-amber-100">
-                <span className="h-2 w-2 rounded-full bg-amber-500" aria-hidden />
-                Test Mode ON
-              </div>
-            )}
-            {children}
+          <main className="p-4 md:p-6 lg:p-8">
+            <div className="max-w-5xl mx-auto w-full space-y-4">
+              {testMode && (
+                <div className="inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-800 border border-amber-100">
+                  <span className="h-2 w-2 rounded-full bg-amber-500" aria-hidden />
+                  Test Mode ON
+                </div>
+              )}
+              {children}
+            </div>
           </main>
         </div>
       </div>
