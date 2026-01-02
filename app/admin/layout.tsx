@@ -142,7 +142,7 @@ export default function AdminLayout({
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="flex min-h-screen">
-        <aside className="w-56 bg-white border-r border-slate-200 flex flex-col">
+        <aside className="w-56 bg-white border-r border-slate-200 hidden md:flex flex-col">
           <div className="px-4 py-5 border-b border-slate-200">
             <Link href="/admin" className="text-lg font-semibold text-slate-900">
               RiscLens Admin
@@ -172,7 +172,34 @@ export default function AdminLayout({
         </aside>
 
         <div className="flex-1">
-
+          {/* Mobile top nav */}
+          <header className="md:hidden sticky top-0 z-20 bg-white border-b border-slate-200">
+            <div className="px-4 py-3 flex items-center justify-between">
+              <Link href="/admin" className="text-base font-semibold text-slate-900">
+                RiscLens Admin
+              </Link>
+            </div>
+            <div className="px-3 pb-3">
+              <div className="flex gap-2 overflow-x-auto no-scrollbar">
+                {NAV_ITEMS.map((item) => {
+                  const active = pathname === item.href;
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={`whitespace-nowrap rounded-full px-3 py-2 text-sm font-medium ${
+                        active
+                          ? 'bg-brand-50 text-brand-700 border border-brand-100'
+                          : 'bg-slate-50 text-slate-700 border border-slate-200'
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          </header>
           <main className="p-4 md:p-6 lg:p-8 space-y-4">
             {testMode && (
               <div className="inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-800 border border-amber-100">
