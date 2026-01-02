@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Script from 'next/script';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 const CTA_HREF = '/soc-2-readiness-index';
 
@@ -95,7 +96,7 @@ export default function Soc2CostSaasPage() {
               SaaS teams juggle multi-tenant architectures, fast release cycles, and customer security demands. These factors shape audit scope, evidence collection, and tooling needs—impacting your SOC 2 budget.
             </p>
             <p className="text-sm text-slate-500 mb-6">
-              Jump into the readiness assessment: <Link href={CTA_HREF} className="underline underline-offset-2 text-brand-700 hover:text-brand-800">SOC 2 Readiness Index</Link>.
+              Jump into the readiness assessment: SOC 2 Readiness Index.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
@@ -187,7 +188,36 @@ export default function Soc2CostSaasPage() {
             </div>
           </div>
         </section>
+
+        <section className="py-12 bg-white border-t border-slate-200">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 space-y-4">
+            <h2 className="text-2xl font-bold text-slate-900">SOC 2 Cost FAQs</h2>
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-lg font-semibold text-slate-800">How much does SOC 2 typically cost?</h3>
+                <p className="text-slate-600">SaaS teams often budget for auditor fees, tooling, and internal time; totals vary with scope and deployment complexity.</p>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-slate-800">What increases SOC 2 audit cost the most?</h3>
+                <p className="text-slate-600">Broad scope, heavy integrations, and compressed timelines increase testing hours and evidence collection.</p>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-slate-800">Is SOC 2 Type II more expensive than Type I?</h3>
+                <p className="text-slate-600">Yes. Type II requires operating evidence across deployments, adding auditor time and internal effort.</p>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-slate-800">Can startups reduce SOC 2 costs?</h3>
+                <p className="text-slate-600">Standardized change control, clear tenant isolation, and evidence automation can reduce effort and fees.</p>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-slate-800">How long does SOC 2 usually take?</h3>
+                <p className="text-slate-600">Readiness can take a few months; Type I follows quickly; Type II adds an observation window of several months.</p>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
+      <Footer />
     </>
   );
 }

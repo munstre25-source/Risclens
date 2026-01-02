@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Script from 'next/script';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
   title: 'SOC 2 Readiness Score & Cost Estimate (2026) | RiscLens',
@@ -103,26 +104,8 @@ export default function HomePage() {
             Free • No credit card • Instant results
           </p>
 
-          {/* Industry Links */}
-          <div className="mt-10 pt-8 border-t border-slate-200/50">
-            <p className="text-sm text-slate-500 mb-3">
-              Built for your industry:
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Link 
-                href="/soc-2-readiness/saas"
-                className="text-sm text-slate-600 hover:text-brand-600 transition-colors underline underline-offset-2"
-              >
-                SaaS Companies
-              </Link>
-              <span className="text-slate-300">•</span>
-              <Link 
-                href="/soc-2-readiness/fintech"
-                className="text-sm text-slate-600 hover:text-brand-600 transition-colors underline underline-offset-2"
-              >
-                Fintech Companies
-              </Link>
-            </div>
+          <div className="mt-10 pt-8 border-t border-slate-200/50 text-sm text-slate-500">
+            Built for your industry: SaaS companies • Fintech companies
           </div>
         </div>
       </section>
@@ -451,44 +434,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-10 bg-slate-900 text-slate-400 text-sm">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div>
-              <p className="font-semibold text-slate-200">RiscLens</p>
-              <p className="text-xs text-slate-500 mt-1 uppercase tracking-wide">
-                Compliance readiness infrastructure
-              </p>
-            </div>
-            <div className="flex items-center gap-6">
-              <Link href="/privacy" className="text-slate-400 hover:text-slate-200 transition-colors">
-                Privacy
-              </Link>
-              <Link href="/terms" className="text-slate-400 hover:text-slate-200 transition-colors">
-                Terms
-              </Link>
-              <a href="mailto:reports@risclens.com" className="text-slate-400 hover:text-slate-200 transition-colors">
-                Contact
-              </a>
-            </div>
-          </div>
-          
-          {/* Disclaimer */}
-          <div className="mt-10 pt-8 border-t border-slate-800">
-            <p className="text-xs text-slate-500 leading-relaxed max-w-3xl">
-              <strong className="text-slate-400">Disclaimer:</strong> RiscLens provides informational 
-              estimates only. We do not provide legal advice, audit services, or SOC 2 certification. 
-              All results are based on self-reported inputs and should be used for planning purposes only. 
-              For formal compliance guidance, consult a qualified auditor or legal professional.
-            </p>
-          </div>
-
-          <p className="mt-8 text-center text-slate-500 text-xs">
-            © {new Date().getFullYear()} RiscLens. Your data is encrypted and never shared without consent.
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </main>
     </>
   );

@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
@@ -94,11 +95,7 @@ export default function PrivacyPage() {
         </div>
       </div>
 
-      <footer className="py-8 bg-gray-900 text-gray-400 text-sm">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          <p>&copy; {new Date().getFullYear()} RiscLens. All rights reserved.</p>
-        </div>
-      </footer>
+      <Footer />
     </main>
   );
 }

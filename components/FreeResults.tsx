@@ -218,6 +218,11 @@ export default function FreeResults({
         <h3 className="text-lg font-semibold text-gray-900 mb-4">
           Top Recommendations
         </h3>
+        <p className="text-sm text-gray-600 mb-3">
+          <a href="/soc-2-cost" className="underline underline-offset-2 text-brand-700 hover:text-brand-800">
+            Learn how SOC 2 costs are calculated.
+          </a>
+        </p>
         <ul className="space-y-3">
           {topRecommendations.map((rec, index) => (
             <li key={index} className="flex gap-3">

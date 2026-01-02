@@ -117,6 +117,9 @@ npm run lint
 npm run build
 ```
 
+### Favicon/Icon cache reset
+- After changing `app/favicon.ico` (or removing old `app/icon.*` files), delete the `.next` directory and restart the dev server to clear cached icon routes.
+
 ## Local Smoke Tests
 
 After setup, verify the system works:

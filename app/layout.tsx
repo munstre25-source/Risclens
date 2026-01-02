@@ -27,10 +27,10 @@ export const metadata: Metadata = {
     description: 'Get a clear readiness score, cost estimate, and gap analysis in minutes. Free instant results for startups.',
     images: [
       {
-        url: '/opengraph-image',
+        url: '/og.png',
         width: 1200,
         height: 630,
-        alt: 'RiscLens - SOC 2 Readiness Index',
+        alt: 'RiscLens',
       },
     ],
   },
@@ -38,18 +38,14 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'SOC 2 Readiness Index for Early-Stage Companies',
     description: 'Get a clear readiness score, cost estimate, and gap analysis in minutes.',
-    images: ['/opengraph-image'],
+    images: ['/og.png'],
   },
   robots: {
     index: true,
     follow: true,
   },
   icons: {
-    icon: [
-      { url: '/favicon.svg', type: 'image/svg+xml' },
-    ],
-    shortcut: '/favicon.svg',
-    apple: '/apple-icon',
+    icon: [{ url: '/favicon.ico' }],
   },
 };
 

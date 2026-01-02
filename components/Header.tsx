@@ -1,8 +1,8 @@
 'use client';
 
-
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const CTA_HREF = '/soc-2-readiness-index';
 
@@ -35,10 +35,19 @@ export default function Header() {
 
   return (
     <header className="bg-white border-b border-slate-200">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-6">
-        <Link href="/" className="text-xl font-bold text-slate-900">
-          RiscLens
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-6">
+        <Link href="/" className="flex items-center gap-3">
+          <Image
+  src="/logo/logo-wordmark.png"
+  alt="RiscLens"
+  width={360}
+  height={164}
+  priority
+  className="h-28 md:h-32 w-auto object-contain"
+/>
+
         </Link>
+
 
         <div className="flex items-center gap-4">
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-700">

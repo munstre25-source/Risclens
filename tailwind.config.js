@@ -39,8 +39,8 @@ module.exports = {
         },
         // Trust/security accent (green - used minimally)
         trust: {
-          500: '#10b981',
-          600: '#059669',
+          500: '#18b2a2',
+          600: '#0f9c8c',
         },
       },
       fontFamily: {

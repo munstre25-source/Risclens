@@ -253,6 +253,10 @@ const generateTimeline = (auditDate: string) => {
 // =============================================================================
 
 export default function PDFTemplate({ lead }: PDFTemplateProps) {
+  const logoUrl =
+    (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_APP_URL
+      ? `${process.env.NEXT_PUBLIC_APP_URL}/logo/logo-wordmark.png`
+      : 'https://risclens.com/logo/logo-wordmark.png');
   const readinessBand = getReadinessBand(lead.readiness_score);
   const timeline = generateTimeline(lead.audit_date);
   const applicableControlAreas = lead.data_types
@@ -519,6 +523,11 @@ export default function PDFTemplate({ lead }: PDFTemplateProps) {
         {/* HEADER */}
         {/* ============================================================= */}
         <div className="header">
+          <img
+            src={logoUrl}
+            alt="RiscLens"
+            style={{ height: '48px', width: 'auto', marginBottom: '10px' }}
+          />
           <h1>SOC 2 Readiness Report</h1>
           <div className="subtitle">
             Prepared for {lead.company_name} | {formatDate(new Date().toISOString())}

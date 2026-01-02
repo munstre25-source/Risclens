@@ -1,5 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
   title: 'SOC 2 Readiness for SaaS | Score & Plan (2026)',
@@ -11,13 +13,7 @@ export default function SaaSSoc2ReadinessPage() {
   return (
     <main className="min-h-screen flex flex-col bg-slate-100">
       {/* Header */}
-      <header className="bg-white border-b border-slate-200">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4">
-          <Link href="/" className="text-xl font-bold text-slate-900">
-            RiscLens
-          </Link>
-        </div>
-      </header>
+      <Header />
 
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
@@ -29,8 +25,11 @@ export default function SaaSSoc2ReadinessPage() {
           <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-10 leading-relaxed">
             Enterprise customers expect SOC 2. Get a clear picture of your readiness, estimated costs, and preparation timeline — before you engage an auditor.
           </p>
+          <p className="text-sm text-slate-600 mb-4">
+            Get a free SOC 2 readiness score and cost estimate in under 2 minutes.
+          </p>
           <p className="text-sm text-slate-500 mb-4">
-            Prefer a quick score? <Link href="/soc-2-readiness-index" className="underline underline-offset-2 text-brand-700 hover:text-brand-800">Try the SOC 2 Readiness Index</Link>.
+            Prefer a quick score? Try the SOC 2 Readiness Index.
           </p>
           <Link
             href="/soc-2-readiness-index"
@@ -281,43 +280,7 @@ export default function SaaSSoc2ReadinessPage() {
       </section>
 
       {/* Footer */}
-      <footer className="py-10 bg-slate-900 text-slate-400 text-sm">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div>
-              <p className="font-semibold text-slate-200">RiscLens</p>
-              <p className="text-xs text-slate-500 mt-1 uppercase tracking-wide">
-                Compliance readiness infrastructure
-              </p>
-            </div>
-            <div className="flex items-center gap-6">
-              <Link href="/privacy" className="text-slate-400 hover:text-slate-200 transition-colors">
-                Privacy
-              </Link>
-              <Link href="/terms" className="text-slate-400 hover:text-slate-200 transition-colors">
-                Terms
-              </Link>
-              <a href="mailto:reports@risclens.com" className="text-slate-400 hover:text-slate-200 transition-colors">
-                Contact
-              </a>
-            </div>
-          </div>
-          
-          {/* Disclaimer */}
-          <div className="mt-10 pt-8 border-t border-slate-800">
-            <p className="text-xs text-slate-500 leading-relaxed max-w-3xl">
-              <strong className="text-slate-400">Disclaimer:</strong> RiscLens provides informational 
-              estimates only. We do not provide legal advice, audit services, or SOC 2 certification. 
-              All results are based on self-reported inputs and should be used for planning purposes only. 
-              For formal compliance guidance, consult a qualified auditor or legal professional.
-            </p>
-          </div>
-
-          <p className="mt-8 text-center text-slate-500 text-xs">
-            © {new Date().getFullYear()} RiscLens. Your data is encrypted and never shared without consent.
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </main>
   );
 }

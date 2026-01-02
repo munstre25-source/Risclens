@@ -185,11 +185,10 @@ export const COST_PARAMETERS = {
 export const SCORE_BOUNDS = {
   // Maximum possible raw score (sum of all max weights)
   // companySize(25) + timeline(20) + dataTypes(36) + requester(12) + role(5) + industry(10) = 108
-  maxRawScore: 108,
+  maxRawScore: 85,
   
   // Minimum possible raw score
-  // companySize(5) + timeline(5) + dataTypes(0) + requester(0) + role(1) + industry(2) = 13
-  minRawScore: 13,
+  minRawScore: 0,
 
   // Normalization range
   normalizedMin: 0,

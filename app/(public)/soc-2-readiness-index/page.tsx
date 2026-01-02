@@ -1,11 +1,14 @@
 import { Suspense } from 'react';
 import { Metadata } from 'next';
-import Link from 'next/link';
 import CalculatorForm from '@/components/CalculatorForm';
 
 export const metadata: Metadata = {
   title: 'SOC 2 Readiness Index (2026) | Free Score & Budget Range',
   description: 'Instant SOC 2 readiness score with a budget range and next steps. Built for teams preparing their 2026 audit.',
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 function FormSkeleton() {
@@ -25,16 +28,6 @@ function FormSkeleton() {
 export default function CalculatorPage() {
   return (
     <main className="min-h-screen bg-gray-50">
-      {/* Minimal Header */}
-      <header className="bg-white border-b border-gray-100">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="text-lg font-bold text-gray-900 hover:text-brand-600 transition-colors">
-            ← RiscLens
-          </Link>
-        </div>
-      </header>
-
-      {/* Calculator Section - Starts immediately */}
       <section className="py-8 lg:py-12 px-4 sm:px-6">
         <div className="max-w-2xl mx-auto">
           <Suspense fallback={<FormSkeleton />}>
@@ -42,17 +35,6 @@ export default function CalculatorPage() {
           </Suspense>
         </div>
       </section>
-
-      {/* Minimal Footer */}
-      <footer className="py-6 border-t border-gray-200 text-center text-sm text-gray-500">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6">
-          <p>© {new Date().getFullYear()} RiscLens</p>
-          <div className="mt-2 flex items-center justify-center gap-4">
-            <Link href="/privacy" className="hover:text-gray-700">Privacy</Link>
-            <Link href="/terms" className="hover:text-gray-700">Terms</Link>
-          </div>
-        </div>
-      </footer>
     </main>
   );
 }
