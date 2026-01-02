@@ -149,11 +149,7 @@ function formatCurrency(amount: number) {
 // MAIN COMPONENT
 // =============================================================================
 
-interface AdminDashboardProps {
-  onLogout?: () => void;
-}
-
-export default function AdminDashboard({ onLogout = () => {} }: AdminDashboardProps) {
+export default function AdminDashboard() {
   // Data state
   const [leads, setLeads] = useState<Lead[]>([]);
   const [variants, setVariants] = useState<ABVariant[]>([]);
@@ -475,23 +471,33 @@ export default function AdminDashboard({ onLogout = () => {} }: AdminDashboardPr
   // RENDER
   // ==========================================================================
 
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/admin/logout', { method: 'POST', credentials: 'include' });
+    } catch {
+      // ignore
+    } finally {
+      window.location.href = '/admin';
+    }
+  };
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-100 overflow-x-hidden flex items-center justify-center">
         <div className="text-gray-500">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 overflow-x-hidden">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
           <h1 className="text-xl font-bold text-gray-900">
             RiscLens Admin Dashboard
           </h1>
-          <button onClick={onLogout} className="text-sm text-gray-600 hover:text-gray-900">
+          <button onClick={handleLogout} className="text-sm text-gray-600 hover:text-gray-900">
             Logout
           </button>
         </div>
@@ -774,6 +780,70 @@ export default function AdminDashboard({ onLogout = () => {} }: AdminDashboardPr
               })
             )}
           </div>
+          <div className="md:hidden divide-y divide-gray-200">
+            {leads.length === 0 ? (
+              <p className="py-6 text-center text-gray-500">No leads found.</p>
+            ) : (
+              leads.map((lead) => {
+                const urgency = getUrgencyBand(lead.audit_date);
+                const readiness = getReadinessBand(lead.readiness_score);
+                const status = LEAD_STATUSES.find(s => s.value === lead.lead_status) || LEAD_STATUSES[0];
+                const daysUntil = getDaysUntilAudit(lead.audit_date);
+
+                return (
+                  <div key={lead.id} className="p-4 space-y-2">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="font-semibold text-gray-900">{lead.company_name}</p>
+                        <p className="text-xs text-gray-500">{lead.email || 'No email'}</p>
+                        <p className="text-xs text-gray-500">Created {formatDate(lead.created_at)}</p>
+                      </div>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${status.color}`}>
+                        {status.label}
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2 text-xs text-gray-700">
+                      <span className="capitalize">{lead.industry}</span>
+                      <span className="text-gray-300">•</span>
+                      <span className={readiness.color}>{lead.readiness_score}% {readiness.label}</span>
+                      <span className="text-gray-300">•</span>
+                      <span className={urgency.color}>{urgency.badge} {daysUntil}d</span>
+                      <span className="text-gray-300">•</span>
+                      <span className="capitalize">{lead.keep_or_sell}</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-xs text-gray-600">
+                      <button onClick={() => openLeadDetail(lead)} className="text-brand-600 font-medium">
+                        View details
+                      </button>
+                      {lead.pdf_url && (
+                        <a
+                          href={lead.pdf_url}
+                          className="text-brand-600"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          PDF
+                        </a>
+                      )}
+                      {lead.email_sent && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleResendEmail(lead.id);
+                          }}
+                          disabled={actionLoading}
+                          className="text-brand-600"
+                        >
+                          Resend
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
         </div>
 
         {/* A/B Testing Section */}
@@ -1001,6 +1071,49 @@ export default function AdminDashboard({ onLogout = () => {} }: AdminDashboardPr
                   </button>
                 )}
               </div>
+            </div>
+            <div className="md:hidden divide-y divide-gray-200">
+              {variants.length === 0 ? (
+                <p className="py-6 text-center text-gray-500">No A/B variants configured.</p>
+              ) : (
+                variants.map((variant) => (
+                  <div key={variant.id} className="p-4 space-y-2">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="font-semibold text-gray-900">{variant.name}</p>
+                        <p className="text-xs text-gray-500 font-mono">{variant.variation_id}</p>
+                      </div>
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          variant.active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'
+                        }`}
+                      >
+                        {variant.active ? 'Active' : 'Inactive'}
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2 text-xs text-gray-700">
+                      <span>{variant.impressions.toLocaleString()} impressions</span>
+                      <span className="text-gray-300">•</span>
+                      <span>{variant.submissions.toLocaleString()} submissions</span>
+                      <span className="text-gray-300">•</span>
+                      <span>
+                        {variant.impressions > 0
+                          ? `${((variant.submissions / variant.impressions) * 100).toFixed(1)}%`
+                          : '0%'}{' '}
+                        conversion
+                      </span>
+                    </div>
+                    <div>
+                      <button
+                        onClick={() => handleToggleVariant(variant.variation_id, !variant.active)}
+                        className="text-brand-600 text-sm"
+                      >
+                        {variant.active ? 'Deactivate' : 'Activate'}
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
             <div className="md:hidden divide-y divide-gray-200">
               {variants.length === 0 ? (
