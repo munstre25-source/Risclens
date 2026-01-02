@@ -230,6 +230,18 @@ export default function FreeResults({
         </ul>
       </div>
 
+      {/* Mid-page secondary CTA - same flow */}
+      <div className="card mb-6 text-center">
+        <button
+          type="submit"
+          form="pdf-form"
+          className="btn-primary"
+          disabled={isRequestingPdf || pdfSent}
+        >
+          Email me the PDF roadmap
+        </button>
+      </div>
+
       {/* PDF CTA Section - Email Gate */}
       <div className="card bg-gradient-to-br from-brand-50 via-white to-brand-50 border-brand-100">
         <div className="text-center">
@@ -246,7 +258,7 @@ export default function FreeResults({
                 Used by auditors, founders, and security leads preparing for SOC 2.
               </p>
 
-              <form onSubmit={handleGetPdf} className="max-w-sm mx-auto text-left">
+              <form id="pdf-form" onSubmit={handleGetPdf} className="max-w-sm mx-auto text-left">
                 <div className="mb-3">
                   <label htmlFor="pdf-email" className="block text-sm font-medium text-gray-700 mb-1">
                     Work Email
@@ -275,6 +287,11 @@ export default function FreeResults({
                     </span>
                   </label>
                 </div>
+
+                <ul className="text-sm text-gray-600 mb-3 list-disc list-inside space-y-1">
+                  <li>Instant readiness score + cost range</li>
+                  <li>Auditor-style, prioritized recommendations</li>
+                </ul>
 
                 {error && (
                   <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
@@ -330,6 +347,10 @@ export default function FreeResults({
                     </>
                   )}
                 </button>
+
+                <p className="text-xs text-gray-500 text-center mt-3">
+                  No spam. One PDF roadmap + occasional SOC 2 insights. Unsubscribe anytime.
+                </p>
               </form>
             </>
           ) : (

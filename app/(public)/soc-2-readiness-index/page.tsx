@@ -4,8 +4,8 @@ import Link from 'next/link';
 import CalculatorForm from '@/components/CalculatorForm';
 
 export const metadata: Metadata = {
-  title: 'SOC 2 Readiness Index | Free Assessment',
-  description: 'Get your SOC 2 readiness score and cost estimate in under 2 minutes. Built for early-stage companies preparing for their first audit.',
+  title: 'SOC 2 Readiness Index (2026) | Free Score & Budget Range',
+  description: 'Instant SOC 2 readiness score with a budget range and next steps. Built for teams preparing their 2026 audit.',
 };
 
 function FormSkeleton() {

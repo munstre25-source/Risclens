@@ -1,30 +1,36 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import Header from '@/components/Header';
 
 export const metadata: Metadata = {
-  title: 'SOC 2 Readiness for Fintech Companies | RiscLens',
-  description: 'Evaluate your fintech company\'s SOC 2 readiness. Understand regulatory overlap, costs, and common gaps before engaging auditors.',
+  title: 'SOC 2 Readiness for Fintech | Score & Plan (2026)',
+  description: 'Get a fintech-focused SOC 2 readiness score, budget range, and prep plan for your 2026 audit.',
   keywords: ['SOC 2 fintech', 'fintech compliance', 'SOC 2 readiness', 'financial services security', 'fintech audit'],
 };
 
 export default function FintechSoc2ReadinessPage() {
   return (
     <main className="min-h-screen flex flex-col bg-slate-100">
-      <Header />
+      {/* Header */}
+      <header className="bg-white border-b border-slate-200">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4">
+          <Link href="/" className="text-xl font-bold text-slate-900">
+            RiscLens
+          </Link>
+        </div>
+      </header>
 
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-20 lg:py-28 text-center">
-          <p className="text-sm font-medium text-brand-600 uppercase tracking-wide mb-4">
-            SOC 2 Readiness for Fintech
-          </p>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mb-6 leading-tight tracking-tight">
-            SOC 2 Readiness Assessment{" "}
-            <span className="text-brand-600">for Fintech Companies</span>
+            <span className="block">SOC 2 Readiness Assessment</span>
+            <span className="block text-brand-600">for Fintech Companies</span>
           </h1>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-10 leading-relaxed">
             Financial data demands rigorous security controls. Understand your readiness posture, cost expectations, and regulatory overlap — before your audit engagement begins.
+          </p>
+          <p className="text-sm text-slate-500 mb-4">
+            Prefer a quick score? <Link href="/soc-2-readiness-index" className="underline underline-offset-2 text-brand-700 hover:text-brand-800">Try the SOC 2 Readiness Index</Link>.
           </p>
           <Link
             href="/soc-2-readiness-index"
