@@ -187,6 +187,9 @@ export default function FreeResults({
         <h3 className="text-lg font-semibold text-gray-900 mb-4">
           Estimated Compliance Cost
         </h3>
+        <p className="text-sm text-gray-500 mb-4">
+          See what drives these numbers in the <a href="/soc-2-cost" className="underline underline-offset-2 text-brand-700 hover:text-brand-800">SOC 2 cost guide</a>.
+        </p>
         <div className="flex items-center justify-center gap-4">
           <div className="text-center">
             <div className="text-2xl font-bold text-brand-600">

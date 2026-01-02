@@ -4,8 +4,8 @@ import Script from 'next/script';
 import Header from '@/components/Header';
 
 export const metadata: Metadata = {
-  title: 'SOC 2 Readiness Index for Early-Stage Companies | RiscLens',
-  description: 'Calculate your SOC 2 compliance costs and get a personalized readiness assessment. Free instant results with detailed PDF report.',
+  title: 'SOC 2 Readiness Score & Cost Estimate (2026) | RiscLens',
+  description: 'Get your SOC 2 readiness score and budget range in minutes. Clear next steps for startups planning their 2026 audit.',
   keywords: ['SOC 2', 'compliance', 'cost calculator', 'audit', 'security', 'readiness', 'startup', 'saas'],
 };
 
@@ -106,7 +106,7 @@ export default function HomePage() {
           {/* Industry Links */}
           <div className="mt-10 pt-8 border-t border-slate-200/50">
             <p className="text-sm text-slate-500 mb-3">
-              SOC 2 readiness by industry:
+              Built for your industry:
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link 

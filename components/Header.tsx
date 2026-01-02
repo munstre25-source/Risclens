@@ -1,50 +1,157 @@
 'use client';
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 
-const navItems = [
-  { label: 'SOC 2 Readiness', href: '/' },
-  { label: 'SaaS', href: '/soc-2-readiness/saas' },
-  { label: 'Fintech', href: '/soc-2-readiness/fintech' },
-];
+import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
+
+const CTA_HREF = '/soc-2-readiness-index';
 
 export default function Header() {
-  const pathname = usePathname();
+  const [isIndustriesOpen, setIndustriesOpen] = useState(false);
+  const [isMobileOpen, setMobileOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIndustriesOpen(false);
+      }
+    }
+
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setIndustriesOpen(false);
+        setMobileOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscape);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, []);
 
   return (
     <header className="bg-white border-b border-slate-200">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
-          {/* Logo */}
-          <Link href="/" className="text-xl font-bold text-slate-900">
-            RiscLens
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-6">
+        <Link href="/" className="text-xl font-bold text-slate-900">
+          RiscLens
+        </Link>
+
+        <div className="flex items-center gap-4">
+          <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-700">
+            <Link href="/soc-2-cost" className="hover:text-brand-700 transition-colors">
+              SOC 2 Cost
+            </Link>
+            <div className="relative" ref={dropdownRef}>
+              <button
+                type="button"
+                className="flex items-center gap-2 hover:text-brand-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600 rounded"
+                aria-expanded={isIndustriesOpen}
+                aria-haspopup="true"
+                onClick={() => setIndustriesOpen((open) => !open)}
+              >
+                Industries
+                <svg
+                  className={`w-4 h-4 transition-transform ${isIndustriesOpen ? 'rotate-180' : ''}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {isIndustriesOpen && (
+                <div className="absolute mt-2 w-40 rounded-lg border border-slate-200 bg-white shadow-md focus:outline-none">
+                  <Link
+                    href="/soc-2-readiness/saas"
+                    className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600 rounded-t-lg"
+                  >
+                    SaaS
+                  </Link>
+                  <Link
+                    href="/soc-2-readiness/fintech"
+                    className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600 rounded-b-lg"
+                  >
+                    Fintech
+                  </Link>
+                </div>
+              )}
+            </div>
+          </nav>
+
+          <Link
+            href={CTA_HREF}
+            className="hidden md:inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-4 py-2 rounded-lg shadow-sm transition-all"
+          >
+            Get Readiness Score
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
           </Link>
 
-          {/* Navigation */}
-          <nav aria-label="Main navigation">
-            <ul className="flex flex-wrap items-center gap-x-6 gap-y-1">
-              {navItems.map((item) => {
-                const isActive = pathname === item.href;
-                return (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      className={`text-sm transition-colors ${
-                        isActive
-                          ? 'text-slate-900 font-medium'
-                          : 'text-slate-500 hover:text-slate-700'
-                      }`}
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </nav>
+          <button
+            type="button"
+            className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600"
+            aria-label="Toggle navigation menu"
+            aria-expanded={isMobileOpen}
+            onClick={() => setMobileOpen((open) => !open)}
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {isMobileOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
         </div>
       </div>
+
+      {isMobileOpen && (
+        <div className="md:hidden border-t border-slate-200 bg-white">
+          <div className="px-4 py-3 space-y-3">
+            <Link
+              href="/soc-2-cost"
+              className="block text-sm font-medium text-slate-800 hover:text-brand-700 transition-colors"
+              onClick={() => setMobileOpen(false)}
+            >
+              SOC 2 Cost
+            </Link>
+            <div className="space-y-2">
+              <p className="text-sm font-semibold text-slate-900">Industries</p>
+              <div className="pl-3 space-y-2">
+                <Link
+                  href="/soc-2-readiness/saas"
+                  className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  SaaS
+                </Link>
+                <Link
+                  href="/soc-2-readiness/fintech"
+                  className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Fintech
+                </Link>
+              </div>
+            </div>
+            <Link
+              href={CTA_HREF}
+              className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-4 py-2 rounded-lg shadow-sm transition-all"
+              onClick={() => setMobileOpen(false)}
+            >
+              Get Readiness Score
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
