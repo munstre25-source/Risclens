@@ -70,8 +70,11 @@ export async function POST(request: NextRequest) {
       buyer_email: buyerEmail,
     });
 
+    const isTest = request.cookies.get('rls_test_mode')?.value === '1';
+
     // Record revenue event
     await recordRevenueEvent({
+      is_test: isTest,
       lead_id: leadId,
       keyword_id: null,
       calculator_page: '/soc-2-readiness-index',

@@ -20,8 +20,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Increment submissions counter atomically
-    await incrementABCounter(variation_id, 'submissions');
+    const isTest = request.cookies.get('rls_test_mode')?.value === '1';
+    // Skip counting submissions when in test mode to avoid polluting metrics
+    if (!isTest) {
+      await incrementABCounter(variation_id, 'submissions');
+    }
 
     console.log('A/B submission recorded:', variation_id);
 

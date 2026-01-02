@@ -20,8 +20,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Increment impressions counter atomically
-    await incrementABCounter(variation_id, 'impressions');
+    const isTest = request.cookies.get('rls_test_mode')?.value === '1';
+    // Skip counting impressions when in test mode to avoid polluting metrics
+    if (!isTest) {
+      await incrementABCounter(variation_id, 'impressions');
+    }
 
     console.log('A/B impression recorded:', variation_id);
 

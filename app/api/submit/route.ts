@@ -29,6 +29,7 @@ export async function POST(request: NextRequest) {
     }
 
     const input = validation.data;
+    const isTest = request.cookies.get('rls_test_mode')?.value === '1';
 
     // Build scoring input
     const scoringInput: ScoringInput = {
@@ -45,6 +46,7 @@ export async function POST(request: NextRequest) {
     // Prepare lead data for DB insert
     // Email and consent are OPTIONAL - can be NULL
     const leadData = {
+      is_test: isTest,
       company_name: input.company_name,
       industry: input.industry,
       num_employees: input.num_employees,
@@ -75,7 +77,7 @@ export async function POST(request: NextRequest) {
     };
 
     // Insert lead into database
-    const lead = await insertLead(leadData);
+    const lead = await insertLead(leadData as any);
 
     // Log audit event
     await logAuditEvent('lead_submitted', {

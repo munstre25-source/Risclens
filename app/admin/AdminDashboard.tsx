@@ -150,10 +150,10 @@ function formatCurrency(amount: number) {
 // =============================================================================
 
 interface AdminDashboardProps {
-  onLogout: () => void;
+  onLogout?: () => void;
 }
 
-export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
+export default function AdminDashboard({ onLogout = () => {} }: AdminDashboardProps) {
   // Data state
   const [leads, setLeads] = useState<Lead[]>([]);
   const [variants, setVariants] = useState<ABVariant[]>([]);

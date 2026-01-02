@@ -1,0 +1,210 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+type AuthState = 'loading' | 'unauthenticated' | 'authenticated';
+
+const NAV_ITEMS = [
+  { href: '/admin', label: 'Dashboard' },
+  { href: '/admin/leads', label: 'Leads' },
+  { href: '/admin/test-mode', label: 'Test Mode' },
+  { href: '/admin/experiments', label: 'Experiments' },
+  { href: '/admin/settings', label: 'Settings' },
+];
+
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const [authState, setAuthState] = useState<AuthState>('loading');
+  const [secret, setSecret] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [testMode, setTestMode] = useState(false);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    checkAuth();
+    syncTestModeFromCookie();
+
+    const handleTestModeChange = (event: Event) => {
+      const customEvent = event as CustomEvent<{ enabled: boolean }>;
+      if (typeof customEvent.detail?.enabled === 'boolean') {
+        setTestMode(customEvent.detail.enabled);
+      } else {
+        syncTestModeFromCookie();
+      }
+    };
+
+    document.addEventListener('rls-test-mode-changed', handleTestModeChange);
+    return () => document.removeEventListener('rls-test-mode-changed', handleTestModeChange);
+  }, []);
+
+  const syncTestModeFromCookie = () => {
+    if (typeof document === 'undefined') return;
+    const enabled = document.cookie.includes('rls_test_mode=1');
+    setTestMode(enabled);
+  };
+
+  const checkAuth = async () => {
+    try {
+      const res = await fetch('/api/admin/leads', {
+        credentials: 'include',
+      });
+      setAuthState(res.ok ? 'authenticated' : 'unauthenticated');
+    } catch {
+      setAuthState('unauthenticated');
+    }
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setIsLoggingIn(true);
+
+    try {
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ secret }),
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setAuthState('authenticated');
+        setSecret('');
+      } else {
+        setError(data.error || 'Invalid credentials');
+      }
+    } catch {
+      setError('Login failed. Please try again.');
+    } finally {
+      setIsLoggingIn(false);
+    }
+  };
+
+  if (authState === 'loading') {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="text-gray-500">Loading...</div>
+      </div>
+    );
+  }
+
+  if (authState === 'unauthenticated') {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
+        <div className="max-w-md w-full">
+          <div className="card">
+            <h1 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+              Admin Access
+            </h1>
+            <form onSubmit={handleLogin}>
+              <div className="mb-4">
+                <label htmlFor="secret" className="form-label">
+                  Admin Secret
+                </label>
+                <input
+                  type="password"
+                  id="secret"
+                  value={secret}
+                  onChange={(e) => setSecret(e.target.value)}
+                  required
+                  className="form-input"
+                  placeholder="Enter admin secret"
+                  autoComplete="off"
+                  disabled={isLoggingIn}
+                />
+              </div>
+              {error && (
+                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                  {error}
+                </div>
+              )}
+              <button
+                type="submit"
+                disabled={isLoggingIn || !secret}
+                className="btn-primary w-full"
+              >
+                {isLoggingIn ? 'Logging in...' : 'Access Dashboard'}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-slate-50">
+      <div className="flex min-h-screen">
+        <aside className="w-56 bg-white border-r border-slate-200 hidden md:flex flex-col">
+          <div className="px-4 py-5 border-b border-slate-200">
+            <Link href="/admin" className="text-lg font-semibold text-slate-900">
+              RiscLens Admin
+            </Link>
+          </div>
+          <nav className="flex-1 py-4">
+            <ul className="space-y-1">
+              {NAV_ITEMS.map((item) => {
+                const active = pathname === item.href;
+                return (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      className={`block px-4 py-2 text-sm rounded-lg transition-colors ${
+                        active
+                          ? 'bg-brand-50 text-brand-700 font-semibold'
+                          : 'text-slate-700 hover:bg-slate-100'
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+        </aside>
+
+        <div className="flex-1">
+          <header className="md:hidden bg-white border-b border-slate-200 px-4 py-3">
+            <div className="flex items-center justify-between">
+              <Link href="/admin" className="text-base font-semibold text-slate-900">
+                RiscLens Admin
+              </Link>
+              <div className="flex items-center gap-2 text-xs text-slate-500">
+                {NAV_ITEMS.map((item) => {
+                  const active = pathname === item.href;
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={active ? 'text-brand-700 font-semibold' : 'text-slate-600'}
+                    >
+                      {item.label}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          </header>
+
+          <main className="p-4 md:p-6 lg:p-8 space-y-4">
+            {testMode && (
+              <div className="inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-800 border border-amber-100">
+                <span className="h-2 w-2 rounded-full bg-amber-500" aria-hidden />
+                Test Mode ON
+              </div>
+            )}
+            {children}
+          </main>
+        </div>
+      </div>
+    </div>
+  );
+}

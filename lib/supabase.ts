@@ -80,6 +80,7 @@ export type LeadStatus = 'new' | 'qualified' | 'contacted' | 'in_conversation' |
 
 export interface SOC2Lead {
   id: string;
+  is_test?: boolean;
   company_name: string;
   industry: string;
   num_employees: number;
@@ -113,6 +114,7 @@ export interface SOC2Lead {
 
 export interface RevenueEvent {
   id: string;
+  is_test?: boolean;
   lead_id: string;
   keyword_id: string | null;
   calculator_page: string;
@@ -283,6 +285,25 @@ export async function logAuditEvent(
     // Log but don't throw - audit logging should not break main flows
     console.error('Failed to log audit event:', error);
   }
+}
+
+export async function getAuditLogs(params?: { limit?: number; offset?: number }): Promise<AuditLog[]> {
+  const supabase = getSupabaseAdmin();
+  const limit = params?.limit || 50;
+  const offset = params?.offset || 0;
+
+  const { data, error } = await supabase
+    .from('AUDIT_LOGS')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .range(offset, offset + limit - 1);
+
+  if (error) {
+    console.error('Failed to fetch audit logs:', error);
+    throw new Error(`Database error: ${error.message}`);
+  }
+
+  return data || [];
 }
 
 /**

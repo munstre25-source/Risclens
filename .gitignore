@@ -50,3 +50,4 @@ coverage/
 *.seed
 *.pid.lock
 
+.venv/
