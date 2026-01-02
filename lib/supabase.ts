@@ -175,6 +175,25 @@ export async function insertLead(lead: Omit<SOC2Lead, 'id' | 'created_at' | 'upd
     .select()
     .single();
 
+  // Fallback: if older DBs are missing the is_test column, retry without it to avoid blocking submissions.
+  if (error && error.message && error.message.toLowerCase().includes('is_test')) {
+    const { data: retryData, error: retryError } = await supabase
+      .from('SOC2_Leads')
+      .insert(({ ...lead, is_test: undefined } as any))
+      .select()
+      .single();
+
+    if (!retryError && retryData) {
+      console.warn('Inserted lead without is_test column fallback');
+      return retryData;
+    }
+
+    if (retryError) {
+      console.error('Failed to insert lead after is_test fallback:', retryError);
+      throw new Error(`Database error: ${retryError.message}`);
+    }
+  }
+
   if (error) {
     console.error('Failed to insert lead:', error);
     throw new Error(`Database error: ${error.message}`);
