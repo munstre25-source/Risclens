@@ -43,19 +43,19 @@ const faqSchema = {
 export const metadata: Metadata = {
   title: 'SOC 2 Cost (2026) Budget Estimate | RiscLens',
   description:
-    'Understand SOC 2 audit pricing drivers for 2026 and get a quick budget estimate before you meet an auditor.',
+    'Estimate SOC 2 cost based on scope, timeline, tooling, and starting readiness. Use this guide to anchor your budget—then validate with the readiness assessment.',
   alternates: {
     canonical: '/soc-2-cost',
   },
   openGraph: {
     type: 'website',
     url: 'https://risclens.com/soc-2-cost',
-    title: 'SOC 2 Cost (2026): Estimate Your Audit Budget in 2 Minutes',
+    title: 'SOC 2 Cost (2026) Budget Estimate | RiscLens',
     description:
-      'Understand SOC 2 audit pricing drivers and get a fast readiness assessment to see your budget and timeline.',
+      'Estimate SOC 2 cost based on scope, timeline, tooling, and starting readiness. Use this guide to anchor your budget—then validate with the readiness assessment.',
     images: [
       {
-        url: '/opengraph-image',
+        url: '/og.png',
         width: 1200,
         height: 630,
         alt: 'RiscLens - SOC 2 Cost and Readiness',
@@ -64,10 +64,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'SOC 2 Cost (2026): Estimate Your Audit Budget in 2 Minutes',
+    title: 'SOC 2 Cost (2026) Budget Estimate | RiscLens',
     description:
-      'Quickly understand SOC 2 audit pricing factors and start your readiness assessment.',
-    images: ['/opengraph-image'],
+      'Estimate SOC 2 cost based on scope, timeline, tooling, and starting readiness. Use this guide to anchor your budget—then validate with the readiness assessment.',
+    images: ['/og.png'],
   },
 };
 

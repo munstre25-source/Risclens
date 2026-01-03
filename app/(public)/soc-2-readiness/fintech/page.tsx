@@ -4,9 +4,22 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
-  title: 'SOC 2 Readiness for Fintech | Score & Plan (2026)',
-  description: 'Get a fintech-focused SOC 2 readiness score, budget range, and prep plan for your 2026 audit.',
-  keywords: ['SOC 2 fintech', 'fintech compliance', 'SOC 2 readiness', 'financial services security', 'fintech audit'],
+  title: 'SOC 2 Readiness Assessment for Fintech Companies | RiscLens',
+  description:
+    'Fintech demands rigorous controls. Get a SOC 2 readiness score, gap areas, and audit-style next steps tailored to fintech—fast and free.',
+  openGraph: {
+    title: 'SOC 2 Readiness Assessment for Fintech Companies | RiscLens',
+    description:
+      'Fintech demands rigorous controls. Get a SOC 2 readiness score, gap areas, and audit-style next steps tailored to fintech—fast and free.',
+    images: [{ url: '/og.png', width: 1200, height: 630, alt: 'RiscLens' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'SOC 2 Readiness Assessment for Fintech Companies | RiscLens',
+    description:
+      'Fintech demands rigorous controls. Get a SOC 2 readiness score, gap areas, and audit-style next steps tailored to fintech—fast and free.',
+    images: ['/og.png'],
+  },
 };
 
 export default function FintechSoc2ReadinessPage() {

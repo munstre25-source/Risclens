@@ -3,8 +3,19 @@ import Link from 'next/link';
 import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy',
-  description: 'RiscLens Privacy Policy - How we collect, use, and protect your data.',
+  title: 'Privacy Policy | RiscLens',
+  description: 'How RiscLens collects, uses, and protects data.',
+  openGraph: {
+    title: 'Privacy Policy | RiscLens',
+    description: 'How RiscLens collects, uses, and protects data.',
+    images: [{ url: '/og.png', width: 1200, height: 630, alt: 'RiscLens' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Privacy Policy | RiscLens',
+    description: 'How RiscLens collects, uses, and protects data.',
+    images: ['/og.png'],
+  },
 };
 
 export default function PrivacyPage() {

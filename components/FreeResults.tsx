@@ -243,7 +243,7 @@ export default function FreeResults({
           className="btn-primary"
           disabled={isRequestingPdf || pdfSent}
         >
-          Email me the PDF roadmap
+          Get my SOC 2 roadmap (PDF)
         </button>
       </div>
 

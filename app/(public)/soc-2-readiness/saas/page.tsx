@@ -4,9 +4,22 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
-  title: 'SOC 2 Readiness for SaaS | Score & Plan (2026)',
-  description: 'Get a SaaS-focused SOC 2 readiness score, budget range, and prep plan for your 2026 audit.',
-  keywords: ['SOC 2 SaaS', 'SaaS compliance', 'SOC 2 readiness', 'B2B SaaS security', 'SaaS audit'],
+  title: 'SOC 2 Readiness Assessment for SaaS Companies | RiscLens',
+  description:
+    'Understand your SOC 2 readiness for SaaS: security controls, access, change management, and vendor risk. Get a score and next steps in under 2 minutes.',
+  openGraph: {
+    title: 'SOC 2 Readiness Assessment for SaaS Companies | RiscLens',
+    description:
+      'Understand your SOC 2 readiness for SaaS: security controls, access, change management, and vendor risk. Get a score and next steps in under 2 minutes.',
+    images: [{ url: '/og.png', width: 1200, height: 630, alt: 'RiscLens' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'SOC 2 Readiness Assessment for SaaS Companies | RiscLens',
+    description:
+      'Understand your SOC 2 readiness for SaaS: security controls, access, change management, and vendor risk. Get a score and next steps in under 2 minutes.',
+    images: ['/og.png'],
+  },
 };
 
 export default function SaaSSoc2ReadinessPage() {

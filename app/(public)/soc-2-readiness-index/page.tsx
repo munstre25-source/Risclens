@@ -3,8 +3,22 @@ import { Metadata } from 'next';
 import CalculatorForm from '@/components/CalculatorForm';
 
 export const metadata: Metadata = {
-  title: 'SOC 2 Readiness Index (2026) | Free Score & Budget Range',
-  description: 'Instant SOC 2 readiness score with a budget range and next steps. Built for teams preparing their 2026 audit.',
+  title: 'SOC 2 Readiness Score in Under 2 Minutes | RiscLens',
+  description:
+    'Answer a few questions and get an instant SOC 2 readiness score, gap highlights, and what auditors will likely ask next—built for early-stage teams.',
+  openGraph: {
+    title: 'SOC 2 Readiness Score in Under 2 Minutes | RiscLens',
+    description:
+      'Answer a few questions and get an instant SOC 2 readiness score, gap highlights, and what auditors will likely ask next—built for early-stage teams.',
+    images: [{ url: '/og.png', width: 1200, height: 630, alt: 'RiscLens' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'SOC 2 Readiness Score in Under 2 Minutes | RiscLens',
+    description:
+      'Answer a few questions and get an instant SOC 2 readiness score, gap highlights, and what auditors will likely ask next—built for early-stage teams.',
+    images: ['/og.png'],
+  },
   robots: {
     index: false,
     follow: false,

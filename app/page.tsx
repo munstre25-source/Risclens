@@ -5,9 +5,22 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
-  title: 'SOC 2 Readiness Score & Cost Estimate (2026) | RiscLens',
-  description: 'Get your SOC 2 readiness score and budget range in minutes. Clear next steps for startups planning their 2026 audit.',
-  keywords: ['SOC 2', 'compliance', 'cost calculator', 'audit', 'security', 'readiness', 'startup', 'saas'],
+  title: 'SOC 2 Readiness Index for Early-Stage Companies | RiscLens',
+  description:
+    'Get a free SOC 2 readiness score and cost estimate in under 2 minutes. See gaps, what auditors will ask next, and a clear path forward.',
+  openGraph: {
+    title: 'SOC 2 Readiness Index for Early-Stage Companies | RiscLens',
+    description:
+      'Get a free SOC 2 readiness score and cost estimate in under 2 minutes. See gaps, what auditors will ask next, and a clear path forward.',
+    images: [{ url: '/og.png', width: 1200, height: 630, alt: 'RiscLens' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'SOC 2 Readiness Index for Early-Stage Companies | RiscLens',
+    description:
+      'Get a free SOC 2 readiness score and cost estimate in under 2 minutes. See gaps, what auditors will ask next, and a clear path forward.',
+    images: ['/og.png'],
+  },
 };
 
 // FAQ Schema for SEO - aligned with on-page FAQ content

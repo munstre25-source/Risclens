@@ -11,22 +11,16 @@ export const metadata: Metadata = {
     default: 'SOC 2 Readiness Index for Early-Stage Companies | RiscLens',
     template: '%s | RiscLens',
   },
-  description: 'Get a clear readiness score, cost estimate, and gap analysis in minutes. Free instant results for startups preparing for SOC 2.',
-  keywords: ['SOC 2', 'compliance', 'readiness', 'audit', 'security', 'startup', 'cost estimate', 'gap analysis'],
-  authors: [{ name: 'RiscLens' }],
-  creator: 'RiscLens',
-  publisher: 'RiscLens',
-  formatDetection: {
-    email: false,
-    telephone: false,
-  },
+  description:
+    'Get a free SOC 2 readiness score and cost estimate in under 2 minutes. See gaps, what auditors will ask next, and a clear path forward.',
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: 'https://risclens.com',
     siteName: 'RiscLens',
-    title: 'SOC 2 Readiness Index for Early-Stage Companies',
-    description: 'Get a clear readiness score, cost estimate, and gap analysis in minutes. Free instant results for startups.',
+    title: 'SOC 2 Readiness Index for Early-Stage Companies | RiscLens',
+    description:
+      'Get a free SOC 2 readiness score and cost estimate in under 2 minutes. See gaps, what auditors will ask next, and a clear path forward.',
     images: [
       {
         url: '/og.png',
@@ -38,8 +32,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'SOC 2 Readiness Index for Early-Stage Companies',
-    description: 'Get a clear readiness score, cost estimate, and gap analysis in minutes.',
+    title: 'SOC 2 Readiness Index for Early-Stage Companies | RiscLens',
+    description:
+      'Get a free SOC 2 readiness score and cost estimate in under 2 minutes. See gaps, what auditors will ask next, and a clear path forward.',
     images: ['/og.png'],
   },
   robots: {
