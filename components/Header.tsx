@@ -67,7 +67,7 @@ export default function Header() {
       }`}
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-0 flex items-center justify-between gap-6">
-        <Link href="/" className="flex items-center gap-3">
+        <Link href="/" className="flex items-center gap-3 -ml-2 sm:ml-0">
           <div className="relative h-16 md:h-20 w-[200px] md:w-[240px] flex items-center">
             <Image
   src="/logo/logo-wordmark.png"
