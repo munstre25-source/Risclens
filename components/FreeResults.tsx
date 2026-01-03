@@ -216,6 +216,20 @@ export default function FreeResults({
         </p>
       </div>
 
+      <div className="card mb-6">
+        <h3 className="text-base font-semibold text-gray-900 mb-2">About these estimates</h3>
+        <p className="text-sm text-gray-600 leading-relaxed">
+          Cost and readiness ranges are directional, not guarantees. Typical variance is ±15–25%, depending on auditor, scope changes, and control maturity.
+        </p>
+      </div>
+
+      <div className="card mb-6 bg-white">
+        <h3 className="text-base font-semibold text-gray-900 mb-2">Early results</h3>
+        <p className="text-sm text-gray-600 leading-relaxed">
+          This tool is actively being tested with founders and operators preparing for SOC 2. Early users consistently report clearer expectations around cost, timeline, and audit readiness.
+        </p>
+      </div>
+
       {/* Top Recommendations */}
       <div className="card mb-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">

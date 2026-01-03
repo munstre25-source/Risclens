@@ -56,6 +56,14 @@ export default function FintechSoc2ReadinessPage() {
           <p className="mt-4 text-sm text-slate-500">
             Free • 2 minutes • Instant results
           </p>
+          <div className="mt-6 text-left max-w-2xl mx-auto">
+            <p className="text-sm font-medium text-slate-700 mb-2">Who this is for</p>
+            <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">
+              <li>SaaS, fintech, and data-driven startups</li>
+              <li>Teams preparing for enterprise customers or investor due diligence</li>
+              <li>Founders who need a SOC 2 reality check before engaging auditors</li>
+            </ul>
+          </div>
         </div>
       </section>
 
@@ -98,9 +106,24 @@ export default function FintechSoc2ReadinessPage() {
             <p>
               SOC 2 serves as a common baseline across financial services — it demonstrates that your organization has implemented controls aligned with industry expectations, even if additional regulatory frameworks apply.
             </p>
+            </div>
+            <div className="border-t border-slate-200 pt-6 text-sm text-slate-600">
+              <p className="font-medium text-slate-700 mb-2">About RiscLens</p>
+              <p className="leading-relaxed">
+                RiscLens is an independent SOC 2 readiness project built to help early-stage teams understand audit expectations, costs, and gaps — without sales pressure or automation lock-in.
+              </p>
+              <div className="mt-3">
+                <p className="font-medium text-slate-700 mb-1">Your data &amp; privacy</p>
+                <ul className="list-disc list-inside space-y-1 leading-relaxed">
+                  <li>We do not sell or share your information</li>
+                  <li>Responses are used only to calculate your score</li>
+                  <li>You can complete the assessment without providing an email</li>
+                  <li>Aggregated, anonymous data may be used to improve estimates</li>
+                </ul>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
       {/* Common Readiness Challenges */}
       <section className="py-16 lg:py-20 bg-slate-50 border-t border-slate-200">

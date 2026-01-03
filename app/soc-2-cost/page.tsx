@@ -109,6 +109,14 @@ export default function Soc2CostPage() {
               <p className="text-sm text-slate-500">Free • No sales calls • Instant results</p>
             </div>
           </div>
+          <div className="max-w-2xl mx-auto text-left mt-8">
+            <p className="text-sm font-medium text-slate-700 mb-2">Who this is for</p>
+            <ul className="list-disc list-inside text-slate-600 space-y-1 text-sm leading-relaxed">
+              <li>SaaS, fintech, and data-driven startups</li>
+              <li>Teams preparing for enterprise customers or investor due diligence</li>
+              <li>Founders who need a SOC 2 reality check before engaging auditors</li>
+            </ul>
+          </div>
         </section>
 
         <section className="bg-white border-t border-slate-200">
@@ -245,6 +253,21 @@ export default function Soc2CostPage() {
               <div>
                 <h3 className="text-lg font-semibold text-slate-800">How long does SOC 2 usually take?</h3>
                 <p className="text-slate-600">Readiness can take a few months; Type I typically weeks; Type II adds 3–12 months of observation depending on requirements.</p>
+              </div>
+              <div className="border-t border-slate-200 pt-6 text-sm text-slate-600">
+                <p className="font-medium text-slate-700 mb-2">About RiscLens</p>
+                <p className="leading-relaxed">
+                  RiscLens is an independent SOC 2 readiness project built to help early-stage teams understand audit expectations, costs, and gaps — without sales pressure or automation lock-in.
+                </p>
+              </div>
+              <div className="text-sm text-slate-600">
+                <p className="font-medium text-slate-700 mb-2">Your data &amp; privacy</p>
+                <ul className="list-disc list-inside space-y-1 leading-relaxed">
+                  <li>We do not sell or share your information</li>
+                  <li>Responses are used only to calculate your score</li>
+                  <li>You can complete the assessment without providing an email</li>
+                  <li>Aggregated, anonymous data may be used to improve estimates</li>
+                </ul>
               </div>
             </div>
           </div>

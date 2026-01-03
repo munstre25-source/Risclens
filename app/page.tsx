@@ -106,6 +106,14 @@ export default function HomePage() {
           <p className="text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto mb-12 leading-relaxed">
             See where you stand before the auditor does. Get your readiness score, cost estimate, and a clear path forward — in under 2 minutes.
           </p>
+          <div className="max-w-2xl mx-auto text-left mb-10">
+            <p className="text-sm font-medium text-slate-700 mb-2">Who this is for</p>
+            <ul className="list-disc list-inside text-slate-600 space-y-1 text-sm leading-relaxed">
+              <li>SaaS, fintech, and data-driven startups</li>
+              <li>Teams preparing for enterprise customers or investor due diligence</li>
+              <li>Founders who need a SOC 2 reality check before engaging auditors</li>
+            </ul>
+          </div>
           <Link
             href="/soc-2-readiness-index"
             className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
@@ -129,9 +137,21 @@ export default function HomePage() {
           <p className="mt-2 text-sm text-slate-500">
             Why is this free? This tool is designed to help founders understand SOC 2 early. No sales calls, no credit card, no hidden upsell.
           </p>
+          <div className="mt-4 max-w-2xl mx-auto bg-white/60 border border-slate-200 rounded-lg p-4 text-left">
+            <p className="text-sm font-medium text-slate-700 mb-2">Your data &amp; privacy</p>
+            <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">
+              <li>We do not sell or share your information</li>
+              <li>Responses are used only to calculate your score</li>
+              <li>You can complete the assessment without providing an email</li>
+              <li>Aggregated, anonymous data may be used to improve estimates</li>
+            </ul>
+          </div>
 
           <div className="mt-10 pt-8 border-t border-slate-200/50 text-sm text-slate-500">
             Built for your industry: SaaS companies • Fintech companies
+            <div className="mt-4 text-sm text-slate-600">
+              About RiscLens — An independent SOC 2 readiness project built to help early-stage teams understand audit expectations, costs, and gaps without sales pressure or lock-in.
+            </div>
           </div>
         </div>
       </section>

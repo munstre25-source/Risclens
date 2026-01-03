@@ -47,6 +47,18 @@ export default function CalculatorPage() {
           <Suspense fallback={<FormSkeleton />}>
             <CalculatorForm />
           </Suspense>
+          <div className="mt-6 bg-white/70 border border-slate-200 rounded-lg p-4">
+            <p className="text-sm font-medium text-slate-700 mb-2">Your data &amp; privacy</p>
+            <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">
+              <li>We do not sell or share your information</li>
+              <li>Responses are used only to calculate your score</li>
+              <li>You can complete the assessment without providing an email</li>
+              <li>Aggregated, anonymous data may be used to improve estimates</li>
+            </ul>
+          </div>
+          <div className="mt-4 text-sm text-slate-600">
+            About RiscLens — An independent SOC 2 readiness project built to help early-stage teams understand audit expectations, costs, and gaps without sales pressure or lock-in.
+          </div>
         </div>
       </section>
     </main>
