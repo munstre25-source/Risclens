@@ -100,11 +100,11 @@ export default function HomePage() {
             <span className="block">SOC 2 Readiness Index for</span>
             <span className="block text-brand-600">Early-Stage Companies</span>
           </h1>
-          <p className="text-base sm:text-lg text-slate-700 max-w-2xl mx-auto mb-8 leading-relaxed">
-            SOC 2 is a security audit that enterprise customers require before buying from you. This assessment shows how ready you are, what it will cost, and what to fix first — before talking to an auditor.
+          <p className="text-base sm:text-lg text-slate-700 max-w-2xl mx-auto mb-6 leading-relaxed">
+            SOC 2 is a security attestation that enterprise buyers expect before they purchase. This readiness assessment shows where you stand, what it will cost, and what to fix first — built for early-stage SaaS, fintech, and data-driven startups.
           </p>
-          <p className="text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto mb-12 leading-relaxed">
-            See where you stand before the auditor does. Get your readiness score, cost estimate, and a clear path forward — in under 2 minutes.
+          <p className="text-sm text-slate-600 mb-10">
+            This is not a certification, audit, or compliance software. It’s a readiness assessment.
           </p>
           <div className="max-w-2xl mx-auto text-left mb-10">
             <p className="text-sm font-medium text-slate-700 mb-2">Who this is for</p>
@@ -137,12 +137,41 @@ export default function HomePage() {
           <p className="mt-2 text-sm text-slate-500">
             Why is this free? This tool is designed to help founders understand SOC 2 early. No sales calls, no credit card, no hidden upsell.
           </p>
+          <div className="mt-8 grid gap-6 max-w-4xl mx-auto text-left">
+            <div className="bg-white/70 border border-slate-200 rounded-lg p-4">
+              <p className="text-sm font-semibold text-slate-800 mb-2">What signing up actually does</p>
+              <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">
+                <li>You provide basic company details: size, industry, data types, and audit timeline.</li>
+                <li>You receive a readiness score (0–100), SOC 2 cost range, and prioritized next steps.</li>
+                <li>Takes about 2 minutes to complete.</li>
+              </ul>
+            </div>
+            <div className="bg-white/70 border border-slate-200 rounded-lg p-4">
+              <p className="text-sm font-semibold text-slate-800 mb-2">How to interpret your score</p>
+              <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">
+                <li>0–40 = Pre-audit</li>
+                <li>41–70 = Early-stage</li>
+                <li>71–85 = Near-ready</li>
+                <li>86–100 = Audit-ready</li>
+              </ul>
+              <p className="text-sm text-slate-600 mt-2">There is no pass/fail. SOC 2 readiness is a spectrum.</p>
+            </div>
+            <div className="bg-white/70 border border-slate-200 rounded-lg p-4">
+              <p className="text-sm font-semibold text-slate-800 mb-2">How accurate are the estimates?</p>
+              <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">
+                <li>Scores are deterministic and rules-based, not “AI” guesses.</li>
+                <li>Cost ranges are directional, not quotes.</li>
+                <li>Typical variance is ±15–25% based on auditor, scope changes, and control maturity.</li>
+                <li>Final costs depend on the auditor you pick and how much scope you include.</li>
+              </ul>
+            </div>
+          </div>
           <div className="mt-4 max-w-2xl mx-auto bg-white/60 border border-slate-200 rounded-lg p-4 text-left">
             <p className="text-sm font-medium text-slate-700 mb-2">Your data &amp; privacy</p>
             <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">
-              <li>We do not sell or share your information</li>
-              <li>Responses are used only to calculate your score</li>
-              <li>You can complete the assessment without providing an email</li>
+              <li>Inputs are not sold or shared</li>
+              <li>Data is used only to calculate your score</li>
+              <li>Email is optional; you can complete the assessment without it</li>
               <li>Aggregated, anonymous data may be used to improve estimates</li>
             </ul>
           </div>
@@ -150,7 +179,10 @@ export default function HomePage() {
           <div className="mt-10 pt-8 border-t border-slate-200/50 text-sm text-slate-500">
             Built for your industry: SaaS companies • Fintech companies
             <div className="mt-4 text-sm text-slate-600">
-              About RiscLens — An independent SOC 2 readiness project built to help early-stage teams understand audit expectations, costs, and gaps without sales pressure or lock-in.
+              About &amp; legitimacy — RiscLens is an independent SOC 2 readiness project for early-stage SaaS, fintech, and data-driven startups. It’s free for education and early demand discovery. No sales calls. No lock-in.
+            </div>
+            <div className="mt-3 text-sm text-slate-600">
+              Early results — The assessment is being tested with founders and operators preparing for SOC 2. Early users report clearer expectations on cost, timeline, and readiness.
             </div>
           </div>
         </div>
