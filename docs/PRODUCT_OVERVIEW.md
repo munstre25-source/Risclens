@@ -19,6 +19,9 @@ RiscLens is a Next.js (App Router) site that delivers SOC 2 readiness guidance a
 - `/soc-2-readiness-checklist` — Practical checklist (new SEO page).
 - `/soc-2-cost-breakdown` — Cost components (new SEO page).
 - `/when-do-you-need-soc-2` — Readiness timing guidance (new SEO page).
+- `/soc-2-readiness/startups` — Startup-focused readiness guidance (new SEO page).
+- `/soc-2-readiness/enterprise-sales` — Enterprise sales readiness guidance (new SEO page).
+- `/soc-2-vs-iso-27001` — SOC 2 vs ISO 27001 comparison (new SEO page).
 - `/soc-2-readiness/saas`, `/soc-2-readiness/fintech` — Industry-specific variants.
 - `/privacy`, `/terms` — Policies.
 - `/admin` (and nested) — Admin dashboard for leads/metrics.

@@ -8,6 +8,9 @@
 - `/soc-2-type-i-vs-type-ii` — Type comparison.
 - `/soc-2-readiness-checklist` — Checklist guide.
 - `/when-do-you-need-soc-2` — Timing guidance.
+- `/soc-2-readiness/startups` — Startup-focused readiness guidance.
+- `/soc-2-readiness/enterprise-sales` — Enterprise sales guidance.
+- `/soc-2-vs-iso-27001` — Framework comparison.
 - `/soc-2-readiness/saas`, `/soc-2-readiness/fintech` — Industry-specific readiness pages.
 - `/privacy`, `/terms` — Policies.
 - `/learn/soc-2-readiness` — Evergreen explainer.

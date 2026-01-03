@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Script from 'next/script';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import AssessmentCTA from '@/components/AssessmentCTA';
 
 const faqs = [
   {
@@ -107,6 +108,9 @@ export default function Soc2CostPage() {
                 </svg>
               </Link>
               <p className="text-sm text-slate-500">Free • No sales calls • Instant results</p>
+              <Link href="/soc-2-timeline" className="text-sm text-brand-700 underline underline-offset-2 hover:text-brand-800">
+                Want timelines? See the SOC 2 Timeline Calculator
+              </Link>
             </div>
           </div>
           <div className="max-w-2xl mx-auto text-left mt-8">
@@ -272,6 +276,8 @@ export default function Soc2CostPage() {
             </div>
           </div>
         </section>
+
+        <AssessmentCTA />
       </main>
       <Footer />
     </>

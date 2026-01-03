@@ -138,7 +138,7 @@ export default function HomePage() {
                 'Not a SOC 2 certification or badge',
                 'Not a CPA audit or attestation',
                 'Not a replacement for an auditor',
-                'Not compliance automation software',
+                'Not a compliance automation platform',
               ]}
               showTitle={false}
             />
@@ -156,6 +156,11 @@ export default function HomePage() {
 
           <p className="mt-4 text-sm text-slate-500">
             Free • No credit card • Instant results
+          </p>
+          <p className="mt-2 text-sm text-brand-700">
+            <Link href="/soc-2-cost" className="underline underline-offset-2 hover:text-brand-800">
+              Prefer to start with estimates? See SOC 2 cost + timeline guides →
+            </Link>
           </p>
 
           <div className="mt-6 grid gap-4 max-w-4xl mx-auto text-left">

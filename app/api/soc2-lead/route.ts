@@ -1,0 +1,229 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
+import { Redis } from '@upstash/redis';
+import { createClient } from '@supabase/supabase-js';
+import { calculateLeadScore, generateRecommendations, ScoringInput } from '@/lib/scoring';
+import { logAuditEvent } from '@/lib/supabase';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+const redis =
+  process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
+    ? new Redis({
+        url: process.env.UPSTASH_REDIS_REST_URL,
+        token: process.env.UPSTASH_REDIS_REST_TOKEN,
+      })
+    : null;
+
+const RATE_LIMIT = 10;
+const RATE_WINDOW_SECONDS = 60;
+const MAX_PAYLOAD_BYTES = 12 * 1024; // ~12kb
+const inMemoryRate = new Map<string, { count: number; reset: number }>();
+
+const leadSchema = z
+  .object({
+    email: z
+      .string()
+      .trim()
+      .toLowerCase()
+      .email()
+      .max(254),
+    company_name: z.string().trim().max(120).optional(),
+    industry: z.string().trim().max(60).optional(),
+    num_employees: z.number().int().min(1).max(100000).optional(),
+    data_types: z.array(z.string().trim().max(32)).max(10).optional(),
+    audit_date: z
+      .string()
+      .trim()
+      .optional()
+      .refine(
+        (val) => !val || (/^\d{4}-\d{2}-\d{2}$/.test(val) && !Number.isNaN(Date.parse(val))),
+        { message: 'Invalid audit_date format' }
+      ),
+    role: z.string().trim().max(60).optional(),
+    utm_source: z.string().trim().max(80).optional(),
+    variation_id: z.string().trim().max(40).optional().default('default'),
+    website: z.string().trim().optional(),
+  })
+  .strict();
+
+function getClientIp(request: NextRequest) {
+  const forwardedFor = request.headers.get('x-forwarded-for');
+  if (forwardedFor) return forwardedFor.split(',')[0]?.trim() || 'unknown';
+  return (
+    request.headers.get('cf-connecting-ip') ||
+    request.headers.get('x-real-ip') ||
+    request.ip ||
+    'unknown'
+  );
+}
+
+async function checkRateLimit(ip: string) {
+  if (!redis) {
+    const now = Date.now();
+    const entry = inMemoryRate.get(ip);
+    if (!entry || entry.reset < now) {
+      inMemoryRate.set(ip, { count: 1, reset: now + RATE_WINDOW_SECONDS * 1000 });
+      return { allowed: true, retryAfter: 0 };
+    }
+
+    entry.count += 1;
+    inMemoryRate.set(ip, entry);
+
+    if (entry.count > RATE_LIMIT) {
+      const retryAfterMs = entry.reset - now;
+      return { allowed: false, retryAfter: Math.max(1, Math.ceil(retryAfterMs / 1000)) };
+    }
+
+    return { allowed: true, retryAfter: 0 };
+  }
+
+  const key = `rate:soc2-lead:${ip}`;
+  const current = await redis.incr(key);
+  if (current === 1) {
+    await redis.expire(key, RATE_WINDOW_SECONDS);
+  }
+
+  if (current > RATE_LIMIT) {
+    const ttl = await redis.ttl(key);
+    return { allowed: false, retryAfter: ttl > 0 ? ttl : RATE_WINDOW_SECONDS };
+  }
+
+  return { allowed: true, retryAfter: 0 };
+}
+
+export async function POST(request: NextRequest) {
+  const ip = getClientIp(request);
+
+  const { allowed, retryAfter } = await checkRateLimit(ip);
+  if (!allowed) {
+    return NextResponse.json(
+      { ok: false, error: 'rate_limited' },
+      {
+        status: 429,
+        headers: { 'Retry-After': `${retryAfter}` },
+      }
+    );
+  }
+
+  const rawBody = await request.text();
+  if (rawBody.length > MAX_PAYLOAD_BYTES) {
+    return NextResponse.json(
+      { ok: false, error: 'payload_too_large' },
+      { status: 413 }
+    );
+  }
+
+  let body: unknown;
+  try {
+    body = rawBody ? JSON.parse(rawBody) : {};
+  } catch {
+    return NextResponse.json({ ok: false, error: 'invalid_json' }, { status: 400 });
+  }
+
+  const parsed = leadSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { ok: false, error: 'validation_error', details: parsed.error.flatten() },
+      { status: 400 }
+    );
+  }
+
+  const { website, ...payload } = parsed.data;
+  if (website && website.trim().length > 0) {
+    return NextResponse.json({ ok: true });
+  }
+
+  // Guard: ensure required fields for scoring exist
+  if (
+    !payload.company_name ||
+    !payload.industry ||
+    !payload.data_types?.length ||
+    !payload.num_employees ||
+    !payload.audit_date ||
+    !payload.role
+  ) {
+    return NextResponse.json(
+      { ok: false, error: 'missing_required_fields' },
+      { status: 400 }
+    );
+  }
+
+  const scoringInput: ScoringInput = {
+    num_employees: payload.num_employees as number,
+    audit_date: payload.audit_date as string,
+    data_types: payload.data_types as string[],
+    role: payload.role as string,
+  };
+
+  const scoringResult = calculateLeadScore(scoringInput);
+  const recommendations = generateRecommendations(scoringInput, scoringResult);
+
+  try {
+    if (!supabaseUrl || !supabaseAnonKey) {
+      throw new Error('Missing Supabase environment variables.');
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+    const leadInsert = {
+      email: payload.email,
+      company_name: payload.company_name ?? null,
+      industry: payload.industry ?? null,
+      num_employees: payload.num_employees ?? null,
+      data_types: payload.data_types ?? [],
+      audit_date: payload.audit_date ?? null,
+      role: payload.role ?? null,
+      utm_source: payload.utm_source ?? null,
+      variation_id: payload.variation_id ?? 'default',
+    };
+
+    const { data, error } = await supabase
+      .from('SOC2_Leads')
+      .insert(leadInsert)
+      .select('id')
+      .single();
+
+    if (error) {
+      console.error('Supabase insert error:', error);
+      return NextResponse.json(
+        { ok: false, error: 'insert_failed' },
+        { status: 500 }
+      );
+    }
+
+    await logAuditEvent('lead_submitted', {
+      lead_id: data?.id,
+      source: 'soc2-lead-endpoint',
+      ip,
+      variation_id: payload.variation_id ?? 'default',
+      has_email: !!payload.email,
+      timestamp: new Date().toISOString(),
+    });
+
+    return NextResponse.json({
+      ok: true,
+      lead_id: data?.id,
+      results: {
+        readiness_score: scoringResult.readiness_score,
+        estimated_cost_low: scoringResult.estimated_cost_low,
+        estimated_cost_high: scoringResult.estimated_cost_high,
+        recommendations: recommendations.slice(0, 4),
+      },
+    });
+  } catch (error) {
+    console.error('Lead insert failed:', error);
+
+    await logAuditEvent('lead_submission_failed', {
+      error: error instanceof Error ? error.message : 'Unknown error',
+      ip,
+      timestamp: new Date().toISOString(),
+    }).catch(console.error);
+
+    return NextResponse.json(
+      { ok: false, error: 'submission_failed' },
+      { status: 500 }
+    );
+  }
+}

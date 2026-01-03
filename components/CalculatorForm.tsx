@@ -161,16 +161,21 @@ export default function CalculatorForm() {
     setError(null);
 
     try {
-      // Submit WITHOUT email - email will be collected on results page
-      const response = await fetch('/api/submit', {
+      const placeholderEmail = 'no-email@readiness.risclens.com';
+
+      const response = await fetch('/api/soc2-lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ...formData,
+          email: placeholderEmail,
+          company_name: formData.company_name,
+          industry: formData.industry,
           num_employees: parseInt(formData.num_employees, 10),
-          utm_source: utmSource,
+          data_types: formData.data_types,
+          audit_date: formData.planned_audit_date,
+          role: formData.role,
+          utm_source: utmSource || undefined,
           variation_id: variationId,
-          // email and consent are NOT sent - collected later for PDF
         }),
       });
 

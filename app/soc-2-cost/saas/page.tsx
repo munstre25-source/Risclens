@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Script from 'next/script';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import AssessmentCTA from '@/components/AssessmentCTA';
 
 const CTA_HREF = '/soc-2-readiness-index';
 
@@ -216,6 +217,8 @@ export default function Soc2CostSaasPage() {
             </div>
           </div>
         </section>
+
+        <AssessmentCTA />
       </main>
       <Footer />
     </>

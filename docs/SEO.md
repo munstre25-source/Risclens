@@ -1,30 +1,30 @@
-# SEO
+# SEO Guide
 
-## Metadata Patterns
-- Global defaults in `app/layout.tsx` (title/description, OpenGraph, Twitter).
-- Page-specific metadata in route files (e.g., cost pages, readiness index, industry pages).
-- OG image: `/public/og.png`.
-
-## Sitemap
-- Generated via `app/sitemap.ts`; includes main site pages, cost variants, timeline, type I vs II, readiness checklist, cost breakdown, when-do-you-need-soc-2, industry pages, privacy/terms.
-- If sitemap is hard-coded, new SEO routes were appended accordingly.
-
-## Robots
-- Default behavior; no explicit `robots.txt` override present.
-
-## JSON-LD
-- FAQ/schema present historically (see earlier commits); ensure `app/page.tsx` or related components if JSON-LD remains needed.
+## Programmatic/Key Pages
+- `/`, `/soc-2-readiness-index`
+- Cost: `/soc-2-cost`, `/soc-2-cost/saas`, `/soc-2-cost/fintech`, `/soc-2-cost-breakdown`
+- Timeline: `/soc-2-timeline`
+- Type: `/soc-2-type-i-vs-type-ii`
+- Checklist: `/soc-2-readiness-checklist`
+- Timing: `/when-do-you-need-soc-2`
+- Audience: `/soc-2-readiness/saas`, `/soc-2-readiness/fintech`, `/soc-2-readiness/startups`, `/soc-2-readiness/enterprise-sales`
+- Comparison: `/soc-2-vs-iso-27001`
+- Evergreen explainer: `/learn/soc-2-readiness`
 
 ## Internal Linking
-- Guides dropdown in `Header.tsx` links to calculators/guides.
-- Bottom `AssessmentCTA` funnels from guide pages to readiness index.
-- Cost pages link to timeline; readiness variants link to Type I vs II.
-- Hero secondary text link points to guides/cost/timeline.
+- Header “Guides” and “Industries” dropdowns link to all major pages.
+- Bottom `AssessmentCTA` funnels guide pages to readiness index.
+- Inline links (cost → timeline, readiness variants → Type I vs II) maintained where present.
 
-## Content Strategy
-- Distinct high-intent pages: cost, timeline, Type I vs II, readiness checklist, cost breakdown, timing guidance.
-- Unique titles/descriptions per page to avoid duplication.
+## Metadata
+- Per-page metadata via Next.js `metadata` export.
+- OG/Twitter image: `/public/og.png`.
+- Sitemap at `app/sitemap.ts` includes current routes.
 
-## Performance/UX
-- Sticky header with blur; avoid layout shift (logo wrapper fixed height).
-- Mobile CTA visible above the fold; reduced hero whitespace.
+## Tone & Content
+- Enterprise, concise, non-salesy; no hype or AI claims in scoring.
+- Unique copy per page to avoid duplication.
+
+## Rationale
+- Target high-intent SOC 2 queries (cost, timeline, type, readiness, ISO comparison, industries).
+- Preserve single primary CTA to reduce dilution.

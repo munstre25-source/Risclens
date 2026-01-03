@@ -64,6 +64,37 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.5,
     },
+    {
+      url: `${baseUrl}/soc-2-timeline`,
+      lastModified: new Date(),
+    },
+    {
+      url: `${baseUrl}/soc-2-type-i-vs-type-ii`,
+      lastModified: new Date(),
+    },
+    {
+      url: `${baseUrl}/soc-2-readiness-checklist`,
+      lastModified: new Date(),
+    },
+    {
+      url: `${baseUrl}/soc-2-cost-breakdown`,
+      lastModified: new Date(),
+    },
+    {
+      url: `${baseUrl}/when-do-you-need-soc-2`,
+      lastModified: new Date(),
+    },
+    {
+      url: `${baseUrl}/soc-2-readiness/startups`,
+      lastModified: new Date(),
+    },
+    {
+      url: `${baseUrl}/soc-2-readiness/enterprise-sales`,
+      lastModified: new Date(),
+    },
+    {
+      url: `${baseUrl}/soc-2-vs-iso-27001`,
+      lastModified: new Date(),
+    },
   ];
 }
-

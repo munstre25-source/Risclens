@@ -64,6 +64,13 @@ export default function FintechSoc2ReadinessPage() {
           <p className="mt-4 text-sm text-slate-500">
             Free • 2 minutes • Instant results
           </p>
+          <p className="text-sm text-slate-600 mt-2">
+            Deciding audit type? Read the{' '}
+            <Link href="/soc-2-type-i-vs-type-ii" className="underline underline-offset-2 text-brand-700 hover:text-brand-800">
+              SOC 2 Type I vs Type II guide
+            </Link>
+            .
+          </p>
           <div className="mt-6 bg-white/70 border border-slate-200 rounded-lg p-4 text-left max-w-3xl mx-auto">
             <p className="text-sm font-semibold text-slate-800 mb-2">Trust &amp; privacy</p>
             <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">
