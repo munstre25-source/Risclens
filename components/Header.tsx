@@ -10,6 +10,7 @@ export default function Header() {
   const [isIndustriesOpen, setIndustriesOpen] = useState(false);
   const [isMobileOpen, setMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -44,9 +45,24 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (isMobileOpen) {
+      setShowMobileMenu(true);
+      document.body.style.overflow = 'hidden';
+    } else {
+      const timeout = setTimeout(() => setShowMobileMenu(false), 200);
+      document.body.style.overflow = '';
+      return () => clearTimeout(timeout);
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileOpen]);
+
   return (
     <header
-      className={`sticky top-0 z-50 border-b transition-all ${
+      className={`sticky top-0 z-50 border-b transition-all relative ${
         isScrolled ? 'bg-white/80 backdrop-blur border-slate-200/80 shadow-sm' : 'bg-white/95 border-slate-200'
       }`}
     >
@@ -134,47 +150,63 @@ export default function Header() {
         </div>
       </div>
 
-      {isMobileOpen && (
-        <div className="md:hidden border-t border-slate-200 bg-white">
-          <div className="px-4 py-3 space-y-3">
-            <Link
-              href="/soc-2-cost"
-              className="block text-sm font-medium text-slate-800 hover:text-brand-700 transition-colors"
-              onClick={() => setMobileOpen(false)}
-            >
-              SOC 2 Cost
-            </Link>
-            <div className="space-y-2">
-              <p className="text-sm font-semibold text-slate-900">Industries</p>
-              <div className="pl-3 space-y-2">
-                <Link
-                  href="/soc-2-readiness/saas"
-                  className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  SaaS
-                </Link>
-                <Link
-                  href="/soc-2-readiness/fintech"
-                  className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  Fintech
-                </Link>
+      {showMobileMenu && (
+        <>
+          <button
+            type="button"
+            aria-hidden="true"
+            tabIndex={-1}
+            className={`md:hidden fixed inset-0 bg-slate-900/30 transition-opacity duration-200 ease-out ${
+              isMobileOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+            }`}
+            onClick={() => setMobileOpen(false)}
+          />
+
+          <div
+            className={`md:hidden absolute inset-x-0 top-full border-t border-slate-200 bg-white shadow-sm transition-all duration-200 ease-out ${
+              isMobileOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'
+            }`}
+          >
+            <div className="px-4 py-3 space-y-3">
+              <Link
+                href="/soc-2-cost"
+                className="block text-sm font-medium text-slate-800 hover:text-brand-700 transition-colors"
+                onClick={() => setMobileOpen(false)}
+              >
+                SOC 2 Cost
+              </Link>
+              <div className="space-y-2">
+                <p className="text-sm font-semibold text-slate-900">Industries</p>
+                <div className="pl-3 space-y-2">
+                  <Link
+                    href="/soc-2-readiness/saas"
+                    className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    SaaS
+                  </Link>
+                  <Link
+                    href="/soc-2-readiness/fintech"
+                    className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    Fintech
+                  </Link>
+                </div>
               </div>
+              <Link
+                href={CTA_HREF}
+                className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-4 py-2 rounded-lg shadow-sm transition-all"
+                onClick={() => setMobileOpen(false)}
+              >
+                Get Readiness Score
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
             </div>
-            <Link
-              href={CTA_HREF}
-              className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-4 py-2 rounded-lg shadow-sm transition-all"
-              onClick={() => setMobileOpen(false)}
-            >
-              Get Readiness Score
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </Link>
           </div>
-        </div>
+        </>
       )}
     </header>
   );

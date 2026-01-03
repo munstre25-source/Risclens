@@ -24,6 +24,8 @@ export default function AdminLayout({
   const [error, setError] = useState<string | null>(null);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [testMode, setTestMode] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const [showMobileNav, setShowMobileNav] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -40,8 +42,27 @@ export default function AdminLayout({
     };
 
     document.addEventListener('rls-test-mode-changed', handleTestModeChange);
-    return () => document.removeEventListener('rls-test-mode-changed', handleTestModeChange);
+    document.addEventListener('keydown', handleEscape);
+    return () => {
+      document.removeEventListener('rls-test-mode-changed', handleTestModeChange);
+      document.removeEventListener('keydown', handleEscape);
+    };
   }, []);
+
+  useEffect(() => {
+    if (isMobileNavOpen) {
+      setShowMobileNav(true);
+      document.body.style.overflow = 'hidden';
+    } else {
+      const timeout = setTimeout(() => setShowMobileNav(false), 200);
+      document.body.style.overflow = '';
+      return () => clearTimeout(timeout);
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileNavOpen]);
 
   const syncTestModeFromCookie = () => {
     if (typeof document === 'undefined') return;
@@ -84,6 +105,12 @@ export default function AdminLayout({
       setError('Login failed. Please try again.');
     } finally {
       setIsLoggingIn(false);
+    }
+  };
+
+  const handleEscape = (event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      setIsMobileNavOpen(false);
     }
   };
 
@@ -173,32 +200,68 @@ export default function AdminLayout({
 
         <div className="flex-1">
           {/* Mobile top nav */}
-          <header className="md:hidden sticky top-0 z-20 bg-white border-b border-slate-200">
+          <header className="md:hidden sticky top-0 z-20 bg-white border-b border-slate-200 relative">
             <div className="px-4 py-3 flex items-center justify-between">
               <Link href="/admin" className="text-base font-semibold text-slate-900">
                 RiscLens Admin
               </Link>
+              <button
+                type="button"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600"
+                aria-label="Toggle navigation menu"
+                aria-expanded={isMobileNavOpen}
+                onClick={() => setIsMobileNavOpen((open) => !open)}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  {isMobileNavOpen ? (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  ) : (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  )}
+                </svg>
+              </button>
             </div>
-            <div className="px-3 pb-3">
-              <div className="flex gap-2 overflow-x-auto no-scrollbar">
-                {NAV_ITEMS.map((item) => {
-                  const active = pathname === item.href;
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className={`whitespace-nowrap rounded-full px-3 py-2 text-sm font-medium ${
-                        active
-                          ? 'bg-brand-50 text-brand-700 border border-brand-100'
-                          : 'bg-slate-50 text-slate-700 border border-slate-200'
-                      }`}
-                    >
-                      {item.label}
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
+
+            {showMobileNav && (
+              <>
+                <button
+                  type="button"
+                  aria-hidden="true"
+                  tabIndex={-1}
+                  className={`fixed inset-0 bg-slate-900/30 transition-opacity duration-200 ease-out ${
+                    isMobileNavOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                  }`}
+                  onClick={() => setIsMobileNavOpen(false)}
+                />
+                <div
+                  className={`absolute inset-x-0 top-full border-t border-slate-200 bg-white shadow-sm transition-all duration-200 ease-out ${
+                    isMobileNavOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'
+                  }`}
+                >
+                  <div className="px-3 pb-4 pt-3">
+                    <div className="flex flex-wrap gap-2">
+                      {NAV_ITEMS.map((item) => {
+                        const active = pathname === item.href;
+                        return (
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            className={`rounded-full px-3 py-2 text-sm font-medium transition-colors ${
+                              active
+                                ? 'bg-brand-50 text-brand-700 border border-brand-100'
+                                : 'bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100'
+                            }`}
+                            onClick={() => setIsMobileNavOpen(false)}
+                          >
+                            {item.label}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
           </header>
           <main className="p-4 md:p-6 lg:p-8 overflow-x-hidden">
             <div className="max-w-5xl mx-auto w-full space-y-4">
