@@ -68,12 +68,12 @@ export default function Header() {
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 md:h-20 flex items-center justify-between gap-6">
         <Link href="/" className="flex items-center gap-3">
-          <div className="flex items-center h-[72px] md:h-11">
+          <div className="flex items-center h-[64px] md:h-11">
             <Image
   src="/logo/logo-wordmark.png"
   alt="RiscLens"
-  width={220}
-  height={100}
+  width={198}
+  height={90}
   priority
   className="h-full w-auto object-contain"
 />
