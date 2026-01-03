@@ -98,7 +98,7 @@ export default function Soc2CostFintechPage() {
             <p className="text-sm text-slate-500 mb-6">
               Start the readiness assessment: SOC 2 Readiness Index.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3">
               <Link
                 href={CTA_HREF}
                 className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"

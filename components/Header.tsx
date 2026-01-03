@@ -9,6 +9,7 @@ const CTA_HREF = '/soc-2-readiness-index';
 export default function Header() {
   const [isIndustriesOpen, setIndustriesOpen] = useState(false);
   const [isMobileOpen, setMobileOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -33,8 +34,22 @@ export default function Header() {
     };
   }, []);
 
+  useEffect(() => {
+    function handleScroll() {
+      setIsScrolled(window.scrollY > 4);
+    }
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <header className="bg-white border-b border-slate-200">
+    <header
+      className={`sticky top-0 z-50 border-b transition-all ${
+        isScrolled ? 'bg-white/80 backdrop-blur border-slate-200/80 shadow-sm' : 'bg-white/95 border-slate-200'
+      }`}
+    >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-6">
         <Link href="/" className="flex items-center gap-3">
           <Image
@@ -43,7 +58,7 @@ export default function Header() {
   width={360}
   height={164}
   priority
-  className="h-28 md:h-32 w-auto object-contain"
+  className="h-24 sm:h-28 md:h-32 w-auto object-contain"
 />
 
         </Link>
