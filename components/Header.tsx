@@ -135,7 +135,7 @@ export default function Header() {
 
           <button
             type="button"
-            className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600"
+            className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-slate-200 text-brand-700 hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600"
             aria-label="Toggle navigation menu"
             aria-expanded={isMobileOpen}
             onClick={() => setMobileOpen((open) => !open)}
