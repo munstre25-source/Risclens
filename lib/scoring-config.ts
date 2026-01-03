@@ -56,50 +56,50 @@ export const SCORING_WEIGHTS = {
   companySize: {
     inputField: 'num_employees',
     weights: [
-      { range: [1, 5], points: 5, label: '1-5 employees', rationale: 'Minimal org complexity' },
-      { range: [6, 20], points: 10, label: '6-20 employees', rationale: 'Small team complexity' },
-      { range: [21, 50], points: 15, label: '21-50 employees', rationale: 'Growing team complexity' },
-      { range: [51, 100], points: 20, label: '51-100 employees', rationale: 'Medium org complexity' },
-      { range: [101, Infinity], points: 25, label: '100+ employees', rationale: 'Large org complexity' },
+      { range: [1, 5], points: 4, label: '1-5 employees', rationale: 'Minimal org complexity' },
+      { range: [6, 20], points: 8, label: '6-20 employees', rationale: 'Small team complexity' },
+      { range: [21, 50], points: 12, label: '21-50 employees', rationale: 'Growing team complexity' },
+      { range: [51, 100], points: 16, label: '51-100 employees', rationale: 'Medium org complexity' },
+      { range: [101, Infinity], points: 20, label: '100+ employees', rationale: 'Large org complexity' },
     ],
-    maxPoints: 25,
+    maxPoints: 20,
   },
 
   // Audit timeline urgency
   auditTimeline: {
     inputField: 'audit_date',
     weights: [
-      { monthsRange: [0, 3], points: 5, label: 'Under 90 days', rationale: 'Urgent timeline - limited prep time' },
-      { monthsRange: [3, 6], points: 10, label: '3-6 months', rationale: 'Tight timeline - focused effort needed' },
-      { monthsRange: [6, 12], points: 15, label: '6-12 months', rationale: 'Reasonable timeline' },
-      { monthsRange: [12, Infinity], points: 20, label: '12+ months', rationale: 'Ample preparation time' },
+      { monthsRange: [0, 3], points: -5, label: 'Under 90 days', rationale: 'Urgent timeline without fundamentals increases risk' },
+      { monthsRange: [3, 6], points: 5, label: '3-6 months', rationale: 'Tight timeline - focused effort needed' },
+      { monthsRange: [6, 12], points: 12, label: '6-12 months', rationale: 'Reasonable timeline' },
+      { monthsRange: [12, Infinity], points: 16, label: '12+ months', rationale: 'Ample preparation time' },
     ],
-    maxPoints: 20,
+    maxPoints: 16,
   },
 
   // Data types handled (cumulative)
   dataTypes: {
     inputField: 'data_types',
     weights: [
-      { value: 'pii', points: 8, label: 'PII', controlCategory: 'CC6.1', rationale: 'Personal data requires classification controls' },
-      { value: 'financial', points: 8, label: 'Financial', controlCategory: 'CC6.1', rationale: 'Financial data requires encryption and access logging' },
-      { value: 'health', points: 10, label: 'Health/PHI', controlCategory: 'CC6.1', rationale: 'PHI requires HIPAA-aligned controls' },
-      { value: 'intellectual_property', points: 5, label: 'IP', controlCategory: 'CC6.7', rationale: 'IP requires access restrictions' },
-      { value: 'customer_data', points: 5, label: 'Customer Data', controlCategory: 'CC6.1', rationale: 'Customer data requires confidentiality controls' },
+      { value: 'pii', points: 10, label: 'PII', controlCategory: 'CC6.1', rationale: 'Personal data requires classification controls' },
+      { value: 'financial', points: 10, label: 'Financial', controlCategory: 'CC6.1', rationale: 'Financial data requires encryption and access logging' },
+      { value: 'health', points: 12, label: 'Health/PHI', controlCategory: 'CC6.1', rationale: 'PHI requires HIPAA-aligned controls' },
+      { value: 'intellectual_property', points: 6, label: 'IP', controlCategory: 'CC6.7', rationale: 'IP requires access restrictions' },
+      { value: 'customer_data', points: 6, label: 'Customer Data', controlCategory: 'CC6.1', rationale: 'Customer data requires confidentiality controls' },
     ],
-    maxPoints: 36, // Sum of all possible
+    maxPoints: 44, // Sum of all possible
   },
 
   // SOC 2 requester type (optional, for routing)
   requesterType: {
     inputField: 'soc2_requirers',
     weights: [
-      { value: 'enterprise', points: 5, label: 'Enterprise customers', urgencySignal: 'high', rationale: 'Enterprise deals often have compliance deadlines' },
-      { value: 'midmarket', points: 3, label: 'Mid-market customers', urgencySignal: 'medium', rationale: 'Growing customer requirements' },
-      { value: 'investors', points: 4, label: 'Investors', urgencySignal: 'high', rationale: 'Due diligence often requires compliance posture' },
+      { value: 'enterprise', points: 6, label: 'Enterprise customers', urgencySignal: 'high', rationale: 'Enterprise deals often have compliance deadlines' },
+      { value: 'midmarket', points: 4, label: 'Mid-market customers', urgencySignal: 'medium', rationale: 'Growing customer requirements' },
+      { value: 'investors', points: 5, label: 'Investors', urgencySignal: 'high', rationale: 'Due diligence often requires compliance posture' },
       { value: 'exploratory', points: 0, label: 'Exploratory', urgencySignal: 'low', rationale: 'No external pressure yet' },
     ],
-    maxPoints: 12, // Sum of top 3 (enterprise + midmarket + investors)
+    maxPoints: 15, // Sum of top 3 (enterprise + midmarket + investors)
   },
 
   // Role seniority (decision-making authority)
@@ -111,7 +111,7 @@ export const SCORING_WEIGHTS = {
       { value: 'security', points: 5, label: 'Security/Compliance Lead', rationale: 'Direct compliance owner' },
       { value: 'engineering', points: 3, label: 'Engineering Manager', rationale: 'Technical influencer' },
       { value: 'operations', points: 3, label: 'Operations/IT', rationale: 'Operational stakeholder' },
-      { value: 'other', points: 1, label: 'Other', rationale: 'Indirect stakeholder' },
+      { value: 'other', points: 0, label: 'Other', rationale: 'Indirect stakeholder; unclear owner' },
     ],
     maxPoints: 5,
   },
@@ -122,11 +122,11 @@ export const SCORING_WEIGHTS = {
     weights: [
       { value: 'fintech', points: 10, label: 'Fintech', riskProfile: 'high', rationale: 'Regulated industry with strict requirements' },
       { value: 'healthcare', points: 10, label: 'Healthcare', riskProfile: 'high', rationale: 'HIPAA and PHI requirements' },
-      { value: 'saas', points: 5, label: 'SaaS', riskProfile: 'medium', rationale: 'Standard B2B compliance needs' },
-      { value: 'ecommerce', points: 5, label: 'E-commerce', riskProfile: 'medium', rationale: 'PCI and customer data considerations' },
-      { value: 'consulting', points: 3, label: 'Consulting', riskProfile: 'low', rationale: 'Client data handling varies' },
-      { value: 'manufacturing', points: 3, label: 'Manufacturing', riskProfile: 'low', rationale: 'IP and operational data' },
-      { value: 'other', points: 2, label: 'Other', riskProfile: 'low', rationale: 'Variable requirements' },
+      { value: 'saas', points: 4, label: 'SaaS', riskProfile: 'medium', rationale: 'Standard B2B compliance needs' },
+      { value: 'ecommerce', points: 4, label: 'E-commerce', riskProfile: 'medium', rationale: 'PCI and customer data considerations' },
+      { value: 'consulting', points: 2, label: 'Consulting', riskProfile: 'low', rationale: 'Client data handling varies' },
+      { value: 'manufacturing', points: 2, label: 'Manufacturing', riskProfile: 'low', rationale: 'IP and operational data' },
+      { value: 'other', points: 1, label: 'Other', riskProfile: 'low', rationale: 'Variable requirements' },
     ],
     maxPoints: 10,
   },
@@ -184,8 +184,8 @@ export const COST_PARAMETERS = {
 
 export const SCORE_BOUNDS = {
   // Maximum possible raw score (sum of all max weights)
-  // companySize(25) + timeline(20) + dataTypes(36) + requester(12) + role(5) + industry(10) = 108
-  maxRawScore: 85,
+  // Updated after weight tuning
+  maxRawScore: 105,
   
   // Minimum possible raw score
   minRawScore: 0,

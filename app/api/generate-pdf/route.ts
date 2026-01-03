@@ -3,6 +3,7 @@ import { getLeadById, updateLead, logAuditEvent } from '@/lib/supabase';
 import { generateAndUploadPDF } from '@/lib/pdf';
 import { applyRateLimit } from '@/lib/rate-limit';
 import { isValidUUID } from '@/lib/validation';
+import { calculateLeadScore } from '@/lib/scoring';
 
 // POST /api/generate-pdf - Generate PDF for a lead
 export async function POST(request: NextRequest) {
@@ -64,6 +65,37 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    // Recompute score/cost if missing from legacy insert
+    let readinessScore = lead.readiness_score;
+    let estimatedLow = lead.estimated_cost_low;
+    let estimatedHigh = lead.estimated_cost_high;
+    let leadScore = lead.lead_score;
+    if (
+      readinessScore === null ||
+      readinessScore === undefined ||
+      Number.isNaN(readinessScore) ||
+      estimatedLow === null ||
+      estimatedHigh === null
+    ) {
+      const recalculated = calculateLeadScore({
+        num_employees: lead.num_employees,
+        audit_date: lead.audit_date,
+        data_types: lead.data_types || [],
+        role: lead.role,
+      });
+      readinessScore = recalculated.readiness_score;
+      estimatedLow = recalculated.estimated_cost_low;
+      estimatedHigh = recalculated.estimated_cost_high;
+      leadScore = recalculated.lead_score;
+      await updateLead(lead_id, {
+        readiness_score: readinessScore,
+        estimated_cost_low: estimatedLow,
+        estimated_cost_high: estimatedHigh,
+        lead_score: leadScore,
+        keep_or_sell: recalculated.keep_or_sell,
+      });
+    }
+
     // Generate and upload PDF
     const pdfResult = await generateAndUploadPDF({
       id: lead.id,
@@ -74,10 +106,10 @@ export async function POST(request: NextRequest) {
       audit_date: lead.audit_date,
       role: lead.role,
       email: lead.email,
-      readiness_score: lead.readiness_score,
-      estimated_cost_low: lead.estimated_cost_low,
-      estimated_cost_high: lead.estimated_cost_high,
-      lead_score: lead.lead_score,
+      readiness_score: readinessScore,
+      estimated_cost_low: estimatedLow,
+      estimated_cost_high: estimatedHigh,
+      lead_score: leadScore,
     });
 
     if (!pdfResult.success || !pdfResult.pdfPath || !pdfResult.pdfUrl) {

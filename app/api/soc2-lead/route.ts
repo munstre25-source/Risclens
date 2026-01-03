@@ -170,6 +170,11 @@ export async function POST(request: NextRequest) {
       utm_source: payload.utm_source ?? null,
       variation_id: payload.variation_id ?? 'default',
       lead_status: 'new',
+      readiness_score: scoringResult.readiness_score,
+      estimated_cost_low: scoringResult.estimated_cost_low,
+      estimated_cost_high: scoringResult.estimated_cost_high,
+      lead_score: scoringResult.lead_score,
+      keep_or_sell: scoringResult.keep_or_sell,
     };
 
     const { data, error } = await supabase
