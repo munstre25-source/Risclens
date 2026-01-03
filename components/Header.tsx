@@ -57,7 +57,7 @@ export default function Header() {
       clearGuidesTimers();
       clearIndustriesTimers();
     };
-  }, []);
+  }, [closeIndustries, closeGuides, clearGuidesTimers, clearIndustriesTimers]);
 
   useEffect(() => {
     function handleScroll() {
