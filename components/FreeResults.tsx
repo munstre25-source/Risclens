@@ -25,6 +25,10 @@ export default function FreeResults({
   const [isRequestingPdf, setIsRequestingPdf] = useState(false);
   const [pdfSent, setPdfSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [reviewType, setReviewType] = useState<'auditor_intro' | 'gap_review'>('auditor_intro');
+  const [reviewEmail, setReviewEmail] = useState('');
+  const [reviewStatus, setReviewStatus] = useState<string | null>(null);
+  const [isSubmittingReview, setIsSubmittingReview] = useState(false);
 
   const getScoreColor = (score: number) => {
     if (score >= 70) return 'text-trust-600';
@@ -123,6 +127,36 @@ export default function FreeResults({
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setIsRequestingPdf(false);
+    }
+  };
+
+  const handleReviewSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!leadId) {
+      setReviewStatus('Unable to submit request. Missing lead.');
+      return;
+    }
+    setIsSubmittingReview(true);
+    setReviewStatus(null);
+    try {
+      const resp = await fetch('/api/lead/request-review', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          lead_id: leadId,
+          review_type: reviewType,
+          email: reviewEmail || undefined,
+        }),
+      });
+      const data = await resp.json();
+      if (!resp.ok || !data.success) {
+        throw new Error(data.error || 'Request failed');
+      }
+      setReviewStatus('Request received. We’ll reach out shortly.');
+    } catch (err) {
+      setReviewStatus(err instanceof Error ? err.message : 'Request failed');
+    } finally {
+      setIsSubmittingReview(false);
     }
   };
 
@@ -225,6 +259,52 @@ export default function FreeResults({
         <p className="text-xs text-gray-500 text-center mt-2">
           Includes auditor fees, tooling, and internal preparation effort.
         </p>
+      </div>
+
+      <div className="card mb-6 border border-slate-200">
+        <div className="space-y-4">
+          <div>
+            <p className="text-sm font-semibold text-gray-900">Need extra help?</p>
+            <p className="text-sm text-gray-600">
+              Optional: request a quick gap review or an intro to an auditor. Your score remains free and instant.
+            </p>
+          </div>
+          <form onSubmit={handleReviewSubmit} className="space-y-3">
+            <div>
+              <label className="text-sm font-medium text-gray-700">Choose one</label>
+              <select
+                className="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                value={reviewType}
+                onChange={(e) => setReviewType(e.target.value as 'auditor_intro' | 'gap_review')}
+              >
+                <option value="auditor_intro">Auditor introduction</option>
+                <option value="gap_review">Gap review</option>
+              </select>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700">Work email (optional)</label>
+              <input
+                type="email"
+                value={reviewEmail}
+                onChange={(e) => setReviewEmail(e.target.value)}
+                className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                placeholder="you@company.com"
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <button
+                type="submit"
+                disabled={isSubmittingReview}
+                className="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 disabled:opacity-60"
+              >
+                {isSubmittingReview ? 'Submitting...' : 'Request help'}
+              </button>
+              {reviewStatus && (
+                <p className="text-sm text-gray-600">{reviewStatus}</p>
+              )}
+            </div>
+          </form>
+        </div>
       </div>
 
       <div className="card mb-6">
