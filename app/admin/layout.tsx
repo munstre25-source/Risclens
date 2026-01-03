@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 
 type AuthState = 'loading' | 'unauthenticated' | 'authenticated';
 
@@ -171,8 +172,9 @@ export default function AdminLayout({
       <div className="flex min-h-screen">
         <aside className="w-56 bg-white border-r border-slate-200 hidden md:flex flex-col">
           <div className="px-4 py-5 border-b border-slate-200">
-            <Link href="/admin" className="text-lg font-semibold text-slate-900">
-              RiscLens Admin
+            <Link href="/admin" className="flex items-center gap-2 text-lg font-semibold text-slate-900">
+              <Image src="/logo/logo-wordmark.png" alt="RiscLens" width={140} height={60} className="h-6 w-auto" />
+              <span className="text-sm text-slate-700">Admin</span>
             </Link>
           </div>
           <nav className="flex-1 py-4 overflow-y-auto">
@@ -202,8 +204,9 @@ export default function AdminLayout({
           {/* Mobile top nav */}
           <header className="md:hidden sticky top-0 z-20 bg-white border-b border-slate-200 relative">
             <div className="px-4 py-3 flex items-center justify-between">
-              <Link href="/admin" className="text-base font-semibold text-slate-900">
-                RiscLens Admin
+              <Link href="/admin" className="flex items-center gap-2">
+                <Image src="/logo/logo-wordmark.png" alt="RiscLens" width={140} height={60} className="h-6 w-auto" />
+                <span className="text-sm font-semibold text-slate-900">Admin</span>
               </Link>
               <button
                 type="button"

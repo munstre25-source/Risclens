@@ -72,9 +72,9 @@ export default function Header() {
   src="/logo/logo-wordmark.png"
   alt="RiscLens"
   width={360}
-  height={164}
+  height={200}
   priority
-  className="h-24 sm:h-28 md:h-32 w-auto object-contain"
+  className="h-18 sm:h-24 md:h-30 w-auto object-contain"
 />
 
         </Link>

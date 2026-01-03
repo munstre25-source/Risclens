@@ -145,6 +145,29 @@ function formatCurrency(amount: number) {
   }).format(amount);
 }
 
+function isToday(dateStr: string) {
+  const date = new Date(dateStr);
+  const now = new Date();
+  return (
+    date.getFullYear() === now.getFullYear() &&
+    date.getMonth() === now.getMonth() &&
+    date.getDate() === now.getDate()
+  );
+}
+
+function formatRelativeTime(dateStr: string) {
+  const date = new Date(dateStr);
+  const diffMs = Date.now() - date.getTime();
+  const diffMinutes = Math.floor(diffMs / (1000 * 60));
+  const diffHours = Math.floor(diffMinutes / 60);
+  const diffDays = Math.floor(diffHours / 24);
+
+  if (diffMinutes < 1) return 'just now';
+  if (diffMinutes < 60) return `${diffMinutes} minute${diffMinutes === 1 ? '' : 's'} ago`;
+  if (diffHours < 24) return `${diffHours} hour${diffHours === 1 ? '' : 's'} ago`;
+  return `${diffDays} day${diffDays === 1 ? '' : 's'} ago`;
+}
+
 // =============================================================================
 // MAIN COMPONENT
 // =============================================================================
@@ -544,6 +567,18 @@ export default function AdminDashboard() {
             </div>
           </div>
         )}
+
+        <div className="mb-6 text-sm text-gray-600">
+          <div className="text-xs uppercase tracking-wide text-gray-500 mb-1">System status</div>
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span>Tracking enabled:</span>
+              <span role="img" aria-label="enabled">✅</span>
+            </div>
+            <div>PDF downloads today: {leads.filter((lead) => lead.pdf_url && isToday(lead.created_at)).length || 0}</div>
+            <div>Last lead received: {leads.length > 0 ? formatRelativeTime(leads[0].created_at) : '—'}</div>
+          </div>
+        </div>
 
         {/* Saved Filters */}
         {savedFilters.length > 0 && (
