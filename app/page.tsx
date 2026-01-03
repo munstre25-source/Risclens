@@ -100,6 +100,9 @@ export default function HomePage() {
             <span className="block">SOC 2 Readiness Index for</span>
             <span className="block text-brand-600">Early-Stage Companies</span>
           </h1>
+          <p className="text-base sm:text-lg text-slate-700 max-w-2xl mx-auto mb-8 leading-relaxed">
+            SOC 2 is a security audit that enterprise customers require before buying from you. This assessment shows how ready you are, what it will cost, and what to fix first — before talking to an auditor.
+          </p>
           <p className="text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto mb-12 leading-relaxed">
             See where you stand before the auditor does. Get your readiness score, cost estimate, and a clear path forward — in under 2 minutes.
           </p>
@@ -112,8 +115,19 @@ export default function HomePage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </Link>
+          <div className="mt-4 text-left text-sm text-slate-600 max-w-xl mx-auto space-y-2">
+            <p className="font-medium text-slate-700">You’ll get:</p>
+            <ul className="list-disc list-inside space-y-1">
+              <li>A readiness score (0–100) showing how close you are</li>
+              <li>A realistic SOC 2 cost range based on your answers</li>
+              <li>A short list of the highest-impact next steps auditors expect</li>
+            </ul>
+          </div>
           <p className="mt-5 text-sm text-slate-500">
             Free • No credit card • Instant results
+          </p>
+          <p className="mt-2 text-sm text-slate-500">
+            Why is this free? This tool is designed to help founders understand SOC 2 early. No sales calls, no credit card, no hidden upsell.
           </p>
 
           <div className="mt-10 pt-8 border-t border-slate-200/50 text-sm text-slate-500">

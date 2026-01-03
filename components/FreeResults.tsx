@@ -140,6 +140,9 @@ export default function FreeResults({
           <p className="text-gray-500 mb-6">
             Results for {companyName}
           </p>
+          <p className="text-sm text-gray-500 mb-4">
+            There is no “pass” or “fail.” Higher scores mean fewer gaps and lower audit risk. Most early-stage companies score between 20–50.
+          </p>
 
           {/* Score Circle */}
           <div className="relative inline-flex items-center justify-center mb-4">
