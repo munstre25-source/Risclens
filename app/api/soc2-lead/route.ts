@@ -1,12 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { Redis } from '@upstash/redis';
-import { createClient } from '@supabase/supabase-js';
 import { calculateLeadScore, generateRecommendations, ScoringInput } from '@/lib/scoring';
-import { logAuditEvent } from '@/lib/supabase';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+import { getSupabaseAdmin, logAuditEvent } from '@/lib/supabase';
 
 const redis =
   process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
@@ -161,11 +157,7 @@ export async function POST(request: NextRequest) {
   const recommendations = generateRecommendations(scoringInput, scoringResult);
 
   try {
-    if (!supabaseUrl || !supabaseAnonKey) {
-      throw new Error('Missing Supabase environment variables.');
-    }
-
-    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+    const supabase = getSupabaseAdmin();
 
     const leadInsert = {
       email: payload.email,
@@ -177,6 +169,7 @@ export async function POST(request: NextRequest) {
       role: payload.role ?? null,
       utm_source: payload.utm_source ?? null,
       variation_id: payload.variation_id ?? 'default',
+      lead_status: 'new',
     };
 
     const { data, error } = await supabase
