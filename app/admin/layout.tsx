@@ -173,7 +173,14 @@ export default function AdminLayout({
         <aside className="w-56 bg-white border-r border-slate-200 hidden md:flex flex-col">
           <div className="px-4 py-5 border-b border-slate-200">
             <Link href="/admin" className="flex items-center gap-2 text-lg font-semibold text-slate-900">
-              <Image src="/logo/logo-wordmark.png" alt="RiscLens" width={140} height={60} className="h-6 w-auto" />
+              <Image
+                src="/logo/logo-wordmark.png"
+                alt="RiscLens"
+                width={140}
+                height={60}
+                className="w-auto"
+                style={{ height: '4.5rem' }}
+              />
               <span className="text-sm text-slate-700">Admin</span>
             </Link>
           </div>
@@ -205,7 +212,14 @@ export default function AdminLayout({
           <header className="md:hidden sticky top-0 z-20 bg-white border-b border-slate-200 relative">
             <div className="px-4 py-3 flex items-center justify-between">
               <Link href="/admin" className="flex items-center gap-2">
-                <Image src="/logo/logo-wordmark.png" alt="RiscLens" width={140} height={60} className="h-6 w-auto" />
+                <Image
+                  src="/logo/logo-wordmark.png"
+                  alt="RiscLens"
+                  width={140}
+                  height={60}
+                  className="w-auto"
+                  style={{ height: '4.5rem' }}
+                />
                 <span className="text-sm font-semibold text-slate-900">Admin</span>
               </Link>
               <button
