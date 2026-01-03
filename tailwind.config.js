@@ -6,6 +6,17 @@ module.exports = {
     './pdf/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    fontWeight: {
+      thin: '100',
+      extralight: '200',
+      light: '300',
+      normal: '400',
+      medium: '500',
+      semibold: '500',
+      bold: '500',
+      extrabold: '600',
+      black: '700',
+    },
     extend: {
       colors: {
         // Brand colors - Primary blue (used sparingly for CTAs)
