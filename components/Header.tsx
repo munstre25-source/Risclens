@@ -66,16 +66,16 @@ export default function Header() {
         isScrolled ? 'bg-white/80 backdrop-blur border-slate-200/80 shadow-sm' : 'bg-white/95 border-slate-200'
       }`}
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-0 flex items-center justify-between gap-6">
-        <Link href="/" className="flex items-center gap-3 -ml-1 sm:ml-0">
-          <div className="relative h-14 md:h-20 w-[180px] md:w-[240px] flex items-center">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 md:h-20 flex items-center justify-between gap-6">
+        <Link href="/" className="flex items-center gap-3">
+          <div className="flex items-center h-8 md:h-9">
             <Image
   src="/logo/logo-wordmark.png"
   alt="RiscLens"
-  fill
-  sizes="(min-width: 768px) 240px, 200px"
+  width={180}
+  height={82}
   priority
-  className="object-contain"
+  className="h-full w-auto object-contain"
 />
           </div>
         </Link>
