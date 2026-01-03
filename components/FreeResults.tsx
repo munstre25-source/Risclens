@@ -143,6 +143,17 @@ export default function FreeResults({
           <p className="text-sm text-gray-500 mb-4">
             There is no “pass” or “fail.” Higher scores mean fewer gaps and lower audit risk. Most early-stage companies score between 20–50.
           </p>
+          <div className="bg-white border border-slate-200 rounded-lg p-4 text-left text-sm text-gray-700 space-y-2 mb-4">
+            <p className="font-semibold text-gray-900">How to interpret your score</p>
+            <p className="text-gray-600">There is no official “pass/fail” score for SOC 2. This score reflects typical audit readiness patterns based on your answers.</p>
+            <ul className="list-disc list-inside space-y-1">
+              <li>0–39: Early-stage — significant gaps; focus on fundamentals and evidence</li>
+              <li>40–69: Near-ready — gaps remain; prioritize high-impact controls and consistency</li>
+              <li>70–100: Strong — closer to audit-ready; validate scope and evidence quality</li>
+            </ul>
+            <p className="text-gray-600">In practice, auditors care most about whether controls exist, are documented, and can be evidenced consistently.</p>
+            <p className="text-gray-600">Typically, scope and evidence quality drive both timeline and cost.</p>
+          </div>
 
           {/* Score Circle */}
           <div className="relative inline-flex items-center justify-center mb-4">

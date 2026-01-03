@@ -3,6 +3,8 @@ import Link from 'next/link';
 import Script from 'next/script';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import InfoAccordion from '@/components/InfoAccordion';
+import InfoDisclosure from '@/components/InfoDisclosure';
 
 export const metadata: Metadata = {
   title: 'SOC 2 Readiness Index for Early-Stage Companies | RiscLens',
@@ -104,11 +106,18 @@ export default function HomePage() {
             Get a SOC 2 readiness score + cost range in under 2 minutes.
           </p>
           <p className="text-base sm:text-lg text-slate-700 max-w-2xl mx-auto mb-4 leading-relaxed">
-            See what to fix first before you talk to an auditor.
+            See what to fix first so you don’t waste time or money with auditors.
           </p>
           <p className="text-sm text-slate-600 mb-6">
-            This is not a certification, audit, or compliance software. It’s a readiness assessment.
+            This is a readiness assessment, not a certification, audit, or compliance software.
           </p>
+          <div className="mt-3 mb-4">
+            <InfoAccordion
+              triggerLabel="What SOC 2 actually means"
+              body="SOC 2 (System and Organization Controls) is an independent audit framework used by enterprise customers to evaluate how a company protects customer data. It focuses on whether your internal controls, processes, and evidence meet real-world security expectations — not whether you claim to be secure."
+              clarifier="SOC 2 is not a certification, badge, or software product. It’s an audit outcome based on documented evidence."
+            />
+          </div>
 
           <div className="max-w-3xl mx-auto text-left mb-6">
             <p className="text-sm font-medium text-slate-700 mb-2">What you’ll get</p>
@@ -119,9 +128,25 @@ export default function HomePage() {
             </ul>
           </div>
 
+          <div className="mt-4 mb-8">
+            <InfoDisclosure
+              collapsible
+              triggerLabel="What is SOC 2 readiness?"
+              title="What SOC 2 readiness is not"
+              body="Clarifies the boundaries of the readiness assessment so expectations stay grounded."
+              bullets={[
+                'Not a SOC 2 certification or badge',
+                'Not a CPA audit or attestation',
+                'Not a replacement for an auditor',
+                'Not compliance automation software',
+              ]}
+              showTitle={false}
+            />
+          </div>
+
           <Link
             href="/soc-2-readiness-index"
-            className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all"
+            className="mt-4 inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all"
           >
             Get Your Readiness Score
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -162,6 +187,7 @@ export default function HomePage() {
                 <li>86–100 = Audit-ready</li>
               </ul>
               <p className="text-sm text-slate-600 mt-2">There is no pass/fail. SOC 2 readiness is a spectrum.</p>
+              <p className="text-sm text-slate-600">Most early-stage teams underestimate internal preparation time.</p>
             </div>
             <div className="bg-white/70 border border-slate-200 rounded-lg p-4">
               <p className="text-sm font-semibold text-slate-800 mb-2">How accurate are the estimates?</p>
@@ -171,6 +197,7 @@ export default function HomePage() {
                 <li>Typical variance is ±15–25% based on auditor, scope changes, and control maturity.</li>
                 <li>Final costs depend on the auditor you pick and how much scope you include.</li>
               </ul>
+              <p className="text-sm text-slate-600 mt-2">Typically, scope and evidence quality drive both timeline and cost.</p>
             </div>
           </div>
 
