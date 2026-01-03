@@ -30,20 +30,28 @@ export default function SaaSSoc2ReadinessPage() {
 
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-20 lg:py-28 text-center">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 lg:py-24 text-center">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mb-6 leading-tight tracking-tight">
             <span className="block">SOC 2 Readiness Assessment</span>
             <span className="block text-brand-600">for SaaS Companies</span>
           </h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Enterprise customers expect SOC 2. Get a clear picture of your readiness, estimated costs, and preparation timeline — before you engage an auditor.
+          <p className="text-base text-slate-700 max-w-2xl mx-auto mb-3 leading-relaxed">
+            Get a SOC 2 readiness score + cost range in under 2 minutes.
+          </p>
+          <p className="text-base text-slate-700 max-w-2xl mx-auto mb-4 leading-relaxed">
+            See what to fix first before you talk to an auditor.
           </p>
           <p className="text-sm text-slate-600 mb-4">
-            Get a free SOC 2 readiness score and cost estimate in under 2 minutes.
+            This is not a certification, audit, or compliance software. It’s a readiness assessment.
           </p>
-          <p className="text-sm text-slate-500 mb-4">
-            Prefer a quick score? Try the SOC 2 Readiness Index.
-          </p>
+          <div className="max-w-3xl mx-auto text-left mb-6">
+            <p className="text-sm font-medium text-slate-700 mb-2">What you’ll get</p>
+            <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">
+              <li>Readiness score (0–100) + band (Early-stage / Near-ready / Audit-ready)</li>
+              <li>Estimated cost range (auditor + tooling + internal effort)</li>
+              <li>Top next steps auditors expect (highest impact first)</li>
+            </ul>
+          </div>
           <Link
             href="/soc-2-readiness-index"
             className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
@@ -56,13 +64,16 @@ export default function SaaSSoc2ReadinessPage() {
           <p className="mt-4 text-sm text-slate-500">
             Free • 2 minutes • Instant results
           </p>
-          <div className="mt-6 text-left max-w-2xl mx-auto">
-            <p className="text-sm font-medium text-slate-700 mb-2">Who this is for</p>
+          <div className="mt-6 bg-white/70 border border-slate-200 rounded-lg p-4 text-left max-w-3xl mx-auto">
+            <p className="text-sm font-semibold text-slate-800 mb-2">Trust &amp; privacy</p>
             <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">
-              <li>SaaS, fintech, and data-driven startups</li>
-              <li>Teams preparing for enterprise customers or investor due diligence</li>
-              <li>Founders who need a SOC 2 reality check before engaging auditors</li>
+              <li>Why free? Built to help early-stage teams understand SOC 2 without sales pressure. No sales calls.</li>
+              <li>What happens to my answers? Used only to calculate your score. You can complete it without email.</li>
+              <li>Reliability: Estimates are directional ranges based on common SOC 2 readiness patterns. Use as planning guidance, not audit advice.</li>
             </ul>
+            <p className="text-sm text-slate-600 mt-3">
+              About: Built by the RiscLens team (contact: reports@risclens.com). Independent SOC 2 readiness project. See <a href="/terms" className="underline underline-offset-2 text-brand-700 hover:text-brand-800">Terms</a> and <a href="/privacy" className="underline underline-offset-2 text-brand-700 hover:text-brand-800">Privacy</a>. No lock-in.
+            </p>
           </div>
         </div>
       </section>

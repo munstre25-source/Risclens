@@ -95,49 +95,56 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-24 lg:py-32 text-center">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-medium text-slate-900 mb-8 leading-snug tracking-tight">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 lg:py-28 text-center">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-medium text-slate-900 mb-6 leading-snug tracking-tight">
             <span className="block">SOC 2 Readiness Index for</span>
             <span className="block text-brand-600">Early-Stage Companies</span>
           </h1>
-          <p className="text-base sm:text-lg text-slate-700 max-w-2xl mx-auto mb-6 leading-relaxed">
-            SOC 2 is a security attestation that enterprise buyers expect before they purchase. This readiness assessment shows where you stand, what it will cost, and what to fix first — built for early-stage SaaS, fintech, and data-driven startups.
+          <p className="text-base sm:text-lg text-slate-700 max-w-2xl mx-auto mb-3 leading-relaxed">
+            Get a SOC 2 readiness score + cost range in under 2 minutes.
           </p>
-          <p className="text-sm text-slate-600 mb-10">
+          <p className="text-base sm:text-lg text-slate-700 max-w-2xl mx-auto mb-4 leading-relaxed">
+            See what to fix first before you talk to an auditor.
+          </p>
+          <p className="text-sm text-slate-600 mb-6">
             This is not a certification, audit, or compliance software. It’s a readiness assessment.
           </p>
-          <div className="max-w-2xl mx-auto text-left mb-10">
-            <p className="text-sm font-medium text-slate-700 mb-2">Who this is for</p>
+
+          <div className="max-w-3xl mx-auto text-left mb-6">
+            <p className="text-sm font-medium text-slate-700 mb-2">What you’ll get</p>
             <ul className="list-disc list-inside text-slate-600 space-y-1 text-sm leading-relaxed">
-              <li>SaaS, fintech, and data-driven startups</li>
-              <li>Teams preparing for enterprise customers or investor due diligence</li>
-              <li>Founders who need a SOC 2 reality check before engaging auditors</li>
+              <li>Readiness score (0–100) + band (Early-stage / Near-ready / Audit-ready)</li>
+              <li>Estimated cost range (auditor + tooling + internal effort)</li>
+              <li>Top next steps auditors expect (highest impact first)</li>
             </ul>
           </div>
+
           <Link
             href="/soc-2-readiness-index"
-            className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
+            className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all"
           >
             Get Your Readiness Score
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </Link>
-          <div className="mt-4 text-left text-sm text-slate-600 max-w-xl mx-auto space-y-2">
-            <p className="font-medium text-slate-700">You’ll get:</p>
-            <ul className="list-disc list-inside space-y-1">
-              <li>A readiness score (0–100) showing how close you are</li>
-              <li>A realistic SOC 2 cost range based on your answers</li>
-              <li>A short list of the highest-impact next steps auditors expect</li>
-            </ul>
-          </div>
-          <p className="mt-5 text-sm text-slate-500">
+
+          <p className="mt-4 text-sm text-slate-500">
             Free • No credit card • Instant results
           </p>
-          <p className="mt-2 text-sm text-slate-500">
-            Why is this free? This tool is designed to help founders understand SOC 2 early. No sales calls, no credit card, no hidden upsell.
-          </p>
-          <div className="mt-8 grid gap-6 max-w-4xl mx-auto text-left">
+
+          <div className="mt-6 grid gap-4 max-w-4xl mx-auto text-left">
+            <div className="bg-white/70 border border-slate-200 rounded-lg p-4">
+              <p className="text-sm font-semibold text-slate-800 mb-2">Trust &amp; privacy</p>
+              <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">
+                <li>Why free? Built to help early-stage teams understand SOC 2 without sales pressure. No sales calls.</li>
+                <li>What happens to my answers? Used only to calculate your score. You can complete it without email.</li>
+                <li>Reliability: Estimates are directional ranges based on common SOC 2 readiness patterns. Use as planning guidance, not audit advice.</li>
+              </ul>
+              <p className="text-sm text-slate-600 mt-3">
+                About: Built by the RiscLens team (contact: reports@risclens.com). Independent SOC 2 readiness project. See <a href="/terms" className="underline underline-offset-2 text-brand-700 hover:text-brand-800">Terms</a> and <a href="/privacy" className="underline underline-offset-2 text-brand-700 hover:text-brand-800">Privacy</a>. No lock-in.
+              </p>
+            </div>
             <div className="bg-white/70 border border-slate-200 rounded-lg p-4">
               <p className="text-sm font-semibold text-slate-800 mb-2">What signing up actually does</p>
               <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">
@@ -166,6 +173,7 @@ export default function HomePage() {
               </ul>
             </div>
           </div>
+
           <div className="mt-4 max-w-2xl mx-auto bg-white/60 border border-slate-200 rounded-lg p-4 text-left">
             <p className="text-sm font-medium text-slate-700 mb-2">Your data &amp; privacy</p>
             <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">
@@ -176,7 +184,7 @@ export default function HomePage() {
             </ul>
           </div>
 
-          <div className="mt-10 pt-8 border-t border-slate-200/50 text-sm text-slate-500">
+          <div className="mt-8 pt-6 border-t border-slate-200/50 text-sm text-slate-500">
             Built for your industry: SaaS companies • Fintech companies
             <div className="mt-4 text-sm text-slate-600">
               About &amp; legitimacy — RiscLens is an independent SOC 2 readiness project for early-stage SaaS, fintech, and data-driven startups. It’s free for education and early demand discovery. No sales calls. No lock-in.
