@@ -26,7 +26,7 @@ export default function Soc2TimelinePage() {
               Built to help founders avoid wasted time and budget by understanding realistic SOC 2 timelines upfront.
             </p>
             <Link
-              href="/soc-2-readiness-index"
+              href="/soc-2-readiness-calculator"
               className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
             >
               Check Your Readiness &amp; Timeline
@@ -78,7 +78,7 @@ export default function Soc2TimelinePage() {
 
             <div className="text-center">
               <Link
-                href="/soc-2-readiness-index"
+                href="/soc-2-readiness-calculator"
                 className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
               >
                 Estimate My SOC 2 Timeline

@@ -53,7 +53,7 @@ export default function SaaSSoc2ReadinessPage() {
             </ul>
           </div>
           <Link
-            href="/soc-2-readiness-index"
+            href="/soc-2-readiness-calculator"
             className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
           >
             Get Your SaaS Readiness Score
@@ -316,7 +316,7 @@ export default function SaaSSoc2ReadinessPage() {
               Ready to assess your SaaS company&apos;s SOC 2 readiness?
             </p>
             <Link 
-              href="/soc-2-readiness-index"
+              href="/soc-2-readiness-calculator"
               className="inline-flex items-center text-brand-600 hover:text-brand-700 font-medium transition-colors"
             >
               Start your free assessment

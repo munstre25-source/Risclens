@@ -35,7 +35,7 @@ export default function Soc2CostBreakdownPage() {
               Where SOC 2 budget really goes: auditor fees, tooling, and internal effort.
             </p>
             <Link
-              href="/soc-2-readiness-index"
+              href="/soc-2-readiness-calculator"
               className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
             >
               Get Your Readiness Score →
@@ -103,7 +103,7 @@ export default function Soc2CostBreakdownPage() {
                 Use the readiness assessment to get a tailored cost range tied to your scope and timeline.
               </p>
               <Link
-                href="/soc-2-readiness-index"
+                href="/soc-2-readiness-calculator"
                 className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
               >
                 Get Your Readiness Score →

@@ -27,7 +27,7 @@ export default function Soc2VsIsoPage() {
               A practical comparison for teams selling in the US vs globally, balancing speed to signal with depth of control coverage.
             </p>
             <Link
-              href="/soc-2-readiness-index"
+              href="/soc-2-readiness-calculator"
               className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
             >
               Get Your Readiness Score →
@@ -85,7 +85,7 @@ export default function Soc2VsIsoPage() {
 
             <div className="text-center">
               <Link
-                href="/soc-2-readiness-index"
+                href="/soc-2-readiness-calculator"
                 className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
               >
                 Get Your Readiness Score →

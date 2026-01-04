@@ -100,7 +100,7 @@ export default function Soc2CostPage() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3">
               <Link
-                href="/soc-2-readiness-index"
+                href="/soc-2-readiness-calculator"
                 className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
               >
                 Get Your Readiness Score
@@ -204,7 +204,7 @@ export default function Soc2CostPage() {
                 The RiscLens readiness assessment benchmarks your environment, timelines, and industry to project a realistic SOC 2 budget. It highlights where to reduce cost—before you sign an auditor engagement letter.
               </p>
               <Link
-                href="/soc-2-readiness-index"
+                href="/soc-2-readiness-calculator"
                 className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-6 py-3 rounded-lg shadow transition-all"
               >
                 Start the readiness assessment
@@ -229,7 +229,7 @@ export default function Soc2CostPage() {
             <div className="border-t border-slate-200 pt-8">
               <h3 className="text-lg font-semibold text-slate-800 mb-3">Explore related resources</h3>
               <div className="flex flex-wrap gap-4 text-brand-700">
-                <Link href="/soc-2-readiness-index" className="underline underline-offset-2 hover:text-brand-800">
+                <Link href="/soc-2-readiness-calculator" className="underline underline-offset-2 hover:text-brand-800">
                   SOC 2 Readiness Index
                 </Link>
                 <Link href="/soc-2-readiness/saas" className="underline underline-offset-2 hover:text-brand-800">

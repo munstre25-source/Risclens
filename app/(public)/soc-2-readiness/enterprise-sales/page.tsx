@@ -27,7 +27,7 @@ export default function Soc2EnterpriseSalesPage() {
               Built for teams navigating enterprise buyers that expect SOC 2 signals before moving to legal and security review.
             </p>
             <Link
-              href="/soc-2-readiness-index"
+              href="/soc-2-readiness-calculator"
               className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
             >
               Get Your Readiness Score →
@@ -85,7 +85,7 @@ export default function Soc2EnterpriseSalesPage() {
 
             <div className="text-center">
               <Link
-                href="/soc-2-readiness-index"
+                href="/soc-2-readiness-calculator"
                 className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
               >
                 Get Your Readiness Score →

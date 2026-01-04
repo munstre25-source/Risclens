@@ -36,7 +36,7 @@ export default function WhenDoYouNeedSoc2Page() {
               How to tell if SOC 2 is a must-have now, or something to plan for later.
             </p>
             <Link
-              href="/soc-2-readiness-index"
+              href="/soc-2-readiness-calculator"
               className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
             >
               Get Your Readiness Score →
@@ -101,7 +101,7 @@ export default function WhenDoYouNeedSoc2Page() {
                 Get your readiness band to see if SOC 2 is a must-have now or a planned milestone.
               </p>
               <Link
-                href="/soc-2-readiness-index"
+                href="/soc-2-readiness-calculator"
                 className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
               >
                 Get Your Readiness Score →

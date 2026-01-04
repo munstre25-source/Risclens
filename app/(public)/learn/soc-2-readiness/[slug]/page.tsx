@@ -68,7 +68,7 @@ export default function ReadinessControlPage({ params }: { params: { slug: strin
           <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">{control.summary}</p>
           <div className="mt-6">
             <Link
-              href="/soc-2-readiness-index"
+              href="/soc-2-readiness-calculator"
               className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-5 py-3 rounded-lg shadow-sm transition"
             >
               Get Readiness Score
@@ -143,7 +143,7 @@ export default function ReadinessControlPage({ params }: { params: { slug: strin
                   {item.title}
                 </Link>
               ))}
-              <Link href="/soc-2-readiness-index" className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">
+              <Link href="/soc-2-readiness-calculator" className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">
                 Get Readiness Score
               </Link>
             </div>

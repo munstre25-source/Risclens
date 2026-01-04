@@ -4,7 +4,7 @@ export function VendorRiskRelatedLinks() {
   const links = [
     { href: '/vendor-risk-assessment', label: 'VRA Hub' },
     { href: '/vendor-risk-assessment/triage', label: 'Run the VRA Triage' },
-    { href: '/soc-2-readiness-index', label: 'SOC 2 Readiness Index' },
+    { href: '/soc-2-readiness-calculator', label: 'SOC 2 Readiness Score' },
     { href: '/soc-2-cost', label: 'SOC 2 Cost Guide' },
   ];
 

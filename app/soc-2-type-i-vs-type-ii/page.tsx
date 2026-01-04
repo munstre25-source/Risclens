@@ -26,7 +26,7 @@ export default function Soc2TypePage() {
               Built for early-stage teams who need a clear path without overcommitting to audit scope or timelines.
             </p>
             <Link
-              href="/soc-2-readiness-index"
+              href="/soc-2-readiness-calculator"
               className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
             >
               Check My SOC 2 Readiness
@@ -78,7 +78,7 @@ export default function Soc2TypePage() {
 
             <div className="text-center">
               <Link
-                href="/soc-2-readiness-index"
+                href="/soc-2-readiness-calculator"
                 className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
               >
                 See My Type I vs Type II Readiness

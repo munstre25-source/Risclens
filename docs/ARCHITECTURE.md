@@ -41,7 +41,7 @@ Audit logs -> /api/admin/audit/*
 ## Folder Highlights
 ```
 app/
-  (public)/soc-2-readiness-index, soc-2-cost*, soc-2-timeline*, soc-2-vs-iso-27001*, readiness variants, pentest*, vendor-risk-assessment*, learn/soc-2-readiness*
+  (public)/soc-2-readiness-calculator, soc-2-cost*, soc-2-timeline*, soc-2-vs-iso-27001*, readiness variants, pentest*, vendor-risk-assessment*, learn/soc-2-readiness*
   admin/* (dashboard, leads, experiments, settings, test-mode)
   api/* (lead capture, pdf/email, ab, admin, cron, health)
 components/ (Header, mobile drawer, accordions, CTA blocks, results cards)

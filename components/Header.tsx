@@ -163,7 +163,7 @@ export default function Header() {
     pathname.startsWith('/soc-2') ||
     pathname.startsWith('/soc-2-') ||
     pathname.startsWith('/when-do-you-need-soc-2') ||
-    pathname === '/soc-2-readiness-index';
+    pathname === '/soc-2-readiness-calculator';
   const isPentestActive = pathname.startsWith('/penetration-testing');
   const isVendorActive = pathname.startsWith('/vendor-risk-assessment');
 

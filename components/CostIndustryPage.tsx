@@ -22,7 +22,7 @@ export interface CostIndustryContent {
   relatedLinks: RelatedLink[];
 }
 
-const CTA_HREF = '/soc-2-readiness-index';
+const CTA_HREF = '/soc-2-readiness-calculator';
 
 export function CostIndustryPage({
   industry,

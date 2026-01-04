@@ -114,7 +114,7 @@ export default function HomePage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
                 <Link
-                  href="/soc-2-readiness-index"
+                  href="/soc-2-readiness-calculator"
                   className="btn-primary text-base px-8 py-3"
                 >
                   Get your readiness score
@@ -437,7 +437,7 @@ export default function HomePage() {
           {/* Inline CTA */}
           <div className="pt-4 border-t border-slate-200">
             <Link 
-              href="/soc-2-readiness-index"
+              href="/soc-2-readiness-calculator"
               className="inline-flex items-center text-brand-600 hover:text-brand-700 font-medium transition-colors"
             >
               See your SOC 2 readiness score
@@ -643,7 +643,7 @@ export default function HomePage() {
               Ready to assess your SOC 2 readiness?
             </p>
             <Link 
-              href="/soc-2-readiness-index"
+              href="/soc-2-readiness-calculator"
               className="inline-flex items-center text-brand-600 hover:text-brand-700 font-medium transition-colors"
             >
               Start your free assessment

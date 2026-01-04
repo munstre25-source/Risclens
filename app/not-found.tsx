@@ -23,7 +23,7 @@ export default function NotFound() {
           <div className="text-sm text-gray-500">
             or{' '}
             <Link
-              href="/soc-2-readiness-index"
+              href="/soc-2-readiness-calculator"
               className="text-brand-600 hover:text-brand-700 font-medium"
             >
               try our SOC 2 Calculator

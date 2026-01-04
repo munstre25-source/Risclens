@@ -110,7 +110,7 @@ export default function ComparisonPage({ params }: PageProps) {
               <Link href="/soc-2-cost" className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">SOC 2 Cost</Link>
               <Link href="/soc-2-timeline" className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">SOC 2 Timeline</Link>
               <Link href="/soc-2/guides" className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">SOC 2 Guides</Link>
-              <Link href="/soc-2-readiness-index" className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">SOC 2 Readiness Index</Link>
+              <Link href="/soc-2-readiness-calculator" className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">SOC 2 Readiness Index</Link>
               <Link href="/soc-2-vs-iso-27001" className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">SOC 2 vs ISO 27001</Link>
             </div>
           </div>

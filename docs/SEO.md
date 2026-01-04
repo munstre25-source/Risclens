@@ -3,7 +3,7 @@
 Focus: high-intent security/compliance queries and clean crawlability.
 
 ## Key Surfaces
-- Core funnels: `/` → `/soc-2-readiness-index`; pentest `/penetration-testing` → `/penetration-testing/cost-estimator`; vendor risk `/vendor-risk-assessment` → `/vendor-risk-assessment/triage`.
+- Core funnels: `/` → `/soc-2-readiness-calculator`; pentest `/penetration-testing` → `/penetration-testing/cost-estimator`; vendor risk `/vendor-risk-assessment` → `/vendor-risk-assessment/triage`.
 - SOC 2 hubs: cost (`/soc-2-cost*`), timeline (`/soc-2-timeline*`), type (`/soc-2-type-i-vs-type-ii`), checklist, cost breakdown, when-to-start, industries (`/soc-2/industries*`), ISO comparison (`/soc-2-vs-iso-27001*`), evidence (`/soc-2-evidence/[slug]`), learning hub (`/learn/soc-2-readiness*`).
 - Pentest guides under `/penetration-testing/[slug]`; vendor risk guides under `/vendor-risk-assessment/*`.
 

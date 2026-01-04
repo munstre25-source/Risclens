@@ -12,7 +12,7 @@ What users experience across risclens.com. See [PRODUCT.md](PRODUCT.md) for posi
 - Calculator pages follow the same spine: hero → form → results preview → “How it works” accordion → FAQ/related links.
 
 ## Core Tools & Hubs
-- **SOC 2 Readiness Index** `/soc-2-readiness-index`: multi-step assessment → deterministic scoring → results preview with top fixes.
+- **SOC 2 Readiness Index** `/soc-2-readiness-calculator`: multi-step assessment → deterministic scoring → results preview with top fixes.
 - **SOC 2 Cost** `/soc-2-cost` (+ `/saas`, `/fintech`, `/[slug]` breakdowns) and **Cost Breakdown** `/soc-2-cost-breakdown`.
 - **SOC 2 Timeline** `/soc-2-timeline` (+ size variants).
 - **SOC 2 Type I vs Type II**, **Readiness Checklist**, **Industries** hub `/soc-2/industries` (+ `[slug]` pages).

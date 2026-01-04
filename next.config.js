@@ -3,8 +3,13 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: '/soc-2-readiness-index',
+        destination: '/',
+        permanent: true,
+      },
+      {
         source: '/start',
-        destination: '/soc-2-readiness-index',
+        destination: '/soc-2-readiness-calculator',
         permanent: true,
       },
     ];

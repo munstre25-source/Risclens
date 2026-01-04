@@ -1,7 +1,7 @@
 import { industryCostLinks } from './industryCostLinks';
 
 export const CTA = {
-  href: '/soc-2-readiness-index',
+  href: '/soc-2-readiness-calculator',
   label: 'Get Readiness Score',
 };
 
@@ -14,6 +14,9 @@ export const navConfig = {
       { label: 'SOC 2 Timeline', href: '/soc-2-timeline' },
       { label: 'Type I vs Type II', href: '/soc-2-type-i-vs-type-ii' },
       { label: 'Readiness Checklist', href: '/soc-2-readiness-checklist' },
+      { label: 'Evidence Vault', href: '/soc-2-evidence/vault' },
+      { label: 'Auditor Selection', href: '/soc-2/auditor-selection' },
+      { label: 'Continuous Monitoring', href: '/soc-2/continuous-monitoring' },
     ],
     viewAll: { label: 'View all SOC 2 →', href: '/soc-2/guides' },
   },
@@ -25,6 +28,9 @@ export const navConfig = {
       { label: 'Pentest vs Scan', href: '/penetration-testing/vs-vulnerability-scan' },
       { label: 'For SOC 2', href: '/penetration-testing/for-soc-2' },
       { label: 'Reporting', href: '/penetration-testing/report' },
+      { label: 'SOW Template', href: '/penetration-testing/sow' },
+      { label: 'Retesting & Remediation', href: '/penetration-testing/retesting-remediation' },
+      { label: 'For Compliance Buyers', href: '/penetration-testing/compliance-buyers' },
     ],
     viewAll: { label: 'View all Pentest →', href: '/penetration-testing' },
   },
@@ -36,6 +42,7 @@ export const navConfig = {
       { label: 'Evidence by Tier', href: '/vendor-risk-assessment/evidence-by-tier' },
       { label: 'Contract Clauses', href: '/vendor-risk-assessment/contract-clauses' },
       { label: 'Monitoring Cadence', href: '/vendor-risk-assessment/monitoring-cadence' },
+      { label: 'Questionnaire Template', href: '/vendor-risk-assessment/questionnaire' },
     ],
     viewAll: { label: 'View all Vendor Risk →', href: '/vendor-risk-assessment' },
   },

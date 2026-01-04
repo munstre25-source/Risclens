@@ -36,7 +36,7 @@ export default function Soc2ReadinessChecklistPage() {
               A practical pre-audit checklist to spot gaps before you talk to an auditor.
             </p>
             <Link
-              href="/soc-2-readiness-index"
+              href="/soc-2-readiness-calculator"
               className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
             >
               Get Your Readiness Score →
@@ -103,7 +103,7 @@ export default function Soc2ReadinessChecklistPage() {
                 Use the readiness assessment to see your band and map gaps to timeline and cost before scheduling auditors.
               </p>
               <Link
-                href="/soc-2-readiness-index"
+                href="/soc-2-readiness-calculator"
                 className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
               >
                 Get Your Readiness Score →

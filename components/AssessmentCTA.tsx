@@ -7,7 +7,7 @@ export default function AssessmentCTA() {
         <p className="text-sm font-semibold text-slate-800">Not sure where you stand?</p>
         <p className="text-base text-slate-700">Get a SOC 2 readiness score + cost range in under 2 minutes.</p>
         <Link
-          href="/soc-2-readiness-index"
+          href="/soc-2-readiness-calculator"
           className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all"
         >
           Get Your Readiness Score →

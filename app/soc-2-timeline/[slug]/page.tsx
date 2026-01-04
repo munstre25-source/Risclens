@@ -10,7 +10,7 @@ interface PageProps {
   params: { slug: string };
 }
 
-const CTA_HREF = '/soc-2-readiness-index';
+const CTA_HREF = '/soc-2-readiness-calculator';
 
 function buildFaqs(title: string) {
   return [

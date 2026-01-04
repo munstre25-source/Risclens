@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
       is_test: isTest,
       lead_id: leadId,
       keyword_id: null,
-      calculator_page: '/soc-2-readiness-index',
+      calculator_page: '/soc-2-readiness-calculator',
       event_type: 'lead_sold',
       event_value: saleAmount,
       event_date: new Date().toISOString(),

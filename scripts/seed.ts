@@ -199,7 +199,7 @@ async function seed() {
 
   if (successCount > 0) {
     console.log('📊 View leads in admin panel: /admin');
-    console.log('🔍 Test the calculator: /soc-2-readiness-index');
+    console.log('🔍 Test the calculator: /soc-2-readiness-calculator');
   }
 }
 

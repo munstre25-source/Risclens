@@ -56,7 +56,7 @@ export const seoClusters: Record<ClusterKey, Cluster> = {
     ],
   },
   'soc2-readiness': {
-    hub: { href: '/soc-2-readiness-index', label: 'SOC 2 Readiness Index' },
+    hub: { href: '/soc-2-readiness-calculator', label: 'SOC 2 Readiness Score' },
     leaves: [
       { href: '/soc-2-readiness/access-control', label: 'Access Control' },
       { href: '/soc-2-readiness/user-access-reviews', label: 'User Access Reviews' },
