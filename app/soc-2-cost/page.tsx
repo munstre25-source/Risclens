@@ -286,6 +286,23 @@ export default function Soc2CostPage() {
           </div>
         </section>
 
+        <section className="bg-white border-t border-slate-200">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 space-y-4">
+            <h2 className="text-lg font-semibold text-slate-900">Related high-intent SOC 2 guides</h2>
+            <div className="flex flex-wrap gap-3 text-sm">
+              <Link href="/soc-2-evidence/vault" className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">
+                SOC 2 Evidence Vault
+              </Link>
+              <Link href="/soc-2/auditor-selection" className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">
+                Auditor Selection
+              </Link>
+              <Link href="/soc-2/continuous-monitoring" className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">
+                Continuous Monitoring
+              </Link>
+            </div>
+          </div>
+        </section>
+
         <AssessmentCTA />
       </main>
       <Footer />

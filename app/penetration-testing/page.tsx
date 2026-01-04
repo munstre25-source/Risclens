@@ -172,6 +172,21 @@ export default function PentestHubPage() {
             </div>
           </div>
 
+          <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-3">
+            <h2 className="text-lg font-semibold text-slate-900">Related high-intent pentest guides</h2>
+            <div className="flex flex-wrap gap-3 text-sm">
+              <Link href="/penetration-testing/sow" className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">
+                Pentest SOW Template
+              </Link>
+              <Link href="/penetration-testing/retesting-remediation" className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">
+                Retesting &amp; Remediation
+              </Link>
+              <Link href="/penetration-testing/compliance-buyers" className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">
+                For Compliance Buyers
+              </Link>
+            </div>
+          </div>
+
           <div className="grid gap-4 md:grid-cols-2" id="saas">
             <div className="border border-slate-200 rounded-xl p-5 bg-white space-y-2">
               <p className="text-sm font-semibold text-slate-900">SaaS pentests</p>

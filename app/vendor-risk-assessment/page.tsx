@@ -164,6 +164,21 @@ export default function VendorRiskAssessmentHubPage() {
             <p className="text-xs text-slate-500">Use as guidance—align asks with your security, legal, and compliance owners.</p>
           </div>
 
+          <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-3">
+            <h3 className="text-lg font-semibold text-slate-900">Related high-intent VRA guides</h3>
+            <div className="flex flex-wrap gap-3 text-sm">
+              <Link href="/vendor-risk-assessment/questionnaire" className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">
+                Vendor Questionnaire Template
+              </Link>
+              <Link href="/vendor-risk-assessment/contract-clauses" className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">
+                Contract Clauses
+              </Link>
+              <Link href="/vendor-risk-assessment/monitoring-cadence" className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">
+                Monitoring Cadence
+              </Link>
+            </div>
+          </div>
+
           <div className="grid gap-4 md:grid-cols-2" id="saas">
             <div className="border border-slate-200 rounded-xl p-5 bg-white space-y-2">
               <p className="text-sm font-semibold text-slate-900">SaaS vendors</p>
