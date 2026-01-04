@@ -312,6 +312,11 @@ export default function Header() {
     };
   }, [isMobileOpen]);
 
+  // Close mobile menu when route changes to avoid stale open drawer after navigation.
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
+
   useEffect(() => {
     if (!isMobileOpen) {
       setMobileSocOpen(false);
@@ -920,11 +925,11 @@ export default function Header() {
 
             <div
               ref={mobileMenuRef}
-              className={`md:hidden fixed inset-y-0 right-0 w-full h-[100dvh] max-w-md z-[9999] bg-white text-slate-900 shadow-2xl transition-all duration-200 ease-out ${
-                isMobileOpen ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4 pointer-events-none'
+              className={`md:hidden fixed inset-0 w-full h-[100dvh] z-[9999] bg-white text-slate-900 shadow-2xl transition-all duration-200 ease-out ${
+                isMobileOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'
               }`}
             >
-              <div className="px-4 py-4 space-y-3 h-full overflow-y-auto pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
+              <div className="px-4 py-4 space-y-3 h-full overflow-y-auto overscroll-contain pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
                 <div className="space-y-2 rounded-xl border border-slate-200">
                   <button
                     type="button"
