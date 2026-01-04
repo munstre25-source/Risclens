@@ -96,39 +96,179 @@ export default function HomePage() {
       <Header />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 lg:py-28 text-center">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-medium text-slate-900 mb-6 leading-snug tracking-tight">
-            <span className="block">SOC 2 Readiness Index for</span>
-            <span className="block text-brand-600">Early-Stage Companies</span>
-          </h1>
-          <p className="text-base sm:text-lg text-slate-700 max-w-2xl mx-auto mb-3 leading-relaxed">
-            Get a SOC 2 readiness score + cost range in under 2 minutes.
-          </p>
-          <p className="text-base sm:text-lg text-slate-700 max-w-2xl mx-auto mb-4 leading-relaxed">
-            See what to fix first so you don’t waste time or money with auditors.
-          </p>
-          <p className="text-sm text-slate-600 mb-6">
-            This is a readiness assessment, not a certification, audit, or compliance software.
-          </p>
-          <div className="mt-3 mb-4">
+      <section className="bg-white border-b border-slate-200/70">
+        <div className="section-shell py-14 lg:py-20">
+          <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] items-start">
+            <div className="space-y-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
+                SOC 2 Readiness Index
+              </p>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-medium text-slate-900 leading-tight">
+                Get a SOC 2 readiness score in 2 minutes
+              </h1>
+              <p className="text-lg text-slate-700 leading-relaxed max-w-2xl">
+                For early-stage companies
+              </p>
+              <p className="text-sm text-slate-600">
+                Readiness assessment only — not a certification, audit, or compliance software.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
+                <Link
+                  href="/soc-2-readiness-index"
+                  className="btn-primary text-base px-8 py-3"
+                >
+                  Get your readiness score
+                </Link>
+                <span className="text-sm text-slate-600 sm:ml-1">Free • No credit card • Instant results</span>
+              </div>
+              <p className="text-sm text-brand-700">
+                <Link href="/soc-2-cost" className="underline underline-offset-2 hover:text-brand-800">
+                  See SOC 2 cost + timeline guides →
+                </Link>
+              </p>
+              <div className="flex flex-wrap gap-2 text-xs text-slate-600">
+                <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 border border-slate-200">
+                  Private by default
+                </span>
+                <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 border border-slate-200">
+                  No login required
+                </span>
+                <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 border border-slate-200">
+                  Designed around auditor expectations
+                </span>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {[
+                  {
+                    title: 'Readiness score',
+                    body: '0–100 score + band (Early-stage / Near-ready / Audit-ready)',
+                    icon: (
+                      <svg className="w-8 h-8 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6l3 3m6 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    ),
+                  },
+                  {
+                    title: 'Cost range',
+                    body: 'Estimated SOC 2 cost based on scope, timeline, and team size',
+                    icon: (
+                      <svg className="w-8 h-8 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .843-3 1.882 0 1.038 1.343 1.881 3 1.881s3 .843 3 1.88C15 15.881 13.657 16.724 12 16.724c-1.26 0-2.342-.457-2.812-1.1M12 6v12m9-6a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    ),
+                  },
+                  {
+                    title: 'Next steps',
+                    body: 'Top fixes auditors expect—prioritized by impact',
+                    icon: (
+                      <svg className="w-8 h-8 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    ),
+                  },
+                ].map((item) => (
+                  <div key={item.title} className="card p-4 shadow-sm border-slate-200 space-y-2">
+                    <div>{item.icon}</div>
+                    <p className="text-sm font-semibold text-slate-900">{item.title}</p>
+                    <p className="text-sm text-slate-700 leading-relaxed">{item.body}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Hero preview card */}
+            <div className="card shadow-sm border-slate-200 bg-white space-y-4">
+              <div>
+                <p className="text-sm font-semibold text-slate-900">Results preview</p>
+                <p className="text-sm text-slate-600">Example output from the readiness index</p>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="relative inline-flex items-center justify-center">
+                  <svg className="w-24 h-24 -rotate-90">
+                    <circle cx="48" cy="48" r="42" strokeWidth="10" fill="none" className="text-slate-200" />
+                    <circle
+                      cx="48"
+                      cy="48"
+                      r="42"
+                      strokeWidth="10"
+                      fill="none"
+                      strokeDasharray={`${0.72 * 264} 264`}
+                      strokeLinecap="round"
+                      className="stroke-trust-500"
+                    />
+                  </svg>
+                  <div className="absolute flex flex-col items-center">
+                    <span className="text-3xl font-bold text-trust-600">72</span>
+                    <span className="text-[10px] uppercase text-slate-500 tracking-wide">Near-ready</span>
+                  </div>
+                </div>
+                <div className="space-y-2 flex-1">
+                  <div className="rounded-lg bg-slate-50 border border-slate-200 p-3">
+                    <p className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Estimated cost</p>
+                    <p className="text-lg font-bold text-brand-700">$38k–$68k</p>
+                    <p className="text-xs text-slate-500">Auditor + tooling + internal effort</p>
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <p className="text-sm font-semibold text-slate-800">Top fixes</p>
+                <ul className="space-y-2">
+                  {[
+                    'Tighten access reviews with evidence logs',
+                    'Document change management with approvals',
+                    'Vendor risk: tier critical vendors with proofs',
+                  ].map((item) => (
+                    <li key={item} className="flex gap-2 text-sm text-slate-700">
+                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-brand-600" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <p className="text-xs text-slate-500">Static preview. Your score and recommendations will match your inputs.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Context and trust */}
+      <section className="bg-slate-50 border-b border-slate-200/70">
+        <div className="section-shell py-10 space-y-8">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="card-muted">
+              <p className="text-sm font-semibold text-slate-800 mb-2">Trust &amp; privacy</p>
+              <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">
+                <li>No login required; email optional.</li>
+                <li>Answers are used only to calculate your score.</li>
+                <li>Directional estimates based on common SOC 2 readiness patterns.</li>
+              </ul>
+            </div>
+            <div className="card-muted">
+              <p className="text-sm font-semibold text-slate-800 mb-2">How it works</p>
+              <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">
+                <li>Answer questions on access, change, vendors, and policies.</li>
+                <li>Get a score, cost range, and prioritized next steps.</li>
+                <li>Built to mirror real auditor questions.</li>
+              </ul>
+            </div>
+            <div className="card-muted">
+              <p className="text-sm font-semibold text-slate-800 mb-2">Score interpretation</p>
+              <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">
+                <li>0–40 = Pre-audit</li>
+                <li>41–70 = Early-stage</li>
+                <li>71–85 = Near-ready</li>
+                <li>86–100 = Audit-ready</li>
+              </ul>
+              <p className="text-xs text-slate-500 mt-2">No pass/fail. SOC 2 readiness is about documented, repeatable controls.</p>
+            </div>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2">
             <InfoAccordion
               triggerLabel="What SOC 2 actually means"
               body="SOC 2 (System and Organization Controls) is an independent audit framework used by enterprise customers to evaluate how a company protects customer data. It focuses on whether your internal controls, processes, and evidence meet real-world security expectations — not whether you claim to be secure."
               clarifier="SOC 2 is not a certification, badge, or software product. It’s an audit outcome based on documented evidence."
             />
-          </div>
-
-          <div className="max-w-3xl mx-auto text-left mb-6">
-            <p className="text-sm font-medium text-slate-700 mb-2">What you’ll get</p>
-            <ul className="list-disc list-inside text-slate-600 space-y-1 text-sm leading-relaxed">
-              <li>Readiness score (0–100) + band (Early-stage / Near-ready / Audit-ready)</li>
-              <li>Estimated cost range (auditor + tooling + internal effort)</li>
-              <li>Top next steps auditors expect (highest impact first)</li>
-            </ul>
-          </div>
-
-          <div className="mt-4 mb-8">
             <InfoDisclosure
               collapsible
               triggerLabel="What is SOC 2 readiness?"
@@ -144,96 +284,48 @@ export default function HomePage() {
             />
           </div>
 
-          <Link
-            href="/soc-2-readiness-index"
-            className="mt-4 inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all"
-          >
-            Get Your Readiness Score
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </Link>
-
-          <p className="mt-4 text-sm text-slate-500">
-            Free • No credit card • Instant results
-          </p>
-          <p className="mt-2 text-sm text-brand-700">
-            <Link href="/soc-2-cost" className="underline underline-offset-2 hover:text-brand-800">
-              Prefer to start with estimates? See SOC 2 cost + timeline guides →
-            </Link>
-          </p>
-          <div className="mt-3 text-xs text-slate-600 flex flex-col sm:flex-row items-center justify-center gap-2">
-            <span className="font-semibold text-slate-700">Related tools:</span>
-            <div className="flex flex-wrap justify-center gap-3">
-              <Link href="/penetration-testing/pricing" className="underline underline-offset-4 hover:text-brand-800 text-slate-700">
-                Penetration Testing Pricing
-              </Link>
-              <Link href="/vendor-risk-assessment" className="underline underline-offset-4 hover:text-brand-800 text-slate-700">
-                Vendor Risk Assessment
-              </Link>
-            </div>
-          </div>
-
-          <div className="mt-6 grid gap-4 max-w-4xl mx-auto text-left">
-            <div className="bg-white/70 border border-slate-200 rounded-lg p-4">
-              <p className="text-sm font-semibold text-slate-800 mb-2">Trust &amp; privacy</p>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <div className="bg-white border border-slate-200 rounded-lg p-4">
+              <p className="text-sm font-semibold text-slate-800 mb-2">What signing up does</p>
               <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">
-                <li>Why free? Built to help early-stage teams understand SOC 2 without sales pressure. No sales calls.</li>
-                <li>What happens to my answers? Used only to calculate your score. You can complete it without email.</li>
-                <li>Reliability: Estimates are directional ranges based on common SOC 2 readiness patterns. Use as planning guidance, not audit advice.</li>
+                <li>Provide company size, industry, data types, and timeline.</li>
+                <li>Receive readiness score, cost range, and prioritized next steps.</li>
+                <li>Takes ~2 minutes.</li>
               </ul>
-              <p className="text-sm text-slate-600 mt-3">
-                About: Built by the RiscLens team (contact: reports@risclens.com). Independent SOC 2 readiness project. See <a href="/terms" className="underline underline-offset-2 text-brand-700 hover:text-brand-800">Terms</a> and <a href="/privacy" className="underline underline-offset-2 text-brand-700 hover:text-brand-800">Privacy</a>. No lock-in.
+            </div>
+            <div className="bg-white border border-slate-200 rounded-lg p-4">
+              <p className="text-sm font-semibold text-slate-800 mb-2">Accuracy</p>
+              <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">
+                <li>Deterministic, rules-based scoring.</li>
+                <li>Cost ranges are directional, not quotes.</li>
+                <li>Variance is typically ±15–25% depending on scope and maturity.</li>
+              </ul>
+            </div>
+            <div className="bg-white border border-slate-200 rounded-lg p-4">
+              <p className="text-sm font-semibold text-slate-800 mb-2">Data handling</p>
+              <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">
+                <li>Inputs are not sold or shared.</li>
+                <li>Used only for scoring; email optional.</li>
+                <li>Aggregated, anonymous data may improve estimates.</li>
+              </ul>
+            </div>
+            <div className="bg-white border border-slate-200 rounded-lg p-4">
+              <p className="text-sm font-semibold text-slate-800 mb-2">Built for</p>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                SaaS, fintech, data platforms, marketplaces, and AI/ML companies preparing for SOC 2. Independent project by RiscLens — no lock-in, no sales calls.
               </p>
             </div>
-            <div className="bg-white/70 border border-slate-200 rounded-lg p-4">
-              <p className="text-sm font-semibold text-slate-800 mb-2">What signing up actually does</p>
-              <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">
-                <li>You provide basic company details: size, industry, data types, and audit timeline.</li>
-                <li>You receive a readiness score (0–100), SOC 2 cost range, and prioritized next steps.</li>
-                <li>Takes about 2 minutes to complete.</li>
-              </ul>
-            </div>
-            <div className="bg-white/70 border border-slate-200 rounded-lg p-4">
-              <p className="text-sm font-semibold text-slate-800 mb-2">How to interpret your score</p>
-              <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">
-                <li>0–40 = Pre-audit</li>
-                <li>41–70 = Early-stage</li>
-                <li>71–85 = Near-ready</li>
-                <li>86–100 = Audit-ready</li>
-              </ul>
-              <p className="text-sm text-slate-600 mt-2">There is no pass/fail. SOC 2 readiness is a spectrum.</p>
-              <p className="text-sm text-slate-600">Most early-stage teams underestimate internal preparation time.</p>
-            </div>
-            <div className="bg-white/70 border border-slate-200 rounded-lg p-4">
-              <p className="text-sm font-semibold text-slate-800 mb-2">How accurate are the estimates?</p>
-              <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">
-                <li>Scores are deterministic and rules-based, not “AI” guesses.</li>
-                <li>Cost ranges are directional, not quotes.</li>
-                <li>Typical variance is ±15–25% based on auditor, scope changes, and control maturity.</li>
-                <li>Final costs depend on the auditor you pick and how much scope you include.</li>
-              </ul>
-              <p className="text-sm text-slate-600 mt-2">Typically, scope and evidence quality drive both timeline and cost.</p>
-            </div>
           </div>
 
-          <div className="mt-4 max-w-2xl mx-auto bg-white/60 border border-slate-200 rounded-lg p-4 text-left">
-            <p className="text-sm font-medium text-slate-700 mb-2">Your data &amp; privacy</p>
-            <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">
-              <li>Inputs are not sold or shared</li>
-              <li>Data is used only to calculate your score</li>
-              <li>Email is optional; you can complete the assessment without it</li>
-              <li>Aggregated, anonymous data may be used to improve estimates</li>
-            </ul>
-          </div>
-
-          <div className="mt-8 pt-6 border-t border-slate-200/50 text-sm text-slate-500">
-            Built for your industry: SaaS companies • Fintech companies
-            <div className="mt-4 text-sm text-slate-600">
-              About &amp; legitimacy — RiscLens is an independent SOC 2 readiness project for early-stage SaaS, fintech, and data-driven startups. It’s free for education and early demand discovery. No sales calls. No lock-in.
-            </div>
-            <div className="mt-3 text-sm text-slate-600">
-              Early results — The assessment is being tested with founders and operators preparing for SOC 2. Early users report clearer expectations on cost, timeline, and readiness.
+          <div className="border border-slate-200 rounded-xl bg-white p-5">
+            <p className="text-sm font-semibold text-slate-800 mb-2">Related tools</p>
+            <div className="flex flex-wrap gap-3 text-sm text-brand-700">
+              <Link href="/penetration-testing/pricing" className="underline underline-offset-4 hover:text-brand-800">
+                Penetration Testing Pricing
+              </Link>
+              <Link href="/vendor-risk-assessment" className="underline underline-offset-4 hover:text-brand-800">
+                Vendor Risk Assessment
+              </Link>
             </div>
           </div>
         </div>

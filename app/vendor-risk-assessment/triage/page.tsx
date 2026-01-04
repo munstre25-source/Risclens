@@ -3,7 +3,8 @@ import Script from 'next/script';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { VendorRiskTriageForm } from '@/components/vendor-risk/VendorRiskTriageForm';
-import { VendorRiskRelatedLinks } from '@/components/vendor-risk/VendorRiskRelatedLinks';
+import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
+import { HowItWorksAccordion } from '@/components/HowItWorksAccordion';
 
 const lastUpdated = '2026-03-20';
 
@@ -81,7 +82,14 @@ export default function VendorRiskAssessmentTriagePage() {
           <div className="border border-slate-200 rounded-xl p-6 bg-white">
             <VendorRiskTriageForm />
           </div>
-          <VendorRiskRelatedLinks />
+          <HowItWorksAccordion />
+          <RelatedGuidesRow
+            links={[
+              { href: '/vendor-risk-assessment/checklist', label: 'VRA Checklist' },
+              { href: '/vendor-risk-assessment/evidence-by-tier', label: 'Evidence by tier' },
+              { href: '/vendor-risk-assessment/contract-clauses', label: 'Contract clauses' },
+            ]}
+          />
         </div>
       </section>
       <Footer />

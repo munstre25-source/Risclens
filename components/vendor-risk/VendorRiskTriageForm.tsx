@@ -28,6 +28,11 @@ export function VendorRiskTriageForm() {
   const [inputs, setInputs] = useState<VendorRiskInput>(defaultInput);
   const [result, setResult] = useState<VendorRiskResult | null>(null);
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [company, setCompany] = useState('');
+  const [website, setWebsite] = useState('');
+  const [showDetails, setShowDetails] = useState(false);
+  const [showEstimateNotes, setShowEstimateNotes] = useState(false);
   const [submitState, setSubmitState] = useState<'idle' | 'submitting' | 'sent' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -56,6 +61,9 @@ export function VendorRiskTriageForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email,
+          name: name || undefined,
+          company: company || undefined,
+          website: website || undefined,
           inputs,
           result,
           source_url: typeof window !== 'undefined' ? window.location.href : '',
@@ -65,6 +73,7 @@ export function VendorRiskTriageForm() {
         throw new Error('Failed to save lead');
       }
       setSubmitState('sent');
+      setErrorMsg('');
     } catch (err) {
       console.error(err);
       setSubmitState('error');
@@ -215,30 +224,116 @@ export function VendorRiskTriageForm() {
         <div className="space-y-4">
           <VendorRiskResults result={calculated} inputs={inputs} />
 
-          <div className="border border-slate-200 rounded-xl p-4 bg-slate-50 space-y-3">
-            <p className="text-sm font-semibold text-slate-900">Send me the VRA package (optional)</p>
-            <div className="flex flex-col sm:flex-row gap-2">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="work email"
-                className="flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
-              />
+          <div className="border border-slate-200 rounded-xl p-4 bg-white space-y-3">
+            <p className="text-sm font-semibold text-slate-900">Email me the detailed breakdown (optional)</p>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label className="text-sm font-medium text-slate-800">Email</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@company.com"
+                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium text-slate-800">Name (optional)</label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Alex Rivera"
+                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
+                />
+              </div>
+            </div>
+
+            <div className="rounded-lg border border-slate-200 bg-slate-50">
               <button
                 type="button"
-                onClick={sendLead}
-                disabled={submitState === 'submitting'}
-                className="inline-flex items-center justify-center rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-700 transition-colors disabled:opacity-60"
+                onClick={() => setShowDetails((prev) => !prev)}
+                aria-expanded={showDetails}
+                aria-controls="vendor-optional-details"
+                className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-slate-900"
               >
-                {submitState === 'submitting' ? 'Sending…' : 'Send package'}
+                Add details (optional)
+                <svg
+                  className={`w-4 h-4 transition-transform ${showDetails ? 'rotate-180' : ''}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
               </button>
+              {showDetails && (
+                <div id="vendor-optional-details" className="px-4 pb-4 space-y-3">
+                  <div>
+                    <label className="text-sm font-medium text-slate-800">Company (optional)</label>
+                    <input
+                      type="text"
+                      value={company}
+                      onChange={(e) => setCompany(e.target.value)}
+                      placeholder="Company name"
+                      className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-slate-800">Website (optional)</label>
+                    <input
+                      type="url"
+                      value={website}
+                      onChange={(e) => setWebsite(e.target.value)}
+                      placeholder="https://"
+                      className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
+
+            <button
+              type="button"
+              onClick={sendLead}
+              disabled={submitState === 'submitting'}
+              className="inline-flex items-center justify-center rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-700 transition-colors disabled:opacity-60"
+            >
+              {submitState === 'submitting' ? 'Sending…' : 'Email me the breakdown'}
+            </button>
             {submitState === 'sent' && <p className="text-sm text-emerald-700">Got it. We will send the package.</p>}
             {submitState === 'error' && <p className="text-sm text-rose-700">{errorMsg || 'Could not send right now.'}</p>}
-            <p className="text-xs text-slate-500">
-              We will include your inputs and the recommended evidence package in the follow-up. No spam—opt-out anytime.
-            </p>
+            <p className="text-xs text-slate-600">Estimates are informational and not a binding quote.</p>
+            <p className="text-xs text-slate-500">We only store details if you enter your email.</p>
+          </div>
+
+          <div className="border border-slate-200 rounded-xl bg-slate-50">
+            <button
+              type="button"
+              onClick={() => setShowEstimateNotes((prev) => !prev)}
+              aria-expanded={showEstimateNotes}
+              aria-controls="vendor-how-estimate"
+              className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-slate-900"
+            >
+              How we estimate
+              <svg
+                className={`w-4 h-4 transition-transform ${showEstimateNotes ? 'rotate-180' : ''}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            {showEstimateNotes && (
+              <div id="vendor-how-estimate" className="px-4 pb-4 text-sm text-slate-700 space-y-1">
+                <ul className="space-y-1">
+                  <li>• Data sensitivity, access level, and incident history drive the tier.</li>
+                  <li>• Evidence package is scoped to prove controls to auditors and customers.</li>
+                  <li>• Cadence is planning guidance—confirm with your security and legal teams.</li>
+                </ul>
+              </div>
+            )}
           </div>
         </div>
       )}

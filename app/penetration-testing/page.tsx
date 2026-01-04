@@ -109,7 +109,7 @@ export default function PentestHubPage() {
             <DefinitionCallout
               title="What is penetration testing?"
               description="Penetration testing is a time-boxed security assessment where a qualified tester simulates real attacks to identify and validate exploitable weaknesses in an application, API, network, or cloud environment. It helps teams prioritize fixes based on real-world impact, not just theoretical findings."
-              href="/penetration-testing"
+              linkKey="penetrationTestingOverview"
             />
           </div>
           <div className="max-w-4xl mx-auto mt-6">

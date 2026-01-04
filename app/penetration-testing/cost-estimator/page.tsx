@@ -3,6 +3,7 @@ import Script from 'next/script';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import PentestEstimatorForm from '@/components/pentest/PentestEstimatorForm';
+import { HowItWorksAccordion } from '@/components/HowItWorksAccordion';
 
 const breadcrumbSchema = {
   '@context': 'https://schema.org',
@@ -54,8 +55,9 @@ export default function PentestEstimatorPage() {
       </section>
 
       <section className="bg-white border-t border-slate-200">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 space-y-6">
           <PentestEstimatorForm />
+          <HowItWorksAccordion />
         </div>
       </section>
       <Footer />

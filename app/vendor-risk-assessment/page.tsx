@@ -102,7 +102,7 @@ export default function VendorRiskAssessmentHubPage() {
             <DefinitionCallout
               title="What is a vendor risk assessment?"
               description="A vendor risk assessment (VRA) evaluates a third-party provider’s security and operational risk before sharing data or granting access. It typically includes a questionnaire, evidence review (e.g., SOC 2/ISO), and a risk rating that determines required controls and reassessment frequency."
-              href="/vendor-risk-assessment"
+              linkKey="vendorRiskOverview"
             />
           </div>
           <div className="max-w-4xl mx-auto mt-6">

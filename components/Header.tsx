@@ -138,6 +138,8 @@ export default function Header() {
   const menusRef = useRef<HTMLDivElement>(null);
   const socRef = useRef<HTMLDivElement>(null);
   const vendorRef = useRef<HTMLDivElement>(null);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const mobileToggleRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
   const menuItemClass =
     'block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600';
@@ -195,6 +197,7 @@ export default function Header() {
     { label: 'AI/Data', href: '/soc-2/industries/ai-data' },
   ];
   const isSocActive =
+    pathname === '/' ||
     pathname.startsWith('/soc-2') ||
     pathname.startsWith('/soc-2-') ||
     pathname.startsWith('/when-do-you-need-soc-2') ||
@@ -221,6 +224,10 @@ export default function Header() {
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       const target = event.target as Node;
+
+      if (isMobileOpen && (mobileMenuRef.current?.contains(target) || mobileToggleRef.current?.contains(target))) {
+        return;
+      }
 
       const isInside = [
         { anchor: socRef, menuId: 'soc-menu' },
@@ -275,6 +282,9 @@ export default function Header() {
     clearPentestTimers,
     clearSocTimers,
     clearVendorTimers,
+    isMobileOpen,
+    mobileMenuRef,
+    mobileToggleRef,
   ]);
 
   useEffect(() => {
@@ -310,6 +320,55 @@ export default function Header() {
       setMobileIndustriesOpen(false);
       setMobileVendorOpen(false);
     }
+  }, [isMobileOpen]);
+
+  useEffect(() => {
+    if (!isMobileOpen) return;
+
+    const focusableSelectors = [
+      'button:not([disabled])',
+      '[href]',
+      'input',
+      'select',
+      'textarea',
+      '[tabindex]:not([tabindex="-1"])',
+    ].join(',');
+
+    const focusFirstItem = () => {
+      const first = mobileMenuRef.current?.querySelector<HTMLElement>(focusableSelectors);
+      first?.focus();
+    };
+
+    const trapFocus = (event: KeyboardEvent) => {
+      if (event.key !== 'Tab' || !mobileMenuRef.current) return;
+      const focusable = Array.from(
+        mobileMenuRef.current.querySelectorAll<HTMLElement>(focusableSelectors),
+      ).filter((el) => !el.hasAttribute('disabled') && el.tabIndex !== -1);
+
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (!document.activeElement || !mobileMenuRef.current.contains(document.activeElement)) {
+        first.focus();
+        event.preventDefault();
+        return;
+      }
+
+      if (event.shiftKey) {
+        if (document.activeElement === first) {
+          last.focus();
+          event.preventDefault();
+        }
+      } else if (document.activeElement === last) {
+        first.focus();
+        event.preventDefault();
+      }
+    };
+
+    focusFirstItem();
+    document.addEventListener('keydown', trapFocus);
+    return () => document.removeEventListener('keydown', trapFocus);
   }, [isMobileOpen]);
 
   return (
@@ -355,7 +414,7 @@ export default function Header() {
                 }}
               >
                 <Link
-                  href="/soc-2/guides"
+                  href="/"
                   className={`flex items-center gap-2 hover:text-brand-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600 rounded ${
                     isSocActive ? 'text-brand-700 underline underline-offset-4' : ''
                   }`}
@@ -833,6 +892,7 @@ export default function Header() {
             aria-label="Toggle navigation menu"
             aria-expanded={isMobileOpen}
             onClick={() => setMobileOpen((open) => !open)}
+            ref={mobileToggleRef}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               {isMobileOpen ? (
@@ -858,11 +918,13 @@ export default function Header() {
           />
 
           <div
-              className={`md:hidden fixed inset-x-0 top-full z-50 border-t border-slate-200 bg-white shadow-sm transition-all duration-200 ease-out ${
+            ref={mobileMenuRef}
+            // Keep the mobile drawer above page content and below the header; previously top-full pushed it behind the hero.
+            className={`md:hidden fixed inset-x-0 bottom-0 top-16 z-[60] bg-white text-slate-900 shadow-xl transition-all duration-200 ease-out ${
               isMobileOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'
             }`}
           >
-            <div className="px-4 py-4 space-y-3 max-h-[70vh] overflow-auto">
+            <div className="px-4 py-4 space-y-3 h-full overflow-y-auto">
               <div className="space-y-2 rounded-xl border border-slate-200">
                 <button
                   type="button"

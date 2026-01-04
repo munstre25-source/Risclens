@@ -22,7 +22,7 @@ export default function LearnSoc2ReadinessPage() {
             <DefinitionCallout
               title="What SOC 2 readiness means"
               description="SOC 2 readiness is a pre-audit assessment of how prepared you are for a SOC 2 audit—gaps, timelines, and evidence expectations. It is not a certification or audit opinion."
-              href="/soc-2-readiness-index"
+              linkKey="soc2ReadinessIndex"
             />
           </div>
         </div>

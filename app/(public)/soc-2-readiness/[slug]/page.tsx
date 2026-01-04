@@ -116,7 +116,7 @@ export default function Soc2ReadinessGuidePage({ params }: PageProps) {
                 <DefinitionCallout
                   title="What is a vendor risk assessment?"
                   description="A vendor risk assessment (VRA) evaluates a third-party provider’s security and operational risk before sharing data or granting access. It typically includes a questionnaire, evidence review (e.g., SOC 2/ISO), and a risk rating that determines required controls and reassessment frequency."
-                  href="/vendor-risk-assessment"
+                  linkKey="vendorRiskOverview"
                 />
               </div>
             )}
@@ -125,7 +125,7 @@ export default function Soc2ReadinessGuidePage({ params }: PageProps) {
                 <DefinitionCallout
                   title="What is penetration testing?"
                   description="Penetration testing is a time-boxed security assessment where a qualified tester simulates real attacks to identify and validate exploitable weaknesses in an application, API, network, or cloud environment. It helps teams prioritize fixes based on real-world impact, not just theoretical findings."
-                  href="/penetration-testing/for-soc-2"
+                  linkKey="penetrationTestingForSoc2"
                 />
               </div>
             )}

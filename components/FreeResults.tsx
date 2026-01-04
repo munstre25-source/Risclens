@@ -42,16 +42,26 @@ export default function FreeResults({
     return 'stroke-red-500';
   };
 
-  const getScoreLabel = (score: number) => {
-    if (score >= 70) return 'Good Progress';
-    if (score >= 40) return 'Early-stage readiness';
-    return 'Needs Attention';
-  };
+const getScoreLabel = (score: number) => {
+  if (score >= 70) return 'Good Progress';
+  if (score >= 40) return 'Early-stage readiness';
+  return 'Needs Attention';
+};
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+const getAuditReason = (rec: string) => {
+  const lower = rec.toLowerCase();
+  if (lower.includes('access')) return 'Auditors look for proof of least-privilege and regular access reviews with evidence.';
+  if (lower.includes('change')) return 'Change control with approvals and logs reduces the risk of untracked production changes.';
+  if (lower.includes('vendor')) return 'Third-party risk is a common finding; tiering and evidence keep auditors comfortable.';
+  if (lower.includes('logging') || lower.includes('monitor')) return 'Evidence of monitoring and alerting shows you can detect and respond to issues.';
+  if (lower.includes('backup') || lower.includes('recovery')) return 'Documented backups with test results prove resilience for availability criteria.';
+  return 'Auditors want this control documented, owned, and evidenced consistently.';
+};
+
+const formatCurrency = (amount: number) => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
       maximumFractionDigits: 0,
     }).format(amount);
   };
@@ -162,6 +172,10 @@ export default function FreeResults({
 
   // Show only top 2 recommendations
   const topRecommendations = results.recommendations.slice(0, 2);
+  const topNextSteps = results.recommendations.slice(0, 5).map((rec) => ({
+    title: rec,
+    reason: getAuditReason(rec),
+  }));
 
   return (
     <div className="animate-fade-in">
@@ -230,34 +244,56 @@ export default function FreeResults({
         </div>
       </div>
 
-      {/* Cost Estimate */}
-      <div className="card mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">
-          Estimated Compliance Cost
+      <div className="card mb-6 bg-white border-slate-200">
+        <h3 className="text-lg font-semibold text-gray-900 mb-3">
+          Top next steps (highest impact first)
         </h3>
-        <p className="text-sm text-gray-500 mb-4">
-          See what drives these numbers in the <a href="/soc-2-cost" className="underline underline-offset-2 text-brand-700 hover:text-brand-800">SOC 2 cost guide</a>.
-        </p>
-        <div className="flex items-center justify-center gap-4">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-brand-600">
-              {formatCurrency(results.estimated_cost_low)}
-            </div>
-            <div className="text-sm text-gray-500">Low</div>
+        <ul className="space-y-3">
+          {topNextSteps.map((item, index) => (
+            <li key={item.title} className="flex gap-3">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-brand-50 text-brand-700 text-sm font-semibold">
+                {index + 1}
+              </span>
+              <div className="space-y-1">
+                <p className="text-sm font-semibold text-gray-900">{item.title}</p>
+                <p className="text-sm text-gray-600">{item.reason}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Cost Estimate */}
+      <div className="card mb-6 bg-white border-slate-200">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900">
+              Estimated Compliance Cost
+            </h3>
+            <p className="text-sm text-gray-600">
+              Based on company size, data types, and timeline. Includes auditor fees, tooling, and internal preparation effort.
+            </p>
           </div>
-          <div className="text-gray-300 text-2xl font-light">–</div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-brand-600">
-              {formatCurrency(results.estimated_cost_high)}
-            </div>
-            <div className="text-sm text-gray-500">High</div>
+          <a href="/soc-2-cost" className="btn-ghost text-sm">
+            See cost breakdown guide
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+        </div>
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
+          <div className="sm:col-span-1">
+            <p className="text-xs uppercase tracking-wide text-slate-500 font-semibold mb-1">Low estimate</p>
+            <p className="text-2xl font-bold text-brand-700">{formatCurrency(results.estimated_cost_low)}</p>
+          </div>
+          <div className="text-center text-3xl text-slate-300 font-light sm:col-span-1">–</div>
+          <div className="sm:col-span-1 text-right sm:text-left">
+            <p className="text-xs uppercase tracking-wide text-slate-500 font-semibold mb-1">High estimate</p>
+            <p className="text-2xl font-bold text-brand-700">{formatCurrency(results.estimated_cost_high)}</p>
           </div>
         </div>
-        <p className="text-xs text-gray-400 text-center mt-3">
-          Based on company size, data types, and timeline
-        </p>
-        <p className="text-xs text-gray-500 text-center mt-2">
-          Includes auditor fees, tooling, and internal preparation effort.
+        <p className="text-xs text-gray-500 text-center sm:text-left mt-3">
+          Use this to budget remediation and auditor prep; confirm exact scope with your auditor.
         </p>
       </div>
 
@@ -290,6 +326,7 @@ export default function FreeResults({
                 className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-brand-500"
                 placeholder="you@company.com"
               />
+              <p className="text-xs text-gray-500 mt-1">We’ll only use this to respond. No spam.</p>
             </div>
             <div className="flex items-center justify-between">
               <button
