@@ -2,7 +2,6 @@
 
 export const ROUTES: string[] = [
   '/',
-  '/soc-2-readiness-index',
   '/soc-2-cost',
   '/soc-2-cost/saas',
   '/soc-2-cost/fintech',
@@ -12,6 +11,12 @@ export const ROUTES: string[] = [
   '/soc-2-cost/ecommerce',
   '/soc-2-cost/marketplaces',
   '/soc-2-cost/ai-data',
+  '/soc-2-cost/b2b-saas',
+  '/soc-2-cost/cloud-infrastructure',
+  '/soc-2-cost/devtools',
+  '/soc-2-cost/edtech',
+  '/soc-2-cost/payments',
+  '/soc-2-cost/industries',
   '/soc-2-readiness/saas',
   '/soc-2-readiness/fintech',
   '/soc-2-readiness-calculator',
@@ -42,7 +47,6 @@ export const ROUTES: string[] = [
   '/soc-2-cost/evidence-collection',
   '/soc-2-cost/penetration-testing',
   '/soc-2-cost/vendor-management',
-  '/soc-2-cost/cloud-and-infrastructure',
   '/soc-2-cost/security-tooling',
   '/soc-2-cost/legal-and-grc-support',
   '/soc-2-cost/type-1-vs-type-2-cost',

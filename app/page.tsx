@@ -126,6 +126,26 @@ export default function HomePage() {
                   See SOC 2 cost + timeline guides →
                 </Link>
               </p>
+              <div className="flex flex-col sm:flex-row gap-2 text-sm text-slate-700">
+                <div className="flex-1">
+                  <span className="font-semibold text-slate-800">SOC 2</span>{' '}
+                  <span className="text-slate-700">
+                    Independent audit framework against the Trust Service Criteria (security, availability, confidentiality, processing integrity, privacy).
+                  </span>{' '}
+                  <Link href="#soc2-definitions" className="text-brand-700 underline underline-offset-2">
+                    What SOC 2 actually means
+                  </Link>
+                </div>
+                <div className="flex-1">
+                  <span className="font-semibold text-slate-800">Readiness</span>{' '}
+                  <span className="text-slate-700">
+                    How prepared you are to pass a SOC 2 audit—policies, controls, evidence, and timelines aligned to auditor expectations.
+                  </span>{' '}
+                  <Link href="#soc2-definitions" className="text-brand-700 underline underline-offset-2">
+                    What is SOC 2 readiness?
+                  </Link>
+                </div>
+              </div>
               <div className="flex flex-wrap gap-2 text-xs text-slate-600">
                 <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 border border-slate-200">
                   Private by default
@@ -263,7 +283,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2">
+          <div id="soc2-definitions" className="grid gap-6 md:grid-cols-2">
             <InfoAccordion
               triggerLabel="What SOC 2 actually means"
               body="SOC 2 (System and Organization Controls) is an independent audit framework used by enterprise customers to evaluate how a company protects customer data. It focuses on whether your internal controls, processes, and evidence meet real-world security expectations — not whether you claim to be secure."

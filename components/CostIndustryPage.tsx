@@ -63,9 +63,12 @@ export function CostIndustryPage({
               See SOC 2 timeline guides →
             </Link>
           </div>
-          <div className="text-sm text-brand-700">
+          <div className="flex flex-col sm:flex-row justify-center gap-3 text-sm text-brand-700">
             <Link href={hubHref} className="underline underline-offset-4">
               SOC 2 requirements for {industry} →
+            </Link>
+            <Link href="/soc-2-cost" className="underline underline-offset-4">
+              Back to SOC 2 cost →
             </Link>
           </div>
         </div>

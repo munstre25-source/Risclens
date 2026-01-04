@@ -7,7 +7,7 @@ Route map with purpose, key components, and data dependencies. See [PRODUCT_OVER
 | --- | --- | --- | --- |
 | `/` | Landing with single CTA to readiness index, trust line, results preview card. | `Header`, hero CTA, results preview card | None (static) |
 | `/soc-2-readiness-calculator` | Multi-step readiness calculator, deterministic scoring, results preview + top fixes, optional email/PDF. | form components under app route, `Header`, `LearnMoreLink`, results blocks | `/api/submit` + `/api/soc2-lead`, `/api/generate-pdf`, `/api/send-email`, Supabase `leads` |
-| `/soc-2-cost` (+ `/saas`, `/fintech`, `/startups`, `/enterprise`, `/healthcare`, `/ecommerce`, `/marketplaces`, `/ai-data`, `/[slug]`) | Cost guides + breakdown variants, CTA to calculators; industry-specific cost pages linked from hub. | guide templates, `Header`, industry grid on hub, `AssessmentCTA` | Static |
+| `/soc-2-cost` (+ industry variants: `/startups`, `/saas`, `/fintech`, `/enterprise`, `/healthcare`, `/ecommerce`, `/marketplaces`, `/ai-data`, `/b2b-saas`, `/cloud-infrastructure`, `/devtools`, `/edtech`, `/payments`; listing at `/soc-2-cost/industries`; guide catch-all `/[slug]`) | Cost guides + breakdown variants, CTA to calculators; industry-specific cost pages linked from hub and listing. | guide templates, `Header`, industry grid on hub, `AssessmentCTA` | Static |
 | `/soc-2-cost-breakdown` | Deep dive on cost components. | Guide components | Static |
 | `/soc-2-timeline` (+ `[slug]`) | Timeline guidance and size variants. | Guide components | Static |
 | `/soc-2-type-i-vs-type-ii` | Type comparison. | Guide components | Static |

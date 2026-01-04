@@ -103,9 +103,9 @@ export const costGuides: Soc2GuidePage[] = [
     ],
   },
   {
-    slug: 'cloud-and-infrastructure',
-    title: 'Cloud and Infrastructure Costs',
-    summary: 'Logging, backups, and hardening that often drive incremental cloud spend during SOC 2 prep.',
+    slug: 'cloud-infrastructure',
+    title: 'Cloud Infrastructure Costs',
+    summary: 'Logging, backups, tenancy, and hardening that often drive incremental cloud spend during SOC 2 prep.',
     category: 'cost',
     parent: costParent,
     highlights: [

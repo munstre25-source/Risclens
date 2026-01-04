@@ -134,7 +134,7 @@ export default function Soc2CostPage() {
           <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 space-y-4">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
               <h2 className="text-lg font-semibold text-slate-900">Cost by industry</h2>
-              <Link href="/soc-2/industries" className="text-sm text-brand-700 underline underline-offset-4 hover:text-brand-800">
+              <Link href="/soc-2-cost/industries" className="text-sm text-brand-700 underline underline-offset-4 hover:text-brand-800">
                 View all industries →
               </Link>
             </div>
