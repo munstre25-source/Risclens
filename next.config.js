@@ -3,12 +3,6 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: '/:path*',
-        has: [{ type: 'host', value: 'www.risclens.com' }],
-        destination: 'https://risclens.com/:path*',
-        permanent: true,
-      },
-      {
         source: '/soc-2-readiness-index',
         destination: '/',
         permanent: true,
