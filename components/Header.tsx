@@ -851,14 +851,14 @@ export default function Header() {
             type="button"
             aria-hidden="true"
             tabIndex={-1}
-            className={`md:hidden fixed inset-0 bg-slate-900/30 transition-opacity duration-200 ease-out ${
+            className={`md:hidden fixed inset-0 z-40 bg-slate-900/30 transition-opacity duration-200 ease-out ${
               isMobileOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
             }`}
             onClick={() => setMobileOpen(false)}
           />
 
           <div
-              className={`md:hidden absolute inset-x-0 top-full border-t border-slate-200 bg-white shadow-sm transition-all duration-200 ease-out ${
+              className={`md:hidden fixed inset-x-0 top-16 z-50 border-t border-slate-200 bg-white shadow-sm transition-all duration-200 ease-out ${
               isMobileOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'
             }`}
           >
