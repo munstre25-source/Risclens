@@ -73,6 +73,11 @@ export default function IndustryPage({ params }: PageProps) {
           <div className="flex justify-center">
             <AssessmentCTA />
           </div>
+          <div className="text-sm text-brand-700">
+            <Link href={`/soc-2-cost/${guide.slug}`} className="underline underline-offset-4">
+              SOC 2 cost for {guide.name} →
+            </Link>
+          </div>
         </div>
       </section>
 

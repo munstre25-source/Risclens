@@ -1,79 +1,51 @@
-# Architecture
+# ARCHITECTURE
 
-## High-Level
-- **Framework**: Next.js 13+ App Router (TypeScript, Tailwind).
-- **Hosting**: Vercel (assumed from config).
-- **Data**: Supabase (Postgres + Storage), RLS enabled.
-- **Edge/server**: API routes under `app/api/*`.
-- **Client UI**: React components in `/components`, pages in `/app`.
+Concise view of how the system is wired. See [TECHNICAL.md](TECHNICAL.md) for conventions and [ROUTES_AND_PAGES.md](ROUTES_AND_PAGES.md) for route-level detail.
 
-## Layout & Routing
-- `app/layout.tsx`: Root layout, fonts/styles, metadata defaults.
-- Public pages under `app/(public)/` and root-level routes (cost, timeline, etc.).
-- Admin area under `app/admin`.
-- API routes under `app/api`.
+## Stack & Runtime
+- Next.js App Router (TypeScript, Tailwind). SSR/SSG where possible; some pages are client-rendered due to dynamic inputs.
+- Supabase (Postgres + Storage) via `lib/supabase.ts`; admin client only on server.
+- Email/PDF via `/api/send-email` + `/api/generate-pdf`, stored to Supabase Storage.
+- In-memory rate limit helper in `lib/rate-limit.ts` (single-instance; replace with Redis for multi-instance).
 
-## Component Overview
-- `components/Header.tsx`: Global nav + CTA + guides dropdown; sticky/blur behavior, mobile menu overlay, scroll lock.
-- `components/CalculatorForm.tsx`: Multi-step assessment, client state, posts to `/api/soc2-lead`.
-- `components/FreeResults.tsx`: Results display, PDF/email trigger.
-- `components/AssessmentCTA.tsx`: Reusable bottom CTA block.
-- `components/InfoDisclosure.tsx`: Lightweight accordion/disclosure.
+## Layout & Navigation
+- `app/layout.tsx` applies fonts, global styles (`app/globals.css`), and metadata defaults.
+- `components/Header.tsx` renders desktop dropdowns and a portal-based mobile drawer (fixed inset-0, scrollable, backdrop, route-change close). CTA changes per section (readiness vs pentest).
 
-## Data Flow (Assessment)
-```mermaid
-flowchart TD
-  UserForm[CalculatorForm (client)] -->|POST JSON| APISubmit[/api/soc2-lead]
-  APISubmit --> Zod[Zod validation + rate limit + honeypot]
-  Zod -->|valid| Supabase[(Supabase anon insert)]
-  Zod -->|score| Scoring[lib/scoring + scoring-config]
-  Supabase --> LeadRow[public.SOC2_Leads]
-  APISubmit --> Response[{ok, lead_id, results}]
-  Response --> FreeResults[FreeResults component]
-  FreeResults -->|optional email| SetEmail[/api/lead/set-email]
-  FreeResults --> GenPDF[/api/generate-pdf]
-  GenPDF --> SendEmail[/api/send-email]
+## Modules & Responsibilities
+- **Scoring**: `lib/scoring.ts` + `lib/scoring-config.ts` (deterministic SOC 2 scoring), `lib/pentestEstimator.ts`, `lib/vendorRisk.ts` for other tools, and `recommendations-library.ts` for top fixes.
+- **Content catalogs**: `lib/soc2Guides.ts`, `lib/soc2Industries.ts`, `lib/soc2Evidence.ts`, `lib/seoClusters.ts`, `lib/learnMoreLinks.ts`.
+- **Data/Leads**: `lib/leads.ts`, `lib/supabase.ts`, `lib/supabase-auth.ts`, `lib/email.ts`, `lib/pdf.ts`, `lib/validation.ts`, `lib/rate-limit.ts`.
+- **UI**: Pages under `app/`, shared components under `components/`, design tokens via Tailwind utilities.
+- **SEO**: `app/sitemap.ts` (deduped, sorted, no global lastmod), metadata helpers in `src/seo`.
+
+## Data Flows
+### SOC 2 Readiness (similar for pentest/vendor risk)
+```
+Client form -> POST /api/soc2-lead (or /api/submit legacy)
+  -> zod validation + optional rate limit
+  -> deterministic scoring (lib/scoring.ts)
+  -> insert lead into Supabase `leads` + audit log
+  -> return score/cost/timeline/recommendations
+Client renders results; optional email -> /api/lead/set-email -> /api/generate-pdf -> /api/send-email
 ```
 
-## Scoring
-- Located in `lib/scoring.ts` and `lib/scoring-config.ts`.
-- Deterministic, rule-based; inputs: num_employees, audit_date, data_types, role, optional industry/soc2_requirers.
-- Outputs readiness_score (0–100), lead_score/keep_or_sell, estimated_cost_low/high, recommendations (from `recommendations-library`).
-
-## Styling
-- Tailwind via `globals.css` + utility classes.
-- Cards/buttons via shared classes (`btn-primary`, etc.).
-
-## Assets & Metadata
-- `app/opengraph-image.tsx`, `/public/og.png`.
-- `app/sitemap.ts` generates sitemap with SEO pages included.
-
-## PDF/Email Flow
-- `/api/generate-pdf`: Builds PDF (PDFShift/Browserless depending on env) and stores to Supabase storage bucket (`SUPABASE_STORAGE_BUCKET`).
-- `/api/send-email`: Sends PDF via SendGrid/SMTP based on env.
-- `/api/lead/set-email`: Updates lead with email/consent prior to PDF send (server-side).
-
-## Diagrams
-### Request Lifecycle (Assessment)
+### Admin/Reporting
 ```
-Client form -> /api/soc2-lead (Next.js API) -> zod validate -> rate limit (Redis) -> Supabase insert -> scoring -> return results -> client renders FreeResults -> optional PDF/email
+/admin pages -> server components fetch via Supabase admin client
+CSV export and filters -> /api/admin/export-csv, /api/admin/filters
+AB variants/impressions -> /api/ab/* and /api/admin/variants
+Audit logs -> /api/admin/audit/*
 ```
 
-### Folder Structure (key)
+## Folder Highlights
 ```
 app/
-  (public)/...          # Public routes including readiness index
-  soc-2-cost*, timeline, type-i-vs-type-ii, checklist, cost-breakdown, when-do-you-need-soc-2
-  admin/...             # Admin dashboard
-  api/...               # API routes (submit, soc2-lead, pdf/email, health, unsubscribe)
-components/
-  Header, CalculatorForm, FreeResults, AssessmentCTA, InfoDisclosure, ...
-lib/
-  scoring.ts, scoring-config.ts, recommendations-library.ts
-  supabase.ts           # client/admin helpers
-  rate-limit.ts (legacy in-memory)
-sql/
-  00_init.sql, 01_add_context_note.sql, 02_admin_enhancements.sql
-public/
-  og.png, icons, pdf assets
+  (public)/soc-2-readiness-index, soc-2-cost*, soc-2-timeline*, soc-2-vs-iso-27001*, readiness variants, pentest*, vendor-risk-assessment*, learn/soc-2-readiness*
+  admin/* (dashboard, leads, experiments, settings, test-mode)
+  api/* (lead capture, pdf/email, ab, admin, cron, health)
+components/ (Header, mobile drawer, accordions, CTA blocks, results cards)
+lib/ (scoring, estimators, recommendations, supabase clients, email/pdf, rate-limit)
+src/seo (sitemap route list, clusters)
+sql/ (migrations scaffolding)
 ```

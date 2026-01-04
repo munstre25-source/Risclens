@@ -1,57 +1,40 @@
-# Database & Supabase
+# DATABASE & SUPABASE
+
+Schema and access model. See [DATA.md](DATA.md) for what/why we collect.
 
 ## Overview
-- Postgres via Supabase.
-- RLS enabled on all primary tables.
-- Storage bucket for PDFs (name via `SUPABASE_STORAGE_BUCKET`).
+- Postgres via Supabase; service role used only on server.
+- RLS assumed on all primary tables; verify policies in Supabase UI.
+- Storage bucket (env `SUPABASE_STORAGE_BUCKET`) for generated PDFs.
 
-## Key Tables (sql/00_init.sql, 01_add_context_note.sql, 02_admin_enhancements.sql)
-
-### SOC2_Leads
-- Columns: `id uuid`, `company_name text`, `industry text`, `num_employees int`, `data_types text[]`, `audit_date date`, `role text`, `email text nullable`, `utm_source text`, `variation_id text`, `readiness_score int`, `estimated_cost_low/high int`, `lead_score int`, `keep_or_sell text`, `pdf_url text`, `email_sent bool`, `email_delivery_status text`, `consent bool`, `sold bool`, `buyer_email text`, `sale_amount numeric`, `followup_day3_sent bool`, `followup_day7_sent bool`, `is_test bool`, `context_note text`, `soc2_requirers text[]`, `lead_status text`, `pdf_path text`, timestamps.
-- RLS: enabled; policy grants service_role full access. Public insert historically allowed; now routed through server API.
-- Indexes: email, created_at, keep_or_sell, industry, followup flags.
-
-### REVENUE_EVENTS
-- Track revenue events linked to leads; RLS enabled; service_role full access policy.
-
-### KEYWORDS
-- Placeholder SEO keywords; RLS enabled.
-
-### AUDIT_LOGS
-- Event payloads; RLS enabled.
-
-### AB_VARIANTS
-- A/B variants; RLS enabled.
-
-### UNSUBSCRIBED_EMAILS
-- Unsubscribes; RLS enabled.
-
-### Admin Enhancements (02_admin_enhancements.sql)
-- Adds `lead_status`, `soc2_requirers`, system status tables (see file).
-
-## Policies
-- Service role policies for all key tables (`auth.role() = 'service_role'`).
-- Public policies are minimal; rely on server-side insert to avoid exposing service key.
-
-## Migrations
-- `sql/00_init.sql` — Base schema and RLS.
-- `sql/01_add_context_note.sql` — Adds context note column.
-- `sql/02_admin_enhancements.sql` — Lead status, PDF tracking, admin KPIs.
+## Key Tables (from `sql/*.sql` and `lib/supabase.ts` types)
+- `leads`: unified leads for SOC 2, pentest, vendor risk. Columns include id, company_name, industry, num_employees, data_types[], audit_date, role, email (nullable), utm_source, variation_id, soc2_requirers[], readiness_score, estimated_cost_low/high, lead_score, keep_or_sell, pdf_path/url, email_sent/email_delivery_status, consent, sold, buyer_email, sale_amount, followup_day3_sent, followup_day7_sent, is_test, context_note, lead_status, created_at/updated_at.
+- `revenue_events`: lead_id, keyword_id, calculator_page, event_type/value/date, notes.
+- `audit_logs`: event_type, payload JSON, created_at.
+- `ab_variants`: variation_id, name, headline, cta_text, impressions, submissions, active.
+- `admin_notes`: lead_id, note, author, created_at.
+- `saved_filters`: name, filter_config JSON, timestamps.
+- `unsubscribed_emails`: email, reason?, created_at.
+- `keywords`: SEO keyword planning (optional).
 
 ## Supabase Clients (`lib/supabase.ts`)
-- `getSupabaseClient` (anon) for client-safe reads (rarely used).
-- `getSupabaseAdmin` (service role) for server-only operations (PDF/email/update).
-- Helper functions: insertLead, updateLead, getLeadById, etc.
+- `getSupabaseClient` (anon) for safe client/server reads when needed.
+- `getSupabaseAdmin` (service role) for server-only ops (inserts/updates, audit logging, storage).
+- Helper functions: `insertLead`, `updateLead`, `getLeadById`, `recordRevenueEvent`, `logAuditEvent`, AB counters (RPC), admin filters, notes, CSV export helpers.
+
+## Policies & Access
+- Service role policies grant full access; public RLS policies should block read access. Inserts occur server-side via API routes, never directly from the browser.
+- Admin routes enforce auth via `lib/supabase-auth.ts` (email/password-based admin).
 
 ## Storage
-- Bucket `soc2-pdfs` (or env-provided) for generated PDFs; referenced in PDF/email flows.
+- PDFs uploaded in `/api/generate-pdf` using admin client; stored path saved to `leads.pdf_path` with signed URL cached in `pdf_url`.
 
-## Data Flow
-- Lead insertion now via `/api/soc2-lead` (anon server client) or legacy `/api/submit` (service role scoring insert).
-- PDF generation uploads to storage and updates lead record with path/url.
+## Migrations
+- `sql/00_init.sql` base schema + RLS.
+- `sql/01_add_context_note.sql` adds context note column.
+- `sql/02_admin_enhancements.sql` adds lead_status, soc2_requirers, and admin support tables (notes, filters, variants).
 
-## Public vs Private
-- Public SELECT is blocked by RLS.
-- Inserts are permitted server-side; client direct insert should be avoided (moved to API).
-- Admin routes rely on service role for full access.
+## Data Flows
+- Lead capture endpoints (`/api/soc2-lead`, `/api/submit`, `/api/pentest-lead`, `/api/vendor-risk-assessment`) validate → compute → insert into `leads` using admin client.
+- Audit entries recorded for admin-sensitive actions (mark-sold, resend-email, purge, variant toggle).
+- Unsubscribes handled in `unsubscribed_emails`; purge/test-mode helpers delete flagged rows.

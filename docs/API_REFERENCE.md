@@ -1,68 +1,35 @@
-# API Reference
+# API REFERENCE
 
-All routes are Next.js App Router handlers under `app/api`.
+All routes live under `app/api/*`. JSON only unless noted. Validation uses zod; errors return `4xx { error, details? }`. In-memory rate limit helper exists but is not globally applied; production deployments should front with Redis/WAF if needed.
 
-## Common Behaviors
-- JSON only; `Content-Type: application/json`.
-- Validation errors: `400 { ok:false, error:"validation_error", details?:... }`.
-- Rate limiting: `/api/soc2-lead` (10 req/min/IP via Upstash Redis).
-- Honeypot: `website` field; if present/non-empty → `{ ok:true }` without insert.
+## Lead Capture & Results
+- **POST `/api/soc2-lead`** — SOC 2 readiness submission and scoring. Body: company_name?, industry?, num_employees?, data_types?, audit_date?, role?, email?, utm_source?, variation_id?, soc2_requirers?, honeypot `website?`. Returns `{ success, lead_id, results }` with readiness score, cost band, timeline band, and recommendations. Unknown fields rejected.
+- **POST `/api/submit`** — Legacy readiness handler (kept for compatibility); similar body, uses same scoring, inserts into `leads`, may call webhook. Uses in-memory rate limit if enabled by caller.
+- **POST `/api/pentest-lead`** — Pentest estimator submission. Body: company, app type/targets, timeline, email? etc. Computes cost band via `lib/pentestEstimator.ts` and stores lead row.
+- **POST `/api/vendor-risk-assessment`** — Vendor risk triage submission. Body: vendor type/tier inputs, optional email. Returns scoring/prioritized fixes from `lib/vendorRisk.ts`.
+- **POST `/api/lead/set-email`** — Attach email + consent to an existing lead (used when user adds email after seeing results).
+- **POST `/api/lead/request-review`** — Signal user wants human follow-up; adds admin note/audit entry.
 
-## `/api/soc2-lead` (POST)
-- Purpose: Hardened lead submission + scoring.
-- Body (zod strict, max ~12kb):
-  - `email` (required, email, lowercase, max 254)
-  - `company_name` (optional, max 120)
-  - `industry` (optional, max 60)
-  - `num_employees` (optional, int 1–100000)
-  - `data_types` (optional array strings, max 10, each max 32)
-  - `audit_date` (optional YYYY-MM-DD)
-  - `role` (optional, max 60)
-  - `utm_source` (optional, max 80)
-  - `variation_id` (optional, max 40, default “default”)
-  - `website` (honeypot)
-- Responses:
-  - `200 { ok:true, lead_id?, results? }`
-  - `400 validation_error | payload_too_large | invalid_json | missing_required_fields`
-  - `429 rate_limited`
-  - `500 insert_failed | submission_failed`
-- Inserts only public fields into `SOC2_Leads` using anon server client; computed fields are not written here.
+## Output & Notifications
+- **POST `/api/generate-pdf`** — Input `{ lead_id }`. Renders PDF from stored lead data, uploads to Supabase Storage, updates lead with `pdf_path`/`pdf_url`.
+- **POST `/api/send-email`** — Input `{ lead_id }`. Sends PDF/email via configured provider; logs audit event.
+- **POST `/api/unsubscribe`** — Input `{ email }`. Marks email in unsubscribe list.
 
-## `/api/submit` (POST)
-- Legacy assessment handler (still used for PDF/email flow expectations).
-- Validates via `lib/validation` (email optional), scores, and inserts lead with computed fields and flags.
-- Returns `{ success, lead_id, results }`.
-- Rate limiting via legacy in-memory `lib/rate-limit` (single instance).
+## A/B Testing
+- **POST `/api/ab/impression`**, **POST `/api/ab/submit`** — Track variant impressions/submissions; calls Supabase RPCs to increment counters.
+- **GET/POST `/api/admin/variants`**, **POST `/api/admin/toggle-variant`** — Admin management of variants (auth required).
 
-## `/api/generate-pdf` (POST)
-- Input: `{ lead_id }`.
-- Generates readiness PDF (PDFShift/Browserless) and stores in Supabase storage bucket.
-- Updates lead with PDF path/url.
-- Errors: validation, storage, rendering.
+## Admin & Ops (auth required)
+- Leads: `/api/admin/leads`, `/api/admin/leads/[id]/notes`, `/api/admin/leads/[id]/status`, `/api/admin/export-csv`, `/api/admin/filters`.
+- Audit logs: `/api/admin/audit/list`, `/api/admin/audit/log`.
+- Revenue/mark sold: `/api/admin/mark-sold`.
+- Email ops: `/api/admin/resend-email`.
+- Data hygiene: `/api/admin/purge-retention`, `/api/admin/test-mode/*` (seed/toggle/clear).
+- Auth: `/api/admin/login`, `/api/admin/logout`.
+- Cron: `/api/cron/day-3`, `/api/cron/day-7` (follow-up emails).
+- Health: `/api/health`.
 
-## `/api/send-email` (POST)
-- Input: `{ lead_id }`.
-- Sends PDF email via SendGrid/SMTP (env driven).
-- Errors: email send failures.
-
-## `/api/lead/set-email` (POST)
-- Input: `{ lead_id, email, consent }`.
-- Updates lead record.
-
-## `/api/unsubscribe` (POST)
-- Input: `{ email }`.
-- Marks email unsubscribed (table: `UNSUBSCRIBED_EMAILS`).
-
-## `/api/health` (GET)
-- Basic health/status.
-
-## Webhook
-- Internal webhook call in `/api/submit` to `/api/webhook/new-lead` (not exposed externally) for internal events; ensure route exists/disabled as needed.
-
-## Validation Rules (Highlights)
-- Strict zod in `/api/soc2-lead`; `.strict()` rejects unknown keys.
-- Max payload enforced in `/api/soc2-lead`.
-- Honeypot checked before insert.
-
-## Error Codes (typical)
-- `validation_error`, `payload_too_large`, `invalid_json`, `missing_required_fields`, `rate_limited`, `insert_failed`, `submission_failed`.
+## Common Validation / Error Handling
+- Strict zod schemas per route; unknown fields rejected on hardened endpoints (`.strict()`).
+- Honeypot: `website` field is silently accepted but ignored; non-empty may short-circuit insert.
+- Typical errors: `validation_error`, `rate_limited` (if applied), `insert_failed`, `not_authorized` (admin routes), `email_failed`, `pdf_failed`.

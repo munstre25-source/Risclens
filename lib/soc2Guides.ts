@@ -8,6 +8,8 @@ export interface Soc2GuidePage {
   parent: string;
   highlights: string[];
   related?: string[];
+  delays?: string[];
+  extraLinks?: { href: string; label: string }[];
 }
 
 const costParent = '/soc-2-cost';
@@ -200,6 +202,72 @@ export const costGuides: Soc2GuidePage[] = [
 
 export const timelineGuides: Soc2GuidePage[] = [
   {
+    slug: 'startups',
+    title: 'SOC 2 Timeline for Startups',
+    summary: 'Lean teams can reach Type I quickly if scope stays focused and evidence is organized; Type II depends on consistent logs and access reviews.',
+    category: 'timeline',
+    parent: timelineParent,
+    highlights: [
+      'Centralized owners and fewer systems accelerate decisions.',
+      'Shorter path to Type I; Type II depends on evidence maturity.',
+      'Run pentests and vendor reviews early to avoid blocking audit start.',
+    ],
+    delays: [
+      'Missing logging or inconsistent access reviews that require backfill.',
+      'Late scope changes (vendors/systems) that add sampling and walkthroughs.',
+      'Unclear ownership across engineering, IT, and founders.',
+    ],
+    extraLinks: [
+      { href: '/soc-2-timeline', label: 'SOC 2 Timeline (overview)' },
+      { href: '/soc-2-cost/startups', label: 'SOC 2 Cost for Startups' },
+      { href: '/soc-2-readiness/startups', label: 'SOC 2 Readiness for Startups' },
+    ],
+  },
+  {
+    slug: 'saas',
+    title: 'SOC 2 Timeline for SaaS',
+    summary: 'SaaS teams balance multi-tenant scope, CI/CD pace, and customer pressure; timelines hinge on evidence quality and scope control.',
+    category: 'timeline',
+    parent: timelineParent,
+    highlights: [
+      'Align deployment cadence with evidence collection and change approvals.',
+      'Customer security asks often dictate Type I vs Type II timing.',
+      'Tooling maturity (logging, monitoring, access reviews) reduces delays.',
+    ],
+    delays: [
+      'High release velocity without change evidence or approvals.',
+      'Third-party integrations added late in scope that need reviews.',
+      'Tenant isolation controls not documented, causing auditor rework.',
+    ],
+    extraLinks: [
+      { href: '/soc-2-timeline', label: 'SOC 2 Timeline (overview)' },
+      { href: '/soc-2-cost/saas', label: 'SOC 2 Cost for SaaS' },
+      { href: '/soc-2-readiness/saas', label: 'SOC 2 Readiness for SaaS' },
+    ],
+  },
+  {
+    slug: 'fintech',
+    title: 'SOC 2 Timeline for Fintech',
+    summary: 'Fintech teams face heavier expectations around vendor risk, monitoring, and data protection; plan for deeper evidence and longer observation windows.',
+    category: 'timeline',
+    parent: timelineParent,
+    highlights: [
+      'Regulated data and payment flows expand evidence scope.',
+      'Vendor due diligence and monitoring cadence must be documented.',
+      'Observation windows and sampling may be longer given risk profile.',
+    ],
+    delays: [
+      'Vendor risk reviews and contractual updates that lag behind audits.',
+      'Incomplete logging/monitoring for payment or PII systems.',
+      'Pentest remediation and retests not aligned with audit milestones.',
+    ],
+    extraLinks: [
+      { href: '/soc-2-timeline', label: 'SOC 2 Timeline (overview)' },
+      { href: '/soc-2-cost/fintech', label: 'SOC 2 Cost for Fintech' },
+      { href: '/soc-2-readiness/fintech', label: 'SOC 2 Readiness for Fintech' },
+    ],
+  },
+  {
     slug: '5-10-employees',
     title: 'SOC 2 Timeline for 5-10 Employees',
     summary: 'Lean teams running focused readiness to reach Type I quickly without overloading engineers.',
@@ -209,6 +277,11 @@ export const timelineGuides: Soc2GuidePage[] = [
       'Prep work that can be done in parallel with product delivery.',
       'Where to borrow time from founders vs engineers.',
       'Evidence sequencing to avoid rework.',
+    ],
+    delays: [
+      'No clear owner for access reviews or change management.',
+      'Evidence backfill for logs and tickets.',
+      'Scope creep from late vendor additions.',
     ],
   },
   {
@@ -222,6 +295,11 @@ export const timelineGuides: Soc2GuidePage[] = [
       'Scheduling observation windows to match renewals and big deals.',
       'Reducing churn with clear owners and RACI.',
     ],
+    delays: [
+      'Parallel projects competing for control owners’ time.',
+      'Inconsistent change approvals across teams.',
+      'Late alignment on observation window start/end dates.',
+    ],
   },
   {
     slug: '50-200-employees',
@@ -233,6 +311,11 @@ export const timelineGuides: Soc2GuidePage[] = [
       'Calendar planning across products and regions.',
       'Coordination with procurement and legal cycles.',
       'How to avoid drift between readiness and audit start.',
+    ],
+    delays: [
+      'Coordinating evidence across multiple business units.',
+      'Vendor and contract updates lagging behind audit scope.',
+      'Drift between readiness completion and audit kickoff.',
     ],
   },
 ];

@@ -6,9 +6,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { CTA, industriesNav, navConfig } from '@/lib/navConfig';
 import { useDropdownIntent } from './useDropdownIntent';
-
-const CTA_HREF = '/soc-2-readiness-index';
 const DROPDOWN_PANEL_CLASS =
   'absolute z-[9999] rounded-xl border border-slate-200 bg-white shadow-md max-h-[70vh] overflow-auto focus:outline-none transition ease-out duration-150 transform';
 const DROPDOWN_WIDTH = 224; // w-56
@@ -146,56 +145,11 @@ export default function Header() {
   const viewAllClass =
     'block px-4 py-2 text-sm text-brand-700 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600';
   const sectionLabelClass = 'px-4 pt-3 pb-1 text-[11px] font-semibold uppercase tracking-wide text-slate-500';
-  const socMenu = {
-    overview: { label: 'Overview', href: '/soc-2/guides' },
-    primary: { label: 'Readiness Index', href: '/soc-2-readiness-index', badge: 'Tool' },
-    guides: [
-      { label: 'SOC 2 Cost', href: '/soc-2-cost' },
-      { label: 'SOC 2 Timeline', href: '/soc-2-timeline' },
-      { label: 'Type I vs Type II', href: '/soc-2-type-i-vs-type-ii' },
-      { label: 'Readiness Checklist', href: '/soc-2-readiness-checklist' },
-    ],
-    viewAll: { label: 'View all SOC 2 →', href: '/soc-2/guides' },
-  };
-  const pentestMenu = {
-    overview: { label: 'Overview', href: '/penetration-testing' },
-    primary: { label: 'Cost Estimator', href: '/penetration-testing/cost-estimator', badge: 'Tool' },
-    guides: [
-      { label: 'Pricing', href: '/penetration-testing/pricing' },
-      { label: 'Pentest vs Scan', href: '/penetration-testing/vs-vulnerability-scan' },
-      { label: 'For SOC 2', href: '/penetration-testing/for-soc-2' },
-      { label: 'Reporting', href: '/penetration-testing/report' },
-    ],
-    viewAll: { label: 'View all Pentest →', href: '/penetration-testing' },
-  };
-  const vendorMenu = {
-    overview: { label: 'Overview', href: '/vendor-risk-assessment' },
-    primary: { label: 'Risk Triage', href: '/vendor-risk-assessment/triage', badge: 'Tool' },
-    guides: [
-      { label: 'Checklist', href: '/vendor-risk-assessment/checklist' },
-      { label: 'Evidence by Tier', href: '/vendor-risk-assessment/evidence-by-tier' },
-      { label: 'Contract Clauses', href: '/vendor-risk-assessment/contract-clauses' },
-      { label: 'Monitoring Cadence', href: '/vendor-risk-assessment/monitoring-cadence' },
-    ],
-    viewAll: { label: 'View all Vendor Risk →', href: '/vendor-risk-assessment' },
-  };
-  const curatedGuides = [
-    { label: 'SOC 2 Cost Breakdown', href: '/soc-2-cost-breakdown' },
-    { label: 'SOC 2 Timeline', href: '/soc-2-timeline' },
-    { label: 'SOC 2 vs ISO 27001', href: '/soc-2-vs-iso-27001' },
-    { label: 'Pentest vs Scan', href: '/penetration-testing/vs-vulnerability-scan' },
-    { label: 'Vendor Risk Assessment', href: '/vendor-risk-assessment' },
-  ];
-  const industries = [
-    { label: 'SaaS', href: '/soc-2/industries/saas' },
-    { label: 'Fintech', href: '/soc-2/industries/fintech' },
-    { label: 'Startups', href: '/soc-2/industries/startups' },
-    { label: 'Enterprise', href: '/soc-2/industries/enterprise' },
-    { label: 'Healthcare', href: '/soc-2/industries/healthcare' },
-    { label: 'E-commerce', href: '/soc-2/industries/ecommerce' },
-    { label: 'Marketplaces', href: '/soc-2/industries/marketplaces' },
-    { label: 'AI/Data', href: '/soc-2/industries/ai-data' },
-  ];
+  const socMenu = navConfig.soc;
+  const pentestMenu = navConfig.pentest;
+  const vendorMenu = navConfig.vendor;
+  const curatedGuides = navConfig.guides;
+  const industries = industriesNav;
   const isSocActive =
     pathname === '/' ||
     pathname.startsWith('/soc-2') ||
@@ -882,10 +836,10 @@ export default function Header() {
           </nav>
 
           <Link
-            href={pathname.startsWith('/penetration-testing') ? '/penetration-testing/cost-estimator' : CTA_HREF}
+            href={pathname.startsWith('/penetration-testing') ? '/penetration-testing/cost-estimator' : CTA.href}
             className="hidden md:inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-4 py-2 rounded-lg shadow-sm transition-all"
           >
-            {pathname.startsWith('/penetration-testing') ? 'Run Pentest Cost Estimator' : 'Get Readiness Score'}
+            {pathname.startsWith('/penetration-testing') ? 'Run Pentest Cost Estimator' : CTA.label}
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
@@ -973,13 +927,20 @@ export default function Header() {
                       >
                         {socMenu.overview.label}
                       </Link>
-                      <Link
-                        href={socMenu.primary.href}
-                        className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
-                        onClick={() => setMobileOpen(false)}
-                      >
+                    <Link
+                      href={socMenu.primary.href}
+                      className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      <span className="flex items-center gap-2">
                         {socMenu.primary.label}
-                      </Link>
+                        {socMenu.primary.badge ? (
+                          <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">
+                            {socMenu.primary.badge}
+                          </span>
+                        ) : null}
+                      </span>
+                    </Link>
                       <div className="border-t border-slate-200 my-2" />
                       <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block">Guides</span>
                       {socMenu.guides.map((item) => (
@@ -1032,13 +993,20 @@ export default function Header() {
                       >
                         {pentestMenu.overview.label}
                       </Link>
-                      <Link
-                        href={pentestMenu.primary.href}
-                        className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
-                        onClick={() => setMobileOpen(false)}
-                      >
+                    <Link
+                      href={pentestMenu.primary.href}
+                      className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      <span className="flex items-center gap-2">
                         {pentestMenu.primary.label}
-                      </Link>
+                        {pentestMenu.primary.badge ? (
+                          <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">
+                            {pentestMenu.primary.badge}
+                          </span>
+                        ) : null}
+                      </span>
+                    </Link>
                       <div className="border-t border-slate-200 my-2" />
                       <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block">Guides</span>
                       {pentestMenu.guides.map((item) => (
@@ -1091,13 +1059,20 @@ export default function Header() {
                       >
                         {vendorMenu.overview.label}
                       </Link>
-                      <Link
-                        href={vendorMenu.primary.href}
-                        className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
-                        onClick={() => setMobileOpen(false)}
-                      >
+                    <Link
+                      href={vendorMenu.primary.href}
+                      className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      <span className="flex items-center gap-2">
                         {vendorMenu.primary.label}
-                      </Link>
+                        {vendorMenu.primary.badge ? (
+                          <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">
+                            {vendorMenu.primary.badge}
+                          </span>
+                        ) : null}
+                      </span>
+                    </Link>
                       <div className="border-t border-slate-200 my-2" />
                       <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block">Guides</span>
                       {vendorMenu.guides.map((item) => (
@@ -1213,15 +1188,15 @@ export default function Header() {
                 </div>
 
                 <Link
-                  href={pathname.startsWith('/penetration-testing') ? '/penetration-testing/cost-estimator' : CTA_HREF}
-                  className="w-full inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-4 py-2 rounded-lg shadow-sm transition-all"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {pathname.startsWith('/penetration-testing') ? 'Run Pentest Cost Estimator' : 'Get Readiness Score'}
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </Link>
+                href={pathname.startsWith('/penetration-testing') ? '/penetration-testing/cost-estimator' : CTA.href}
+                className="w-full inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-4 py-2 rounded-lg shadow-sm transition-all"
+                onClick={() => setMobileOpen(false)}
+              >
+                {pathname.startsWith('/penetration-testing') ? 'Run Pentest Cost Estimator' : CTA.label}
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
               </div>
             </div>
           </>,

@@ -1,23 +1,32 @@
-# Data Guide
+# DATA
 
-## Supabase Tables (key)
-- `SOC2_Leads`: lead data (company, industry, num_employees, data_types, audit_date, role, email optional, utm_source, variation_id, readiness_score/cost fields, lead_status, context_note, soc2_requirers, pdf fields, follow-up flags).
-- `REVENUE_EVENTS`: revenue attribution linked to leads.
-- `KEYWORDS`: SEO keyword placeholders.
-- `AUDIT_LOGS`: system audit trail.
-- `AB_VARIANTS`: A/B variant config.
-- `UNSUBSCRIBED_EMAILS`: unsubscribe list.
+What we collect, why, and where it lands. Schema specifics live in [DATABASE_AND_SUPABASE.md](DATABASE_AND_SUPABASE.md). Privacy posture is reinforced in [SECURITY.md](SECURITY.md).
 
-## RLS & Access
-- RLS enabled; service_role full access policies.
-- Public SELECT blocked; inserts go through server endpoints.
-- Client never receives service role key.
+## What We Collect (per submission)
+- Company context: `company_name`, `industry`, `num_employees`, `data_types`, `audit_date`, `role`, `soc2_requirers`, variation/UTM tags.
+- Calculator inputs for pentest/vendor risk (targets, timelines, tiers) as plain fields.
+- Contact: `email` (optional until user opts in), `consent` flag.
+- Outputs: readiness score, cost/timeline bands, lead_score, keep_or_sell, recommendations summary, pdf_path/url if generated.
+- Operational flags: `lead_status`, `followup_day3_sent`, `followup_day7_sent`, `email_delivery_status`, `is_test`, `sold`.
 
-## Flows
-- Lead submission: `/api/soc2-lead` validates and inserts minimal lead fields with anon key server-side; scoring returned to client.
-- Legacy `/api/submit`: validates and inserts with computed fields (service role) for PDF/email flow compatibility.
-- PDF storage: Supabase bucket (configured via `SUPABASE_STORAGE_BUCKET`).
+## What We Do Not Collect
+- No passwords, auth tokens, or customer production data.
+- No continuous telemetry or browser session recording.
+- No payment details.
 
-## Retention Notes
-- No explicit retention/deletion automation in code; rely on Supabase lifecycle policies if needed.
-- Follow-up flags indicate email cadence; adjust downstream if adding automation.
+## Storage
+- **Supabase Postgres**: primary tables `leads`, `revenue_events`, `audit_logs`, `ab_variants`, `admin_notes`, `saved_filters`, `unsubscribed_emails`, `keywords` (SEO planning), plus lead follow-up helpers. See schema details in [DATABASE_AND_SUPABASE.md](DATABASE_AND_SUPABASE.md).
+- **Supabase Storage**: PDFs stored under configured bucket/path; signed URLs cached on the lead row.
+
+## Access & Controls
+- Service role key never sent to the client; admin client only used server-side.
+- RLS assumed on tables (verify in Supabase); public selects not used. Inserts/updates only via server routes.
+- Audit logs recorded via `logAuditEvent` for admin-sensitive actions (variant toggles, mark-sold, purge, email send).
+
+## Retention & Deletion
+- No automated deletion/retention policy implemented in code. Admin endpoint `/api/admin/purge-retention` exists to remove test data by flag; production retention must be defined in Supabase or ops playbook.
+- Unsubscribe list persists emails for opt-out; no bulk purge implemented.
+
+## Data Use
+- Lead fields drive deterministic scoring and cost estimates; optional email solely for delivering results/follow-up.
+- Revenue events used for attribution; AB counters for variant health.

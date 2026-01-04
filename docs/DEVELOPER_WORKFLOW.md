@@ -1,39 +1,39 @@
-# Developer Workflow
+# DEVELOPER WORKFLOW
 
-## Getting Started
-- Install deps: `npm install`
-- Copy env: `cp env.example .env.local` and fill values.
-- Run dev: `npm run dev`
+How to work on risclens.com. See [TECHNICAL.md](TECHNICAL.md) for patterns and [RUNBOOK.md](RUNBOOK.md) for ops.
+
+## Setup
+```bash
+cp env.example .env.local
+npm install
+npm run dev
+```
+
+## Quality Gates
+- Lint: `npm run lint`
+- Typecheck: `npm run typecheck`
+- Build: `npm run build`
+- Link hygiene: `npm run check:links`
+- Sitemap hygiene: `npm run check:sitemap`
 
 ## Conventions
-- **Single primary CTA** per page; secondary links are text-only.
-- **Typography**: lighter weights (500 headings, 400 body) per current style.
-- **Header**: sticky, blur-on-scroll, consistent logo sizing; keep mobile/desktop alignment.
-- **Guides nav**: keep links in `components/Header.tsx` in sync with new pages.
-- **Bottom funnel CTA**: use `components/AssessmentCTA.tsx` on SOC 2 guides/estimators.
-- **Metadata**: add page-specific metadata in route file.
-- **Tests**: manual for flows; no automated suite present.
+- One primary CTA per hero; secondary link only if it points to supporting guide.
+- Keep nav data in `components/Header.tsx` and `lib/learnMoreLinks.ts` in sync with new pages.
+- Use deterministic scoring/estimators; no AI scoring.
+- Validation via zod in API routes; add honeypot/rate-limit when exposing new public endpoints.
+- Update sitemap routes in `src/seo/routes.ts` for any new public page.
 
-## Adding Pages
-- Create route under `app/<slug>/page.tsx`.
-- Use existing hero/section patterns from guides for consistency.
-- Include single CTA to `/soc-2-readiness-index` and trust line.
-- Add to Guides dropdown and sitemap if applicable.
+## Adding/Updating Pages
+1. Create `app/<slug>/page.tsx` following calculator spine (hero → form → results → “How it works” accordion → FAQ/related).
+2. Add metadata export; ensure OG image coverage if needed.
+3. Wire nav/learn-more links and update [ROUTES_AND_PAGES.md](ROUTES_AND_PAGES.md).
+4. If data is collected, update validation, Supabase schema, and [DATA.md](DATA.md).
 
-## API Changes
-- Use zod validation; keep `.strict()`.
-- Add rate limiting if public-facing.
-- Avoid exposing service role keys client-side.
+## Working with Supabase
+- Schema changes go into `sql/` migrations.
+- Never expose `SUPABASE_SERVICE_ROLE_KEY` to client; use server routes with `getSupabaseAdmin`.
+- Record audit events for admin-sensitive actions.
 
-## Supabase Changes
-- Update SQL migrations in `sql/` for schema changes.
-- Keep RLS policies explicit; prefer service_role server-side operations.
-
-## Git Practices
-- Commit scoped changes; reference docs updates when modifying flows.
-- Changelog/commit summaries live in `/docs`.
-
-## Code Style
-- TypeScript, Tailwind utilities.
-- Prefer reusable components (AssessmentCTA, InfoDisclosure).
-- Keep comments concise and purpose-driven.
+## Git & Docs
+- Keep commits scoped and referenced in [CHANGELOG.md](CHANGELOG.md) / [COMMITS_SUMMARY.md](COMMITS_SUMMARY.md) when user-facing.
+- Update relevant docs when flows change; link instead of duplicating content.

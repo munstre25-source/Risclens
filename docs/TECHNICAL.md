@@ -1,42 +1,40 @@
-# Technical Overview
+# TECHNICAL OVERVIEW
+
+Developer-facing details. Pair with [ARCHITECTURE.md](ARCHITECTURE.md) and [DEVELOPER_WORKFLOW.md](DEVELOPER_WORKFLOW.md).
 
 ## Stack
-- Next.js (App Router, TypeScript)
-- Tailwind CSS
-- Supabase (Postgres + Storage) with RLS enabled
-- Vercel hosting
+- Next.js App Router (TypeScript), Tailwind CSS.
+- Supabase Postgres + Storage via `lib/supabase.ts` (admin on server only).
+- Email/PDF generation via server routes, no client-side secrets.
 
-## Key Components
-- `components/Header.tsx`: Sticky header, dropdown navigation (Guides, Industries), keyboard/hover accessible.
-- `components/CalculatorForm.tsx`: Multi-step readiness form (client state, posts to `/api/soc2-lead`).
-- `components/FreeResults.tsx`: Displays score/cost results, optional PDF/email triggers.
-- `components/AssessmentCTA.tsx`: Bottom-funnel CTA used across guides.
-- `components/InfoDisclosure.tsx`: Lightweight accordion/disclosure.
+## Patterns & Components
+- Navigation: `components/Header.tsx` (desktop dropdowns, mobile portal drawer with accordion). CTA text switches based on path.
+- Calculators: Forms live inside route components; server handlers validate with `lib/validation.ts`, compute with `lib/scoring.ts`, `lib/pentestEstimator.ts`, or `lib/vendorRisk.ts`, then store with `lib/leads.ts`.
+- Results: Shared result cards and CTA blocks; optional email/PDF handled server-side.
+- Content catalogs: `lib/soc2Guides.ts`, `soc2Industries.ts`, `soc2Evidence.ts`, `seoClusters.ts`, `learnMoreLinks.ts` drive guide lists and nav consistency.
+- SEO: `app/sitemap.ts` (deduped, sorted, no blanket lastmod), metadata exports per page, OG image via `app/opengraph-image.tsx`.
 
-## Data Flow (Readiness)
-1. User completes form in `CalculatorForm`.
-2. POST `/api/soc2-lead` (zod validation, honeypot, rate limit, server-side scoring).
-3. Insert into `SOC2_Leads` (Supabase anon on server).
-4. Response returns readiness score and cost band; `FreeResults` renders.
-5. Optional email/PDF via `/api/lead/set-email`, `/api/generate-pdf`, `/api/send-email`.
+## Adding a New Tool/Page
+1. Create `app/<route>/page.tsx` using the standard structure (hero with one CTA, form, results, “How it works” accordion, FAQ/related).
+2. Add links to nav data in `components/Header.tsx` and, if needed, to `lib/learnMoreLinks.ts`.
+3. If collecting input, add validation in `lib/validation.ts` and server handler under `app/api/...`.
+4. Persist via `lib/leads.ts` (extend type if needed) and update Supabase schema accordingly (see [DATABASE_AND_SUPABASE.md](DATABASE_AND_SUPABASE.md)).
+5. Include route in `src/seo/routes.ts` so `app/sitemap.ts` picks it up.
 
-## Security Assumptions
-- RLS enabled on Supabase tables; service_role is server-only.
-- Public endpoints are validated (zod) and rate-limited where applicable.
-- No client exposure of service keys; anon key only on server for inserts.
+## Data Flows (summary)
+- Readiness: client form → `/api/soc2-lead` or `/api/submit` → zod validate → deterministic scoring → insert `leads` → response → optional email/PDF via `/api/lead/set-email`, `/api/generate-pdf`, `/api/send-email`.
+- Pentest/Vendor risk: similar flow to `/api/pentest-lead` and `/api/vendor-risk-assessment`.
+- Admin: SSR pages fetch via Supabase admin client; mutations through `/api/admin/*`.
 
-## Routing
-- Public pages under `app/(public)` plus top-level SEO guides (cost, timeline, Type I vs II, checklist, cost breakdown, timing, startups, enterprise sales, SOC 2 vs ISO 27001).
-- Main CTA points to `/soc-2-readiness-index`.
-- Admin area under `app/admin`.
+## Security & Validation
+- Supabase service_role never sent to client; anon key only used server-side for inserts when needed.
+- Input validation via zod in API routes; optional honeypot fields on forms.
+- In-memory rate limit helper (`lib/rate-limit.ts`) available; not yet swapped for Redis.
 
-## Styling
-- Tailwind utility classes; calm enterprise palette.
-- Header dropdowns: solid backgrounds, soft shadow, rounded corners.
+## Styling & Accessibility
+- Tailwind utilities; enterprise palette; focus-visible outlines on interactive elements.
+- Mobile drawer uses fixed inset-0 with safe-area padding and scroll-lock.
 
-## Metadata
-- Per-route metadata exports; OG image `public/og.png`.
-
-## Rate Limiting
-- `/api/soc2-lead`: Upstash Redis (fallback in-memory) 10 req/min/IP.
-- Legacy `/api/submit`: in-memory limiter noted in `lib/rate-limit.ts`.
+## Metadata & SEO
+- Per-route metadata exports; OG via `app/opengraph-image.tsx`.
+- Sitemap dedupes/normalizes URLs; no fake `lastmod` (see [SEO.md](SEO.md)).

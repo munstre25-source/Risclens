@@ -1,30 +1,27 @@
-# SEO Guide
+# SEO
 
-## Programmatic/Key Pages
-- `/`, `/soc-2-readiness-index`
-- Cost: `/soc-2-cost`, `/soc-2-cost/saas`, `/soc-2-cost/fintech`, `/soc-2-cost-breakdown`
-- Timeline: `/soc-2-timeline`
-- Type: `/soc-2-type-i-vs-type-ii`
-- Checklist: `/soc-2-readiness-checklist`
-- Timing: `/when-do-you-need-soc-2`
-- Audience: `/soc-2-readiness/saas`, `/soc-2-readiness/fintech`, `/soc-2-readiness/startups`, `/soc-2-readiness/enterprise-sales`
-- Comparison: `/soc-2-vs-iso-27001`
-- Evergreen explainer: `/learn/soc-2-readiness`
+Focus: high-intent security/compliance queries and clean crawlability.
 
-## Internal Linking
-- Header “Guides” and “Industries” dropdowns link to all major pages.
-- Bottom `AssessmentCTA` funnels guide pages to readiness index.
-- Inline links (cost → timeline, readiness variants → Type I vs II) maintained where present.
+## Key Surfaces
+- Core funnels: `/` → `/soc-2-readiness-index`; pentest `/penetration-testing` → `/penetration-testing/cost-estimator`; vendor risk `/vendor-risk-assessment` → `/vendor-risk-assessment/triage`.
+- SOC 2 hubs: cost (`/soc-2-cost*`), timeline (`/soc-2-timeline*`), type (`/soc-2-type-i-vs-type-ii`), checklist, cost breakdown, when-to-start, industries (`/soc-2/industries*`), ISO comparison (`/soc-2-vs-iso-27001*`), evidence (`/soc-2-evidence/[slug]`), learning hub (`/learn/soc-2-readiness*`).
+- Pentest guides under `/penetration-testing/[slug]`; vendor risk guides under `/vendor-risk-assessment/*`.
 
-## Metadata
-- Per-page metadata via Next.js `metadata` export.
-- OG/Twitter image: `/public/og.png`.
-- Sitemap at `app/sitemap.ts` includes current routes.
+## Internal Linking Strategy
+- Header dropdowns and mobile drawer cover SOC 2, Pentest, Vendor Risk, Guides, Industries.
+- `AssessmentCTA` and hero CTAs point to a single primary action; secondary link allowed to a relevant guide.
+- “Learn more” links are centralized in `lib/learnMoreLinks.ts` to avoid broken hrefs.
+- Related/FAQ blocks kept concise; “How it works” accordions prevent content bloat above the fold.
 
-## Tone & Content
-- Enterprise, concise, non-salesy; no hype or AI claims in scoring.
-- Unique copy per page to avoid duplication.
+## Metadata & Sitemap
+- Per-page `metadata` exports; OG via `app/opengraph-image.tsx` (`public/og.png`).
+- `app/sitemap.ts` normalizes paths, removes trailing slashes, dedupes URLs, sorts output, and omits blanket `lastmod`. Base: `https://risclens.com`.
+- Robots: default Next.js; no custom blocking rules present.
 
-## Rationale
-- Target high-intent SOC 2 queries (cost, timeline, type, readiness, ISO comparison, industries).
-- Preserve single primary CTA to reduce dilution.
+## Content Standards
+- Enterprise tone: concise, factual, no hype, no AI-scoring claims (scoring is deterministic).
+- One primary CTA per page; avoid competing links near hero.
+- FAQ/guide copy unique per page to avoid duplication.
+
+## Measurement
+- Track AB variants via `/api/ab/*`; revenue attribution via `revenue_events`; sitemap check via `npm run check:sitemap`.

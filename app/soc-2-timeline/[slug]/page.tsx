@@ -4,12 +4,13 @@ import Script from 'next/script';
 import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import AssessmentCTA from '@/components/AssessmentCTA';
 import { timelineGuides, timelineGuideBySlug, Soc2GuidePage } from '@/lib/soc2Guides';
 
 interface PageProps {
   params: { slug: string };
 }
+
+const CTA_HREF = '/soc-2-readiness-index';
 
 function buildFaqs(title: string) {
   return [
@@ -101,8 +102,17 @@ export default function Soc2TimelinePage({ params }: PageProps) {
             <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-5 leading-tight">{page.title}</h1>
             <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-8 leading-relaxed">{page.summary}</p>
             <div className="flex justify-center">
-              <AssessmentCTA />
+              <Link
+                href={CTA_HREF}
+                className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
+              >
+                Estimate SOC 2 Timeline
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
             </div>
+            <p className="mt-4 text-sm text-slate-500">Uses the readiness assessment—no extra steps required.</p>
           </div>
         </section>
 
@@ -134,6 +144,19 @@ export default function Soc2TimelinePage({ params }: PageProps) {
             </div>
 
             <div className="bg-white border border-slate-200 rounded-xl p-6">
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">What extends the timeline</h3>
+              <ul className="space-y-2 text-sm text-slate-700 leading-relaxed list-disc list-inside">
+                {(page.delays && page.delays.length ? page.delays : [
+                  'Late scope changes or vendor additions that expand sampling.',
+                  'Missing change management or access evidence that needs backfill.',
+                  'Observation window confusion for Type II engagements.',
+                ]).map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="bg-white border border-slate-200 rounded-xl p-6">
               <h3 className="text-lg font-semibold text-slate-900 mb-3">FAQ</h3>
               <div className="space-y-4">
                 {faqs.map((faq) => (
@@ -151,6 +174,11 @@ export default function Soc2TimelinePage({ params }: PageProps) {
                 <Link href={page.parent} className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">
                   Back to SOC 2 Timeline Hub
                 </Link>
+                {page.extraLinks?.map((link) => (
+                  <Link key={link.href} href={link.href} className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">
+                    {link.label}
+                  </Link>
+                ))}
                 {related.map((rel) => (
                   <Link
                     key={rel.slug}

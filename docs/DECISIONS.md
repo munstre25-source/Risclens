@@ -1,12 +1,14 @@
-# Decisions (Inferred)
+# DECISIONS
 
-- **Next.js App Router**: Chosen for filesystem routing and serverless compatibility with Vercel.
-- **Supabase**: Selected for managed Postgres + RLS + storage; service role used server-side only.
-- **Deterministic Scoring**: No AI in scoring; rule-based for auditability and explainability.
-- **Single Primary CTA**: Keep pages focused; secondary links are text-only to reduce friction.
-- **Sticky Header with Reserved Logo Space**: Prevent CLS and maintain brand presence.
-- **Server-Side Lead Ingestion**: Moved from client insert to `/api/soc2-lead` for validation, rate limiting, and spam protection.
-- **Guides Dropdown + Bottom CTA**: Standardize funnels from SEO pages to readiness index.
-- **Lightweight Accordions (InfoDisclosure)**: Provide explanations without clutter; collapsed by default for hero area.
-- **RLS-First Schema**: RLS enabled on all core tables; service_role-only policies.
-- **PDF/Email Optional**: Results available without email; email only required for PDF delivery to reduce friction.
+Short ADR-style entries (latest at top). Cross-links: [ARCHITECTURE.md](ARCHITECTURE.md), [SEO.md](SEO.md).
+
+- **Mobile nav as portal-based drawer (2024-xx-xx)**: Drawer renders fixed `inset-0` with backdrop and accordion; closes on route change/backdrop/ESC to avoid scroll-position bugs.
+- **Single primary CTA rule (2024-xx-xx)**: One dominant CTA per hero; secondary link allowed only as guide link to reduce funnel friction.
+- **Deterministic scoring only (2024-xx-xx)**: Scoring engines in `lib/scoring.ts`, `lib/pentestEstimator.ts`, `lib/vendorRisk.ts` remain rules-based; AI limited to phrasing, not decisions.
+- **Server-side lead ingestion (2024-xx-xx)**: All calculators submit via API routes with zod validation; no direct client Supabase inserts.
+- **Unified leads table (2024-xx-xx)**: All tools write to `leads` to simplify reporting and follow-up automation.
+- **Centralized “Learn more” links (2024-xx-xx)**: Map lives in `lib/learnMoreLinks.ts` + helper component to prevent broken hrefs.
+- **Sitemap deduplication (2024-xx-xx)**: `app/sitemap.ts` normalizes paths, removes trailing slashes, dedupes URLs, and omits fake `lastmod`.
+- **Accordion-first supporting content (2024-xx-xx)**: “How it works” and methodology blocks collapse by default to keep calculators focused.
+- **PDF/email optional (2024-xx-xx)**: Results shown immediately; email only required for sending PDF or follow-up consent.
+- **In-memory rate limit placeholder (2024-xx-xx)**: `lib/rate-limit.ts` used as stopgap; production should replace with Redis/WAF.

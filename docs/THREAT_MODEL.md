@@ -1,9 +1,9 @@
 # Threat Model
 
 ## Assets
-- Lead data in `SOC2_Leads` (company info, optional email).
-- PDF artifacts in Supabase storage.
-- API endpoints (`/api/soc2-lead`, `/api/submit`, PDF/email endpoints).
+- Lead data in `leads` (company inputs, optional email, scoring outputs).
+- PDF artifacts stored in Supabase Storage (private bucket, signed URLs).
+- API endpoints (lead capture for SOC 2/pentest/vendor risk, PDF/email, AB tracking).
 - Admin dashboard and associated secrets (`ADMIN_SECRET`, service role key).
 - Brand/SEO surface (public pages, sitemap).
 
@@ -14,20 +14,20 @@
 - Insider/developer accounts with service role access.
 
 ## Entry Points
-- Public web forms (readiness assessment).
-- API routes (lead submission, PDF/email).
+- Public web forms (readiness, pentest, vendor risk calculators).
+- API routes (lead submission, PDF/email, AB tracking).
 - Admin routes (protected by secret).
 - Supabase access (service role, anon).
 
 ## Threats & Mitigations
 - **Spam/Abuse of lead form**
-  - Mitigations: zod validation, payload size cap, honeypot field, rate limiting (Upstash Redis), server-side insertion only.
+  - Mitigations: zod validation, payload size cap, honeypot field, optional rate limit (`RATE_LIMIT_PER_MIN`), server-side insertion only.
 - **Credential/secret leakage**
   - Mitigations: env var usage, service role server-only, `env.example` documents required secrets; avoid logging secrets.
 - **Unauthorized data access**
   - Mitigations: RLS enabled on all core tables; service_role-only policies; public SELECT blocked; anon insert controlled via server route.
 - **DoS via API flooding**
-  - Mitigations: 10 req/min/IP rate limit with Redis; in-memory fallback (single instance) as backup.
+  - Mitigations: In-memory rate limiter available; recommend WAF/Redis in production; payload size caps.
 - **PDF/Email abuse**
   - Mitigations: Requires valid lead_id; email optional but must be valid to send; server-side execution; storage controlled via Supabase bucket.
 - **Cross-site scripting**
@@ -38,7 +38,8 @@
   - Mitigations: Strict validation (types, bounds); deterministic scoring; unknown fields rejected.
 
 ## Residual Risks / Follow-ups
-- `/api/submit` uses in-memory rate limiting; consider migrating all traffic to `/api/soc2-lead` and deprecating `/api/submit`.
-- Ensure admin routes have additional protection (basic auth/SSO) beyond `ADMIN_SECRET`.
-- Monitor PDF/email provider abuse; add quotas or auth if needed.
-- Validate storage bucket access level (public vs signed URLs) based on desired privacy.
+- `/api/submit` legacy path still present; migrate callers to hardened endpoints.
+- Rate limiting is per-instance; add Redis/WAF for production-level protection.
+- Admin auth is shared-secret; add IP allowlist or SSO.
+- Define retention/deletion policies for leads/PDFs; currently manual/test-mode purge only.
+- Monitor PDF/email provider usage; enforce quotas if abused.

@@ -1,38 +1,32 @@
-# Product Overview
+# PRODUCT OVERVIEW
 
-## What RiscLens Is
-RiscLens is a Next.js (App Router) site that delivers SOC 2 readiness guidance and cost/timeline calculators for early-stage SaaS/fintech teams. Primary goals:
-- Quickly estimate readiness score, cost range, and timeline.
-- Educate on SOC 2 expectations (Type I vs Type II, timelines, costs, readiness checklist).
-- Capture leads for follow-up via Supabase while keeping user experience lightweight and transparent.
+What users experience across risclens.com. See [PRODUCT.md](PRODUCT.md) for positioning and [USER_GUIDE.md](USER_GUIDE.md) for step-by-step usage.
 
-## Who It’s For
-- Founders, CTOs, and compliance leads at early-stage or growth-stage companies pursuing SOC 2.
-- Teams evaluating whether to start SOC 2 now vs later (cost, timing, audit type).
+## Audience & Outcomes
+- Early-stage to growth B2B teams under SOC 2 pressure, plus security leads scoping pentests and vendor risk.
+- Outcomes: instant readiness score + cost/timeline bands, pentest cost estimates, vendor risk triage guidance, and concise next steps.
 
-## Key Public Pages (non-exhaustive)
-- `/` — Main landing with readiness CTA.
-- `/soc-2-readiness-index` — Multi-step readiness assessment (client form → server scoring → on-page results).
-- `/soc-2-cost`, `/soc-2-cost/saas`, `/soc-2-cost/fintech` — Cost guides.
-- `/soc-2-timeline` — Timeline guidance (new SEO page).
-- `/soc-2-type-i-vs-type-ii` — Type I vs Type II overview (new SEO page).
-- `/soc-2-readiness-checklist` — Practical checklist (new SEO page).
-- `/soc-2-cost-breakdown` — Cost components (new SEO page).
-- `/when-do-you-need-soc-2` — Readiness timing guidance (new SEO page).
-- `/soc-2-readiness/startups` — Startup-focused readiness guidance (new SEO page).
-- `/soc-2-readiness/enterprise-sales` — Enterprise sales readiness guidance (new SEO page).
-- `/soc-2-vs-iso-27001` — SOC 2 vs ISO 27001 comparison (new SEO page).
-- `/soc-2-readiness/saas`, `/soc-2-readiness/fintech` — Industry-specific variants.
-- `/privacy`, `/terms` — Policies.
-- `/admin` (and nested) — Admin dashboard for leads/metrics.
+## UX Standards
+- One primary CTA per hero (e.g., “Get Readiness Score”, “Run Pentest Cost Estimator”); single secondary guide link allowed.
+- Navigation: desktop hover dropdowns; mobile drawer + accordion with backdrop, scroll-lock, and close/route-change handling.
+- Calculator pages follow the same spine: hero → form → results preview → “How it works” accordion → FAQ/related links.
 
-## Core Flows
-- **Readiness Assessment**: Multi-step form → server scoring (`/api/submit` legacy and `/api/soc2-lead` hardened) → results card with score/cost → optional PDF/email flow.
-- **Lead Capture**: Leads stored in Supabase `SOC2_Leads` with RLS; submission now proxied through server API with validation + rate-limit + honeypot.
-- **PDF/Email**: From results view, user can provide email, trigger PDF generation (`/api/generate-pdf`) and email send (`/api/send-email`).
+## Core Tools & Hubs
+- **SOC 2 Readiness Index** `/soc-2-readiness-index`: multi-step assessment → deterministic scoring → results preview with top fixes.
+- **SOC 2 Cost** `/soc-2-cost` (+ `/saas`, `/fintech`, `/[slug]` breakdowns) and **Cost Breakdown** `/soc-2-cost-breakdown`.
+- **SOC 2 Timeline** `/soc-2-timeline` (+ size variants).
+- **SOC 2 Type I vs Type II**, **Readiness Checklist**, **Industries** hub `/soc-2/industries` (+ `[slug]` pages).
+- **SOC 2 vs ISO 27001** hub `/soc-2-vs-iso-27001` (+ `[slug]` comparisons).
+- **Pentest**: overview `/penetration-testing`, estimator `/penetration-testing/cost-estimator`, pricing, scan vs pentest, report, SOC 2-specific guidance.
+- **Vendor Risk**: hub `/vendor-risk-assessment`, triage tool `/vendor-risk-assessment/triage`, checklist, scoring model, evidence by tier, monitoring cadence, contract clauses, common mistakes, subprocessors vs vendors.
+- **Learning**: `/soc-2/guides`, `/learn/soc-2-readiness` (+ `[slug]`), evidence library `/soc-2-evidence/[slug]`.
+- **Policies**: `/privacy`, `/terms`. Admin: `/admin` (leads, filters, audit logs, variants, CSV export, test-mode toggles).
 
-## Value Props
-- Fast, deterministic scoring (no AI in scoring).
-- Clear costs/timelines and expectations.
-- Transparent data use (privacy notes, optional email).
-- Enterprise-grade posture (RLS, validation, rate limiting, spam controls).
+## Lead Capture & Output
+- Forms submit to server APIs (`/api/submit`, `/api/soc2-lead`, `/api/pentest-lead`, `/api/vendor-risk-assessment`) with validation and optional email capture.
+- Results can be emailed as PDF (`/api/generate-pdf`, `/api/send-email`); email is optional and gated behind consent.
+- Lead data stored in unified `leads` table; audit events in `audit_logs`; AB test impressions/submissions tracked in `ab_variants` and RPC helpers.
+
+## What We Do Not Do
+- No live auditor attestation, no persistent user accounts, no automated control monitoring.
+- No AI scoring; AI only used for phrasing explanations, not decisions.

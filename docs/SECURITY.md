@@ -1,34 +1,32 @@
-# Security
+# SECURITY
 
-## Posture
-- **RLS enabled** on all primary tables; service_role-only policies defined.
-- **Server-side lead submission**: `/api/soc2-lead` uses zod validation, payload size limits, honeypot, and IP rate limiting (Upstash Redis).
-- **Legacy /api/submit**: still present; uses in-memory rate limiting; keep behind appropriate traffic controls.
-- **No client-side service key exposure**: service role used server-only via `getSupabaseAdmin`.
-- **Headers**: Default Next.js security; no custom middleware required.
+See [THREAT_MODEL.md](THREAT_MODEL.md) for risk analysis and [DATA.md](DATA.md) for collection scope.
 
-## OWASP-style Risks Addressed
-- **Injection**: Uses Supabase client queries; inputs validated via zod in `/api/soc2-lead` and via validation helpers in `/api/submit`.
-- **XSS**: No raw HTML injection; copy is static. User text (specific_requests) trimmed and stored; avoid rendering unescaped.
-- **CSRF**: API expects JSON POST; Next.js uses same-site defaults; no cookies relied on for auth in public flow.
-- **Rate Limiting**: 10 req/min/IP on `/api/soc2-lead`; in-memory fallback if Redis absent.
-- **Spam/Abuse**: Honeypot field `website`; rate limit; payload size cap.
-- **Secrets**: Kept in env vars; service role key server-only.
-- **RLS**: Public SELECT blocked; service_role required for admin tasks.
-- **PDF/Email**: Emails sent server-side; PDF stored in private bucket (access controlled via signed URLs).
+## Posture (Current)
+- Supabase service role stays server-side (`getSupabaseAdmin`); anon key used server-side only when needed. RLS expected on all tables; no client SELECTs.
+- Public APIs validate via zod, reject unknown fields, and include honeypot fields. Rate limiting helper exists (in-memory, single instance).
+- PDF/email handled server-side; PDFs stored in private Supabase bucket with signed URLs.
+- Admin access controlled by `ADMIN_SECRET` (cookie or header via `lib/supabase-auth.ts`); no SSO/MFA yet.
 
-## Known Gaps / Watchouts
-- `/api/submit` still accepts inserts with more fields; keep monitored or migrate all traffic to `/api/soc2-lead`.
-- In-memory rate limit fallback is single-instance only; rely on Upstash in production.
-- Ensure storage bucket permissions stay private if PDFs should not be public.
-- Admin area assumes authenticated access via `ADMIN_SECRET`; enforce deployment-level protection (basic auth or edge middleware) if needed.
+## Controls
+- **Input validation**: zod schemas on lead endpoints; payload size guardrails.
+- **Abuse mitigation**: honeypot, optional rate limit (`RATE_LIMIT_PER_MIN`), consent flag for email, unsubscribe endpoint.
+- **Secrets management**: env-only; `SUPABASE_SERVICE_ROLE_KEY` never exposed to the client.
+- **Auditability**: `audit_logs` entries for admin-sensitive operations (variant toggle, mark-sold, purge, resend email).
+- **Access separation**: Admin pages/APIs gated; public calculators write via server-only Supabase admin client.
 
-## Environment Variable Hygiene
-- Required secrets: Supabase URL/keys, SendGrid/SMTP keys, PDF provider keys, Upstash Redis.
-- Never expose `SUPABASE_SERVICE_ROLE_KEY` client-side.
-- Keep `NEXT_PUBLIC_*` limited to values safe for clients (URL, anon key).
+## Known Gaps / TODO
+- Rate limit is in-memory and per-instance; production should move to Redis/WAF.
+- Legacy `/api/submit` still accepts submissions; monitor and migrate callers to hardened endpoints.
+- No automated retention/purge policy; only test-mode purge exists. Define production retention.
+- Admin auth is shared-secret; upgrade to IdP or at least IP allowlisting.
 
-## Access Control
-- Public users: access calculators and guides; no authentication required.
-- Admin: behind `ADMIN_SECRET` checks (see admin routes).
-- API: open but rate-limited; honeypot and validation reduce abuse.
+## Environment Hygiene
+- Required: Supabase URL/keys, email/PDF provider keys, `ADMIN_SECRET`, `NEXT_PUBLIC_APP_URL`.
+- Optional: Redis keys for distributed rate limiting, `CRON_SECRET`, analytics IDs.
+- Keep `NEXT_PUBLIC_*` limited to non-sensitive values.
+
+## Access Summary
+- Public users: calculators/guides without auth; writes only through server APIs.
+- Admin users: authenticated via `ADMIN_SECRET`; access admin pages and `/api/admin/*`.
+- Storage: PDFs in private bucket; ensure bucket stays non-public and URLs are signed.

@@ -1,5 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async redirects() {
+    return [
+      {
+        source: '/soc-2-readiness-index',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/start',
+        destination: '/soc-2-readiness-index',
+        permanent: true,
+      },
+    ];
+  },
   // Enable experimental server actions
   experimental: {
     serverActions: {

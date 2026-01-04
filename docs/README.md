@@ -1,20 +1,21 @@
 # RiscLens Documentation
 
-Central hub for product, user, technical, and operational docs.
+Central hub for the risclens.com product. Each document owns a specific topic—link instead of duplicating.
 
-- [Product Overview](PRODUCT_OVERVIEW.md)
-- [User Guide](USER_GUIDE.md)
-- [Architecture](ARCHITECTURE.md)
-- [Routes and Pages](ROUTES_AND_PAGES.md)
-- [API Reference](API_REFERENCE.md)
-- [Database & Supabase](DATABASE_AND_SUPABASE.md)
-- [Security](SECURITY.md)
-- [Deployment](DEPLOYMENT.md)
-- [SEO](SEO.md)
-- [Developer Workflow](DEVELOPER_WORKFLOW.md)
-- [Runbook](RUNBOOK.md)
-- [Glossary](GLOSSARY.md)
-- [Changelog](CHANGELOG.md)
-- [Commits Summary](COMMITS_SUMMARY.md)
-- [Decisions](DECISIONS.md)
-- [Threat Model](THREAT_MODEL.md)
+## Start Here
+- Product: [PRODUCT.md](PRODUCT.md) → [PRODUCT_OVERVIEW.md](PRODUCT_OVERVIEW.md)
+- Developer: [DEVELOPER_WORKFLOW.md](DEVELOPER_WORKFLOW.md) → [TECHNICAL.md](TECHNICAL.md) → [ARCHITECTURE.md](ARCHITECTURE.md)
+- Ops: [RUNBOOK.md](RUNBOOK.md) → [DEPLOYMENT.md](DEPLOYMENT.md)
+- Security: [SECURITY.md](SECURITY.md) → [THREAT_MODEL.md](THREAT_MODEL.md)
+- SEO & Content: [SEO.md](SEO.md) → [ROUTES_AND_PAGES.md](ROUTES_AND_PAGES.md)
+
+## Index
+- Product & Users: [PRODUCT.md](PRODUCT.md), [PRODUCT_OVERVIEW.md](PRODUCT_OVERVIEW.md), [USER_GUIDE.md](USER_GUIDE.md)
+- System: [ARCHITECTURE.md](ARCHITECTURE.md), [TECHNICAL.md](TECHNICAL.md), [ROUTES_AND_PAGES.md](ROUTES_AND_PAGES.md)
+- Data: [DATA.md](DATA.md), [DATABASE_AND_SUPABASE.md](DATABASE_AND_SUPABASE.md)
+- APIs: [API_REFERENCE.md](API_REFERENCE.md)
+- Process: [DEVELOPER_WORKFLOW.md](DEVELOPER_WORKFLOW.md), [DEPLOYMENT.md](DEPLOYMENT.md), [RUNBOOK.md](RUNBOOK.md)
+- Risk & Compliance: [SECURITY.md](SECURITY.md), [THREAT_MODEL.md](THREAT_MODEL.md)
+- SEO: [SEO.md](SEO.md)
+- History: [CHANGELOG.md](CHANGELOG.md), [COMMITS_SUMMARY.md](COMMITS_SUMMARY.md), [DECISIONS.md](DECISIONS.md)
+- Terminology: [GLOSSARY.md](GLOSSARY.md)

@@ -4,6 +4,7 @@ import Script from 'next/script';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AssessmentCTA from '@/components/AssessmentCTA';
+import { costIndustries } from '@/lib/navConfig';
 
 const faqs = [
   {
@@ -130,29 +131,31 @@ export default function Soc2CostPage() {
         </section>
 
         <section className="bg-white border-t border-slate-200">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 space-y-4">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
               <h2 className="text-lg font-semibold text-slate-900">Cost by industry</h2>
-              <div className="flex flex-wrap gap-3">
+              <Link href="/soc-2/industries" className="text-sm text-brand-700 underline underline-offset-4 hover:text-brand-800">
+                View all industries →
+              </Link>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {costIndustries.map((item) => (
                 <Link
-                  href="/soc-2-cost/saas"
-                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-200 text-sm text-brand-700 hover:text-brand-800 hover:border-brand-200 transition-colors"
+                  key={item.slug}
+                  href={item.costHref}
+                  className="group block rounded-xl border border-slate-200 bg-white hover:border-brand-200 hover:shadow-sm transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600"
                 >
-                  SaaS companies
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
+                  <div className="p-4 space-y-1">
+                    <div className="flex items-center justify-between">
+                      <p className="text-base font-semibold text-slate-900">{item.label}</p>
+                      <svg className="w-4 h-4 text-brand-600 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
+                    <p className="text-sm text-slate-600">{item.blurb}</p>
+                  </div>
                 </Link>
-                <Link
-                  href="/soc-2-cost/fintech"
-                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-200 text-sm text-brand-700 hover:text-brand-800 hover:border-brand-200 transition-colors"
-                >
-                  Fintech companies
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </Link>
-              </div>
+              ))}
             </div>
           </div>
         </section>

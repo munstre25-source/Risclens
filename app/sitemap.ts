@@ -11,7 +11,7 @@ type RouteEntry = {
 };
 
 const monthlyPaths = new Set(['/privacy', '/terms', '/learn/soc-2-readiness']);
-const noindexPaths = new Set(['/soc-2-readiness-index']);
+const noindexPaths = new Set(['/soc-2-readiness-index', '/start']);
 
 const routes: RouteEntry[] = ROUTES.map((path) => {
   const normalizedPath = normalizePath(path);
