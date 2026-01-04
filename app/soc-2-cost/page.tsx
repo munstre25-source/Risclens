@@ -111,6 +111,12 @@ export default function Soc2CostPage() {
               <Link href="/soc-2-timeline" className="text-sm text-brand-700 underline underline-offset-2 hover:text-brand-800">
                 Want timelines? See the SOC 2 Timeline Calculator
               </Link>
+              <Link href="/penetration-testing/for-soc-2" className="text-sm text-brand-700 underline underline-offset-2 hover:text-brand-800">
+                Related: Penetration Testing for SOC 2
+              </Link>
+              <Link href="/vendor-risk-assessment" className="text-sm text-brand-700 underline underline-offset-2 hover:text-brand-800">
+                Related: Vendor Risk Assessment
+              </Link>
             </div>
           </div>
           <div className="max-w-2xl mx-auto text-left mt-8">

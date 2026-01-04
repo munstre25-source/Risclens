@@ -21,6 +21,7 @@ export async function POST(request: NextRequest) {
 
     const updates: Record<string, unknown> = {
       lead_status: 'requested_review',
+      status: 'requested_review',
       context_note: review_type === 'auditor_intro' ? 'Requested auditor introduction' : 'Requested gap review',
     };
 
@@ -29,7 +30,7 @@ export async function POST(request: NextRequest) {
     }
 
     const { error } = await supabase
-      .from('SOC2_Leads')
+      .from('leads')
       .update(updates)
       .eq('id', lead_id);
 

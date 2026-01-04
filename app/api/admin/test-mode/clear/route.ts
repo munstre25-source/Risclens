@@ -11,7 +11,7 @@ export async function POST(req: Request) {
   const supabase = getSupabaseAdmin();
 
   try {
-    const targets = ['SOC2_Leads', 'REVENUE_EVENTS'];
+    const targets = ['leads', 'SOC2_Leads', 'REVENUE_EVENTS'];
     for (const table of targets) {
       const { error } = await supabase.from(table).delete().eq('is_test', true);
       if (error) {

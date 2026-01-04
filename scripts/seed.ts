@@ -153,7 +153,7 @@ async function seed() {
 
       // Insert into database
       const { data, error } = await supabase
-        .from('SOC2_Leads')
+        .from('leads')
         .insert(leadData)
         .select()
         .single();

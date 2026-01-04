@@ -162,6 +162,17 @@ export default function HomePage() {
               Prefer to start with estimates? See SOC 2 cost + timeline guides →
             </Link>
           </p>
+          <div className="mt-3 text-xs text-slate-600 flex flex-col sm:flex-row items-center justify-center gap-2">
+            <span className="font-semibold text-slate-700">Related tools:</span>
+            <div className="flex flex-wrap justify-center gap-3">
+              <Link href="/penetration-testing/pricing" className="underline underline-offset-4 hover:text-brand-800 text-slate-700">
+                Penetration Testing Pricing
+              </Link>
+              <Link href="/vendor-risk-assessment" className="underline underline-offset-4 hover:text-brand-800 text-slate-700">
+                Vendor Risk Assessment
+              </Link>
+            </div>
+          </div>
 
           <div className="mt-6 grid gap-4 max-w-4xl mx-auto text-left">
             <div className="bg-white/70 border border-slate-200 rounded-lg p-4">

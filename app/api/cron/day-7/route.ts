@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
 
     // Query eligible leads
     const { data: leads, error } = await supabase
-      .from('SOC2_Leads')
+    .from('leads')
       .select('*')
       .eq('email_sent', true)
       .eq('followup_day7_sent', false)

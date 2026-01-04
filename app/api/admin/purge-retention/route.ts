@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
 
     // Build delete query
     let query = supabase
-      .from('SOC2_Leads')
+      .from('leads')
       .delete()
       .lt('created_at', cutoffISO);
 
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
 
     // First count how many will be affected
     const countQuery = supabase
-      .from('SOC2_Leads')
+      .from('leads')
       .select('id', { count: 'exact', head: true })
       .lt('created_at', cutoffISO);
     

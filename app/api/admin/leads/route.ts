@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
 
     // Build query
     let query = supabase
-      .from('SOC2_Leads')
+      .from('leads')
       .select('*', { count: 'exact' })
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1);
@@ -91,7 +91,7 @@ export async function GET(request: NextRequest) {
 
     // Calculate basic stats
     const statsQuery = await supabase
-      .from('SOC2_Leads')
+      .from('leads')
       .select('keep_or_sell, sold, sale_amount');
 
     const allLeads = statsQuery.data || [];

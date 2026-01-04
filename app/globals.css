@@ -4,12 +4,31 @@
 
 /* Base styles */
 @layer base {
+  :root {
+    --header-h: 64px;
+    --anchor-offset: calc(var(--header-h) + 20px);
+  }
+
+  @media (min-width: 768px) {
+    :root {
+      --header-h: 88px;
+      --anchor-offset: calc(var(--header-h) + 20px);
+    }
+  }
+
   html {
     scroll-behavior: smooth;
   }
 
   body {
     @apply min-h-screen bg-slate-100 text-slate-900 font-normal leading-relaxed;
+  }
+
+  section[id],
+  div[id],
+  h2[id],
+  h3[id] {
+    scroll-margin-top: var(--anchor-offset);
   }
 
   /* Focus styles for accessibility */

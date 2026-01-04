@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
 
     // Build query
     let query = supabase
-      .from('SOC2_Leads')
+      .from('leads')
       .select('*')
       .order('created_at', { ascending: false });
 

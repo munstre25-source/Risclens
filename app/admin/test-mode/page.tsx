@@ -8,6 +8,7 @@ export default function TestModePage() {
   const [deleting, setDeleting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [seeding, setSeeding] = useState(false);
 
   useEffect(() => {
     syncFromCookie();
@@ -76,6 +77,28 @@ export default function TestModePage() {
     }
   };
 
+  const seedLeads = async () => {
+    setError(null);
+    setMessage(null);
+    setSeeding(true);
+    try {
+      const res = await fetch('/api/admin/test-mode/seed', {
+        method: 'POST',
+        credentials: 'include',
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to seed leads');
+      }
+      setMessage('Seeded test leads for SOC 2, Pentest, and VRA.');
+      emitChange(enabled);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to seed leads');
+    } finally {
+      setSeeding(false);
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div className="card">
@@ -126,6 +149,18 @@ export default function TestModePage() {
         <p className="text-xs text-slate-500">
           Confirmation required (type DELETE). Real data (is_test=false) is never touched.
         </p>
+      </div>
+
+      <div className="card space-y-3">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-base font-semibold text-slate-900">Seed Test Leads</h2>
+            <p className="text-sm text-slate-600">Adds one test lead for each tool (SOC 2, Pentest, VRA) to verify admin dashboards.</p>
+          </div>
+          <button onClick={seedLeads} disabled={seeding} className="btn-secondary">
+            {seeding ? 'Seeding…' : 'Seed Leads'}
+          </button>
+        </div>
       </div>
 
       {(message || error) && (

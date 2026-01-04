@@ -71,6 +71,14 @@ export default function SaaSSoc2ReadinessPage() {
             </Link>
             .
           </p>
+          <div className="mt-4 text-sm text-brand-700 flex flex-col sm:flex-row gap-2 justify-center">
+            <Link href="/penetration-testing#saas" className="underline underline-offset-4 hover:text-brand-800">
+              Related: Penetration Testing for SaaS
+            </Link>
+            <Link href="/vendor-risk-assessment#saas" className="underline underline-offset-4 hover:text-brand-800">
+              Related: Vendor Risk Assessment for SaaS
+            </Link>
+          </div>
           <div className="mt-6 bg-white/70 border border-slate-200 rounded-lg p-4 text-left max-w-3xl mx-auto">
             <p className="text-sm font-semibold text-slate-800 mb-2">Trust &amp; privacy</p>
             <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">

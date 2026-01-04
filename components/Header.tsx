@@ -1,11 +1,87 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import type { ReactNode, RefObject } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { useDropdownIntent } from './useDropdownIntent';
 
 const CTA_HREF = '/soc-2-readiness-index';
+const DROPDOWN_PANEL_CLASS =
+  'absolute z-[9999] rounded-xl border border-slate-200 bg-white shadow-md max-h-[70vh] overflow-auto focus:outline-none transition ease-out duration-150 transform';
+const DROPDOWN_WIDTH = 224; // w-56
+
+type DropdownPortalProps = {
+  id: string;
+  isOpen: boolean;
+  anchorRef: RefObject<HTMLElement>;
+  children: ReactNode;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
+  ariaLabel?: string;
+};
+
+function DropdownPortal({ id, isOpen, anchorRef, children, onMouseEnter, onMouseLeave, ariaLabel }: DropdownPortalProps) {
+  const [mounted, setMounted] = useState(false);
+  const [position, setPosition] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const updatePosition = () => {
+      const anchor = anchorRef.current;
+      if (!anchor) return;
+      const rect = anchor.getBoundingClientRect();
+      const centeredLeft = rect.left + rect.width / 2 - DROPDOWN_WIDTH / 2 + window.scrollX;
+      const clampedLeft = Math.max(
+        window.scrollX + 8,
+        Math.min(centeredLeft, window.scrollX + window.innerWidth - DROPDOWN_WIDTH - 8),
+      );
+      setPosition({
+        top: rect.bottom + window.scrollY + 4, // tighter gap for easier hover travel
+        left: clampedLeft,
+      });
+    };
+
+    updatePosition();
+    window.addEventListener('resize', updatePosition);
+    window.addEventListener('scroll', updatePosition, true);
+    return () => {
+      window.removeEventListener('resize', updatePosition);
+      window.removeEventListener('scroll', updatePosition, true);
+    };
+  }, [isOpen, anchorRef]);
+
+  if (!mounted) return null;
+
+  return createPortal(
+    <div
+      id={id}
+      role="menu"
+      aria-hidden={!isOpen}
+      aria-label={ariaLabel}
+      data-dropdown-panel="true"
+      data-dropdown-id={id}
+      ref={panelRef}
+      style={{ top: position.top, left: position.left, width: DROPDOWN_WIDTH }}
+      className={`${DROPDOWN_PANEL_CLASS} ${
+        isOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-1 pointer-events-none'
+      }`}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      {children}
+    </div>,
+    document.body,
+  );
+}
 
 export default function Header() {
   const {
@@ -24,20 +100,144 @@ export default function Header() {
     immediateClose: closeIndustries,
     clearTimers: clearIndustriesTimers,
   } = useDropdownIntent();
+  const {
+    open: isPentestOpen,
+    scheduleOpen: schedulePentestOpen,
+    scheduleClose: schedulePentestClose,
+    immediateOpen: openPentest,
+    immediateClose: closePentest,
+    clearTimers: clearPentestTimers,
+  } = useDropdownIntent();
+  const {
+    open: isVendorOpen,
+    scheduleOpen: scheduleVendorOpen,
+    scheduleClose: scheduleVendorClose,
+    immediateOpen: openVendor,
+    immediateClose: closeVendor,
+    clearTimers: clearVendorTimers,
+  } = useDropdownIntent();
+  const {
+    open: isSocOpen,
+    scheduleOpen: scheduleSocOpen,
+    scheduleClose: scheduleSocClose,
+    immediateOpen: openSoc,
+    immediateClose: closeSoc,
+    clearTimers: clearSocTimers,
+  } = useDropdownIntent();
   const [isMobileOpen, setMobileOpen] = useState(false);
+  const [mobileSocOpen, setMobileSocOpen] = useState(false);
+  const [mobilePentestOpen, setMobilePentestOpen] = useState(false);
+  const [mobileGuidesOpen, setMobileGuidesOpen] = useState(false);
+  const [mobileIndustriesOpen, setMobileIndustriesOpen] = useState(false);
+  const [mobileVendorOpen, setMobileVendorOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  type MobileSection = 'soc' | 'pentest' | 'guides' | 'industries' | 'vendor';
   const dropdownRef = useRef<HTMLDivElement>(null);
   const guidesRef = useRef<HTMLDivElement>(null);
   const menusRef = useRef<HTMLDivElement>(null);
+  const socRef = useRef<HTMLDivElement>(null);
+  const vendorRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+  const menuItemClass =
+    'block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600';
+  const viewAllClass =
+    'block px-4 py-2 text-sm text-brand-700 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600';
+  const sectionLabelClass = 'px-4 pt-3 pb-1 text-[11px] font-semibold uppercase tracking-wide text-slate-500';
+  const socMenu = {
+    overview: { label: 'Overview', href: '/soc-2/guides' },
+    primary: { label: 'Readiness Index', href: '/soc-2-readiness-index', badge: 'Tool' },
+    guides: [
+      { label: 'SOC 2 Cost', href: '/soc-2-cost' },
+      { label: 'SOC 2 Timeline', href: '/soc-2-timeline' },
+      { label: 'Type I vs Type II', href: '/soc-2-type-i-vs-type-ii' },
+      { label: 'Readiness Checklist', href: '/soc-2-readiness-checklist' },
+    ],
+    viewAll: { label: 'View all SOC 2 →', href: '/soc-2/guides' },
+  };
+  const pentestMenu = {
+    overview: { label: 'Overview', href: '/penetration-testing' },
+    primary: { label: 'Cost Estimator', href: '/penetration-testing/cost-estimator', badge: 'Tool' },
+    guides: [
+      { label: 'Pricing', href: '/penetration-testing/pricing' },
+      { label: 'Pentest vs Scan', href: '/penetration-testing/vs-vulnerability-scan' },
+      { label: 'For SOC 2', href: '/penetration-testing/for-soc-2' },
+      { label: 'Reporting', href: '/penetration-testing/report' },
+    ],
+    viewAll: { label: 'View all Pentest →', href: '/penetration-testing' },
+  };
+  const vendorMenu = {
+    overview: { label: 'Overview', href: '/vendor-risk-assessment' },
+    primary: { label: 'Risk Triage', href: '/vendor-risk-assessment/triage', badge: 'Tool' },
+    guides: [
+      { label: 'Checklist', href: '/vendor-risk-assessment/checklist' },
+      { label: 'Evidence by Tier', href: '/vendor-risk-assessment/evidence-by-tier' },
+      { label: 'Contract Clauses', href: '/vendor-risk-assessment/contract-clauses' },
+      { label: 'Monitoring Cadence', href: '/vendor-risk-assessment/monitoring-cadence' },
+    ],
+    viewAll: { label: 'View all Vendor Risk →', href: '/vendor-risk-assessment' },
+  };
+  const curatedGuides = [
+    { label: 'SOC 2 Cost Breakdown', href: '/soc-2-cost-breakdown' },
+    { label: 'SOC 2 Timeline', href: '/soc-2-timeline' },
+    { label: 'SOC 2 vs ISO 27001', href: '/soc-2-vs-iso-27001' },
+    { label: 'Pentest vs Scan', href: '/penetration-testing/vs-vulnerability-scan' },
+    { label: 'Vendor Risk Assessment', href: '/vendor-risk-assessment' },
+  ];
+  const industries = [
+    { label: 'SaaS', href: '/soc-2/industries/saas' },
+    { label: 'Fintech', href: '/soc-2/industries/fintech' },
+    { label: 'Startups', href: '/soc-2/industries/startups' },
+    { label: 'Enterprise', href: '/soc-2/industries/enterprise' },
+    { label: 'Healthcare', href: '/soc-2/industries/healthcare' },
+    { label: 'E-commerce', href: '/soc-2/industries/ecommerce' },
+    { label: 'Marketplaces', href: '/soc-2/industries/marketplaces' },
+    { label: 'AI/Data', href: '/soc-2/industries/ai-data' },
+  ];
+  const isSocActive =
+    pathname.startsWith('/soc-2') ||
+    pathname.startsWith('/soc-2-') ||
+    pathname.startsWith('/when-do-you-need-soc-2') ||
+    pathname === '/soc-2-readiness-index';
+  const isPentestActive = pathname.startsWith('/penetration-testing');
+  const isVendorActive = pathname.startsWith('/vendor-risk-assessment');
+
+  const closeAllDropdowns = useCallback(() => {
+    closeGuides();
+    closeIndustries();
+    closePentest();
+    closeSoc();
+    closeVendor();
+  }, [closeGuides, closeIndustries, closePentest, closeSoc, closeVendor]);
+
+  const toggleMobileSection = (section: MobileSection) => {
+    setMobileSocOpen(section === 'soc' ? !mobileSocOpen : false);
+    setMobilePentestOpen(section === 'pentest' ? !mobilePentestOpen : false);
+    setMobileGuidesOpen(section === 'guides' ? !mobileGuidesOpen : false);
+    setMobileIndustriesOpen(section === 'industries' ? !mobileIndustriesOpen : false);
+    setMobileVendorOpen(section === 'vendor' ? !mobileVendorOpen : false);
+  };
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        closeIndustries();
-      }
-      if (guidesRef.current && !guidesRef.current.contains(event.target as Node)) {
-        closeGuides();
+      const target = event.target as Node;
+
+      const isInside = [
+        { anchor: socRef, menuId: 'soc-menu' },
+        { anchor: menusRef, menuId: 'pentest-menu' },
+        { anchor: vendorRef, menuId: 'vendor-menu' },
+        { anchor: guidesRef, menuId: 'guides-menu' },
+        { anchor: dropdownRef, menuId: 'industries-menu' },
+      ].some(({ anchor, menuId }) => {
+        const anchorMatch = anchor.current?.contains(target);
+        const panel = document.getElementById(menuId);
+        const panelMatch = panel?.contains(target);
+        return anchorMatch || panelMatch;
+      });
+
+      if (!isInside) {
+        closeAllDropdowns();
+        setMobileOpen(false);
       }
     }
 
@@ -46,6 +246,9 @@ export default function Header() {
         closeIndustries();
         setMobileOpen(false);
         closeGuides();
+        closeSoc();
+        closePentest();
+        closeVendor();
       }
     }
 
@@ -56,8 +259,23 @@ export default function Header() {
       document.removeEventListener('keydown', handleEscape);
       clearGuidesTimers();
       clearIndustriesTimers();
+      clearSocTimers();
+      clearPentestTimers();
+      clearVendorTimers();
     };
-  }, [closeIndustries, closeGuides, clearGuidesTimers, clearIndustriesTimers]);
+  }, [
+    closeAllDropdowns,
+    closeIndustries,
+    closeGuides,
+    closePentest,
+    closeSoc,
+    closeVendor,
+    clearGuidesTimers,
+    clearIndustriesTimers,
+    clearPentestTimers,
+    clearSocTimers,
+    clearVendorTimers,
+  ]);
 
   useEffect(() => {
     function handleScroll() {
@@ -84,6 +302,16 @@ export default function Header() {
     };
   }, [isMobileOpen]);
 
+  useEffect(() => {
+    if (!isMobileOpen) {
+      setMobileSocOpen(false);
+      setMobilePentestOpen(false);
+      setMobileGuidesOpen(false);
+      setMobileIndustriesOpen(false);
+      setMobileVendorOpen(false);
+    }
+  }, [isMobileOpen]);
+
   return (
     <header
       className={`sticky top-0 z-50 border-b transition-all relative ${
@@ -107,13 +335,335 @@ export default function Header() {
 
           <div className="flex items-center gap-4">
             <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-700">
-              <Link href="/soc-2-cost" className="hover:text-brand-700 transition-colors">
-                SOC 2 Cost
-              </Link>
-              <div className="relative" ref={guidesRef}>
+              <div
+                className="relative flex items-center gap-2"
+                ref={socRef}
+                onMouseEnter={() => {
+                  closeGuides();
+                  closeIndustries();
+                  closePentest();
+                  closeVendor();
+                  scheduleSocOpen();
+                }}
+                onMouseLeave={() => scheduleSocClose()}
+                onFocus={() => {
+                  closeGuides();
+                  closeIndustries();
+                  closePentest();
+                  closeVendor();
+                  openSoc();
+                }}
+              >
+                <Link
+                  href="/soc-2/guides"
+                  className={`flex items-center gap-2 hover:text-brand-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600 rounded ${
+                    isSocActive ? 'text-brand-700 underline underline-offset-4' : ''
+                  }`}
+                >
+                  SOC 2
+                </Link>
                 <button
                   type="button"
+                  className={`hover:text-brand-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600 rounded ${
+                    isSocActive ? 'text-brand-700' : ''
+                  }`}
+                  aria-expanded={isSocOpen}
+                  aria-haspopup="menu"
+                  aria-controls="soc-menu"
+                  onClick={() => {
+                    if (isSocOpen) {
+                      closeSoc();
+                    } else {
+                      closeAllDropdowns();
+                      openSoc();
+                    }
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      if (isSocOpen) {
+                        closeSoc();
+                      } else {
+                        closeAllDropdowns();
+                        openSoc();
+                      }
+                    }
+                  }}
+                >
+                  <svg className={`w-4 h-4 transition-transform ${isSocOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <DropdownPortal
+                  id="soc-menu"
+                  isOpen={isSocOpen}
+                  anchorRef={socRef}
+                  onMouseEnter={() => {
+                    closeGuides();
+                    closeIndustries();
+                    closePentest();
+                    closeVendor();
+                    scheduleSocOpen();
+                  }}
+                  onMouseLeave={() => scheduleSocClose()}
+                >
+                  <Link
+                    href="/soc-2/guides"
+                    role="menuitem"
+                    className={`${sectionLabelClass} pt-4 pb-1 text-left`}
+                  >
+                    Tools
+                  </Link>
+                  <Link href={socMenu.overview.href} role="menuitem" className={`${menuItemClass}`}>
+                    {socMenu.overview.label}
+                  </Link>
+                  <Link href={socMenu.primary.href} role="menuitem" className={menuItemClass}>
+                    <span className="flex items-center gap-2">
+                      {socMenu.primary.label}
+                      {socMenu.primary.badge ? (
+                        <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">{socMenu.primary.badge}</span>
+                      ) : null}
+                    </span>
+                  </Link>
+                  <div className="my-2 border-t border-slate-100" />
+                  <div className={sectionLabelClass}>Guides</div>
+                  {socMenu.guides.map((item) => (
+                    <Link key={item.href} href={item.href} role="menuitem" className={menuItemClass}>
+                      {item.label}
+                    </Link>
+                  ))}
+                  <div className="my-2 border-t border-slate-100" />
+                  <Link href={socMenu.viewAll.href} role="menuitem" className={viewAllClass + ' rounded-b-lg'}>
+                    {socMenu.viewAll.label}
+                  </Link>
+                </DropdownPortal>
+              </div>
+
+              <div
+                className="relative flex items-center gap-2"
+                ref={menusRef}
+                onMouseEnter={() => {
+                  closeGuides();
+                  closeIndustries();
+                  closeSoc();
+                  closeVendor();
+                  schedulePentestOpen();
+                }}
+                onMouseLeave={() => schedulePentestClose()}
+                onFocus={() => {
+                  closeGuides();
+                  closeIndustries();
+                  closeSoc();
+                  closeVendor();
+                  openPentest();
+                }}
+              >
+                <Link
+                  href="/penetration-testing"
+                  className={`flex items-center gap-2 hover:text-brand-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600 rounded ${
+                    isPentestActive ? 'text-brand-700 underline underline-offset-4' : ''
+                  }`}
+                >
+                  Penetration Testing
+                </Link>
+                <button
+                  type="button"
+                  className={`hover:text-brand-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600 rounded ${
+                    isPentestActive ? 'text-brand-700' : ''
+                  }`}
+                  aria-expanded={isPentestOpen}
+                  aria-haspopup="menu"
+                  aria-controls="pentest-menu"
+                  onClick={() => {
+                    if (isPentestOpen) {
+                      closePentest();
+                    } else {
+                      closeAllDropdowns();
+                      openPentest();
+                    }
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      if (isPentestOpen) {
+                        closePentest();
+                      } else {
+                        closeAllDropdowns();
+                        openPentest();
+                      }
+                    }
+                  }}
+                >
+                  <svg
+                    className={`w-4 h-4 transition-transform ${isPentestOpen ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <DropdownPortal
+                  id="pentest-menu"
+                  isOpen={isPentestOpen}
+                  anchorRef={menusRef}
+                  onMouseEnter={() => {
+                    closeGuides();
+                    closeIndustries();
+                    closeSoc();
+                    closeVendor();
+                    schedulePentestOpen();
+                  }}
+                  onMouseLeave={() => schedulePentestClose()}
+                >
+                  <div className={`${sectionLabelClass} pt-4 pb-1 text-left`}>Tools</div>
+                  <Link href={pentestMenu.overview.href} role="menuitem" className={menuItemClass}>
+                    {pentestMenu.overview.label}
+                  </Link>
+                  <Link href={pentestMenu.primary.href} role="menuitem" className={menuItemClass}>
+                    <span className="flex items-center gap-2">
+                      {pentestMenu.primary.label}
+                      <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">{pentestMenu.primary.badge}</span>
+                    </span>
+                  </Link>
+                  <div className="my-2 border-t border-slate-100" />
+                  <div className={sectionLabelClass}>Guides</div>
+                  {pentestMenu.guides.map((item) => (
+                    <Link key={item.href} href={item.href} role="menuitem" className={menuItemClass}>
+                      {item.label}
+                    </Link>
+                  ))}
+                  <div className="my-2 border-t border-slate-100" />
+                  <Link href={pentestMenu.viewAll.href} role="menuitem" className={viewAllClass + ' rounded-b-lg'}>
+                    {pentestMenu.viewAll.label}
+                  </Link>
+                </DropdownPortal>
+              </div>
+
+              <div
+                className="relative flex items-center gap-2"
+                ref={vendorRef}
+                onMouseEnter={() => {
+                  closeGuides();
+                  closeIndustries();
+                  closeSoc();
+                  closePentest();
+                  scheduleVendorOpen();
+                }}
+                onMouseLeave={() => scheduleVendorClose()}
+                onFocus={() => {
+                  closeGuides();
+                  closeIndustries();
+                  closeSoc();
+                  closePentest();
+                  openVendor();
+                }}
+              >
+                <Link
+                  href="/vendor-risk-assessment"
+                  className={`flex items-center gap-2 hover:text-brand-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600 rounded ${
+                    isVendorActive ? 'text-brand-700 underline underline-offset-4' : ''
+                  }`}
+                >
+                  Vendor Risk
+                </Link>
+                <button
+                  type="button"
+                  className={`hover:text-brand-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600 rounded ${
+                    isVendorActive ? 'text-brand-700' : ''
+                  }`}
+                  aria-expanded={isVendorOpen}
+                  aria-haspopup="menu"
+                  aria-controls="vendor-menu"
+                  onClick={() => {
+                    if (isVendorOpen) {
+                      closeVendor();
+                    } else {
+                      closeAllDropdowns();
+                      openVendor();
+                    }
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      if (isVendorOpen) {
+                        closeVendor();
+                      } else {
+                        closeAllDropdowns();
+                        openVendor();
+                      }
+                    }
+                  }}
+                >
+                  <svg className={`w-4 h-4 transition-transform ${isVendorOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <DropdownPortal
+                  id="vendor-menu"
+                  isOpen={isVendorOpen}
+                  anchorRef={vendorRef}
+                  onMouseEnter={() => {
+                    closeGuides();
+                    closeIndustries();
+                    closeSoc();
+                    closePentest();
+                    scheduleVendorOpen();
+                  }}
+                  onMouseLeave={() => scheduleVendorClose()}
+                >
+                  <div className={`${sectionLabelClass} pt-4 pb-1 text-left`}>Tools</div>
+                  <Link href={vendorMenu.overview.href} role="menuitem" className={menuItemClass}>
+                    {vendorMenu.overview.label}
+                  </Link>
+                  <Link href={vendorMenu.primary.href} role="menuitem" className={menuItemClass}>
+                    <span className="flex items-center gap-2">
+                      {vendorMenu.primary.label}
+                      <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">{vendorMenu.primary.badge}</span>
+                    </span>
+                  </Link>
+                  <div className="my-2 border-t border-slate-100" />
+                  <div className={sectionLabelClass}>Guides</div>
+                  {vendorMenu.guides.map((item) => (
+                    <Link key={item.href} href={item.href} role="menuitem" className={menuItemClass}>
+                      {item.label}
+                    </Link>
+                  ))}
+                  <div className="my-2 border-t border-slate-100" />
+                  <Link href={vendorMenu.viewAll.href} role="menuitem" className={viewAllClass + ' rounded-b-lg'}>
+                    {vendorMenu.viewAll.label}
+                  </Link>
+                </DropdownPortal>
+              </div>
+
+              <div
+                className="relative flex items-center gap-2"
+                ref={guidesRef}
+                onMouseEnter={() => {
+                  closeIndustries();
+                  closeSoc();
+                  closePentest();
+                  closeVendor();
+                  scheduleGuidesOpen();
+                }}
+                onMouseLeave={() => scheduleGuidesClose()}
+                onFocus={() => {
+                  closeIndustries();
+                  closeSoc();
+                  closePentest();
+                  closeVendor();
+                  openGuides();
+                }}
+              >
+                <Link
+                  href="/soc-2/guides"
                   className="flex items-center gap-2 hover:text-brand-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600 rounded"
+                >
+                  Guides
+                </Link>
+                <button
+                  type="button"
+                  className="hover:text-brand-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600 rounded"
                   aria-expanded={isGuidesOpen}
                   aria-haspopup="menu"
                   aria-controls="guides-menu"
@@ -121,18 +671,9 @@ export default function Header() {
                     if (isGuidesOpen) {
                       closeGuides();
                     } else {
-                      closeIndustries();
+                      closeAllDropdowns();
                       openGuides();
                     }
-                  }}
-                  onMouseEnter={() => {
-                    closeIndustries();
-                    scheduleGuidesOpen();
-                  }}
-                  onMouseLeave={() => scheduleGuidesClose()}
-                  onFocus={() => {
-                    closeIndustries();
-                    openGuides();
                   }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
@@ -140,13 +681,12 @@ export default function Header() {
                       if (isGuidesOpen) {
                         closeGuides();
                       } else {
-                        closeIndustries();
+                        closeAllDropdowns();
                         openGuides();
                       }
                     }
                   }}
                 >
-                  Guides
                   <svg
                     className={`w-4 h-4 transition-transform ${isGuidesOpen ? 'rotate-180' : ''}`}
                     fill="none"
@@ -156,102 +696,65 @@ export default function Header() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
-                <div
+                <DropdownPortal
                   id="guides-menu"
-                  role="menu"
-                  aria-hidden={!isGuidesOpen}
-                  className={`absolute mt-2 w-48 rounded-xl border border-slate-200 bg-white shadow-md focus:outline-none transition ease-out duration-150 transform ${
-                    isGuidesOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-1 pointer-events-none'
-                  }`}
+                  isOpen={isGuidesOpen}
+                  anchorRef={guidesRef}
                   onMouseEnter={() => {
                     closeIndustries();
+                    closeSoc();
+                    closePentest();
+                    closeVendor();
                     scheduleGuidesOpen();
                   }}
                   onMouseLeave={() => scheduleGuidesClose()}
                 >
+                  <div className={`${sectionLabelClass} pt-4 pb-1 text-left`}>Curated</div>
+                  {curatedGuides.map((item, idx) => (
                     <Link
-                      href="/soc-2-cost"
+                      key={item.href}
+                      href={item.href}
                       role="menuitem"
-                      className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600 rounded-t-lg"
+                      className={`${menuItemClass} ${idx === 0 ? 'rounded-t-lg' : ''}`}
                     >
-                      SOC 2 Cost
+                      {item.label}
                     </Link>
-                    <Link
-                      href="/soc-2-timeline"
-                      role="menuitem"
-                      className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600"
-                    >
-                      SOC 2 Timeline
-                    </Link>
-                    <Link
-                    href="/soc-2-type-i-vs-type-ii"
-                    role="menuitem"
-                    className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600"
-                  >
-                    Type I vs Type II
+                  ))}
+                  <div className="my-2 border-t border-slate-100" />
+                  <Link href="/soc-2/guides" role="menuitem" className={viewAllClass + ' rounded-b-lg'}>
+                    View all guides →
                   </Link>
-                  <Link
-                    href="/soc-2-readiness-checklist"
-                    role="menuitem"
-                    className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600"
-                  >
-                    Readiness Checklist
-                  </Link>
-                  <Link
-                    href="/soc-2-cost-breakdown"
-                    role="menuitem"
-                    className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600"
-                  >
-                    Cost Breakdown
-                  </Link>
-                  <Link
-                    href="/when-do-you-need-soc-2"
-                    role="menuitem"
-                    className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600"
-                  >
-                    When Do You Need SOC 2?
-                  </Link>
-                  <Link
-                    href="/soc-2-readiness/saas"
-                    role="menuitem"
-                    className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600"
-                  >
-                    SOC 2 for SaaS
-                  </Link>
-                  <Link
-                    href="/soc-2-readiness/fintech"
-                    role="menuitem"
-                    className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600"
-                  >
-                    SOC 2 for Fintech
-                  </Link>
-                  <Link
-                    href="/soc-2-readiness/startups"
-                    role="menuitem"
-                    className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600"
-                  >
-                    SOC 2 for Startups
-                  </Link>
-                  <Link
-                    href="/soc-2-readiness/enterprise-sales"
-                    role="menuitem"
-                    className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600"
-                  >
-                    SOC 2 for Enterprise Sales
-                  </Link>
-                  <Link
-                    href="/soc-2-vs-iso-27001"
-                    role="menuitem"
-                    className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600 rounded-b-lg"
-                  >
-                    SOC 2 vs ISO 27001
-                  </Link>
-                  </div>
+                </DropdownPortal>
               </div>
-              <div className="relative" ref={dropdownRef}>
+
+              <div
+                className="relative flex items-center gap-2"
+                ref={dropdownRef}
+                onMouseEnter={() => {
+                  closeGuides();
+                  closeSoc();
+                  closePentest();
+                  closeVendor();
+                  scheduleIndustriesOpen();
+                }}
+                onMouseLeave={() => scheduleIndustriesClose()}
+                onFocus={() => {
+                  closeGuides();
+                  closeSoc();
+                  closePentest();
+                  closeVendor();
+                  openIndustries();
+                }}
+              >
+                <Link
+                  href="/soc-2/industries"
+                  className="flex items-center gap-2 hover:text-brand-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600 rounded"
+                >
+                  Industries
+                </Link>
                 <button
                   type="button"
-                  className="flex items-center gap-2 hover:text-brand-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600 rounded"
+                  className="hover:text-brand-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600 rounded"
                   aria-expanded={isIndustriesOpen}
                   aria-haspopup="menu"
                   aria-controls="industries-menu"
@@ -259,18 +762,9 @@ export default function Header() {
                     if (isIndustriesOpen) {
                       closeIndustries();
                     } else {
-                      closeGuides();
+                      closeAllDropdowns();
                       openIndustries();
                     }
-                  }}
-                  onMouseEnter={() => {
-                    closeGuides();
-                    scheduleIndustriesOpen();
-                  }}
-                  onMouseLeave={() => scheduleIndustriesClose()}
-                  onFocus={() => {
-                    closeGuides();
-                    openIndustries();
                   }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
@@ -278,58 +772,56 @@ export default function Header() {
                       if (isIndustriesOpen) {
                         closeIndustries();
                       } else {
-                        closeGuides();
+                        closeAllDropdowns();
                         openIndustries();
                       }
                     }
                   }}
-              >
-                Industries
-                <svg
-                  className={`w-4 h-4 transition-transform ${isIndustriesOpen ? 'rotate-180' : ''}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-                <div
+                  <svg
+                    className={`w-4 h-4 transition-transform ${isIndustriesOpen ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <DropdownPortal
                   id="industries-menu"
-                  role="menu"
-                  aria-hidden={!isIndustriesOpen}
-                  className={`absolute mt-2 w-40 rounded-xl border border-slate-200 bg-white shadow-md focus:outline-none transition ease-out duration-150 transform ${
-                    isIndustriesOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-1 pointer-events-none'
-                  }`}
+                  isOpen={isIndustriesOpen}
+                  anchorRef={dropdownRef}
                   onMouseEnter={() => {
                     closeGuides();
+                    closeSoc();
+                    closePentest();
+                    closeVendor();
                     scheduleIndustriesOpen();
                   }}
                   onMouseLeave={() => scheduleIndustriesClose()}
                 >
-                  <Link
-                    href="/soc-2-readiness/saas"
-                    role="menuitem"
-                    className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600 rounded-t-lg"
-                  >
-                    SaaS
+                  <div className={`${sectionLabelClass} pt-4 pb-1 text-left text-slate-500`}>SOC 2 Industries</div>
+                  <Link href="/soc-2/industries" role="menuitem" className={menuItemClass + ' rounded-t-lg'}>
+                    Overview
                   </Link>
-                  <Link
-                    href="/soc-2-readiness/fintech"
-                    role="menuitem"
-                    className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600 rounded-b-lg"
-                  >
-                    Fintech
+                  {industries.map((item) => (
+                    <Link key={item.href} href={item.href} role="menuitem" className={menuItemClass}>
+                      {item.label}
+                    </Link>
+                  ))}
+                  <div className="my-2 border-t border-slate-100" />
+                  <Link href="/soc-2/industries" role="menuitem" className={viewAllClass + ' rounded-b-lg'}>
+                    View all industries →
                   </Link>
-                </div>
+                </DropdownPortal>
             </div>
           </nav>
 
           <Link
-            href={CTA_HREF}
+            href={pathname.startsWith('/penetration-testing') ? '/penetration-testing/cost-estimator' : CTA_HREF}
             className="hidden md:inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-4 py-2 rounded-lg shadow-sm transition-all"
           >
-            Get Readiness Score
+            {pathname.startsWith('/penetration-testing') ? 'Run Pentest Cost Estimator' : 'Get Readiness Score'}
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
@@ -366,125 +858,284 @@ export default function Header() {
           />
 
           <div
-            className={`md:hidden absolute inset-x-0 top-full border-t border-slate-200 bg-white shadow-sm transition-all duration-200 ease-out ${
+              className={`md:hidden absolute inset-x-0 top-full border-t border-slate-200 bg-white shadow-sm transition-all duration-200 ease-out ${
               isMobileOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'
             }`}
           >
-            <div className="px-4 py-3 space-y-3">
-              <div className="space-y-2">
-                <p className="text-sm font-semibold text-slate-900">Guides</p>
-                <div className="pl-3 space-y-2">
-                  <Link
-                    href="/soc-2-cost"
-                    className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
-                    onClick={() => setMobileOpen(false)}
+            <div className="px-4 py-4 space-y-3">
+              <div className="space-y-2 rounded-xl border border-slate-200">
+                <button
+                  type="button"
+                  className="w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-slate-900"
+                  aria-expanded={mobileSocOpen}
+                  aria-controls="mobile-soc-menu"
+                  onClick={() => toggleMobileSection('soc')}
+                >
+                  <span>SOC 2</span>
+                  <svg
+                    className={`w-4 h-4 transition-transform ${mobileSocOpen ? 'rotate-180 text-brand-700' : 'text-slate-500'}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
-                    SOC 2 Cost
-                  </Link>
-                  <Link
-                    href="/soc-2-timeline"
-                    className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    SOC 2 Timeline
-                  </Link>
-                  <Link
-                    href="/soc-2-type-i-vs-type-ii"
-                    className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    Type I vs Type II
-                  </Link>
-                  <Link
-                    href="/soc-2-readiness-checklist"
-                    className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    Readiness Checklist
-                  </Link>
-                  <Link
-                    href="/soc-2-cost-breakdown"
-                    className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    Cost Breakdown
-                  </Link>
-                  <Link
-                    href="/when-do-you-need-soc-2"
-                    className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    When Do You Need SOC 2?
-                  </Link>
-                  <Link
-                    href="/soc-2-readiness/saas"
-                    className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    SOC 2 for SaaS
-                  </Link>
-                  <Link
-                    href="/soc-2-readiness/fintech"
-                    className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    SOC 2 for Fintech
-                  </Link>
-                  <Link
-                    href="/soc-2-readiness/startups"
-                    className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    SOC 2 for Startups
-                  </Link>
-                  <Link
-                    href="/soc-2-readiness/enterprise-sales"
-                    className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    SOC 2 for Enterprise Sales
-                  </Link>
-                  <Link
-                    href="/soc-2-vs-iso-27001"
-                    className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    SOC 2 vs ISO 27001
-                  </Link>
-                </div>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {mobileSocOpen && (
+                  <div id="mobile-soc-menu" className="px-3 pb-3 space-y-2">
+                    <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block pt-1">Tools</span>
+                    <Link
+                      href={socMenu.overview.href}
+                      className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {socMenu.overview.label}
+                    </Link>
+                    <Link
+                      href={socMenu.primary.href}
+                      className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {socMenu.primary.label}
+                    </Link>
+                    <div className="border-t border-slate-200 my-2" />
+                    <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block">Guides</span>
+                    {socMenu.guides.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                    <div className="border-t border-slate-200 my-2" />
+                    <Link
+                      href={socMenu.viewAll.href}
+                      className="block text-sm text-brand-700 hover:text-brand-800 transition-colors"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {socMenu.viewAll.label}
+                    </Link>
+                  </div>
+                )}
               </div>
+
+              <div className="space-y-2 rounded-xl border border-slate-200">
+                <button
+                  type="button"
+                  className="w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-slate-900"
+                  aria-expanded={mobilePentestOpen}
+                  aria-controls="mobile-pentest-menu"
+                  onClick={() => toggleMobileSection('pentest')}
+                >
+                  <span>Penetration Testing</span>
+                  <svg
+                    className={`w-4 h-4 transition-transform ${mobilePentestOpen ? 'rotate-180 text-brand-700' : 'text-slate-500'}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {mobilePentestOpen && (
+                  <div id="mobile-pentest-menu" className="px-3 pb-3 space-y-2">
+                    <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block pt-1">Tools</span>
+                    <Link
+                      href={pentestMenu.overview.href}
+                      className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {pentestMenu.overview.label}
+                    </Link>
+                    <Link
+                      href={pentestMenu.primary.href}
+                      className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {pentestMenu.primary.label}
+                    </Link>
+                    <div className="border-t border-slate-200 my-2" />
+                    <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block">Guides</span>
+                    {pentestMenu.guides.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                    <div className="border-t border-slate-200 my-2" />
+                    <Link
+                      href={pentestMenu.viewAll.href}
+                      className="block text-sm text-brand-700 hover:text-brand-800 transition-colors"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {pentestMenu.viewAll.label}
+                    </Link>
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-2 rounded-xl border border-slate-200">
+                <button
+                  type="button"
+                  className="w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-slate-900"
+                  aria-expanded={mobileVendorOpen}
+                  aria-controls="mobile-vendor-menu"
+                  onClick={() => toggleMobileSection('vendor')}
+                >
+                  <span>Vendor Risk</span>
+                  <svg
+                    className={`w-4 h-4 transition-transform ${mobileVendorOpen ? 'rotate-180 text-brand-700' : 'text-slate-500'}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {mobileVendorOpen && (
+                  <div id="mobile-vendor-menu" className="px-3 pb-3 space-y-2">
+                    <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block pt-1">Tools</span>
+                    <Link
+                      href={vendorMenu.overview.href}
+                      className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {vendorMenu.overview.label}
+                    </Link>
+                    <Link
+                      href={vendorMenu.primary.href}
+                      className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {vendorMenu.primary.label}
+                    </Link>
+                    <div className="border-t border-slate-200 my-2" />
+                    <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block">Guides</span>
+                    {vendorMenu.guides.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                    <div className="border-t border-slate-200 my-2" />
+                    <Link
+                      href={vendorMenu.viewAll.href}
+                      className="block text-sm text-brand-700 hover:text-brand-800 transition-colors"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {vendorMenu.viewAll.label}
+                    </Link>
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-2 rounded-xl border border-slate-200">
+                <button
+                  type="button"
+                  className="w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-slate-900"
+                  aria-expanded={mobileGuidesOpen}
+                  aria-controls="mobile-guides-menu"
+                  onClick={() => toggleMobileSection('guides')}
+                >
+                  <span>Guides</span>
+                  <svg
+                    className={`w-4 h-4 transition-transform ${mobileGuidesOpen ? 'rotate-180 text-brand-700' : 'text-slate-500'}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {mobileGuidesOpen && (
+                  <div id="mobile-guides-menu" className="px-3 pb-3 space-y-2">
+                    {curatedGuides.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                    <Link
+                      href="/soc-2/guides"
+                      className="block text-sm text-brand-700 hover:text-brand-800 transition-colors"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      View all guides →
+                    </Link>
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-2 rounded-xl border border-slate-200">
+                <button
+                  type="button"
+                  className="w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-slate-900"
+                  aria-expanded={mobileIndustriesOpen}
+                  aria-controls="mobile-industries-menu"
+                  onClick={() => toggleMobileSection('industries')}
+                >
+                  <span>Industries</span>
+                  <svg
+                    className={`w-4 h-4 transition-transform ${mobileIndustriesOpen ? 'rotate-180 text-brand-700' : 'text-slate-500'}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {mobileIndustriesOpen && (
+                  <div id="mobile-industries-menu" className="px-3 pb-3 space-y-2">
+                    <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block pt-1">SOC 2 Industries</span>
+                    <Link
+                      href="/soc-2/industries"
+                      className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      Overview
+                    </Link>
+                    {industries.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                    <Link
+                      href="/soc-2/industries"
+                      className="block text-sm text-brand-700 hover:text-brand-800 transition-colors"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      View all industries →
+                    </Link>
+                  </div>
+                )}
+              </div>
+
               <Link
-                href="/soc-2-cost"
-                className="block text-sm font-medium text-slate-800 hover:text-brand-700 transition-colors"
+                href={pathname.startsWith('/penetration-testing') ? '/penetration-testing/cost-estimator' : CTA_HREF}
+                className="w-full inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-4 py-2 rounded-lg shadow-sm transition-all"
                 onClick={() => setMobileOpen(false)}
               >
-                SOC 2 Cost
-              </Link>
-              <div className="space-y-2">
-                <p className="text-sm font-semibold text-slate-900">Industries</p>
-                <div className="pl-3 space-y-2">
-                  <Link
-                    href="/soc-2-readiness/saas"
-                    className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    SaaS
-                  </Link>
-                  <Link
-                    href="/soc-2-readiness/fintech"
-                    className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    Fintech
-                  </Link>
-                </div>
-              </div>
-              <Link
-                href={CTA_HREF}
-                className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-4 py-2 rounded-lg shadow-sm transition-all"
-                onClick={() => setMobileOpen(false)}
-              >
-                Get Readiness Score
+                {pathname.startsWith('/penetration-testing') ? 'Run Pentest Cost Estimator' : 'Get Readiness Score'}
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>

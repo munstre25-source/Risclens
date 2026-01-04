@@ -164,13 +164,13 @@ export interface SavedFilter {
 // =============================================================================
 
 /**
- * Insert a new lead into SOC2_Leads table
+ * Insert a new lead into the unified leads table
  */
 export async function insertLead(lead: Omit<SOC2Lead, 'id' | 'created_at' | 'updated_at'>): Promise<SOC2Lead> {
   const supabase = getSupabaseAdmin();
 
   const { data, error } = await supabase
-    .from('SOC2_Leads')
+    .from('leads')
     .insert(lead)
     .select()
     .single();
@@ -178,7 +178,7 @@ export async function insertLead(lead: Omit<SOC2Lead, 'id' | 'created_at' | 'upd
   // Fallback: if older DBs are missing the is_test column, retry without it to avoid blocking submissions.
   if (error && error.message && error.message.toLowerCase().includes('is_test')) {
     const { data: retryData, error: retryError } = await supabase
-      .from('SOC2_Leads')
+      .from('leads')
       .insert(({ ...lead, is_test: undefined } as any))
       .select()
       .single();
@@ -209,7 +209,7 @@ export async function getLeadById(id: string): Promise<SOC2Lead | null> {
   const supabase = getSupabaseAdmin();
 
   const { data, error } = await supabase
-    .from('SOC2_Leads')
+    .from('leads')
     .select('*')
     .eq('id', id)
     .single();
@@ -230,7 +230,7 @@ export async function updateLead(id: string, updates: Partial<SOC2Lead>): Promis
   const supabase = getSupabaseAdmin();
 
   const { data, error } = await supabase
-    .from('SOC2_Leads')
+    .from('leads')
     .update({ ...updates, updated_at: new Date().toISOString() })
     .eq('id', id)
     .select()
@@ -257,7 +257,7 @@ export async function getLeads(filters?: {
   const supabase = getSupabaseAdmin();
 
   let query = supabase
-    .from('SOC2_Leads')
+    .from('leads')
     .select('*', { count: 'exact' })
     .order('created_at', { ascending: false });
 
@@ -399,8 +399,8 @@ export async function getHealthMetrics(): Promise<{ lead_count: number; pdf_coun
   const supabase = getSupabaseAdmin();
 
   const [leadResult, pdfResult] = await Promise.all([
-    supabase.from('SOC2_Leads').select('id', { count: 'exact', head: true }),
-    supabase.from('SOC2_Leads').select('id', { count: 'exact', head: true }).not('pdf_url', 'is', null),
+    supabase.from('leads').select('id', { count: 'exact', head: true }),
+    supabase.from('leads').select('id', { count: 'exact', head: true }).not('pdf_url', 'is', null),
   ]);
 
   return {
@@ -467,8 +467,8 @@ export async function updateLeadStatus(
   const supabase = getSupabaseAdmin();
 
   const { data, error } = await supabase
-    .from('SOC2_Leads')
-    .update({ lead_status: status, updated_at: new Date().toISOString() })
+    .from('leads')
+    .update({ lead_status: status, status, updated_at: new Date().toISOString() })
     .eq('id', leadId)
     .select()
     .single();
@@ -567,7 +567,7 @@ export async function getEnhancedMetrics(): Promise<EnhancedMetrics> {
   const supabase = getSupabaseAdmin();
 
   const { data: leads, error } = await supabase
-    .from('SOC2_Leads')
+    .from('leads')
     .select('readiness_score, estimated_cost_low, estimated_cost_high, soc2_requirers, audit_date, sold, sale_amount');
 
   if (error || !leads) {

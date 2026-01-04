@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { Redis } from '@upstash/redis';
 import { calculateLeadScore, generateRecommendations, ScoringInput } from '@/lib/scoring';
-import { getSupabaseAdmin, logAuditEvent } from '@/lib/supabase';
+import { logAuditEvent } from '@/lib/supabase';
+import { createLead } from '@/lib/leads';
 
 const redis =
   process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
@@ -157,34 +158,34 @@ export async function POST(request: NextRequest) {
   const recommendations = generateRecommendations(scoringInput, scoringResult);
 
   try {
-    const supabase = getSupabaseAdmin();
-
-    const leadInsert = {
-      email: payload.email,
-      company_name: payload.company_name ?? null,
-      industry: payload.industry ?? null,
-      num_employees: payload.num_employees ?? null,
-      data_types: payload.data_types ?? [],
-      audit_date: payload.audit_date ?? null,
-      role: payload.role ?? null,
-      utm_source: payload.utm_source ?? null,
-      variation_id: payload.variation_id ?? 'default',
-      lead_status: 'new',
-      readiness_score: scoringResult.readiness_score,
-      estimated_cost_low: scoringResult.estimated_cost_low,
-      estimated_cost_high: scoringResult.estimated_cost_high,
-      lead_score: scoringResult.lead_score,
-      keep_or_sell: scoringResult.keep_or_sell,
+    const leadPayload = {
+      inputs: payload,
+      scoring: scoringResult,
+      recommendations,
     };
 
-    const { data, error } = await supabase
-      .from('SOC2_Leads')
-      .insert(leadInsert)
-      .select('id')
-      .single();
+    const leadResult = await createLead({
+      email: payload.email,
+      company: payload.company_name ?? null,
+      leadType: 'soc2_readiness',
+      payload: leadPayload,
+      derivedFields: {
+        industry: payload.industry ?? null,
+        numEmployees: payload.num_employees ?? null,
+        dataTypes: payload.data_types ?? [],
+        auditDate: payload.audit_date ?? null,
+        role: payload.role ?? null,
+        utmSource: payload.utm_source ?? null,
+        variationId: payload.variation_id ?? 'default',
+        readinessScore: scoringResult.readiness_score,
+        estimatedCostLow: scoringResult.estimated_cost_low,
+        estimatedCostHigh: scoringResult.estimated_cost_high,
+        leadScore: scoringResult.lead_score,
+        keepOrSell: scoringResult.keep_or_sell as 'keep' | 'sell',
+      },
+    });
 
-    if (error) {
-      console.error('Supabase insert error:', error);
+    if (!leadResult.ok) {
       return NextResponse.json(
         { ok: false, error: 'insert_failed' },
         { status: 500 }
@@ -192,7 +193,7 @@ export async function POST(request: NextRequest) {
     }
 
     await logAuditEvent('lead_submitted', {
-      lead_id: data?.id,
+      lead_id: leadResult.id,
       source: 'soc2-lead-endpoint',
       ip,
       variation_id: payload.variation_id ?? 'default',
@@ -202,7 +203,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       ok: true,
-      lead_id: data?.id,
+      lead_id: leadResult.id,
       results: {
         readiness_score: scoringResult.readiness_score,
         estimated_cost_low: scoringResult.estimated_cost_low,
