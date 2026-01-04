@@ -5,7 +5,7 @@ import type { ReactNode, RefObject } from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { CTA, industriesNav, navConfig } from '@/lib/navConfig';
 import { useDropdownIntent } from './useDropdownIntent';
 const DROPDOWN_PANEL_CLASS =
@@ -83,6 +83,7 @@ function DropdownPortal({ id, isOpen, anchorRef, children, onMouseEnter, onMouse
 }
 
 export default function Header() {
+  const router = useRouter();
   const {
     open: isGuidesOpen,
     scheduleOpen: scheduleGuidesOpen,
@@ -140,6 +141,13 @@ export default function Header() {
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const mobileToggleRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
+  const primaryCtaHref = pathname.startsWith('/penetration-testing') ? '/penetration-testing/cost-estimator' : CTA.href;
+  const handleMobilePrimaryCta = useCallback(() => {
+    if (!primaryCtaHref) return;
+    setMobileOpen(false);
+    document.body.style.overflow = '';
+    router.push(primaryCtaHref);
+  }, [primaryCtaHref, router]);
   const menuItemClass =
     'block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600';
   const viewAllClass =
@@ -280,6 +288,18 @@ export default function Header() {
       setMobileVendorOpen(false);
     }
   }, [isMobileOpen]);
+
+  useEffect(() => {
+    if (process.env.NODE_ENV !== 'development') return;
+    if (!CTA.href || !CTA.href.startsWith('/')) {
+      // eslint-disable-next-line no-console
+      console.warn('Header CTA misconfigured: expected internal href, received', CTA.href);
+    }
+    if (!primaryCtaHref.startsWith('/')) {
+      // eslint-disable-next-line no-console
+      console.warn('Derived primary CTA href should be internal path; got', primaryCtaHref);
+    }
+  }, [primaryCtaHref]);
 
   useEffect(() => {
     if (!isMobileOpen) return;
@@ -1187,16 +1207,16 @@ export default function Header() {
                   )}
                 </div>
 
-                <Link
-                href={pathname.startsWith('/penetration-testing') ? '/penetration-testing/cost-estimator' : CTA.href}
-                className="w-full inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-4 py-2 rounded-lg shadow-sm transition-all"
-                onClick={() => setMobileOpen(false)}
-              >
-                {pathname.startsWith('/penetration-testing') ? 'Run Pentest Cost Estimator' : CTA.label}
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
+                <button
+                  type="button"
+                  className="w-full inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-4 py-2 rounded-lg shadow-sm transition-all"
+                  onClick={handleMobilePrimaryCta}
+                >
+                  {pathname.startsWith('/penetration-testing') ? 'Run Pentest Cost Estimator' : CTA.label}
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </button>
               </div>
             </div>
           </>,
