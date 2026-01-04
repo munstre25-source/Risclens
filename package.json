@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "migrate": "bash scripts/migrate.sh",
     "seed": "tsx scripts/seed.ts",
-    "check:links": "tsx scripts/check-learn-more-links.ts"
+    "check:links": "tsx scripts/check-learn-more-links.ts",
+    "check:sitemap": "tsx scripts/check-sitemap.ts"
   },
   "dependencies": {
     "@sendgrid/mail": "^8.1.0",

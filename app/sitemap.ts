@@ -25,9 +25,11 @@ const routes: RouteEntry[] = ROUTES.map((path) => {
     path: normalizedPath,
     changeFrequency: monthlyPaths.has(normalizedPath) ? 'monthly' : 'weekly',
     priority: isRoot ? 1 : 0.8,
-    // Add lastModified only when accurate per-page data is available; omit otherwise to avoid misleading dates.
+    // Only include lastModified when per-page accuracy is available; omitted by default to avoid misleading metadata.
   };
-}).filter(Boolean) as RouteEntry[];
+})
+  .filter(Boolean)
+  .map((entry) => ({ ...entry, path: normalizePath(entry!.path) })) as RouteEntry[];
 
 function normalizePath(path: string): string {
   if (!path) return '/';
@@ -39,7 +41,7 @@ function normalizePath(path: string): string {
 
 function toAbsoluteUrl(path: string): string {
   const normalizedPath = normalizePath(path);
-  return normalizedPath === '/' ? baseUrl : `${baseUrl}${normalizedPath}`;
+  return normalizedPath === '/' ? baseUrl : new URL(normalizedPath, baseUrl).toString();
 }
 
 function dedupeByUrl(entries: RouteEntry[]): RouteEntry[] {
@@ -66,14 +68,17 @@ function dedupeByUrl(entries: RouteEntry[]): RouteEntry[] {
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return dedupeByUrl(routes).map(({ path, changeFrequency, priority, lastModified }) => {
-    const url = toAbsoluteUrl(path);
-
-    return {
-      url,
-      changeFrequency,
-      priority,
-      ...(lastModified ? { lastModified } : {}),
-    };
+  const unique = dedupeByUrl(routes);
+  const sorted = unique.sort((a, b) => {
+    const urlA = toAbsoluteUrl(a.path);
+    const urlB = toAbsoluteUrl(b.path);
+    return urlA.localeCompare(urlB);
   });
+
+  return sorted.map(({ path, changeFrequency, priority, lastModified }) => ({
+    url: toAbsoluteUrl(path),
+    changeFrequency,
+    priority,
+    ...(lastModified ? { lastModified } : {}),
+  }));
 }

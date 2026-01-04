@@ -905,307 +905,308 @@ export default function Header() {
         </div>
       </div>
 
-      {showMobileMenu && (
-        <>
-          <button
-            type="button"
-            aria-hidden="true"
-            tabIndex={-1}
-            className={`md:hidden fixed inset-0 z-40 bg-slate-900/30 transition-opacity duration-200 ease-out ${
-              isMobileOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-            }`}
-            onClick={() => setMobileOpen(false)}
-          />
+      {showMobileMenu &&
+        createPortal(
+          <>
+            <button
+              type="button"
+              aria-hidden="true"
+              tabIndex={-1}
+              className={`md:hidden fixed inset-0 z-[9998] bg-slate-900/40 transition-opacity duration-200 ease-out ${
+                isMobileOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+              }`}
+              onClick={() => setMobileOpen(false)}
+            />
 
-          <div
-            ref={mobileMenuRef}
-            // Keep the mobile drawer above page content and below the header; previously top-full pushed it behind the hero.
-            className={`md:hidden fixed inset-x-0 bottom-0 top-16 z-[60] bg-white text-slate-900 shadow-xl transition-all duration-200 ease-out ${
-              isMobileOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'
-            }`}
-          >
-            <div className="px-4 py-4 space-y-3 h-full overflow-y-auto">
-              <div className="space-y-2 rounded-xl border border-slate-200">
-                <button
-                  type="button"
-                  className="w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-slate-900"
-                  aria-expanded={mobileSocOpen}
-                  aria-controls="mobile-soc-menu"
-                  onClick={() => toggleMobileSection('soc')}
-                >
-                  <span>SOC 2</span>
-                  <svg
-                    className={`w-4 h-4 transition-transform ${mobileSocOpen ? 'rotate-180 text-brand-700' : 'text-slate-500'}`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
+            <div
+              ref={mobileMenuRef}
+              className={`md:hidden fixed inset-y-0 right-0 w-full h-[100dvh] max-w-md z-[9999] bg-white text-slate-900 shadow-2xl transition-all duration-200 ease-out ${
+                isMobileOpen ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4 pointer-events-none'
+              }`}
+            >
+              <div className="px-4 py-4 space-y-3 h-full overflow-y-auto pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
+                <div className="space-y-2 rounded-xl border border-slate-200">
+                  <button
+                    type="button"
+                    className="w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-slate-900"
+                    aria-expanded={mobileSocOpen}
+                    aria-controls="mobile-soc-menu"
+                    onClick={() => toggleMobileSection('soc')}
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                {mobileSocOpen && (
-                  <div id="mobile-soc-menu" className="px-3 pb-3 space-y-2">
-                    <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block pt-1">Tools</span>
-                    <Link
-                      href={socMenu.overview.href}
-                      className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
-                      onClick={() => setMobileOpen(false)}
+                    <span>SOC 2</span>
+                    <svg
+                      className={`w-4 h-4 transition-transform ${mobileSocOpen ? 'rotate-180 text-brand-700' : 'text-slate-500'}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
                     >
-                      {socMenu.overview.label}
-                    </Link>
-                    <Link
-                      href={socMenu.primary.href}
-                      className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      {socMenu.primary.label}
-                    </Link>
-                    <div className="border-t border-slate-200 my-2" />
-                    <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block">Guides</span>
-                    {socMenu.guides.map((item) => (
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  {mobileSocOpen && (
+                    <div id="mobile-soc-menu" className="px-3 pb-3 space-y-2">
+                      <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block pt-1">Tools</span>
                       <Link
-                        key={item.href}
-                        href={item.href}
+                        href={socMenu.overview.href}
                         className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
                         onClick={() => setMobileOpen(false)}
                       >
-                        {item.label}
+                        {socMenu.overview.label}
                       </Link>
-                    ))}
-                    <div className="border-t border-slate-200 my-2" />
-                    <Link
-                      href={socMenu.viewAll.href}
-                      className="block text-sm text-brand-700 hover:text-brand-800 transition-colors"
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      {socMenu.viewAll.label}
-                    </Link>
-                  </div>
-                )}
-              </div>
-
-              <div className="space-y-2 rounded-xl border border-slate-200">
-                <button
-                  type="button"
-                  className="w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-slate-900"
-                  aria-expanded={mobilePentestOpen}
-                  aria-controls="mobile-pentest-menu"
-                  onClick={() => toggleMobileSection('pentest')}
-                >
-                  <span>Penetration Testing</span>
-                  <svg
-                    className={`w-4 h-4 transition-transform ${mobilePentestOpen ? 'rotate-180 text-brand-700' : 'text-slate-500'}`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                {mobilePentestOpen && (
-                  <div id="mobile-pentest-menu" className="px-3 pb-3 space-y-2">
-                    <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block pt-1">Tools</span>
-                    <Link
-                      href={pentestMenu.overview.href}
-                      className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      {pentestMenu.overview.label}
-                    </Link>
-                    <Link
-                      href={pentestMenu.primary.href}
-                      className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      {pentestMenu.primary.label}
-                    </Link>
-                    <div className="border-t border-slate-200 my-2" />
-                    <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block">Guides</span>
-                    {pentestMenu.guides.map((item) => (
                       <Link
-                        key={item.href}
-                        href={item.href}
+                        href={socMenu.primary.href}
                         className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
                         onClick={() => setMobileOpen(false)}
                       >
-                        {item.label}
+                        {socMenu.primary.label}
                       </Link>
-                    ))}
-                    <div className="border-t border-slate-200 my-2" />
-                    <Link
-                      href={pentestMenu.viewAll.href}
-                      className="block text-sm text-brand-700 hover:text-brand-800 transition-colors"
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      {pentestMenu.viewAll.label}
-                    </Link>
-                  </div>
-                )}
-              </div>
-
-              <div className="space-y-2 rounded-xl border border-slate-200">
-                <button
-                  type="button"
-                  className="w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-slate-900"
-                  aria-expanded={mobileVendorOpen}
-                  aria-controls="mobile-vendor-menu"
-                  onClick={() => toggleMobileSection('vendor')}
-                >
-                  <span>Vendor Risk</span>
-                  <svg
-                    className={`w-4 h-4 transition-transform ${mobileVendorOpen ? 'rotate-180 text-brand-700' : 'text-slate-500'}`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                {mobileVendorOpen && (
-                  <div id="mobile-vendor-menu" className="px-3 pb-3 space-y-2">
-                    <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block pt-1">Tools</span>
-                    <Link
-                      href={vendorMenu.overview.href}
-                      className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      {vendorMenu.overview.label}
-                    </Link>
-                    <Link
-                      href={vendorMenu.primary.href}
-                      className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      {vendorMenu.primary.label}
-                    </Link>
-                    <div className="border-t border-slate-200 my-2" />
-                    <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block">Guides</span>
-                    {vendorMenu.guides.map((item) => (
+                      <div className="border-t border-slate-200 my-2" />
+                      <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block">Guides</span>
+                      {socMenu.guides.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                      <div className="border-t border-slate-200 my-2" />
                       <Link
-                        key={item.href}
-                        href={item.href}
+                        href={socMenu.viewAll.href}
+                        className="block text-sm text-brand-700 hover:text-brand-800 transition-colors"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        {socMenu.viewAll.label}
+                      </Link>
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-2 rounded-xl border border-slate-200">
+                  <button
+                    type="button"
+                    className="w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-slate-900"
+                    aria-expanded={mobilePentestOpen}
+                    aria-controls="mobile-pentest-menu"
+                    onClick={() => toggleMobileSection('pentest')}
+                  >
+                    <span>Penetration Testing</span>
+                    <svg
+                      className={`w-4 h-4 transition-transform ${mobilePentestOpen ? 'rotate-180 text-brand-700' : 'text-slate-500'}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  {mobilePentestOpen && (
+                    <div id="mobile-pentest-menu" className="px-3 pb-3 space-y-2">
+                      <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block pt-1">Tools</span>
+                      <Link
+                        href={pentestMenu.overview.href}
                         className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
                         onClick={() => setMobileOpen(false)}
                       >
-                        {item.label}
+                        {pentestMenu.overview.label}
                       </Link>
-                    ))}
-                    <div className="border-t border-slate-200 my-2" />
-                    <Link
-                      href={vendorMenu.viewAll.href}
-                      className="block text-sm text-brand-700 hover:text-brand-800 transition-colors"
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      {vendorMenu.viewAll.label}
-                    </Link>
-                  </div>
-                )}
-              </div>
-
-              <div className="space-y-2 rounded-xl border border-slate-200">
-                <button
-                  type="button"
-                  className="w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-slate-900"
-                  aria-expanded={mobileGuidesOpen}
-                  aria-controls="mobile-guides-menu"
-                  onClick={() => toggleMobileSection('guides')}
-                >
-                  <span>Guides</span>
-                  <svg
-                    className={`w-4 h-4 transition-transform ${mobileGuidesOpen ? 'rotate-180 text-brand-700' : 'text-slate-500'}`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                {mobileGuidesOpen && (
-                  <div id="mobile-guides-menu" className="px-3 pb-3 space-y-2">
-                    {curatedGuides.map((item) => (
                       <Link
-                        key={item.href}
-                        href={item.href}
+                        href={pentestMenu.primary.href}
                         className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
                         onClick={() => setMobileOpen(false)}
                       >
-                        {item.label}
+                        {pentestMenu.primary.label}
                       </Link>
-                    ))}
-                    <Link
-                      href="/soc-2/guides"
-                      className="block text-sm text-brand-700 hover:text-brand-800 transition-colors"
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      View all guides →
-                    </Link>
-                  </div>
-                )}
-              </div>
-
-              <div className="space-y-2 rounded-xl border border-slate-200">
-                <button
-                  type="button"
-                  className="w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-slate-900"
-                  aria-expanded={mobileIndustriesOpen}
-                  aria-controls="mobile-industries-menu"
-                  onClick={() => toggleMobileSection('industries')}
-                >
-                  <span>Industries</span>
-                  <svg
-                    className={`w-4 h-4 transition-transform ${mobileIndustriesOpen ? 'rotate-180 text-brand-700' : 'text-slate-500'}`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                {mobileIndustriesOpen && (
-                  <div id="mobile-industries-menu" className="px-3 pb-3 space-y-2">
-                    <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block pt-1">SOC 2 Industries</span>
-                    <Link
-                      href="/soc-2/industries"
-                      className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      Overview
-                    </Link>
-                    {industries.map((item) => (
+                      <div className="border-t border-slate-200 my-2" />
+                      <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block">Guides</span>
+                      {pentestMenu.guides.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                      <div className="border-t border-slate-200 my-2" />
                       <Link
-                        key={item.href}
-                        href={item.href}
+                        href={pentestMenu.viewAll.href}
+                        className="block text-sm text-brand-700 hover:text-brand-800 transition-colors"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        {pentestMenu.viewAll.label}
+                      </Link>
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-2 rounded-xl border border-slate-200">
+                  <button
+                    type="button"
+                    className="w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-slate-900"
+                    aria-expanded={mobileVendorOpen}
+                    aria-controls="mobile-vendor-menu"
+                    onClick={() => toggleMobileSection('vendor')}
+                  >
+                    <span>Vendor Risk</span>
+                    <svg
+                      className={`w-4 h-4 transition-transform ${mobileVendorOpen ? 'rotate-180 text-brand-700' : 'text-slate-500'}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  {mobileVendorOpen && (
+                    <div id="mobile-vendor-menu" className="px-3 pb-3 space-y-2">
+                      <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block pt-1">Tools</span>
+                      <Link
+                        href={vendorMenu.overview.href}
                         className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
                         onClick={() => setMobileOpen(false)}
                       >
-                        {item.label}
+                        {vendorMenu.overview.label}
                       </Link>
-                    ))}
-                    <Link
-                      href="/soc-2/industries"
-                      className="block text-sm text-brand-700 hover:text-brand-800 transition-colors"
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      View all industries →
-                    </Link>
-                  </div>
-                )}
-              </div>
+                      <Link
+                        href={vendorMenu.primary.href}
+                        className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        {vendorMenu.primary.label}
+                      </Link>
+                      <div className="border-t border-slate-200 my-2" />
+                      <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block">Guides</span>
+                      {vendorMenu.guides.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                      <div className="border-t border-slate-200 my-2" />
+                      <Link
+                        href={vendorMenu.viewAll.href}
+                        className="block text-sm text-brand-700 hover:text-brand-800 transition-colors"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        {vendorMenu.viewAll.label}
+                      </Link>
+                    </div>
+                  )}
+                </div>
 
-              <Link
-                href={pathname.startsWith('/penetration-testing') ? '/penetration-testing/cost-estimator' : CTA_HREF}
-                className="w-full inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-4 py-2 rounded-lg shadow-sm transition-all"
-                onClick={() => setMobileOpen(false)}
-              >
-                {pathname.startsWith('/penetration-testing') ? 'Run Pentest Cost Estimator' : 'Get Readiness Score'}
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
+                <div className="space-y-2 rounded-xl border border-slate-200">
+                  <button
+                    type="button"
+                    className="w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-slate-900"
+                    aria-expanded={mobileGuidesOpen}
+                    aria-controls="mobile-guides-menu"
+                    onClick={() => toggleMobileSection('guides')}
+                  >
+                    <span>Guides</span>
+                    <svg
+                      className={`w-4 h-4 transition-transform ${mobileGuidesOpen ? 'rotate-180 text-brand-700' : 'text-slate-500'}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  {mobileGuidesOpen && (
+                    <div id="mobile-guides-menu" className="px-3 pb-3 space-y-2">
+                      {curatedGuides.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                      <Link
+                        href="/soc-2/guides"
+                        className="block text-sm text-brand-700 hover:text-brand-800 transition-colors"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        View all guides →
+                      </Link>
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-2 rounded-xl border border-slate-200">
+                  <button
+                    type="button"
+                    className="w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-slate-900"
+                    aria-expanded={mobileIndustriesOpen}
+                    aria-controls="mobile-industries-menu"
+                    onClick={() => toggleMobileSection('industries')}
+                  >
+                    <span>Industries</span>
+                    <svg
+                      className={`w-4 h-4 transition-transform ${mobileIndustriesOpen ? 'rotate-180 text-brand-700' : 'text-slate-500'}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  {mobileIndustriesOpen && (
+                    <div id="mobile-industries-menu" className="px-3 pb-3 space-y-2">
+                      <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block pt-1">SOC 2 Industries</span>
+                      <Link
+                        href="/soc-2/industries"
+                        className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        Overview
+                      </Link>
+                      {industries.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                      <Link
+                        href="/soc-2/industries"
+                        className="block text-sm text-brand-700 hover:text-brand-800 transition-colors"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        View all industries →
+                      </Link>
+                    </div>
+                  )}
+                </div>
+
+                <Link
+                  href={pathname.startsWith('/penetration-testing') ? '/penetration-testing/cost-estimator' : CTA_HREF}
+                  className="w-full inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-4 py-2 rounded-lg shadow-sm transition-all"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {pathname.startsWith('/penetration-testing') ? 'Run Pentest Cost Estimator' : 'Get Readiness Score'}
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </Link>
+              </div>
             </div>
-          </div>
-        </>
-      )}
+          </>,
+          document.body,
+        )}
     </header>
   );
 }
