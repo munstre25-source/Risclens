@@ -213,7 +213,7 @@ export function VendorRiskTriageForm() {
 
       {calculated && (
         <div className="space-y-4">
-          <VendorRiskResults result={calculated} />
+          <VendorRiskResults result={calculated} inputs={inputs} />
 
           <div className="border border-slate-200 rounded-xl p-4 bg-slate-50 space-y-3">
             <p className="text-sm font-semibold text-slate-900">Send me the VRA package (optional)</p>

@@ -7,6 +7,8 @@ const payloadSchema = z
   .object({
     email: z.string().trim().toLowerCase().email().optional(),
     source_url: z.string().trim().max(240).optional(),
+    help_option: z.string().trim().max(64).optional(),
+    help_notes: z.string().trim().max(1000).optional(),
     inputs: z
       .object({
         dataSensitivity: z.string(),
@@ -53,6 +55,8 @@ export async function POST(request: NextRequest) {
       inputs: data.inputs,
       result: data.result,
       source_url: data.source_url ?? null,
+      help_option: data.help_option ?? null,
+      help_notes: data.help_notes ?? null,
     };
 
     const leadResult = await createLead({

@@ -59,10 +59,19 @@ export default function CalculatorPage() {
               Related: Vendor Risk Assessment
             </Link>
           </div>
-          <div className="flex justify-center">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <Link
+              href="#calculator"
+              className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-5 py-2.5 rounded-lg shadow-sm transition"
+            >
+              Get Readiness Score
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
             <HowItWorksButton />
           </div>
-          <div className="rounded-2xl border border-slate-200 bg-white p-6">
+          <div id="calculator" className="rounded-2xl border border-slate-200 bg-white p-6">
             <Suspense fallback={<FormSkeleton />}>
               <CalculatorForm />
             </Suspense>

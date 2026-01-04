@@ -858,11 +858,11 @@ export default function Header() {
           />
 
           <div
-              className={`md:hidden fixed inset-x-0 top-16 z-50 border-t border-slate-200 bg-white shadow-sm transition-all duration-200 ease-out ${
+              className={`md:hidden fixed inset-x-0 top-full z-50 border-t border-slate-200 bg-white shadow-sm transition-all duration-200 ease-out ${
               isMobileOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'
             }`}
           >
-            <div className="px-4 py-4 space-y-3">
+            <div className="px-4 py-4 space-y-3 max-h-[70vh] overflow-auto">
               <div className="space-y-2 rounded-xl border border-slate-200">
                 <button
                   type="button"
