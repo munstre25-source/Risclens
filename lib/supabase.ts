@@ -82,6 +82,7 @@ export interface SOC2Lead {
   id: string;
   is_test?: boolean;
   company_name: string;
+  company?: string; // Fallback for some templates
   industry: string;
   num_employees: number;
   data_types: string[];
@@ -93,6 +94,12 @@ export interface SOC2Lead {
   context_note: string | null; // Optional free-text context from user (not used in scoring)
   soc2_requirers: string[]; // Array of SOC 2 requirement sources
   lead_status: LeadStatus; // Lead lifecycle status
+  status?: LeadStatus; // Duplicate for compatibility
+  lead_type?: string;
+  lead_payload?: any;
+  payload?: any;
+  source_url?: string;
+  frameworks?: string[];
   readiness_score: number;
   estimated_cost_low: number;
   estimated_cost_high: number;
@@ -111,6 +118,51 @@ export interface SOC2Lead {
   created_at: string;
   updated_at: string;
 }
+
+/**
+ * Insert a new lead into the unified leads table
+ */
+export async function insertLead(lead: Omit<SOC2Lead, 'id' | 'created_at' | 'updated_at'>): Promise<SOC2Lead> {
+  const supabase = getSupabaseAdmin();
+
+  const { data, error } = await supabase
+    .from('leads')
+    .insert(lead)
+    .select()
+    .single();
+
+  // Fallback: if older DBs are missing the is_test column, retry without it to avoid blocking submissions.
+  if (error && error.message && error.message.toLowerCase().includes('is_test')) {
+    const { data: retryData, error: retryError } = await supabase
+      .from('leads')
+      .insert(({ ...lead, is_test: undefined } as any))
+      .select()
+      .single();
+
+    if (!retryError && retryData) {
+      console.warn('Inserted lead without is_test column fallback');
+      return retryData;
+    }
+
+    if (retryError) {
+      console.error('Failed to insert lead after is_test fallback:', retryError);
+      throw new Error(`Database error: ${retryError.message}`);
+    }
+  }
+
+  if (error) {
+    console.error('Failed to insert lead:', error);
+    throw new Error(`Database error: ${error.message}`);
+  }
+
+  return data;
+}
+
+/**
+ * Alias for insertLead to support legacy codebases
+ */
+export const createLead = insertLead;
+
 
 export interface RevenueEvent {
   id: string;
