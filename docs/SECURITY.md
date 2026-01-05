@@ -1,5 +1,7 @@
 # SECURITY
 
+**Note:** A public-facing Trust Center is available at `/security`.
+
 See [THREAT_MODEL.md](THREAT_MODEL.md) for risk analysis and [DATA.md](DATA.md) for collection scope.
 
 ## Posture (Current)

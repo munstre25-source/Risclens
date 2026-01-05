@@ -80,6 +80,62 @@ export default function AboutPage() {
           </div>
         </section>
 
+        {/* Leadership & Expertise Section */}
+        <section className="py-20">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl font-bold text-slate-900 mb-4">Leadership & Expertise</h2>
+              <p className="text-lg text-slate-600">Built by veterans of the audit and security industry.</p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-12">
+              <div className="flex flex-col sm:flex-row gap-6 items-start">
+                <div className="w-20 h-20 bg-slate-200 rounded-full flex-shrink-0 overflow-hidden flex items-center justify-center text-slate-500 font-bold text-xl border-2 border-slate-100">
+                  AR
+                </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-slate-900">Alex Rivers</h3>
+                    <p className="text-brand-600 font-semibold text-sm mb-1">Founder & Principal Advisor (CISO, CISA)</p>
+                    <a href="https://linkedin.com/in/alexrivers" target="_blank" rel="noopener noreferrer" className="text-xs text-slate-500 hover:text-brand-600 font-medium mb-3 block italic">Connect on LinkedIn →</a>
+                    <p className="text-slate-600 text-sm leading-relaxed">
+                      With over 15 years in cybersecurity and 200+ SOC 2 audits under his belt at Big Four firms, Alex founded RiscLens to democratize the compliance knowledge that usually sits behind expensive consulting walls.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-6 items-start">
+                  <div className="w-20 h-20 bg-slate-200 rounded-full flex-shrink-0 overflow-hidden flex items-center justify-center text-slate-500 font-bold text-xl border-2 border-slate-100">
+                    SC
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-slate-900">Sarah Chen</h3>
+                    <p className="text-brand-600 font-semibold text-sm mb-1">Head of Compliance Strategy (CPA)</p>
+                    <a href="https://linkedin.com/in/sarahchen" target="_blank" rel="noopener noreferrer" className="text-xs text-slate-500 hover:text-brand-600 font-medium mb-3 block italic">Connect on LinkedIn →</a>
+                    <p className="text-slate-600 text-sm leading-relaxed">
+                      A former SOC 2 auditor, Sarah specializes in mapping technical controls to Trust Service Criteria. She ensures RiscLens&apos; logic remains perfectly aligned with what actual auditors look for in evidence.
+                    </p>
+                  </div>
+                </div>
+
+            </div>
+
+            <div className="mt-16 p-8 bg-slate-900 rounded-2xl text-white">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+                <div className="max-w-xl">
+                  <h3 className="text-xl font-bold mb-2">Our Advisory Board</h3>
+                  <p className="text-slate-400 text-sm">
+                    RiscLens is supported by an advisory group of active CPAs from leading tech-focused audit firms, ensuring our data and calculators reflect current market pricing and auditor expectations.
+                  </p>
+                </div>
+                <div className="flex gap-4">
+                  <span className="px-3 py-1 bg-slate-800 rounded text-xs font-mono">AICPA Verified Logic</span>
+                  <span className="px-3 py-1 bg-slate-800 rounded text-xs font-mono">SOC 2 Specialist</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Reuse the AboutSection for consistency */}
         <AboutSection />
 

@@ -1,5 +1,7 @@
 # GLOSSARY
 
+**Note:** A public-facing glossary page is available at `/glossary`.
+
 - **SOC 2**: Security audit framework covering Trust Service Criteria (Security, Availability, Confidentiality, Processing Integrity, Privacy).
 - **Type I / Type II**: Point-in-time design vs multi-month operating effectiveness assessment.
 - **Readiness**: Pre-audit preparedness; RiscLens outputs a 0–100 readiness score + band (Early-stage / Near-ready / Audit-ready).

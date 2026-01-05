@@ -42,39 +42,62 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
-  icons: {
-    icon: [{ url: '/favicon.ico' }],
-  },
-};
+    icons: {
+      icon: [{ url: '/favicon.ico' }],
+    },
+  };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <html lang="en">
-      <head>
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-7BR1HET2Y2"
-          strategy="afterInteractive"
-        />
-        <Script id="ga-init" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-7BR1HET2Y2');
-          `}
-        </Script>
-      </head>
-      <body>
-        <HashScrollFix />
-        {children}
-        <Analytics />
-        <SpeedInsights />
-      </body>
-    </html>
-  );
-}
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "RiscLens",
+    "url": "https://risclens.com",
+    "logo": "https://risclens.com/logo.png",
+    "sameAs": [
+      "https://linkedin.com/company/risclens",
+      "https://twitter.com/risclens"
+    ],
+    "description": "Deterministic SOC 2 readiness infrastructure for early-stage companies.",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "email": "hello@risclens.com",
+      "contactType": "customer support"
+    }
+  };
+
+  export default function RootLayout({
+    children,
+  }: {
+    children: React.ReactNode;
+  }) {
+    return (
+      <html lang="en">
+        <head>
+          <Script
+            src="https://www.googletagmanager.com/gtag/js?id=G-7BR1HET2Y2"
+            strategy="afterInteractive"
+          />
+          <Script id="ga-init" strategy="afterInteractive">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-7BR1HET2Y2');
+            `}
+          </Script>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          />
+        </head>
+        <body>
+          <HashScrollFix />
+          {children}
+          <Analytics />
+          <SpeedInsights />
+        </body>
+      </html>
+    );
+  }
+
 

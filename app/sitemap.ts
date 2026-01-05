@@ -10,7 +10,12 @@ type RouteEntry = {
   lastModified?: Date;
 };
 
-const monthlyPaths = new Set(['/privacy', '/terms', '/learn/soc-2-readiness']);
+const monthlyPaths = new Set(['/privacy', '/terms']);
+const highIntentPaths = new Set([
+  '/soc-2-cost',
+  '/penetration-testing/pricing',
+]);
+
 const noindexPaths = new Set([
   '/soc-2-cost/cloud-and-infrastructure',
   '/start',
@@ -24,10 +29,12 @@ const routes: RouteEntry[] = ROUTES.map((path) => {
     return null as unknown as RouteEntry;
   }
 
+  const isHighIntent = highIntentPaths.has(normalizedPath) || normalizedPath.startsWith('/soc-2-cost/');
+
   return {
     path: normalizedPath,
     changeFrequency: monthlyPaths.has(normalizedPath) ? 'monthly' : 'weekly',
-    priority: isRoot ? 1 : 0.8,
+    priority: isRoot ? 1 : (isHighIntent ? 0.9 : 0.8),
     // Only include lastModified when per-page accuracy is available; omitted by default to avoid misleading metadata.
   };
 })

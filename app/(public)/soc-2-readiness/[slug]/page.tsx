@@ -7,6 +7,8 @@ import Footer from '@/components/Footer';
 import AssessmentCTA from '@/components/AssessmentCTA';
 import DefinitionCallout from '@/components/DefinitionCallout';
 import { readinessGuides, readinessGuideBySlug, Soc2GuidePage } from '@/lib/soc2Guides';
+import { AuthorBio, VerifiedBy } from '@/components/AuthorBio';
+import { authors } from '@/lib/authors';
 
 interface PageProps {
   params: { slug: string };
@@ -89,17 +91,32 @@ export default function Soc2ReadinessGuidePage({ params }: PageProps) {
     })),
   };
 
-  const related = relatedPages(page.slug);
+    const related = relatedPages(page.slug);
+    const author = authors.alex;
 
-  return (
-    <>
-      <Script id={`readiness-faq-${page.slug}`} type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <main className="min-h-screen flex flex-col bg-slate-100">
-        <Header />
-        <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 lg:py-20 text-center">
-            <p className="text-sm font-semibold uppercase tracking-wide text-brand-700 mb-3">SOC 2 Readiness</p>
-            <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-5 leading-tight">{page.title}</h1>
+    const personSchema = {
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      name: author.name,
+      jobTitle: author.role,
+      url: `https://risclens.com/about`,
+      sameAs: [author.linkedIn],
+    };
+
+    return (
+      <>
+        <Script id={`readiness-faq-${page.slug}`} type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+        <Script id={`author-schema-${page.slug}`} type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }} />
+        <main className="min-h-screen flex flex-col bg-slate-100">
+          <Header />
+          <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 lg:py-20 text-center">
+              <div className="flex justify-center mb-6">
+                <VerifiedBy authorId="alex" />
+              </div>
+              <p className="text-sm font-semibold uppercase tracking-wide text-brand-700 mb-3">SOC 2 Readiness</p>
+              <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-5 leading-tight">{page.title}</h1>
+
             <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-8 leading-relaxed">{page.summary}</p>
             <div className="flex justify-center">
               <AssessmentCTA />
@@ -167,11 +184,14 @@ export default function Soc2ReadinessGuidePage({ params }: PageProps) {
                     <p className="font-semibold text-slate-900">{faq.question}</p>
                     <p className="text-sm text-slate-700 leading-relaxed">{faq.answer}</p>
                   </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
 
-            <div className="border border-slate-200 rounded-xl p-6 bg-white">
+              <AuthorBio authorId="alex" />
+
+              <div className="border border-slate-200 rounded-xl p-6 bg-white">
+
               <h3 className="text-lg font-semibold text-slate-900 mb-3">Related</h3>
               <div className="flex flex-wrap gap-3 text-sm">
                 <Link href={page.parent} className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">

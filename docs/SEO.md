@@ -3,11 +3,18 @@
 Focus: high-intent security/compliance queries and clean crawlability.
 
 ## Key Surfaces
-- Core funnels: `/` → `/soc-2-readiness-calculator`; pentest `/penetration-testing` → `/penetration-testing/cost-estimator`; vendor risk `/vendor-risk-assessment` → `/vendor-risk-assessment/triage`.
-- High-intent industry pages: Pentest `/penetration-testing/saas`, `/penetration-testing/fintech`.
-- High-intent tools: Vendor Risk ROI Calculator `/vendor-risk-assessment/roi-calculator`.
-- SOC 2 hubs: cost (`/soc-2-cost*`), timeline (`/soc-2-timeline*`), type (`/soc-2-type-i-vs-type-ii`), checklist, cost breakdown, when-to-start, industries (`/soc-2/industries*`), ISO comparison (`/soc-2-vs-iso-27001*`), evidence (`/soc-2-evidence/[slug]`), learning hub (`/learn/soc-2-readiness*`).
-- Pentest guides under `/penetration-testing/[slug]`; vendor risk guides under `/vendor-risk-assessment/*`.
+  - Core funnels: `/` → `/soc-2-readiness-calculator`; pentest `/penetration-testing` → `/penetration-testing/cost-estimator`; vendor risk `/vendor-risk-assessment` → `/vendor-risk-assessment/triage`.
+  - High-intent industry pages: Pentest `/penetration-testing/saas`, `/penetration-testing/fintech`.
+    - High-intent tools: Vendor Risk ROI Calculator `/vendor-risk-assessment/roi-calculator`, ISO 27001 Checklist `/iso-27001-checklist`.
+    - Trust & Authority: `/security` (Trust Center), `/glossary` (Compliance Glossary), `/auditor-directory` (Partner CPA firms).
+    - SOC 2 hubs: cost (`/soc-2-cost*`), timeline (`/soc-2-timeline*`), type (`/soc-2-type-i-vs-type-ii`), checklist, cost breakdown, when-to-start, industries (`/soc-2/industries*`), ISO comparison (`/soc-2-vs-iso-27001*`), evidence (`/soc-2-evidence/[slug]`), learning hub (`/learn/soc-2-readiness*`).
+  - SOC 2 Sales: `/soc-2-sales*` targeting enterprise buyers concerned with bridge letters, subservice organizations, and multi-framework mapping.
+
+## Content Consolidation & De-duplication
+- **Primary Paths:** For control-specific informational content, `/learn/soc-2-readiness/[slug]` is the primary canonical path.
+- **Industry Variants:** The `/soc-2-readiness/[slug]` surface is reserved exclusively for industry/vertical-specific readiness guides (e.g., `/saas`, `/fintech`, `/startups`).
+- **Sitemap Filtering:** Redundant control pages under `/soc-2-readiness/` are excluded from `src/seo/routes.ts` to prevent index bloat and keyword cannibalization.
+
 
 ## Internal Linking Strategy
 - Header dropdowns and mobile drawer cover SOC 2, Pentest, Vendor Risk (including ROI Calculator), Guides, Industries.

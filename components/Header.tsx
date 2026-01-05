@@ -749,14 +749,18 @@ export default function Header() {
                         </Link>
                       ))}
                       <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 pt-2">Comparisons</p>
-                      {resourcesMenu.comparisons.map((item) => (
-                        <Link key={item.href} href={item.href} className="block text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
-                          {item.label}
+                        {resourcesMenu.comparisons.map((item) => (
+                          <Link key={item.href} href={item.href} className="block text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
+                            {item.label}
+                          </Link>
+                        ))}
+                        <Link href={resourcesMenu.viewAll.href} className="block text-sm font-semibold text-brand-700 pt-2" onClick={() => setMobileOpen(false)}>
+                          {resourcesMenu.viewAll.label}
                         </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                      </div>
+                    )}
+                  </div>
+
 
                 <Link
                   href="/search"

@@ -5,6 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AssessmentCTA from '@/components/AssessmentCTA';
 import AboutSection from '@/components/AboutSection';
+import ExpertReview from '@/components/ExpertReview';
 import { costIndustries } from '@/lib/navConfig';
 import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
 
@@ -162,10 +163,17 @@ export default function Soc2CostPage() {
           </div>
         </section>
 
-        <section className="py-16 lg:py-20 bg-white border-t border-slate-200">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 space-y-10">
-            <div>
-              <h2 className="text-2xl font-bold text-slate-900 mb-4">What shapes SOC 2 pricing?</h2>
+          <section className="py-16 lg:py-20 bg-white border-t border-slate-200">
+            <div className="max-w-3xl mx-auto px-4 sm:px-6 space-y-10">
+              <ExpertReview 
+                authorName="Sarah Chen" 
+                authorTitle="Head of Compliance Strategy (CPA)" 
+                date="January 5, 2026" 
+              />
+              
+              <div>
+                <h2 className="text-2xl font-bold text-slate-900 mb-4">What shapes SOC 2 pricing?</h2>
+
               <p className="text-slate-600 leading-relaxed mb-4">
                 A realistic SOC 2 budget blends external fees and internal effort. CPA firms price based on the controls they need to test, the number of systems in scope, and how quickly you want the report. Tooling helps reduce lift, but it adds subscription spend you should plan for up front.
               </p>
