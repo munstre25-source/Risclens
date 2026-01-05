@@ -117,6 +117,20 @@ const COST_EXPLANATION_TEMPLATE = {
   includes: 'This estimate includes: auditor fees, compliance tooling, and internal preparation effort.',
 };
 
+// Business Case template for budget approval
+const BUSINESS_CASE_TEMPLATES = {
+  PRE_AUDIT: {
+    roi: 'Early investment in SOC 2 prevents future enterprise deal friction, reducing sales cycles by 20-30%.',
+    risk: 'Non-compliance is the #1 reason for enterprise procurement rejection in SaaS.',
+    necessity: 'Establishing controls now avoids expensive technical debt and remediation later.',
+  },
+  DEFAULT: {
+    roi: 'SOC 2 allows the sales team to bypass lengthy security questionnaires, accelerating Time-to-Close.',
+    risk: 'Competitors with SOC 2 will win enterprise bids where security is a mandatory gate.',
+    necessity: 'Your current score indicates gaps that will be flagged in even basic due diligence.',
+  }
+};
+
 // Next steps checklist (templated)
 const NEXT_STEPS_CHECKLIST = [
   { step: 'Review this report with your compliance or security team', priority: 1 },
@@ -613,8 +627,30 @@ export default function PDFTemplate({ lead }: PDFTemplateProps) {
           </div>
         </div>
 
-        {/* ============================================================= */}
-        {/* SECTION 4: CONTROL GAP SECTIONS (CONDITIONAL) */}
+          {/* ============================================================= */}
+          {/* SECTION: BUSINESS CASE FOR BUDGET (NEW) */}
+          {/* ============================================================= */}
+          <div className="section">
+            <h2 className="section-title">Business Case for Budget Approval</h2>
+            <div className="executive-summary" style={{ background: '#fffbeb', borderLeftColor: '#f59e0b' }}>
+              <p style={{ marginBottom: '15px' }}>
+                Use these points to justify the investment in SOC 2 to your stakeholders (CFO/CEO).
+              </p>
+              <div style={{ marginBottom: '10px' }}>
+                <p><strong>ROI & Sales Impact:</strong> {lead.readiness_score < 40 ? BUSINESS_CASE_TEMPLATES.PRE_AUDIT.roi : BUSINESS_CASE_TEMPLATES.DEFAULT.roi}</p>
+              </div>
+              <div style={{ marginBottom: '10px' }}>
+                <p><strong>Risk of Delay:</strong> {lead.readiness_score < 40 ? BUSINESS_CASE_TEMPLATES.PRE_AUDIT.risk : BUSINESS_CASE_TEMPLATES.DEFAULT.risk}</p>
+              </div>
+              <div>
+                <p><strong>Strategic Necessity:</strong> {lead.readiness_score < 40 ? BUSINESS_CASE_TEMPLATES.PRE_AUDIT.necessity : BUSINESS_CASE_TEMPLATES.DEFAULT.necessity}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* ============================================================= */}
+          {/* SECTION 4: CONTROL GAP SECTIONS (CONDITIONAL) */}
+
         {/* ============================================================= */}
         {applicableControlAreas.length > 0 && (
           <div className="section">

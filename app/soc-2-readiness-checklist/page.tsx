@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AssessmentCTA from '@/components/AssessmentCTA';
+import ChecklistDownloadForm from '@/components/ChecklistDownloadForm';
 
 export const metadata: Metadata = {
   title: 'SOC 2 Readiness Checklist (2026) | RiscLens',
@@ -45,10 +46,50 @@ export default function Soc2ReadinessChecklistPage() {
               </svg>
             </Link>
             <p className="mt-4 text-sm text-slate-500">Free • No credit card • Instant results</p>
-          </div>
-        </section>
+            </div>
+          </section>
 
-        <section className="py-14 bg-white border-t border-slate-200">
+          <section id="download" className="py-12 bg-slate-50 border-y border-slate-200">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6">
+              <div className="grid gap-12 lg:grid-cols-[1fr_1.2fr] items-center">
+                <div className="space-y-6">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-100 text-brand-700 text-sm font-semibold">
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
+                    </svg>
+                    New for 2026
+                  </div>
+                  <h2 className="text-3xl font-bold text-slate-900 leading-tight">
+                    Get the portable PDF version
+                  </h2>
+                  <p className="text-lg text-slate-600 leading-relaxed">
+                    Take this checklist offline. Share it with your team, map owners to tasks, and track your progress as you prepare for your SOC 2 audit.
+                  </p>
+                  <ul className="space-y-3">
+                    {[
+                      'Interactive task list for teams',
+                      'Evidence collection templates',
+                      'Common auditor questions',
+                      'Cost & timeline benchmarks'
+                    ].map((item) => (
+                      <li key={item} className="flex items-center gap-3 text-slate-700">
+                        <svg className="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <ChecklistDownloadForm />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="py-14 bg-white">
+
           <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-10">
             <div className="space-y-3">
               <h2 className="text-2xl font-semibold text-slate-900">What a SOC 2 readiness checklist is (and isn’t)</h2>

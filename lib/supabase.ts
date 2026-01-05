@@ -547,8 +547,165 @@ export async function deleteSavedFilter(id: string): Promise<boolean> {
 }
 
 // =============================================================================
-// ENHANCED METRICS FUNCTIONS
+// BUYERS & MONETIZATION FUNCTIONS
 // =============================================================================
+
+export interface Buyer {
+  id: string;
+  name: string;
+  contact_email: string;
+  company_name: string | null;
+  active: boolean;
+  lead_types: string[];
+  min_score: number;
+  max_price_per_lead: number;
+  created_at: string;
+}
+
+export interface BuyerWebhook {
+  id: string;
+  buyer_id: string;
+  url: string;
+  secret_header: string;
+  secret_value: string | null;
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface LeadEnrichment {
+  id: string;
+  lead_id: string;
+  provider: string;
+  raw_data: any;
+  enriched_fields: any;
+  created_at: string;
+}
+
+/**
+ * Get all buyers
+ */
+export async function getBuyers(): Promise<Buyer[]> {
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase
+    .from('buyers')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Failed to get buyers:', error);
+    throw new Error(`Database error: ${error.message}`);
+  }
+
+  return data || [];
+}
+
+/**
+ * Create or update a buyer
+ */
+export async function upsertBuyer(buyer: Partial<Buyer>): Promise<Buyer> {
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase
+    .from('buyers')
+    .upsert(buyer)
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Failed to upsert buyer:', error);
+    throw new Error(`Database error: ${error.message}`);
+  }
+
+  return data;
+}
+
+/**
+ * Delete a buyer
+ */
+export async function deleteBuyer(id: string): Promise<void> {
+  const supabase = getSupabaseAdmin();
+  const { error } = await supabase
+    .from('buyers')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    console.error('Failed to delete buyer:', error);
+    throw new Error(`Database error: ${error.message}`);
+  }
+}
+
+/**
+ * Get webhooks for a buyer
+ */
+export async function getBuyerWebhooks(buyerId: string): Promise<BuyerWebhook[]> {
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase
+    .from('buyer_webhooks')
+    .select('*')
+    .eq('buyer_id', buyerId)
+    .order('created_at', { ascending: true });
+
+  if (error) {
+    console.error('Failed to get buyer webhooks:', error);
+    throw new Error(`Database error: ${error.message}`);
+  }
+
+  return data || [];
+}
+
+/**
+ * Upsert a buyer webhook
+ */
+export async function upsertBuyerWebhook(webhook: Partial<BuyerWebhook>): Promise<BuyerWebhook> {
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase
+    .from('buyer_webhooks')
+    .upsert(webhook)
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Failed to upsert buyer webhook:', error);
+    throw new Error(`Database error: ${error.message}`);
+  }
+
+  return data;
+}
+
+/**
+ * Delete a buyer webhook
+ */
+export async function deleteBuyerWebhook(id: string): Promise<void> {
+  const supabase = getSupabaseAdmin();
+  const { error } = await supabase
+    .from('buyer_webhooks')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    console.error('Failed to delete buyer webhook:', error);
+    throw new Error(`Database error: ${error.message}`);
+  }
+}
+
+/**
+ * Get lead enrichment data
+ */
+export async function getLeadEnrichment(leadId: string): Promise<LeadEnrichment[]> {
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase
+    .from('lead_enrichment')
+    .select('*')
+    .eq('lead_id', leadId)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Failed to get lead enrichment:', error);
+    return [];
+  }
+
+  return data || [];
+}
 
 export interface EnhancedMetrics {
   total_leads: number;

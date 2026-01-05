@@ -112,141 +112,199 @@ export default function HomePage() {
               <p className="text-sm text-slate-600">
                 Readiness assessment only — not a certification, audit, or compliance software.
               </p>
-              <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
-                <Link
-                  href="/soc-2-readiness-calculator"
-                  className="btn-primary text-base px-8 py-3"
-                >
-                  Get your readiness score
-                </Link>
-                <span className="text-sm text-slate-600 sm:ml-1">Free • No credit card • Instant results</span>
-              </div>
-              <p className="text-sm text-brand-700">
-                <Link href="/soc-2-cost" className="underline underline-offset-2 hover:text-brand-800">
-                  See SOC 2 cost + timeline guides →
-                </Link>
-              </p>
-              <div className="flex flex-col sm:flex-row gap-2 text-sm text-slate-700">
-                <div className="flex-1">
-                  <span className="font-semibold text-slate-800">SOC 2</span>{' '}
-                  <span className="text-slate-700">
-                    Independent audit framework against the Trust Service Criteria (security, availability, confidentiality, processing integrity, privacy).
-                  </span>{' '}
-                  <Link href="#soc2-definitions" className="text-brand-700 underline underline-offset-2">
-                    What SOC 2 actually means
+                <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
+                  <Link
+                    href="/soc-2-readiness-calculator"
+                    className="btn-primary text-base px-8 py-3"
+                  >
+                    Get your readiness score
+                  </Link>
+                    <Link
+                      href="/soc-2-readiness-checklist#download"
+                      className="btn-secondary text-base px-8 py-3 border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 transition-colors rounded-lg font-medium"
+                    >
+
+                    Download SOC 2 Checklist
                   </Link>
                 </div>
-                <div className="flex-1">
-                  <span className="font-semibold text-slate-800">Readiness</span>{' '}
-                  <span className="text-slate-700">
-                    How prepared you are to pass a SOC 2 audit—policies, controls, evidence, and timelines aligned to auditor expectations.
-                  </span>{' '}
-                  <Link href="#soc2-definitions" className="text-brand-700 underline underline-offset-2">
-                    What is SOC 2 readiness?
-                  </Link>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-slate-600">Free • No credit card • Instant results</span>
                 </div>
-              </div>
-              <div className="flex flex-wrap gap-2 text-xs text-slate-600">
-                <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 border border-slate-200">
-                  Private by default
-                </span>
-                <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 border border-slate-200">
-                  No login required
-                </span>
-                <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 border border-slate-200">
-                  Designed around auditor expectations
-                </span>
-              </div>
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {[
-                  {
-                    title: 'Readiness score',
-                    body: '0–100 score + band (Early-stage / Near-ready / Audit-ready)',
-                    icon: (
-                      <svg className="w-8 h-8 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6l3 3m6 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    ),
-                  },
-                  {
-                    title: 'Cost range',
-                    body: 'Estimated SOC 2 cost based on scope, timeline, and team size',
-                    icon: (
-                      <svg className="w-8 h-8 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .843-3 1.882 0 1.038 1.343 1.881 3 1.881s3 .843 3 1.88C15 15.881 13.657 16.724 12 16.724c-1.26 0-2.342-.457-2.812-1.1M12 6v12m9-6a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    ),
-                  },
-                  {
-                    title: 'Next steps',
-                    body: 'Top fixes auditors expect—prioritized by impact',
-                    icon: (
-                      <svg className="w-8 h-8 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                    ),
-                  },
-                ].map((item) => (
-                  <div key={item.title} className="card p-4 shadow-sm border-slate-200 space-y-2">
-                    <div>{item.icon}</div>
-                    <p className="text-sm font-semibold text-slate-900">{item.title}</p>
-                    <p className="text-sm text-slate-700 leading-relaxed">{item.body}</p>
+                
+                {/* Framework Alignment */}
+                <div className="pt-6 border-t border-slate-100">
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400 font-bold mb-4">
+                    Aligned with industry standards
+                  </p>
+                  <div className="flex flex-wrap items-center gap-x-8 gap-y-4 opacity-70">
+                    <div className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-slate-300"></div>
+                      <span className="text-[11px] font-bold tracking-tight text-slate-600 uppercase">AICPA TSC</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-slate-300"></div>
+                      <span className="text-[11px] font-bold tracking-tight text-slate-600 uppercase">NIST 800-53</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-slate-300"></div>
+                      <span className="text-[11px] font-bold tracking-tight text-slate-600 uppercase">ISO 27001</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-slate-300"></div>
+                      <span className="text-[11px] font-bold tracking-tight text-slate-600 uppercase">HIPAA Security</span>
+                    </div>
                   </div>
-                ))}
-              </div>
+                </div>
+
+                <div className="pt-4">
+                  <Link href="/soc-2-cost" className="inline-flex items-center text-sm font-medium text-brand-600 hover:text-brand-700 transition-colors group">
+                    See SOC 2 cost + timeline guides
+                    <svg className="w-4 h-4 ml-1 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </Link>
+                </div>
+
+                <div className="grid gap-6 sm:grid-cols-2 pt-2">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold uppercase tracking-wider text-slate-900">SOC 2</span>
+                      <div className="h-px flex-1 bg-slate-100"></div>
+                    </div>
+                    <p className="text-sm text-slate-600 leading-relaxed">
+                      Independent audit framework against the Trust Service Criteria (security, availability, confidentiality).{' '}
+                      <Link href="#soc2-definitions" className="text-brand-600 font-medium hover:underline decoration-brand-200 underline-offset-4">
+                        What it means
+                      </Link>
+                    </p>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold uppercase tracking-wider text-slate-900">Readiness</span>
+                      <div className="h-px flex-1 bg-slate-100"></div>
+                    </div>
+                    <p className="text-sm text-slate-600 leading-relaxed">
+                      How prepared you are to pass an audit—policies, controls, and evidence aligned to auditor expectations.{' '}
+                      <Link href="#soc2-definitions" className="text-brand-600 font-medium hover:underline decoration-brand-200 underline-offset-4">
+                        Learn more
+                      </Link>
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap gap-2 pt-2">
+                  <span className="inline-flex items-center rounded-md bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-600 border border-slate-200/60">
+                    Private by default
+                  </span>
+                  <span className="inline-flex items-center rounded-md bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-600 border border-slate-200/60">
+                    No login required
+                  </span>
+                  <span className="inline-flex items-center rounded-md bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-600 border border-slate-200/60">
+                    Designed for auditors
+                  </span>
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 pt-4">
+                  {[
+                    {
+                      title: 'Readiness score',
+                      body: '0–100 score + band (Early-stage / Near-ready / Audit-ready)',
+                      icon: (
+                        <svg className="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                      ),
+                    },
+                    {
+                      title: 'Cost range',
+                      body: 'Estimated SOC 2 cost based on scope, timeline, and team size',
+                      icon: (
+                        <svg className="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .843-3 1.882 0 1.038 1.343 1.881 3 1.881s3 .843 3 1.88C15 15.881 13.657 16.724 12 16.724c-1.26 0-2.342-.457-2.812-1.1M12 6v12m9-6a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      ),
+                    },
+                    {
+                      title: 'Next steps',
+                      body: 'Top fixes auditors expect—prioritized by impact',
+                      icon: (
+                        <svg className="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      ),
+                    },
+                  ].map((item) => (
+                    <div key={item.title} className="group relative bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-brand-200 transition-all duration-200">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-brand-50 group-hover:bg-brand-100 transition-colors">
+                          {item.icon}
+                        </div>
+                        <p className="text-sm font-bold text-slate-900 tracking-tight">{item.title}</p>
+                      </div>
+                      <p className="text-sm text-slate-600 leading-relaxed">{item.body}</p>
+                    </div>
+                  ))}
+                </div>
             </div>
 
-            {/* Hero preview card */}
-            <div className="card shadow-sm border-slate-200 bg-white space-y-4">
-              <div>
-                <p className="text-sm font-semibold text-slate-900">Results preview</p>
-                <p className="text-sm text-slate-600">Example output from the readiness index</p>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="relative inline-flex items-center justify-center">
-                  <svg className="w-24 h-24 -rotate-90">
-                    <circle cx="48" cy="48" r="42" strokeWidth="10" fill="none" className="text-slate-200" />
-                    <circle
-                      cx="48"
-                      cy="48"
-                      r="42"
-                      strokeWidth="10"
-                      fill="none"
-                      strokeDasharray={`${0.72 * 264} 264`}
-                      strokeLinecap="round"
-                      className="stroke-trust-500"
-                    />
-                  </svg>
-                  <div className="absolute flex flex-col items-center">
-                    <span className="text-3xl font-bold text-trust-600">72</span>
-                    <span className="text-[10px] uppercase text-slate-500 tracking-wide">Near-ready</span>
+              {/* Hero preview card */}
+              <div className="card shadow-md border-slate-200 bg-white space-y-4 hover:shadow-lg transition-shadow duration-300 group">
+                <div>
+                  <p className="text-sm font-semibold text-slate-900 flex items-center gap-2">
+                    Results preview
+                    <span className="inline-flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                  </p>
+                  <p className="text-sm text-slate-600">Example output from the readiness index</p>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="relative inline-flex items-center justify-center group/score cursor-help">
+                    <svg className="w-24 h-24 -rotate-90 group-hover/score:scale-105 transition-transform">
+                      <circle cx="48" cy="48" r="42" strokeWidth="10" fill="none" className="text-slate-200" />
+                      <circle
+                        cx="48"
+                        cy="48"
+                        r="42"
+                        strokeWidth="10"
+                        fill="none"
+                        strokeDasharray={`${0.72 * 264} 264`}
+                        strokeLinecap="round"
+                        className="stroke-trust-500"
+                      />
+                    </svg>
+                    <div className="absolute flex flex-col items-center">
+                      <span className="text-3xl font-bold text-trust-600">72</span>
+                      <span className="text-[10px] uppercase text-slate-500 tracking-wide">Near-ready</span>
+                    </div>
+                    {/* Tooltip on hover */}
+                    <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover/score:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
+                      Standard band for Series A SaaS
+                    </div>
+                  </div>
+                  <div className="space-y-2 flex-1">
+                    <div className="rounded-lg bg-slate-50 border border-slate-200 p-3 group-hover:border-brand-200 transition-colors">
+                      <p className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Estimated cost</p>
+                      <p className="text-lg font-bold text-brand-700">$38k–$68k</p>
+                      <p className="text-xs text-slate-500">Auditor + tooling + internal effort</p>
+                    </div>
                   </div>
                 </div>
-                <div className="space-y-2 flex-1">
-                  <div className="rounded-lg bg-slate-50 border border-slate-200 p-3">
-                    <p className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Estimated cost</p>
-                    <p className="text-lg font-bold text-brand-700">$38k–$68k</p>
-                    <p className="text-xs text-slate-500">Auditor + tooling + internal effort</p>
-                  </div>
+                <div className="space-y-2">
+                  <p className="text-sm font-semibold text-slate-800">Top fixes</p>
+                  <ul className="space-y-3">
+                    {[
+                      { text: 'Tighten access reviews with evidence logs', icon: '🔑' },
+                      { text: 'Document change management with approvals', icon: '📝' },
+                      { text: 'Vendor risk: tier critical vendors with proofs', icon: '🛡️' },
+                    ].map((item) => (
+                      <li key={item.text} className="flex gap-3 text-sm text-slate-700 group/item hover:bg-slate-50 p-2 -m-2 rounded-lg transition-colors">
+                        <span className="text-base group-hover/item:scale-110 transition-transform">{item.icon}</span>
+                        <span>{item.text}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
+                <p className="text-xs text-slate-500">Static preview. Your score and recommendations will match your inputs.</p>
               </div>
-              <div className="space-y-2">
-                <p className="text-sm font-semibold text-slate-800">Top fixes</p>
-                <ul className="space-y-2">
-                  {[
-                    'Tighten access reviews with evidence logs',
-                    'Document change management with approvals',
-                    'Vendor risk: tier critical vendors with proofs',
-                  ].map((item) => (
-                    <li key={item} className="flex gap-2 text-sm text-slate-700">
-                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-brand-600" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <p className="text-xs text-slate-500">Static preview. Your score and recommendations will match your inputs.</p>
-            </div>
           </div>
         </div>
       </section>

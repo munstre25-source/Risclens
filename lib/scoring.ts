@@ -149,6 +149,11 @@ function normalizeToHundred(rawScore: number): number {
 // MAIN SCORING FUNCTION (ENTERPRISE-GRADE)
 // =============================================================================
 
+export interface ScoringConfig {
+  scoring_weights?: any;
+  cost_parameters?: any;
+}
+
 /**
  * Calculate detailed scoring result with full breakdown.
  * This is the primary enterprise-grade scoring function.
@@ -156,14 +161,17 @@ function normalizeToHundred(rawScore: number): number {
  * DETERMINISTIC: Same inputs always produce same outputs.
  * INSPECTABLE: Every point can be traced to explicit rules.
  */
-export function calculateDetailedScore(input: ScoringInput): DetailedScoringResult {
+export function calculateDetailedScore(input: ScoringInput, config?: ScoringConfig): DetailedScoringResult {
   const breakdown: ScoreExplanation[] = [];
   let rawScore = 0;
   const monthsUntilAudit = calculateMonthsUntilAudit(input.audit_date);
 
+  // Use dynamic weights if provided, otherwise fallback to defaults
+  const weights = config?.scoring_weights || SCORING_WEIGHTS;
+
   // 1. Company Size Score
   const sizeWeight = findRangeWeight(
-    SCORING_WEIGHTS.companySize.weights,
+    weights.companySize.weights,
     input.num_employees
   );
   rawScore += sizeWeight.points;
@@ -171,13 +179,13 @@ export function calculateDetailedScore(input: ScoringInput): DetailedScoringResu
     input: 'Company Size',
     value: input.num_employees,
     points: sizeWeight.points,
-    maxPoints: SCORING_WEIGHTS.companySize.maxPoints,
+    maxPoints: weights.companySize.maxPoints,
     rationale: `${sizeWeight.label}: ${sizeWeight.rationale}`,
   });
 
   // 2. Audit Timeline Score
   const timelineWeight = findTimelineWeight(
-    SCORING_WEIGHTS.auditTimeline.weights,
+    weights.auditTimeline.weights,
     monthsUntilAudit
   );
   rawScore += timelineWeight.points;
@@ -185,7 +193,7 @@ export function calculateDetailedScore(input: ScoringInput): DetailedScoringResu
     input: 'Audit Timeline',
     value: `${Math.round(monthsUntilAudit)} months`,
     points: timelineWeight.points,
-    maxPoints: SCORING_WEIGHTS.auditTimeline.maxPoints,
+    maxPoints: weights.auditTimeline.maxPoints,
     rationale: `${timelineWeight.label}: ${timelineWeight.rationale}`,
   });
 
@@ -193,8 +201,8 @@ export function calculateDetailedScore(input: ScoringInput): DetailedScoringResu
   let dataTypePoints = 0;
   const matchedDataTypes: string[] = [];
   for (const dt of input.data_types) {
-    const weight = SCORING_WEIGHTS.dataTypes.weights.find(
-      w => w.value === dt.toLowerCase()
+    const weight = weights.dataTypes.weights.find(
+      (w: any) => w.value === dt.toLowerCase()
     );
     if (weight) {
       dataTypePoints += weight.points;
@@ -206,7 +214,7 @@ export function calculateDetailedScore(input: ScoringInput): DetailedScoringResu
     input: 'Data Types',
     value: input.data_types,
     points: dataTypePoints,
-    maxPoints: SCORING_WEIGHTS.dataTypes.maxPoints,
+    maxPoints: weights.dataTypes.maxPoints,
     rationale: matchedDataTypes.length > 0
       ? `Handling: ${matchedDataTypes.join(', ')}`
       : 'No sensitive data types selected',
@@ -217,8 +225,8 @@ export function calculateDetailedScore(input: ScoringInput): DetailedScoringResu
   const matchedRequirers: string[] = [];
   if (input.soc2_requirers && input.soc2_requirers.length > 0) {
     for (const req of input.soc2_requirers) {
-      const weight = SCORING_WEIGHTS.requesterType.weights.find(
-        w => w.value === req.toLowerCase()
+      const weight = weights.requesterType.weights.find(
+        (w: any) => w.value === req.toLowerCase()
       );
       if (weight) {
         requesterPoints += weight.points;
@@ -231,34 +239,34 @@ export function calculateDetailedScore(input: ScoringInput): DetailedScoringResu
     input: 'SOC 2 Requesters',
     value: input.soc2_requirers || [],
     points: requesterPoints,
-    maxPoints: SCORING_WEIGHTS.requesterType.maxPoints,
+    maxPoints: weights.requesterType.maxPoints,
     rationale: matchedRequirers.length > 0
       ? `Required by: ${matchedRequirers.join(', ')}`
       : 'No external requirements specified',
   });
 
   // 5. Role Score
-  const roleWeight = findValueWeight(SCORING_WEIGHTS.role.weights, input.role);
+  const roleWeight = findValueWeight(weights.role.weights, input.role);
   const rolePoints = roleWeight?.points || 1;
   rawScore += rolePoints;
   breakdown.push({
     input: 'Role',
     value: input.role,
     points: rolePoints,
-    maxPoints: SCORING_WEIGHTS.role.maxPoints,
+    maxPoints: weights.role.maxPoints,
     rationale: roleWeight?.rationale || 'Role not specified',
   });
 
   // 6. Industry Score
   const industry = input.industry || 'other';
-  const industryWeight = findValueWeight(SCORING_WEIGHTS.industry.weights, industry);
+  const industryWeight = findValueWeight(weights.industry.weights, industry);
   const industryPoints = industryWeight?.points || 2;
   rawScore += industryPoints;
   breakdown.push({
     input: 'Industry',
     value: industry,
     points: industryPoints,
-    maxPoints: SCORING_WEIGHTS.industry.maxPoints,
+    maxPoints: weights.industry.maxPoints,
     rationale: industryWeight?.rationale || 'Industry profile applied',
   });
 
@@ -268,7 +276,7 @@ export function calculateDetailedScore(input: ScoringInput): DetailedScoringResu
   const bandInfo = READINESS_BANDS[readinessBand];
 
   // Calculate cost estimate
-  const costEstimate = calculateCostEstimateDetailed(input, monthsUntilAudit);
+  const costEstimate = calculateCostEstimateDetailed(input, monthsUntilAudit, config?.cost_parameters);
 
   return {
     rawScore,
@@ -289,9 +297,10 @@ export function calculateDetailedScore(input: ScoringInput): DetailedScoringResu
  */
 function calculateCostEstimateDetailed(
   input: ScoringInput,
-  monthsUntilAudit: number
+  monthsUntilAudit: number,
+  params?: any
 ): { low: number; high: number; explanation: string } {
-  const { baseCost, perEmployee, perDataType, urgencyMultipliers, industryMultipliers } = COST_PARAMETERS;
+  const { baseCost, perEmployee, perDataType, urgencyMultipliers, industryMultipliers } = params || COST_PARAMETERS;
 
   // Base cost
   let low: number = baseCost.low;
@@ -342,8 +351,8 @@ function calculateCostEstimateDetailed(
  * Calculate lead score using legacy format.
  * Maintained for backward compatibility with existing API.
  */
-export function calculateLeadScore(input: ScoringInput): ScoringResult {
-  const detailed = calculateDetailedScore(input);
+export function calculateLeadScore(input: ScoringInput, config?: ScoringConfig): ScoringResult {
+  const detailed = calculateDetailedScore(input, config);
   
   // Convert to legacy 1-10 scale
   const leadScore = Math.max(1, Math.min(10, Math.round(detailed.normalizedScore / 10)));
@@ -370,6 +379,7 @@ export function calculateLeadScore(input: ScoringInput): ScoringResult {
     },
   };
 }
+
 
 // =============================================================================
 // RECOMMENDATIONS FUNCTION

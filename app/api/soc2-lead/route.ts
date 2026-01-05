@@ -4,6 +4,8 @@ import { Redis } from '@upstash/redis';
 import { calculateLeadScore, generateRecommendations, ScoringInput } from '@/lib/scoring';
 import { logAuditEvent } from '@/lib/supabase';
 import { createLead } from '@/lib/leads';
+import { enrichLead } from '@/lib/enrichment';
+import { triggerBuyerWebhooks } from '@/lib/webhooks';
 
 const redis =
   process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
@@ -154,7 +156,11 @@ export async function POST(request: NextRequest) {
     role: payload.role as string,
   };
 
-  const scoringResult = calculateLeadScore(scoringInput);
+  // Fetch system settings for dynamic pricing and scoring
+  const { getSystemSettings } = await import('@/lib/settings');
+  const settings = await getSystemSettings();
+
+  const scoringResult = calculateLeadScore(scoringInput, settings || undefined);
   const recommendations = generateRecommendations(scoringInput, scoringResult);
 
   try {
@@ -190,6 +196,15 @@ export async function POST(request: NextRequest) {
         { ok: false, error: 'insert_failed' },
         { status: 500 }
       );
+    }
+
+    // Trigger enrichment and webhooks in background
+    if (leadResult.id) {
+      enrichLead(leadResult.id).catch(console.error);
+      // Only trigger buyer webhooks if this isn't a placeholder email
+      if (payload.email && !payload.email.includes('anonymous') && !payload.email.includes('no-email')) {
+        triggerBuyerWebhooks(leadResult.id).catch(console.error);
+      }
     }
 
     await logAuditEvent('lead_submitted', {

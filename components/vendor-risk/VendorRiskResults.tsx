@@ -1,5 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { VendorRiskInput, VendorRiskResult } from '@/lib/vendorRisk';
+import { PostResultsCTA } from '../PostResultsCTA';
+import { trackEvent } from '@/lib/analytics';
+import Link from 'next/link';
 
 interface VendorRiskResultsProps {
   result: VendorRiskResult;
@@ -13,40 +16,36 @@ const tierColors: Record<VendorRiskResult['tier'], string> = {
 };
 
 export function VendorRiskResults({ result, inputs }: VendorRiskResultsProps) {
-  const [helpOption, setHelpOption] = useState('triage_help');
-  const [email, setEmail] = useState('');
-  const [notes, setNotes] = useState('');
-  const [status, setStatus] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [templateStatus, setTemplateStatus] = useState<string | null>(null);
 
-  const submitHelp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inputs) {
-      setStatus('Add your inputs first.');
-      return;
-    }
-    setIsSubmitting(true);
-    setStatus(null);
+  useEffect(() => {
+    trackEvent('vendor_risk_results_viewed', {
+      score: result.score,
+      tier: result.tier,
+      vendor_count: inputs?.vendorCount || 'unknown',
+    });
+  }, [result, inputs]);
+
+  const handleTemplateRequest = async () => {
+    const email = window.prompt("Where should we send the questionnaire + scoring template?");
+    if (!email || !email.includes('@')) return;
+
+    setTemplateStatus('Sending...');
+    trackEvent('vendor_risk_template_requested', { email });
+
     try {
-      const res = await fetch('/api/vendor-risk-assessment', {
+      await fetch('/api/lead/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          email: email || undefined,
-          inputs,
-          result,
-          source_url: typeof window !== 'undefined' ? window.location.href : '',
-          help_option: helpOption,
-          help_notes: notes || undefined,
+          email,
+          lead_type: 'vendor_risk_template',
+          source_url: window.location.href,
         }),
       });
-      if (!res.ok) throw new Error('Could not send right now.');
-      setStatus('Request received. We will follow up shortly.');
-      setNotes('');
+      setTemplateStatus('Sent! Check your inbox shortly.');
     } catch (err) {
-      setStatus(err instanceof Error ? err.message : 'Could not send right now.');
-    } finally {
-      setIsSubmitting(false);
+      setTemplateStatus('Could not send right now.');
     }
   };
 
@@ -97,65 +96,37 @@ export function VendorRiskResults({ result, inputs }: VendorRiskResultsProps) {
 
       <div className="border border-slate-200 rounded-xl p-4 bg-white space-y-3">
         <p className="text-sm font-semibold text-slate-900">Why this tier</p>
-        <ul className="space-y-2 text-sm text-slate-700">
-          {result.why.map((item) => (
-            <li key={item} className="flex gap-2">
-              <span className="text-brand-600">•</span>
-              <span>{item}</span>
-            </li>
-          ))}
-        </ul>
-        <p className="text-xs text-slate-500">Guidance only. Use this to prioritize reviews; always confirm with your risk team.</p>
-      </div>
+          <ul className="space-y-2 text-sm text-slate-700">
+            {result.why.map((item) => (
+              <li key={item} className="flex gap-2">
+                <span className="text-brand-600">•</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="text-xs text-slate-500">Guidance only. Use this to prioritize reviews; always confirm with your risk team.</p>
+        </div>
 
-      <div className="border border-slate-200 rounded-xl p-4 bg-slate-50 space-y-3">
-        <p className="text-sm font-semibold text-slate-900">Need vendor risk help?</p>
-        <p className="text-sm text-slate-600">Optional: request triage help, evidence pack review, or contract/subprocessor review.</p>
-        <form onSubmit={submitHelp} className="space-y-3">
-          <div className="space-y-1">
-            <label className="text-sm font-medium text-slate-800">Choose one</label>
-            <select
-              value={helpOption}
-              onChange={(e) => setHelpOption(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600 bg-white"
-            >
-              <option value="triage_help">Triage my vendors (pick the right tier)</option>
-              <option value="evidence_review">Evidence pack review (by tier)</option>
-              <option value="contract_review">Contract / subprocessor review</option>
-            </select>
-          </div>
-          <div className="space-y-1">
-            <label className="text-sm font-medium text-slate-800">Work email (optional)</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
-              placeholder="you@company.com"
-            />
-          </div>
-          <div className="space-y-1">
-            <label className="text-sm font-medium text-slate-800">Notes (optional)</label>
-            <textarea
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
-              rows={2}
-              placeholder="Share vendor context or timing"
-            />
-          </div>
-          <div className="flex flex-wrap items-center gap-3">
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 disabled:opacity-60"
-            >
-              {isSubmitting ? 'Sending…' : 'Request help'}
-            </button>
-            {status && <p className="text-sm text-slate-600">{status}</p>}
-          </div>
-        </form>
+        <PostResultsCTA
+          title="Turn this into a repeatable vendor risk program"
+          description="Implement a lightweight scoring model, review cadence, and evidence flow that auditors accept—without heavyweight GRC tooling."
+          primaryCtaLabel="Set Up Vendor Risk Program"
+          primaryCtaHref="/vendor-risk-program"
+          primaryCtaOnClick={() => trackEvent('vendor_risk_program_cta_clicked')}
+          secondaryCtaLabel={templateStatus || "Download questionnaire + scoring template"}
+          secondaryCtaOnClick={handleTemplateRequest}
+          footnote="Designed for early-stage teams."
+        />
+
+        <div className="flex justify-center mt-4">
+          <Link
+            href="/vendor-risk-assessment"
+            className="text-sm text-slate-500 hover:text-brand-600 transition"
+          >
+            ← Back to Vendor Risk Guide
+          </Link>
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
+

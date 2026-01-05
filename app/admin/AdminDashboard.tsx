@@ -193,8 +193,10 @@ export default function AdminDashboard() {
   // Detail panel
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [leadNotes, setLeadNotes] = useState<AdminNote[]>([]);
+  const [leadEnrichment, setLeadEnrichment] = useState<any[]>([]);
   const [newNote, setNewNote] = useState('');
   const [showDetailPanel, setShowDetailPanel] = useState(false);
+  const [loadingEnrichment, setLoadingEnrichment] = useState(false);
 
   // Modals
   const [showSellModal, setShowSellModal] = useState(false);
@@ -277,20 +279,34 @@ export default function AdminDashboard() {
   const openLeadDetail = async (lead: Lead) => {
     setSelectedLead(lead);
     setShowDetailPanel(true);
+    setLoadingEnrichment(true);
     
-    // Fetch notes for this lead
+    // Fetch notes and enrichment for this lead
     const token = getAdminToken();
     try {
-      const res = await fetch(`/api/admin/leads/${lead.id}/notes`, {
-        headers: { 'Authorization': `Bearer ${token}` },
-        credentials: 'include',
-      });
-      if (res.ok) {
-        const data = await res.json();
+      const [notesRes, enrichmentRes] = await Promise.all([
+        fetch(`/api/admin/leads/${lead.id}/notes`, {
+          headers: { 'Authorization': `Bearer ${token}` },
+          credentials: 'include',
+        }),
+        fetch(`/api/admin/leads/${lead.id}/enrichment`, {
+          headers: { 'Authorization': `Bearer ${token}` },
+          credentials: 'include',
+        })
+      ]);
+
+      if (notesRes.ok) {
+        const data = await notesRes.json();
         setLeadNotes(data.notes || []);
       }
+      if (enrichmentRes.ok) {
+        const data = await enrichmentRes.json();
+        setLeadEnrichment(data.enrichment || []);
+      }
     } catch {
-      // Ignore errors for notes
+      // Ignore errors
+    } finally {
+      setLoadingEnrichment(false);
     }
   };
 
@@ -513,21 +529,9 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 overflow-x-hidden">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
-          <h1 className="text-xl font-bold text-gray-900">
-            RiscLens Admin Dashboard
-          </h1>
-          <button onClick={handleLogout} className="text-sm text-gray-600 hover:text-gray-900">
-            Logout
-          </button>
-        </div>
-      </header>
-
+    <div className="min-h-screen bg-transparent overflow-x-hidden">
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+      <main className="max-w-7xl mx-auto py-4">
         {error && (
           <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
             {error}
@@ -536,47 +540,141 @@ export default function AdminDashboard() {
 
         {/* Enhanced Metrics */}
         {metrics && (
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-8">
-            <div className="card p-4">
-              <div className="text-xs text-gray-500 mb-1">Total Leads</div>
-              <div className="text-xl font-bold text-gray-900">{metrics.total_leads}</div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4 mb-8">
+            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-2 bg-blue-50 rounded-lg">
+                  <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                </div>
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Leads</span>
+              </div>
+              <div className="text-2xl font-bold text-slate-900">{metrics.total_leads}</div>
             </div>
-            <div className="card p-4">
-              <div className="text-xs text-gray-500 mb-1">Avg Readiness</div>
-              <div className="text-xl font-bold text-brand-600">{metrics.avg_readiness_score}%</div>
+
+            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-2 bg-emerald-50 rounded-lg">
+                  <svg className="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Avg Readiness</span>
+              </div>
+              <div className="text-2xl font-bold text-emerald-600">{metrics.avg_readiness_score}%</div>
             </div>
-            <div className="card p-4">
-              <div className="text-xs text-gray-500 mb-1">Avg Est. Cost</div>
-              <div className="text-xl font-bold text-gray-900">{formatCurrency(metrics.avg_estimated_cost)}</div>
+
+            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-2 bg-amber-50 rounded-lg">
+                  <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zM12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z" />
+                  </svg>
+                </div>
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Avg Value</span>
+              </div>
+              <div className="text-2xl font-bold text-slate-900">{formatCurrency(metrics.avg_estimated_cost)}</div>
             </div>
-            <div className="card p-4">
-              <div className="text-xs text-gray-500 mb-1">Enterprise-driven</div>
-              <div className="text-xl font-bold text-purple-600">{metrics.pct_enterprise_driven}%</div>
+
+            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-2 bg-purple-50 rounded-lg">
+                  <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  </svg>
+                </div>
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Enterprise</span>
+              </div>
+              <div className="text-2xl font-bold text-purple-600">{metrics.pct_enterprise_driven}%</div>
             </div>
-            <div className="card p-4">
-              <div className="text-xs text-gray-500 mb-1">Urgent (&lt;90d)</div>
-              <div className="text-xl font-bold text-red-600">{metrics.pct_urgent}%</div>
+
+            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-2 bg-red-50 rounded-lg">
+                  <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Urgent</span>
+              </div>
+              <div className="text-2xl font-bold text-red-600">{metrics.pct_urgent}%</div>
             </div>
-            <div className="card p-4">
-              <div className="text-xs text-gray-500 mb-1">Conversion</div>
-              <div className="text-xl font-bold text-green-600">{metrics.lead_to_sale_rate}%</div>
+
+            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-2 bg-indigo-50 rounded-lg">
+                  <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                  </svg>
+                </div>
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Sold</span>
+              </div>
+              <div className="text-2xl font-bold text-indigo-600">{metrics.lead_to_sale_rate}%</div>
             </div>
-            <div className="card p-4">
-              <div className="text-xs text-gray-500 mb-1">Revenue</div>
-              <div className="text-xl font-bold text-trust-600">{formatCurrency(metrics.total_revenue)}</div>
+
+            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-2 bg-green-50 rounded-lg">
+                  <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zM12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z" />
+                  </svg>
+                </div>
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Revenue</span>
+              </div>
+              <div className="text-2xl font-bold text-trust-600">{formatCurrency(metrics.total_revenue)}</div>
             </div>
           </div>
         )}
 
-        <div className="mb-6 text-sm text-gray-600">
-          <div className="text-xs uppercase tracking-wide text-gray-500 mb-1">System status</div>
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <span>Tracking enabled:</span>
-              <span role="img" aria-label="enabled">✅</span>
+        <div className="flex flex-col lg:flex-row gap-6 mb-8">
+          <div className="flex-1 bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+            <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">System Activity</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="flex items-center gap-3">
+                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                <div>
+                  <div className="text-xs text-slate-500">Distribution Engine</div>
+                  <div className="text-sm font-medium text-slate-900">Active & Monitoring</div>
+                </div>
+              </div>
+              <div>
+                <div className="text-xs text-slate-500">PDFs Generated Today</div>
+                <div className="text-sm font-medium text-slate-900">
+                  {leads.filter((lead) => lead.pdf_url && isToday(lead.created_at)).length || 0}
+                </div>
+              </div>
+              <div>
+                <div className="text-xs text-slate-500">Last Lead Received</div>
+                <div className="text-sm font-medium text-slate-900">
+                  {leads.length > 0 ? formatRelativeTime(leads[0].created_at) : '—'}
+                </div>
+              </div>
             </div>
-            <div>PDF downloads today: {leads.filter((lead) => lead.pdf_url && isToday(lead.created_at)).length || 0}</div>
-            <div>Last lead received: {leads.length > 0 ? formatRelativeTime(leads[0].created_at) : '—'}</div>
+          </div>
+
+          <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm min-w-[300px]">
+            <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Quick Actions</h3>
+            <div className="flex flex-wrap gap-2">
+              <button onClick={() => window.location.href='/admin/buyers'} className="px-3 py-1.5 text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors flex items-center gap-2">
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                Manage Buyers
+              </button>
+              <button onClick={handleExportCSV} className="px-3 py-1.5 text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors flex items-center gap-2">
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                Export CSV
+              </button>
+              <button onClick={() => window.location.href='/admin/audit'} className="px-3 py-1.5 text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors flex items-center gap-2">
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+                Audit Logs
+              </button>
+            </div>
           </div>
         </div>
 
@@ -1025,15 +1123,60 @@ export default function AdminDashboard() {
                 </div>
               </div>
 
-              {/* User Context Note */}
-              {selectedLead.context_note && (
-                <div className="bg-blue-50 rounded-lg p-4 mb-6">
-                  <h3 className="font-semibold text-gray-900 mb-2">User Context</h3>
-                  <p className="text-sm text-gray-700">{selectedLead.context_note}</p>
-                </div>
-              )}
+                {/* User Context Note */}
+                {selectedLead.context_note && (
+                  <div className="bg-blue-50 rounded-lg p-4 mb-6">
+                    <h3 className="font-semibold text-gray-900 mb-2">User Context</h3>
+                    <p className="text-sm text-gray-700">{selectedLead.context_note}</p>
+                  </div>
+                )}
 
-              {/* Status */}
+                {/* Enrichment Data */}
+                <div className="bg-purple-50 rounded-lg p-4 mb-6">
+                  <h3 className="font-semibold text-gray-900 mb-3 flex items-center justify-between">
+                    Enrichment Data
+                    {loadingEnrichment && <span className="text-xs font-normal text-purple-600 animate-pulse">Loading...</span>}
+                  </h3>
+                  {leadEnrichment.length === 0 ? (
+                    <p className="text-sm text-gray-500">{loadingEnrichment ? 'Fetching social data...' : 'No enrichment data found.'}</p>
+                  ) : (
+                    <div className="space-y-3">
+                      {leadEnrichment.map((enrich) => (
+                        <div key={enrich.id} className="text-sm">
+                          <div className="grid grid-cols-2 gap-y-2">
+                            {Object.entries(enrich.enriched_fields || {}).map(([key, value]) => (
+                              <div key={key}>
+                                <div className="text-xs text-purple-600 uppercase font-bold tracking-tighter">{key.replace(/_/g, ' ')}</div>
+                                <div className="truncate font-medium text-gray-800">
+                                  {typeof value === 'string' && value.startsWith('http') ? (
+                                    <a href={value} target="_blank" rel="noopener noreferrer" className="text-brand-600 hover:underline">
+                                      {value.replace('https://', '')}
+                                    </a>
+                                  ) : String(value)}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Distribution Status */}
+                <div className="bg-green-50 rounded-lg p-4 mb-6">
+                  <h3 className="font-semibold text-gray-900 mb-2">Distribution Status</h3>
+                  <div className="flex items-center gap-3">
+                    <div className={`w-3 h-3 rounded-full ${selectedLead.sold ? 'bg-green-500' : 'bg-gray-300'}`} />
+                    <span className="text-sm font-medium">
+                      {selectedLead.sold 
+                        ? `Sold to ${selectedLead.buyer_email || 'Buyer'} for ${formatCurrency(selectedLead.sale_amount || 0)}` 
+                        : selectedLead.keep_or_sell === 'sell' ? 'Waiting for buyer' : 'Internal Lead (Keep)'}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Status */}
               <div className="mb-6">
                 <h3 className="font-semibold text-gray-900 mb-3">Lead Status</h3>
                 <div className="flex flex-wrap gap-2">

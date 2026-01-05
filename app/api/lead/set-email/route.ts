@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getLeadById, updateLead, logAuditEvent } from '@/lib/supabase';
 import { applyRateLimit } from '@/lib/rate-limit';
 import { isValidUUID, sanitizeString, sanitizeBoolean } from '@/lib/validation';
+import { triggerBuyerWebhooks } from '@/lib/webhooks';
 
 // Email regex
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -52,11 +53,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Update lead with email and consent
+    // Update lead with email and consent, and clear is_partial
     await updateLead(leadId, {
       email: email,
       consent: consent,
-    });
+      is_partial: false,
+      status: 'new', // Change from partial to new
+    } as any);
+
+    // Trigger buyer webhooks in background
+    triggerBuyerWebhooks(leadId).catch(console.error);
 
     // Log audit event
     await logAuditEvent('lead_email_set', {

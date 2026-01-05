@@ -9,15 +9,16 @@ export const navConfig = {
   soc: {
     overview: { label: 'Overview', href: '/soc-2/guides' },
     primary: { label: 'Readiness Score', href: CTA.href, badge: 'Tool' },
-    guides: [
-      { label: 'SOC 2 Cost', href: '/soc-2-cost' },
-      { label: 'SOC 2 Timeline', href: '/soc-2-timeline' },
-      { label: 'Type I vs Type II', href: '/soc-2-type-i-vs-type-ii' },
-      { label: 'Readiness Checklist', href: '/soc-2-readiness-checklist' },
-      { label: 'Evidence Vault', href: '/soc-2-evidence/vault' },
-      { label: 'Auditor Selection', href: '/soc-2/auditor-selection' },
-      { label: 'Continuous Monitoring', href: '/soc-2/continuous-monitoring' },
-    ],
+      guides: [
+        { label: 'SOC 2 Cost', href: '/soc-2-cost' },
+        { label: 'SOC 2 Timeline', href: '/soc-2-timeline' },
+        { label: 'Sales & Operations', href: '/soc-2-sales' },
+        { label: 'Type I vs Type II', href: '/soc-2-type-i-vs-type-ii' },
+        { label: 'Readiness Checklist', href: '/soc-2-readiness-checklist' },
+        { label: 'Evidence Vault', href: '/soc-2-evidence/vault' },
+        { label: 'Auditor Selection', href: '/soc-2/auditor-selection' },
+        { label: 'Continuous Monitoring', href: '/soc-2/continuous-monitoring' },
+      ],
     viewAll: { label: 'View all SOC 2 →', href: '/soc-2/guides' },
   },
   pentest: {

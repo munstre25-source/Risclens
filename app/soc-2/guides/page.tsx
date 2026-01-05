@@ -2,22 +2,22 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { costGuides, timelineGuides, readinessGuides } from '@/lib/soc2Guides';
+import { costGuides, timelineGuides, readinessGuides, salesGuides } from '@/lib/soc2Guides';
 
 export const metadata: Metadata = {
   title: 'SOC 2 Guides Hub | RiscLens',
-  description: 'All SOC 2 guides in one place: costs, timelines, readiness controls, and industry-specific advice.',
+  description: 'All SOC 2 guides in one place: costs, timelines, readiness controls, sales enablement, and industry-specific advice.',
   alternates: { canonical: '/soc-2/guides' },
   openGraph: {
     title: 'SOC 2 Guides Hub | RiscLens',
-    description: 'All SOC 2 guides in one place: costs, timelines, readiness controls, and industry-specific advice.',
+    description: 'All SOC 2 guides in one place: costs, timelines, readiness controls, sales enablement, and industry-specific advice.',
     url: 'https://risclens.com/soc-2/guides',
     images: [{ url: '/og.png', width: 1200, height: 630, alt: 'RiscLens SOC 2 Guides' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'SOC 2 Guides Hub | RiscLens',
-    description: 'All SOC 2 guides in one place: costs, timelines, readiness controls, and industry-specific advice.',
+    description: 'All SOC 2 guides in one place: costs, timelines, readiness controls, sales enablement, and industry-specific advice.',
     images: ['/og.png'],
   },
 };
@@ -27,6 +27,7 @@ export default function Soc2GuidesPage() {
     { title: 'Cost Drivers', href: '/soc-2-cost', items: costGuides },
     { title: 'Timelines', href: '/soc-2-timeline', items: timelineGuides },
     { title: 'Readiness Controls', href: '/soc-2-readiness', items: readinessGuides },
+    { title: 'Sales & Operations', href: '/soc-2-sales', items: salesGuides },
   ];
 
   return (

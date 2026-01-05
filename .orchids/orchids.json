@@ -1,0 +1,7 @@
+{
+  "projectId": "8bf3c86a-6d1b-4d11-ad93-f15c5b208af2",
+  "createdAt": 1767604093295,
+  "startupCommands": [
+    "wsl npm install --prefix /home/qpay/Risclens; wsl npm run dev --prefix /home/qpay/Risclens"
+  ]
+}

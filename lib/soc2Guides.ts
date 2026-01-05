@@ -1,4 +1,4 @@
-export type Soc2Category = 'cost' | 'timeline' | 'readiness';
+export type Soc2Category = 'cost' | 'timeline' | 'readiness' | 'sales';
 
 export interface Soc2GuidePage {
   slug: string;
@@ -15,6 +15,7 @@ export interface Soc2GuidePage {
 const costParent = '/soc-2-cost';
 const timelineParent = '/soc-2-timeline';
 const readinessParent = '/learn/soc-2-readiness';
+const salesParent = '/soc-2-sales';
 
 export const costGuides: Soc2GuidePage[] = [
   {
@@ -563,6 +564,81 @@ export const readinessGuides: Soc2GuidePage[] = [
   },
 ];
 
+export const salesGuides: Soc2GuidePage[] = [
+  {
+    slug: 'bridge-letters',
+    title: 'SOC 2 Bridge Letters',
+    summary: 'What to do when your report is 6+ months old and enterprise deals are stalling.',
+    category: 'sales',
+    parent: salesParent,
+    highlights: [
+      'The "gap" between audit period end and the current date.',
+      'How to draft a letter that satisfies enterprise procurement.',
+      'When you need a new Type II instead of just a bridge letter.',
+    ],
+  },
+  {
+    slug: 'security-questionnaires',
+    title: 'Beating Security Questionnaires',
+    summary: 'How to use your SOC 2 to skip 80% of questionnaires and speed up sales cycles.',
+    category: 'sales',
+    parent: salesParent,
+    highlights: [
+      'Mapping SOC 2 controls to common questionnaire sections.',
+      'Creating a "Security FAQ" for your sales team.',
+      'The "Standard Information Gathering" (SIG) shortcut.',
+    ],
+  },
+  {
+    slug: 'trust-centers',
+    title: 'Trust Centers & Security Portals',
+    summary: 'The modern way to share reports and automate NDA workflows.',
+    category: 'sales',
+    parent: salesParent,
+    highlights: [
+      'Replacing email attachments with secure portals.',
+      'Automating NDA sign-offs before report downloads.',
+      'Real-time trust metrics that impress security reviewers.',
+    ],
+  },
+  {
+    slug: 'subservice-organizations',
+    title: 'Subservice Organizations (Carve-outs)',
+    summary: 'Why AWS’s SOC 2 doesn’t count as yours and how to handle vendor dependencies.',
+    category: 'sales',
+    parent: salesParent,
+    highlights: [
+      'The "Inclusive" vs "Carve-out" method.',
+      'User Entity Controls (UECs) you must still implement.',
+      'Reviewing your vendors’ SOC 2 reports annually.',
+    ],
+  },
+  {
+    slug: 'qualified-opinions',
+    title: 'Qualified Opinions & Exceptions',
+    summary: 'What happens if an auditor finds a flaw, and how to explain it to customers.',
+    category: 'sales',
+    parent: salesParent,
+    highlights: [
+      'Unqualified vs Qualified vs Adverse opinions.',
+      'How to write a "Management Response" to audit exceptions.',
+      'Why one exception isn’t a deal-breaker for enterprise.',
+    ],
+  },
+  {
+    slug: 'multi-framework-mapping',
+    title: 'Multi-Framework Mapping',
+    summary: 'How far SOC 2 gets you toward HIPAA, ISO 27001, and GDPR.',
+    category: 'sales',
+    parent: salesParent,
+    highlights: [
+      'The 80% overlap between SOC 2 and ISO 27001.',
+      'Adding HIPAA Trust Services Criteria (TSC) to your audit.',
+      'Consolidating evidence collection for multiple standards.',
+    ],
+  },
+];
+
 export const costGuideBySlug = costGuides.reduce((acc, page) => {
   acc[page.slug] = page;
   return acc;
@@ -578,8 +654,14 @@ export const readinessGuideBySlug = readinessGuides.reduce((acc, page) => {
   return acc;
 }, {} as Record<string, Soc2GuidePage>);
 
+export const salesGuideBySlug = salesGuides.reduce((acc, page) => {
+  acc[page.slug] = page;
+  return acc;
+}, {} as Record<string, Soc2GuidePage>);
+
 export const soc2GuideSlugs = [
   ...costGuides.map((page) => `${page.parent}/${page.slug}`),
   ...timelineGuides.map((page) => `${page.parent}/${page.slug}`),
   ...readinessGuides.map((page) => `${page.parent}/${page.slug}`),
+  ...salesGuides.map((page) => `${page.parent}/${page.slug}`),
 ];

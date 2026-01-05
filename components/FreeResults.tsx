@@ -1,6 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import Link from 'next/link';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { PostResultsCTA } from './PostResultsCTA';
+import { companySizeBand, scoreBand, trackEvent } from '@/lib/analytics';
 
 interface CalculatorResults {
   readiness_score: number;
@@ -9,16 +12,25 @@ interface CalculatorResults {
   recommendations: string[];
 }
 
+interface FreeResultsContext {
+  numEmployees?: number;
+  industry?: string;
+  plannedAuditDate?: string;
+  soc2Requirers?: string[];
+}
+
 interface FreeResultsProps {
   results: CalculatorResults;
   leadId: string | null;
   companyName: string;
+  context?: FreeResultsContext;
 }
 
 export default function FreeResults({
   results,
   leadId,
   companyName,
+  context,
 }: FreeResultsProps) {
   const [email, setEmail] = useState('');
   const [consent, setConsent] = useState(false);
@@ -90,6 +102,7 @@ const formatCurrency = (amount: number) => {
 
     setIsRequestingPdf(true);
     setError(null);
+    trackEvent('soc2_roadmap_email_requested', { email });
 
     try {
       // Step 1: Set email on the lead
@@ -177,6 +190,32 @@ const formatCurrency = (amount: number) => {
     reason: getAuditReason(rec),
   }));
 
+  const showReadinessCTA = useMemo(() => {
+    if (results.readiness_score < 70) return true;
+    
+    // Check timeline (< 120 days)
+    if (context?.plannedAuditDate) {
+      const auditDate = new Date(context.plannedAuditDate);
+      const now = new Date();
+      const diffDays = Math.ceil((auditDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+      if (diffDays < 120) return true;
+    }
+
+    // Check enterprise intent
+    if (context?.soc2Requirers?.some(r => r === 'enterprise')) return true;
+
+    return false;
+  }, [results.readiness_score, context]);
+
+  useEffect(() => {
+    trackEvent('soc2_results_viewed', {
+      score: results.readiness_score,
+      score_band: scoreBand(results.readiness_score),
+      company_size: context?.numEmployees ? companySizeBand(context.numEmployees) : 'unknown',
+      industry: context?.industry || 'unknown',
+    });
+  }, [results.readiness_score, context]);
+
   return (
     <div className="animate-fade-in">
       {/* Score Card - Primary Focus */}
@@ -263,24 +302,28 @@ const formatCurrency = (amount: number) => {
         </ul>
       </div>
 
-      {/* Cost Estimate */}
-      <div className="card mb-6 bg-white border-slate-200">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900">
-              Estimated Compliance Cost
-            </h3>
-            <p className="text-sm text-gray-600">
-              Based on company size, data types, and timeline. Includes auditor fees, tooling, and internal preparation effort.
-            </p>
+        {showReadinessCTA && (
+          <PostResultsCTA
+            title="Avoid surprises during your SOC 2 audit"
+            description="Based on your inputs, there are a few areas auditors commonly challenge at this stage. Get a focused readiness review to identify gaps before you commit to an audit timeline."
+            primaryCtaLabel="Get a Readiness Review"
+            primaryCtaHref="/readiness-review"
+            primaryCtaOnClick={() => trackEvent('soc2_readiness_review_cta_clicked')}
+            footnote="One-time review. We’ll email your summary so you can share internally."
+          />
+        )}
+
+        {/* Cost Estimate */}
+        <div className="card mb-6 bg-white border-slate-200">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-semibold text-gray-900">Estimated SOC 2 Cost</h3>
+            <a href="/soc-2-cost" className="btn-ghost text-sm">
+              See cost breakdown guide
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
           </div>
-          <a href="/soc-2-cost" className="btn-ghost text-sm">
-            See cost breakdown guide
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </a>
-        </div>
         <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
           <div className="sm:col-span-1">
             <p className="text-xs uppercase tracking-wide text-slate-500 font-semibold mb-1">Low estimate</p>
@@ -345,6 +388,7 @@ const formatCurrency = (amount: number) => {
       </div>
 
       <div className="card mb-6">
+
         <h3 className="text-base font-semibold text-gray-900 mb-2">About these estimates</h3>
         <p className="text-sm text-gray-600 leading-relaxed">
           Cost and readiness ranges are directional, not guarantees. Typical variance is ±15–25%, depending on auditor, scope changes, and control maturity.
@@ -380,39 +424,38 @@ const formatCurrency = (amount: number) => {
         </ul>
       </div>
 
-      {/* Mid-page secondary CTA - same flow */}
-      <div className="card mb-6 text-center">
-        <button
-          type="submit"
-          form="pdf-form"
-          className="btn-primary"
-          disabled={isRequestingPdf || pdfSent}
-        >
-          Get my SOC 2 roadmap (PDF)
-        </button>
-      </div>
+        {/* Mid-page secondary CTA - same flow */}
+        <div className="card mb-6 text-center">
+          <button
+            type="submit"
+            form="pdf-form"
+            className="btn-primary"
+            disabled={isRequestingPdf || pdfSent}
+          >
+            Email me my SOC 2 roadmap (PDF)
+          </button>
+        </div>
 
-      {/* PDF CTA Section - Email Gate */}
-      <div className="card bg-gradient-to-br from-brand-50 via-white to-brand-50 border-brand-100">
-        <div className="text-center">
-          {!pdfSent ? (
-            <>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Get Your Full SOC 2 Roadmap PDF
-              </h3>
-              <p className="text-gray-600 text-sm mb-2">
-                The PDF includes a detailed timeline, compliance checklist, 
-                cost breakdown, and evidence templates.
-              </p>
-              <p className="text-xs text-gray-500 mb-4">
-                Used by auditors, founders, and security leads preparing for SOC 2.
-              </p>
+        {/* PDF CTA Section - Email Gate */}
+        <div className="card bg-gradient-to-br from-brand-50 via-white to-brand-50 border-brand-100">
+          <div className="text-center">
+              {!pdfSent ? (
+                <>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    Get Your Full SOC 2 Roadmap PDF
+                  </h3>
+                  <p className="text-gray-600 text-sm mb-4">
+                    We’ll send it to your inbox so you can save or share it internally. The PDF includes a detailed timeline, compliance checklist, 
+                    cost breakdown, and evidence templates.
+                  </p>
 
-              <form id="pdf-form" onSubmit={handleGetPdf} className="max-w-sm mx-auto text-left">
-                <div className="mb-3">
-                  <label htmlFor="pdf-email" className="block text-sm font-medium text-gray-700 mb-1">
-                    Work Email
-                  </label>
+                  <form id="pdf-form" onSubmit={handleGetPdf} className="max-w-sm mx-auto text-left">
+                    <div className="mb-3">
+                      <p className="text-xs text-brand-600 font-medium mb-1">We’ll send it to your inbox so you can save or share it internally.</p>
+                      <label htmlFor="pdf-email" className="block text-sm font-medium text-gray-700 mb-1">
+                        Work Email
+                      </label>
+
                   <input
                     type="email"
                     id="pdf-email"
@@ -528,9 +571,19 @@ const formatCurrency = (amount: number) => {
                 (Usually arrives within 1-2 minutes)
               </p>
             </div>
-          )}
+            )}
+          </div>
+        </div>
+
+        <div className="flex justify-center mt-8">
+          <Link
+            href="/soc-2-cost"
+            className="text-sm text-slate-500 hover:text-brand-600 transition"
+          >
+            ← Back to SOC 2 Cost Guide
+          </Link>
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
+

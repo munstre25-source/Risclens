@@ -29,6 +29,7 @@ export interface CreateLeadInput {
     utmSource?: string | null;
     isTest?: boolean | null;
   };
+  isPartial?: boolean | null;
 }
 
 export async function createLead(input: CreateLeadInput) {
@@ -43,6 +44,7 @@ export async function createLead(input: CreateLeadInput) {
     leadType,
     payload,
     derivedFields,
+    isPartial,
   } = input;
 
   const insertData = {
@@ -74,12 +76,35 @@ export async function createLead(input: CreateLeadInput) {
     data_types: derivedFields?.dataTypes ?? null,
     utm_source: derivedFields?.utmSource ?? null,
     is_test: derivedFields?.isTest ?? null,
+    is_partial: isPartial ?? false,
   } as Record<string, unknown>;
 
-  const { data, error } = await supabase.from('leads').insert(insertData).select('id').single();
+  // Check if a partial lead with this email already exists
+  const { data: existingLead } = await supabase
+    .from('leads')
+    .select('id')
+    .eq('email', email)
+    .eq('is_partial', true)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .single();
+
+  let result;
+  if (existingLead) {
+    result = await supabase
+      .from('leads')
+      .update(insertData)
+      .eq('id', existingLead.id)
+      .select('id')
+      .single();
+  } else {
+    result = await supabase.from('leads').insert(insertData).select('id').single();
+  }
+
+  const { data, error } = result;
 
   if (error) {
-    console.error('createLead insert error', { error, insertData });
+    console.error('createLead error', { error, insertData });
     return { ok: false, error: error.message };
   }
 

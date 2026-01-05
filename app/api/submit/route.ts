@@ -31,17 +31,22 @@ export async function POST(request: NextRequest) {
     const input = validation.data;
     const isTest = request.cookies.get('rls_test_mode')?.value === '1';
 
-    // Build scoring input
-    const scoringInput: ScoringInput = {
-      num_employees: input.num_employees,
-      audit_date: input.planned_audit_date,
-      data_types: input.data_types,
-      role: input.role,
-    };
+      // Build scoring input
+      const scoringInput: ScoringInput = {
+        num_employees: input.num_employees,
+        audit_date: input.planned_audit_date,
+        data_types: input.data_types,
+        role: input.role,
+      };
 
-    // Calculate scores using lib/scoring.ts
-    const scoringResult = calculateLeadScore(scoringInput);
-    const recommendations = generateRecommendations(scoringInput, scoringResult);
+      // Fetch system settings for dynamic pricing and scoring
+      const { getSystemSettings } = await import('@/lib/settings');
+      const settings = await getSystemSettings();
+
+      // Calculate scores using lib/scoring.ts
+      const scoringResult = calculateLeadScore(scoringInput, settings || undefined);
+      const recommendations = generateRecommendations(scoringInput, scoringResult);
+
 
     // Prepare lead data for DB insert
     // Email and consent are OPTIONAL - can be NULL

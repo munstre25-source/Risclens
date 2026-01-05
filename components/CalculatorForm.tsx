@@ -138,8 +138,27 @@ export default function CalculatorForm() {
   };
 
   const nextStep = () => {
-    if (validateStep(step) && step < TOTAL_STEPS) {
-      setStep(step + 1);
+    if (validateStep(step)) {
+      if (step === 1) {
+        // Send partial lead info
+        fetch('/api/lead/partial', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: `partial-${Date.now()}@anonymous.risclens.com`,
+            company: formData.company_name,
+            industry: formData.industry,
+            lead_type: 'soc2_readiness_partial',
+            source_url: typeof window !== 'undefined' ? window.location.href : '',
+            utm_source: utmSource,
+            variation_id: variationId,
+          }),
+        }).catch(console.error);
+      }
+      
+      if (step < TOTAL_STEPS) {
+        setStep(step + 1);
+      }
     }
   };
 
