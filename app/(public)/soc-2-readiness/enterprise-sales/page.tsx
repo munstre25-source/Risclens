@@ -102,8 +102,7 @@ export default function Soc2EnterpriseSalesPage() {
               </ul>
             </div>
             </div>
-          </div>
-        </section>
+          </section>
       </main>
       <AssessmentCTA />
       <Footer />
