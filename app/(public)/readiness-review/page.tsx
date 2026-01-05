@@ -4,6 +4,10 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'SOC 2 Readiness Review | Risclens',
   description: 'Get a focused readiness review to identify gaps before you commit to an audit timeline.',
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function ReadinessReviewPage() {

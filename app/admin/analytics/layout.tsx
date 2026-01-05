@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import AdminDashboard from './AdminDashboard';
 
 export const metadata: Metadata = {
   robots: {
@@ -8,6 +7,6 @@ export const metadata: Metadata = {
   },
 };
 
-export default function AdminPage() {
-  return <AdminDashboard />;
+export default function AnalyticsLayout({ children }: { children: React.ReactNode }) {
+  return <>{children}</>;
 }

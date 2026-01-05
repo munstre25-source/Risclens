@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 import CalculatorForm from '@/components/CalculatorForm';
 import { HowItWorksAccordion } from '@/components/HowItWorksAccordion';
 import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
+import { SoftwareApplicationSchema } from '@/components/SoftwareApplicationSchema';
 
 export const metadata: Metadata = {
   title: 'SOC 2 Readiness Score in Under 2 Minutes | RiscLens',
@@ -20,10 +21,6 @@ export const metadata: Metadata = {
     description:
       'Answer a few questions and get an instant SOC 2 readiness score, gap highlights, and what auditors will likely ask next—built for early-stage teams.',
     images: ['/og.png'],
-  },
-  robots: {
-    index: false,
-    follow: false,
   },
 };
 
@@ -44,6 +41,12 @@ function FormSkeleton() {
 export default function CalculatorPage() {
   return (
     <main className="bg-gray-50">
+      <SoftwareApplicationSchema
+        name="SOC 2 Readiness Calculator"
+        description="Get an instant SOC 2 readiness score and gap analysis."
+        url="https://risclens.com/soc-2-readiness-calculator"
+        category="SecurityApplication"
+      />
       <section className="py-10 md:py-12">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 space-y-4">
           <div id="calculator" className="rounded-2xl border border-slate-200 bg-white p-6">

@@ -18,11 +18,13 @@ Route map with purpose, key components, and data dependencies. See [PRODUCT_OVER
 | `/soc-2/industries` (+ `[slug]`) | Industries hub + detail pages. | `Header`, guide components | Static |
 | `/soc-2-evidence/[slug]` | Evidence library entries with links to readiness pages. | Evidence content modules | Static |
 | `/soc-2/guides`, `/learn/soc-2-readiness` (+ `[slug]`) | Guide hubs and learning content. | Guide list components, `LearnMoreLink` | Static |
-| `/penetration-testing` | Pentest overview + CTA to estimator, definition callouts. | PT content components, `Header` | Static |
+| `/penetration-testing` | Pentest overview + CTA to estimator, definition callouts. Links to high-intent industry guides. | PT content components, `Header` | Static |
 | `/penetration-testing/cost-estimator` | Pentest cost form + results + optional email. | Estimator form, results cards | `/api/pentest-lead`, Supabase `leads` |
+| `/penetration-testing/saas`, `/penetration-testing/fintech` | High-intent industry-specific pentest guides. | Guide components | Static |
 | `/penetration-testing/[slug]` | PT pricing/report/scan-vs-pentest/SOC2 articles. | Guide components | Static |
-| `/vendor-risk-assessment` | Vendor risk hub + CTA to triage. | VRA content | Static |
+| `/vendor-risk-assessment` | Vendor risk hub + CTA to triage and ROI calculator. | VRA content | Static |
 | `/vendor-risk-assessment/triage` | Vendor risk triage form + recommendations + optional email. | Triage form, results cards | `/api/vendor-risk-assessment`, Supabase `leads` |
+| `/vendor-risk-assessment/roi-calculator` | Vendor Risk ROI Calculator for automation business case. | ROI calculator components | Static |
 | `/vendor-risk-assessment/*` (checklist, scoring-model, evidence-by-tier, monitoring-cadence, contract-clauses, common-mistakes, subprocessors-vs-vendors) | Supporting guides. | Guide components | Static |
 | `/privacy`, `/terms` | Policies. | Static pages | Static |
 | `/sitemap.xml` | Generated sitemap. | `app/sitemap.ts` | Static generation |
@@ -38,4 +40,4 @@ Route map with purpose, key components, and data dependencies. See [PRODUCT_OVER
 - Ops: `/api/health`, `/api/cron/day-3`, `/api/cron/day-7`.
 
 ## Shared Navigation
-- `components/Header.tsx` owns desktop dropdowns (SOC 2, Pentest, Vendor Risk, Guides, Industries) and mobile drawer/accordion with scroll-lock and backdrop. CTA targets readiness index or pentest estimator based on path.
+- `components/Header.tsx` owns desktop dropdowns (SOC 2, Pentest, Vendor Risk, Guides, Industries) and mobile drawer/accordion with scroll-lock and backdrop. CTA targets readiness index or pentest estimator based on path. ROI Calculator added to Vendor Risk dropdown.

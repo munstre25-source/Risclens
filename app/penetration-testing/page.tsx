@@ -115,8 +115,8 @@ export default function PentestHubPage() {
           <div className="max-w-4xl mx-auto mt-6">
             <CommonForIndustries
               items={[
-                { label: 'SaaS', href: '/penetration-testing#saas' },
-                { label: 'Fintech', href: '/penetration-testing#fintech' },
+                { label: 'SaaS', href: '/penetration-testing/saas' },
+                { label: 'Fintech', href: '/penetration-testing/fintech' },
                 { label: 'Healthcare', href: '/penetration-testing#healthcare' },
                 { label: 'Marketplaces', href: '/penetration-testing#marketplaces' },
               ]}
@@ -187,17 +187,17 @@ export default function PentestHubPage() {
             </div>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2" id="saas">
-            <div className="border border-slate-200 rounded-xl p-5 bg-white space-y-2">
-              <p className="text-sm font-semibold text-slate-900">SaaS pentests</p>
-              <p className="text-sm text-slate-700">Scope often centers on multi-tenant auth, RBAC, and data isolation. Pricing flexes with app+API count and retest needs.</p>
-              <Link href="/penetration-testing/cost-estimator" className="text-sm text-brand-700 underline underline-offset-4">Estimate cost</Link>
-            </div>
-            <div className="border border-slate-200 rounded-xl p-5 bg-slate-50 space-y-2" id="fintech">
-              <p className="text-sm font-semibold text-slate-900">Fintech pentests</p>
-              <p className="text-sm text-slate-700">Includes payment flows, auth strength, and segregation of duties. Extra review for API scopes and audit trails.</p>
-              <Link href="/penetration-testing/pricing" className="text-sm text-brand-700 underline underline-offset-4">See pricing approach</Link>
-            </div>
+            <div className="grid gap-4 md:grid-cols-2" id="saas">
+              <div className="border border-slate-200 rounded-xl p-5 bg-white space-y-2">
+                <p className="text-sm font-semibold text-slate-900">SaaS pentests</p>
+                <p className="text-sm text-slate-700">Scope often centers on multi-tenant auth, RBAC, and data isolation. Pricing flexes with app+API count and retest needs.</p>
+                <Link href="/penetration-testing/saas" className="text-sm text-brand-700 underline underline-offset-4">View SaaS Pentest Guide</Link>
+              </div>
+              <div className="border border-slate-200 rounded-xl p-5 bg-slate-50 space-y-2" id="fintech">
+                <p className="text-sm font-semibold text-slate-900">Fintech pentests</p>
+                <p className="text-sm text-slate-700">Includes payment flows, auth strength, and segregation of duties. Extra review for API scopes and audit trails.</p>
+                <Link href="/penetration-testing/fintech" className="text-sm text-brand-700 underline underline-offset-4">View Fintech Pentest Guide</Link>
+              </div>
             <div className="border border-slate-200 rounded-xl p-5 bg-slate-50 space-y-2" id="healthcare">
               <p className="text-sm font-semibold text-slate-900">Healthcare pentests</p>
               <p className="text-sm text-slate-700">PHI handling and ePHI integrations push for deeper auth and audit logging checks; cadence aligns with compliance cycles.</p>

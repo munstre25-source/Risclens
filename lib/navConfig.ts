@@ -35,10 +35,11 @@ export const navConfig = {
     ],
     viewAll: { label: 'View all Pentest →', href: '/penetration-testing' },
   },
-  vendor: {
-    overview: { label: 'Overview', href: '/vendor-risk-assessment' },
-    primary: { label: 'Risk Triage', href: '/vendor-risk-assessment/triage', badge: 'Tool' },
-    guides: [
+    vendor: {
+      overview: { label: 'Overview', href: '/vendor-risk-assessment' },
+      primary: { label: 'Risk Triage', href: '/vendor-risk-assessment/triage', badge: 'Tool' },
+      roi: { label: 'ROI Calculator', href: '/vendor-risk-assessment/roi-calculator', badge: 'Tool' },
+      guides: [
       { label: 'Checklist', href: '/vendor-risk-assessment/checklist' },
       { label: 'Evidence by Tier', href: '/vendor-risk-assessment/evidence-by-tier' },
       { label: 'Contract Clauses', href: '/vendor-risk-assessment/contract-clauses' },

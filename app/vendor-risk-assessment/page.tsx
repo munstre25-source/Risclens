@@ -42,6 +42,7 @@ const faqSchema = {
 };
 
 const clusterLinks = [
+  { href: '/vendor-risk-assessment/roi-calculator', title: 'VRA ROI Calculator', summary: 'Calculate annual savings and efficiency gains from automating vendor security reviews.' },
   { href: '/vendor-risk-assessment/triage', title: 'VRA Triage Tool', summary: 'Score vendor risk in minutes with deterministic logic and evidence expectations.' },
   { href: '/vendor-risk-assessment/checklist', title: 'VRA Checklist', summary: 'Prep list for intake, due diligence, contracts, and ongoing monitoring.' },
   { href: '/vendor-risk-assessment/scoring-model', title: 'Scoring Model', summary: 'How the VRA tiers map to control asks and cadence.' },

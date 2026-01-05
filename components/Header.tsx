@@ -350,6 +350,18 @@ export default function Header() {
     return () => document.removeEventListener('keydown', trapFocus);
   }, [isMobileOpen]);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        router.push('/search');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [router]);
+
   return (
     <header
       className={`sticky top-0 z-50 border-b transition-all relative ${
@@ -654,12 +666,20 @@ export default function Header() {
                   <Link href={vendorMenu.overview.href} role="menuitem" className={menuItemClass}>
                     {vendorMenu.overview.label}
                   </Link>
-                  <Link href={vendorMenu.primary.href} role="menuitem" className={menuItemClass}>
-                    <span className="flex items-center gap-2">
-                      {vendorMenu.primary.label}
-                      <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">{vendorMenu.primary.badge}</span>
-                    </span>
-                  </Link>
+                    <Link href={vendorMenu.primary.href} role="menuitem" className={menuItemClass}>
+                      <span className="flex items-center gap-2">
+                        {vendorMenu.primary.label}
+                        <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">{vendorMenu.primary.badge}</span>
+                      </span>
+                    </Link>
+                    {vendorMenu.roi && (
+                      <Link href={vendorMenu.roi.href} role="menuitem" className={menuItemClass}>
+                        <span className="flex items-center gap-2">
+                          {vendorMenu.roi.label}
+                          <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">{vendorMenu.roi.badge}</span>
+                        </span>
+                      </Link>
+                    )}
                   <div className="my-2 border-t border-slate-100" />
                   <div className={sectionLabelClass}>Guides</div>
                   {vendorMenu.guides.map((item) => (
@@ -765,9 +785,22 @@ export default function Header() {
                 </DropdownPortal>
               </div>
 
-              <div
-                className="relative flex items-center gap-2"
-                ref={dropdownRef}
+                <Link
+                  href="/search"
+                  className={`flex items-center gap-2 hover:text-brand-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600 rounded ${
+                    pathname === '/search' ? 'text-brand-700 underline underline-offset-4' : ''
+                  }`}
+                >
+                  Search
+                  <span className="hidden lg:inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-bold text-slate-400 border border-slate-200 rounded ml-1 bg-slate-50">
+                    ⌘K
+                  </span>
+                </Link>
+
+                <div
+                  className="relative flex items-center gap-2"
+                  ref={dropdownRef}
+
                 onMouseEnter={() => {
                   closeGuides();
                   closeSoc();
@@ -919,14 +952,28 @@ export default function Header() {
                     </svg>
                   </button>
                 </div>
-                <div className="space-y-2 rounded-xl border border-slate-200">
-                  <button
-                    type="button"
-                    className="w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-slate-900"
-                    aria-expanded={mobileSocOpen}
-                    aria-controls="mobile-soc-menu"
-                    onClick={() => toggleMobileSection('soc')}
-                  >
+                  <div className="space-y-2 rounded-xl border border-slate-200">
+                    <Link
+                      href="/search"
+                      className="w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-slate-900"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      <span>Search</span>
+                      <svg className="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                      </svg>
+                    </Link>
+                  </div>
+
+                  <div className="space-y-2 rounded-xl border border-slate-200">
+                    <button
+                      type="button"
+                      className="w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-slate-900"
+                      aria-expanded={mobileSocOpen}
+                      aria-controls="mobile-soc-menu"
+                      onClick={() => toggleMobileSection('soc')}
+                    >
+
                     <span>SOC 2</span>
                     <svg
                       className={`w-4 h-4 transition-transform ${mobileSocOpen ? 'rotate-180 text-brand-700' : 'text-slate-500'}`}
@@ -1079,20 +1126,36 @@ export default function Header() {
                       >
                         {vendorMenu.overview.label}
                       </Link>
-                    <Link
-                      href={vendorMenu.primary.href}
-                      className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      <span className="flex items-center gap-2">
-                        {vendorMenu.primary.label}
-                        {vendorMenu.primary.badge ? (
-                          <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">
-                            {vendorMenu.primary.badge}
+                      <Link
+                        href={vendorMenu.primary.href}
+                        className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        <span className="flex items-center gap-2">
+                          {vendorMenu.primary.label}
+                          {vendorMenu.primary.badge ? (
+                            <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">
+                              {vendorMenu.primary.badge}
+                            </span>
+                          ) : null}
+                        </span>
+                      </Link>
+                      {vendorMenu.roi && (
+                        <Link
+                          href={vendorMenu.roi.href}
+                          className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          <span className="flex items-center gap-2">
+                            {vendorMenu.roi.label}
+                            {vendorMenu.roi.badge ? (
+                              <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">
+                                {vendorMenu.roi.badge}
+                              </span>
+                            ) : null}
                           </span>
-                        ) : null}
-                      </span>
-                    </Link>
+                        </Link>
+                      )}
                       <div className="border-t border-slate-200 my-2" />
                       <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block">Guides</span>
                       {vendorMenu.guides.map((item) => (

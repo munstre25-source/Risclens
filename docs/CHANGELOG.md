@@ -2,6 +2,12 @@
 
 Most recent first. For commit-level notes see [COMMITS_SUMMARY.md](COMMITS_SUMMARY.md).
 
+## 2026-01-05
+- High-intent PenTest pages: Added `/penetration-testing/saas` and `/penetration-testing/fintech` industry guides.
+- Vendor Risk ROI Calculator: Created `/vendor-risk-assessment/roi-calculator` to help build automation business cases.
+- Navigation: Integrated ROI Calculator link into Vendor Risk dropdown (desktop/mobile), positioned under Risk Triage Tool.
+- Documentation: Updated `ROUTES_AND_PAGES.md`, `PRODUCT_OVERVIEW.md`, `SEO.md`, and `CHANGELOG.md` to reflect new high-intent surfaces.
+
 ## 2024-xx-xx
 - Mobile nav hardened: portal-based drawer with backdrop, scroll-lock, close on route change, and sticky close control.
 - Sitemap cleaned: deduped, normalized URLs, sorted output, removed blanket `lastmod`; added `check:sitemap`.

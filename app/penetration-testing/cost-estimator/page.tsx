@@ -4,6 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import PentestEstimatorForm from '@/components/pentest/PentestEstimatorForm';
 import { HowItWorksAccordion } from '@/components/HowItWorksAccordion';
+import { SoftwareApplicationSchema } from '@/components/SoftwareApplicationSchema';
 
 const breadcrumbSchema = {
   '@context': 'https://schema.org',
@@ -41,6 +42,12 @@ export default function PentestEstimatorPage() {
 
   return (
     <main className="min-h-screen flex flex-col bg-slate-100">
+      <SoftwareApplicationSchema
+        name="Pentest Cost Estimator"
+        description="Deterministic pentest pricing based on scope, auth complexity, and environments."
+        url="https://risclens.com/penetration-testing/cost-estimator"
+        category="SecurityApplication"
+      />
       <Script id="pentest-estimator-breadcrumbs" type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <Header />
       <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">

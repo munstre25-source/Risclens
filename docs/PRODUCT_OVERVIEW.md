@@ -17,8 +17,8 @@ What users experience across risclens.com. See [PRODUCT.md](PRODUCT.md) for posi
 - **SOC 2 Timeline** `/soc-2-timeline` (+ size variants).
 - **SOC 2 Type I vs Type II**, **Readiness Checklist**, **Industries** hub `/soc-2/industries` (+ `[slug]` pages).
 - **SOC 2 vs ISO 27001** hub `/soc-2-vs-iso-27001` (+ `[slug]` comparisons).
-- **Pentest**: overview `/penetration-testing`, estimator `/penetration-testing/cost-estimator`, pricing, scan vs pentest, report, SOC 2-specific guidance.
-- **Vendor Risk**: hub `/vendor-risk-assessment`, triage tool `/vendor-risk-assessment/triage`, checklist, scoring model, evidence by tier, monitoring cadence, contract clauses, common mistakes, subprocessors vs vendors.
+- **Pentest**: overview `/penetration-testing`, estimator `/penetration-testing/cost-estimator`, and industry-specific high-intent guides (`/saas`, `/fintech`).
+- **Vendor Risk**: hub `/vendor-risk-assessment`, triage tool `/vendor-risk-assessment/triage`, and **ROI Calculator** `/vendor-risk-assessment/roi-calculator`.
 - **Learning**: `/soc-2/guides`, `/learn/soc-2-readiness` (+ `[slug]`), evidence library `/soc-2-evidence/[slug]`.
 - **Policies**: `/privacy`, `/terms`. Admin: `/admin` (leads, filters, audit logs, variants, CSV export, test-mode toggles).
 

@@ -20,18 +20,18 @@ Source: `app/sitemap.ts` output (ROUTES + noindex filtering). Duplicate sitemap 
 - Checklist & misc:  
   `/soc-2-readiness-checklist`, `/when-do-you-need-soc-2`
 
-## Pentest — 13 URLs
-/penetration-testing, /penetration-testing/{api,cloud,cost-estimator,mobile,pricing,report,vs-vulnerability-scan,web-application,sow,retesting-remediation,compliance-buyers}
+## Pentest — 15 URLs
+/penetration-testing, /penetration-testing/{api,cloud,cost-estimator,mobile,pricing,report,vs-vulnerability-scan,web-application,sow,retesting-remediation,compliance-buyers,saas,fintech}
 
-## Vendor Risk (VAR) — 10 URLs
-/vendor-risk-assessment, /vendor-risk-assessment/{checklist,common-mistakes,contract-clauses,evidence-by-tier,monitoring-cadence,scoring-model,subprocessors-vs-vendors,triage,questionnaire}
+## Vendor Risk (VAR) — 11 URLs
+/vendor-risk-assessment, /vendor-risk-assessment/{checklist,common-mistakes,contract-clauses,evidence-by-tier,monitoring-cadence,scoring-model,subprocessors-vs-vendors,triage,questionnaire,roi-calculator}
 
 ## Other (non-category) — 3 URLs
 /, /privacy, /terms
 
 ## Totals (sitemap)
 - SOC 2: 115
-- Pentest: 13
-- Vendor Risk (VAR): 10
+- Pentest: 15
+- Vendor Risk (VAR): 11
 - Other: 3
-- **All sitemap URLs**: 141
+- **All sitemap URLs**: 144

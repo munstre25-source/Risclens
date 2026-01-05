@@ -4,11 +4,13 @@ Focus: high-intent security/compliance queries and clean crawlability.
 
 ## Key Surfaces
 - Core funnels: `/` → `/soc-2-readiness-calculator`; pentest `/penetration-testing` → `/penetration-testing/cost-estimator`; vendor risk `/vendor-risk-assessment` → `/vendor-risk-assessment/triage`.
+- High-intent industry pages: Pentest `/penetration-testing/saas`, `/penetration-testing/fintech`.
+- High-intent tools: Vendor Risk ROI Calculator `/vendor-risk-assessment/roi-calculator`.
 - SOC 2 hubs: cost (`/soc-2-cost*`), timeline (`/soc-2-timeline*`), type (`/soc-2-type-i-vs-type-ii`), checklist, cost breakdown, when-to-start, industries (`/soc-2/industries*`), ISO comparison (`/soc-2-vs-iso-27001*`), evidence (`/soc-2-evidence/[slug]`), learning hub (`/learn/soc-2-readiness*`).
 - Pentest guides under `/penetration-testing/[slug]`; vendor risk guides under `/vendor-risk-assessment/*`.
 
 ## Internal Linking Strategy
-- Header dropdowns and mobile drawer cover SOC 2, Pentest, Vendor Risk, Guides, Industries.
+- Header dropdowns and mobile drawer cover SOC 2, Pentest, Vendor Risk (including ROI Calculator), Guides, Industries.
 - `AssessmentCTA` and hero CTAs point to a single primary action; secondary link allowed to a relevant guide.
 - “Learn more” links are centralized in `lib/learnMoreLinks.ts` to avoid broken hrefs.
 - Related/FAQ blocks kept concise; “How it works” accordions prevent content bloat above the fold.

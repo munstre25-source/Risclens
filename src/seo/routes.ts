@@ -142,5 +142,9 @@ export const ROUTES: string[] = [
   '/vendor-risk-assessment/common-mistakes',
   '/penetration-testing/sow',
   '/penetration-testing/retesting-remediation',
-  '/penetration-testing/compliance-buyers',
-];
+    '/penetration-testing/compliance-buyers',
+    '/penetration-testing/saas',
+    '/penetration-testing/fintech',
+    '/vendor-risk-assessment/roi-calculator',
+  ];
+
