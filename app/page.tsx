@@ -247,64 +247,94 @@ export default function HomePage() {
                 </div>
             </div>
 
-              {/* Hero preview card */}
-              <div className="card shadow-md border-slate-200 bg-white space-y-4 hover:shadow-lg transition-shadow duration-300 group">
-                <div>
-                  <p className="text-sm font-semibold text-slate-900 flex items-center gap-2">
-                    Results preview
-                    <span className="inline-flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                  </p>
-                  <p className="text-sm text-slate-600">Example output from the readiness index</p>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="relative inline-flex items-center justify-center group/score cursor-help">
-                    <svg className="w-24 h-24 -rotate-90 group-hover/score:scale-105 transition-transform">
-                      <circle cx="48" cy="48" r="42" strokeWidth="10" fill="none" className="text-slate-200" />
-                      <circle
-                        cx="48"
-                        cy="48"
-                        r="42"
-                        strokeWidth="10"
-                        fill="none"
-                        strokeDasharray={`${0.72 * 264} 264`}
-                        strokeLinecap="round"
-                        className="stroke-trust-500"
-                      />
-                    </svg>
-                    <div className="absolute flex flex-col items-center">
-                      <span className="text-3xl font-bold text-trust-600">72</span>
-                      <span className="text-[10px] uppercase text-slate-500 tracking-wide">Near-ready</span>
+                {/* Hero preview card */}
+                <div className="card shadow-md border-slate-200 bg-white space-y-4 hover:shadow-lg transition-shadow duration-300 group">
+                  <div>
+                    <p className="text-sm font-semibold text-slate-900 flex items-center gap-2">
+                      Sample Readiness Report
+                    </p>
+                    <p className="text-sm text-slate-600">Example output from the readiness index</p>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="relative inline-flex items-center justify-center group/score cursor-help">
+                      <svg className="w-24 h-24 -rotate-90 group-hover/score:scale-105 transition-transform">
+                        <circle cx="48" cy="48" r="42" strokeWidth="10" fill="none" className="text-slate-200" />
+                        <circle
+                          cx="48"
+                          cy="48"
+                          r="42"
+                          strokeWidth="10"
+                          fill="none"
+                          strokeDasharray={`${0.72 * 264} 264`}
+                          strokeLinecap="round"
+                          className="stroke-trust-500"
+                        />
+                      </svg>
+                      <div className="absolute flex flex-col items-center">
+                        <span className="text-3xl font-bold text-trust-600">72</span>
+                        <span className="text-[10px] uppercase text-slate-500 tracking-wide">Near-ready</span>
+                      </div>
+                      {/* Tooltip on hover */}
+                      <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover/score:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg border border-slate-700">
+                        Standard band for Series A SaaS
+                      </div>
                     </div>
-                    {/* Tooltip on hover */}
-                    <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover/score:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
-                      Standard band for Series A SaaS
+                    <div className="space-y-2 flex-1">
+                      <div className="relative group/cost rounded-lg bg-slate-50 border border-slate-200 p-3 hover:border-brand-200 transition-colors cursor-help">
+                        <div className="flex items-center justify-between">
+                          <p className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Estimated cost</p>
+                          <svg className="w-3 h-3 text-slate-400 group-hover/cost:text-brand-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <p className="text-lg font-bold text-brand-700">$38k–$68k</p>
+                        <p className="text-xs text-slate-500">Auditor + tooling + internal effort</p>
+                        
+                        {/* Cost Tooltip */}
+                        <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-48 bg-slate-900 text-white text-[10px] p-2 rounded opacity-0 group-hover/cost:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg border border-slate-700 leading-normal">
+                          Range varies by company size, complexity, and auditor choice. We include internal resource costs.
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div className="space-y-2 flex-1">
-                    <div className="rounded-lg bg-slate-50 border border-slate-200 p-3 group-hover:border-brand-200 transition-colors">
-                      <p className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Estimated cost</p>
-                      <p className="text-lg font-bold text-brand-700">$38k–$68k</p>
-                      <p className="text-xs text-slate-500">Auditor + tooling + internal effort</p>
-                    </div>
+                  <div className="space-y-2">
+                    <p className="text-sm font-semibold text-slate-800">Top fixes</p>
+                    <ul className="space-y-3">
+                      {[
+                        { 
+                          text: 'Tighten access reviews with evidence logs', 
+                          icon: (
+                            <svg className="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                            </svg>
+                          )
+                        },
+                        { 
+                          text: 'Document change management with approvals', 
+                          icon: (
+                            <svg className="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                          )
+                        },
+                        { 
+                          text: 'Vendor risk: tier critical vendors with proofs', 
+                          icon: (
+                            <svg className="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                          )
+                        },
+                      ].map((item) => (
+                        <li key={item.text} className="flex gap-3 text-sm text-slate-700 group/item hover:bg-slate-50 p-2 -m-2 rounded-lg transition-colors items-center">
+                          <span className="flex-shrink-0 group-hover/item:scale-110 transition-transform">{item.icon}</span>
+                          <span>{item.text}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
+                  <p className="text-xs text-slate-500 italic">This is a static preview. Your actual score and custom recommendations will match your specific inputs.</p>
                 </div>
-                <div className="space-y-2">
-                  <p className="text-sm font-semibold text-slate-800">Top fixes</p>
-                  <ul className="space-y-3">
-                    {[
-                      { text: 'Tighten access reviews with evidence logs', icon: '🔑' },
-                      { text: 'Document change management with approvals', icon: '📝' },
-                      { text: 'Vendor risk: tier critical vendors with proofs', icon: '🛡️' },
-                    ].map((item) => (
-                      <li key={item.text} className="flex gap-3 text-sm text-slate-700 group/item hover:bg-slate-50 p-2 -m-2 rounded-lg transition-colors">
-                        <span className="text-base group-hover/item:scale-110 transition-transform">{item.icon}</span>
-                        <span>{item.text}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <p className="text-xs text-slate-500">Static preview. Your score and recommendations will match your inputs.</p>
-              </div>
           </div>
         </div>
       </section>
