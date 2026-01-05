@@ -40,7 +40,7 @@ export default function GenericLeadMagnetPDF({ data }: GenericLeadMagnetPDFProps
       </head>
       <body>
         <div className="header">
-          <img src={logoUrl} alt="RiscLens" style={{ height: '40px', marginBottom: '10px' }} />
+          <img src={logoUrl} alt="RiscLens" style={{ height: '56px', marginBottom: '10px' }} />
           <div className="title">{data.title}</div>
           {data.subtitle && <div className="subtitle">{data.subtitle}</div>}
         </div>

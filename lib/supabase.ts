@@ -121,6 +121,7 @@ export interface SOC2Lead {
 
 /**
  * Insert a new lead into the unified leads table
+ * @deprecated Use createLead from @/lib/leads instead for most cases
  */
 export async function insertLead(lead: Omit<SOC2Lead, 'id' | 'created_at' | 'updated_at'>): Promise<SOC2Lead> {
   const supabase = getSupabaseAdmin();
@@ -160,8 +161,9 @@ export async function insertLead(lead: Omit<SOC2Lead, 'id' | 'created_at' | 'upd
 
 /**
  * Alias for insertLead to support legacy codebases
+ * @deprecated Use createLead from @/lib/leads instead
  */
-export const createLead = insertLead;
+// export const createLead = insertLead;
 
 
 export interface RevenueEvent {

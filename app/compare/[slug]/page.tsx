@@ -188,14 +188,36 @@ export default function ToolComparisonPage({ params }: PageProps) {
             <p className="text-brand-800 leading-relaxed">{comparison.verdict}</p>
           </div>
 
-          <div className="border border-slate-200 rounded-xl p-6 bg-white space-y-3">
-            <h3 className="text-lg font-semibold text-slate-900">Related Resources</h3>
-            <div className="flex flex-wrap gap-3 text-sm">
-              <Link href="/soc-2-cost" className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">SOC 2 Cost</Link>
-              <Link href="/soc-2-timeline" className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">SOC 2 Timeline</Link>
-              <Link href="/soc-2-vs-iso-27001" className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">SOC 2 vs ISO 27001</Link>
+            <div className="border border-slate-200 rounded-xl p-6 bg-white space-y-4">
+              <h3 className="text-lg font-semibold text-slate-900">Related Resources</h3>
+              <div className="flex flex-wrap gap-3 text-sm">
+                <Link href="/compare" className="px-3 py-1.5 rounded-full bg-brand-50 border border-brand-100 text-brand-700 font-medium hover:bg-brand-100 transition-colors">
+                  ← Back to Comparisons Hub
+                </Link>
+                <Link href="/soc-2-readiness-calculator" className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200 transition-colors">SOC 2 Readiness Score</Link>
+                <Link href="/soc-2-cost" className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200 transition-colors">SOC 2 Cost Guide</Link>
+                <Link href="/soc-2-timeline" className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200 transition-colors">SOC 2 Timeline</Link>
+              </div>
+              
+              <div className="pt-4 border-t border-slate-100">
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Compare More Platforms</p>
+                <div className="flex flex-wrap gap-2">
+                  {toolComparisons.filter(c => c.slug !== params.slug).slice(0, 4).map(c => (
+                    <Link 
+                      key={c.slug} 
+                      href={`/compare/${c.slug}`}
+                      className="text-sm text-slate-600 hover:text-brand-600 hover:underline transition-colors"
+                    >
+                      {c.toolA.name} vs {c.toolB.name}
+                    </Link>
+                  ))}
+                  <Link href="/compare" className="text-sm text-brand-600 font-medium hover:underline">
+                    View all 15+ comparisons →
+                  </Link>
+                </div>
+              </div>
             </div>
-          </div>
+
 
           <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-4">
             <h3 className="text-lg font-semibold text-slate-900">Common Questions</h3>

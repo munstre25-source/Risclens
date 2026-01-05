@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import type { FormEvent } from 'react';
 import { VendorRiskInput, VendorRiskResult } from '@/lib/vendorRisk';
 import { PostResultsCTA } from '../PostResultsCTA';
 import { trackEvent } from '@/lib/analytics';

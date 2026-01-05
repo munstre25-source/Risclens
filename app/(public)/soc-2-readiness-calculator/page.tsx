@@ -138,13 +138,15 @@ export default function CalculatorPage() {
             {/* Sidebar / Quick Links */}
             <div className="space-y-6">
               <HowItWorksAccordion defaultExpandedOnDesktop={false} />
-              <RelatedGuidesRow
-                links={[
-                  { href: '/soc-2-cost', label: 'SOC 2 Cost guide' },
-                  { href: '/soc-2-timeline', label: 'SOC 2 Timeline' },
-                  { href: '/penetration-testing/cost-estimator', label: 'Pentest Cost Estimator' },
-                ]}
-              />
+                <RelatedGuidesRow
+                  links={[
+                    { href: '/compare', label: 'Compare Platforms' },
+                    { href: '/soc-2-cost', label: 'SOC 2 Cost guide' },
+                    { href: '/soc-2-timeline', label: 'SOC 2 Timeline' },
+                    { href: '/penetration-testing/cost-estimator', label: 'Pentest Cost Estimator' },
+                  ]}
+                />
+
             </div>
           </div>
         </div>

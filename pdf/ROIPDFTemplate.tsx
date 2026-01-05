@@ -52,7 +52,7 @@ export default function ROIPDFTemplate({ data }: ROIPDFTemplateProps) {
       </head>
       <body>
         <div className="header">
-          <img src={logoUrl} alt="RiscLens" style={{ height: '40px', marginBottom: '10px' }} />
+          <img src={logoUrl} alt="RiscLens" style={{ height: '56px', marginBottom: '10px' }} />
           <div className="title">Compliance ROI & Procurement Roadmap</div>
           <div className="subtitle">Prepared for {data.company_name} | January 2026</div>
         </div>

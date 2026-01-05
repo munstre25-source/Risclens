@@ -101,9 +101,9 @@ export default function HomePage() {
         <div className="section-shell py-14 lg:py-20">
           <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] items-start">
             <div className="space-y-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
-                SOC 2 Readiness Index
-              </p>
+                <p className="text-sm font-bold uppercase tracking-[0.12em] text-slate-600">
+                  SOC 2 Readiness Index
+                </p>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-medium text-slate-900 leading-tight">
                 Get a SOC 2 readiness score in 2 minutes
               </h1>

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createLead, logAuditEvent } from '@/lib/supabase';
+import { createLead } from '@/lib/leads';
+import { logAuditEvent } from '@/lib/supabase';
 import { sendEmail, isUnsubscribed } from '@/lib/email';
 import { applyRateLimit } from '@/lib/rate-limit';
 
@@ -27,21 +28,27 @@ export async function POST(request: NextRequest) {
     }
 
     // Create a lead in the database
-    const lead = await createLead({
+    const leadResult = await createLead({
       email,
-      company_name: 'Unknown', // We don't have this in the tiering tool yet
-      lead_type: 'vendor-tiering',
-      lead_payload: {
+      company: 'Unknown', // We don't have this in the tiering tool yet
+      leadType: 'vendor-tiering',
+      payload: {
         vendor_name,
         tier: result.tier,
         requirements: result.requirements,
         monitoring_cadence: result.monitoringCadence,
       },
-      source_url: request.headers.get('referer') || '',
+      sourceUrl: request.headers.get('referer') || '',
     });
 
+    if (!leadResult.ok || !leadResult.id) {
+      throw new Error(leadResult.error || 'Failed to create lead');
+    }
+
+    const leadId = leadResult.id;
+
     // Send the email
-    const unsubscribeToken = Buffer.from(`${email}:${lead.id}`).toString('base64');
+    const unsubscribeToken = Buffer.from(`${email}:${leadId}`).toString('base64');
     
     const emailResult = await sendEmail(email, 'vendor_tiering', {
       email,
@@ -58,13 +65,13 @@ export async function POST(request: NextRequest) {
     }
 
     await logAuditEvent('vendor_tiering_submitted', {
-      lead_id: lead.id,
+      lead_id: leadId,
       email,
       vendor_name,
       tier: result.tier,
     });
 
-    return NextResponse.json({ success: true, lead_id: lead.id });
+    return NextResponse.json({ success: true, lead_id: leadId });
   } catch (error) {
     console.error('Vendor tiering submission error:', error);
     return NextResponse.json(

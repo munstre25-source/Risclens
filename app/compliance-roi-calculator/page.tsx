@@ -499,20 +499,24 @@ export default function ComplianceROICalculator() {
                 </p>
               </div>
 
-              <div className="text-center pt-8 border-t border-slate-200">
-                <h3 className="text-lg font-semibold text-slate-900 mb-4">Compare Platforms Mentioned Above</h3>
-                <div className="flex flex-wrap justify-center gap-3">
-                  <Link href="/compare/vanta-vs-drata" className="px-4 py-2 rounded-lg bg-white border border-slate-200 text-sm text-brand-700 hover:border-brand-300">
-                    Vanta vs Drata
-                  </Link>
-                  <Link href="/compare/thoropass-vs-vanta" className="px-4 py-2 rounded-lg bg-white border border-slate-200 text-sm text-brand-700 hover:border-brand-300">
-                    Thoropass vs Vanta
-                  </Link>
+                <div className="text-center pt-8 border-t border-slate-200">
+                  <h3 className="text-lg font-semibold text-slate-900 mb-4">Compare Platforms Mentioned Above</h3>
+                  <div className="flex flex-wrap justify-center gap-3">
+                    <Link href="/compare/vanta-vs-drata" className="px-4 py-2 rounded-lg bg-white border border-slate-200 text-sm text-brand-700 hover:border-brand-300">
+                      Vanta vs Drata
+                    </Link>
+                    <Link href="/compare/thoropass-vs-vanta" className="px-4 py-2 rounded-lg bg-white border border-slate-200 text-sm text-brand-700 hover:border-brand-300">
+                      Thoropass vs Vanta
+                    </Link>
                     <Link href="/compare/sprinto-vs-vanta" className="px-4 py-2 rounded-lg bg-white border border-slate-200 text-sm text-brand-700 hover:border-brand-300">
                       Sprinto vs Vanta
                     </Link>
+                    <Link href="/compare" className="px-4 py-2 rounded-lg bg-brand-50 border border-brand-100 text-sm font-bold text-brand-700 hover:bg-brand-100 transition-colors">
+                      View all 15+ comparisons →
+                    </Link>
                   </div>
                 </div>
+
 
                 <div className="pt-8 border-t border-slate-200">
                   <RelatedGuidesRow

@@ -154,9 +154,9 @@ export default function Soc2ReadinessGuidePage({ params }: PageProps) {
                 <li>Assign owners and a cadence, then track reviews in one place.</li>
                 <li>Bundle pentest findings, access reviews, or logs that prove it works.</li>
               </ol>
-              <Link href="/penetration-testing/for-soc-2" className="text-sm text-brand-700 underline underline-offset-4">
-                Related: Penetration Testing for SOC 2
-              </Link>
+                <Link href="/penetration-testing/compliance-buyers" className="text-sm text-brand-700 underline underline-offset-4">
+                  Related: Penetration Testing for SOC 2
+                </Link>
             </div>
 
             <div className="bg-white border border-slate-200 rounded-xl p-6">
@@ -186,7 +186,7 @@ export default function Soc2ReadinessGuidePage({ params }: PageProps) {
                     {rel.title}
                   </Link>
                 ))}
-                <Link href="/penetration-testing/for-soc-2" className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">
+                <Link href="/penetration-testing/compliance-buyers" className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">
                   Penetration Testing for SOC 2
                 </Link>
               </div>

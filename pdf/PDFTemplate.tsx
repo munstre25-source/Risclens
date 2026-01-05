@@ -537,11 +537,11 @@ export default function PDFTemplate({ lead }: PDFTemplateProps) {
         {/* HEADER */}
         {/* ============================================================= */}
         <div className="header">
-          <img
-            src={logoUrl}
-            alt="RiscLens"
-            style={{ height: '48px', width: 'auto', marginBottom: '10px' }}
-          />
+            <img
+              src={logoUrl}
+              alt="RiscLens"
+              style={{ height: '64px', width: 'auto', marginBottom: '10px' }}
+            />
           <h1>SOC 2 Readiness Report</h1>
           <div className="subtitle">
             Prepared for {lead.company_name} | {formatDate(new Date().toISOString())}
