@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
   if (rateLimitResponse) return rateLimitResponse;
 
   try {
-    const { lead_id } = await request.json();
+    const { lead_id, template, data: customData } = await request.json();
 
     // Validate lead_id
     if (!lead_id || !isValidUUID(lead_id)) {
@@ -97,20 +97,84 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate and upload PDF
-    const pdfResult = await generateAndUploadPDF({
+    let pdfResult;
+    const templateType = template || (lead.lead_type === 'roi_calculator' ? 'roi' : 'readiness');
+    
+    // Prepare lead data for template
+    const leadDataForTemplate = {
       id: lead.id,
-      company_name: lead.company_name,
+      company_name: lead.company_name || lead.company,
       industry: lead.industry,
       num_employees: lead.num_employees,
-      data_types: lead.data_types,
-      audit_date: lead.audit_date,
-      role: lead.role,
       email: lead.email,
-      readiness_score: readinessScore,
-      estimated_cost_low: estimatedLow,
-      estimated_cost_high: estimatedHigh,
-      lead_score: leadScore,
-    });
+      ...customData // Allow overriding or providing extra data (e.g., from lead magnets)
+    };
+
+    if (templateType === 'roi') {
+      const roiData = lead.payload || {};
+      pdfResult = await generateAndUploadPDF({
+        ...leadDataForTemplate,
+        manualCost: roiData.manualCost,
+        automationCost: roiData.automationCost,
+        allInOneCost: roiData.allInOneCost,
+        savings: roiData.savings,
+        recommendation: roiData.recommendation,
+        breakdown: roiData.breakdown,
+        frameworks: lead.frameworks || [],
+      }, 'roi');
+    } else if (templateType === 'readiness') {
+      pdfResult = await generateAndUploadPDF({
+        ...leadDataForTemplate,
+        data_types: lead.data_types,
+        audit_date: lead.audit_date,
+        role: lead.role,
+        readiness_score: readinessScore,
+        estimated_cost_low: estimatedLow,
+        estimated_cost_high: estimatedHigh,
+        lead_score: leadScore,
+      }, 'readiness');
+    } else {
+      // Handle custom templates (Pentest SOW, VRA Magnets, etc.)
+      const magnetConfigs: Record<string, any> = {
+        pentest_sow: {
+          title: 'Pentest SOW & Vendor Checklist',
+          resourceName: 'Statement of Work',
+          description: 'A custom Statement of Work and technical checklist based on your application scope.',
+        },
+        vra_roi: {
+          title: 'Vendor Risk ROI Report',
+          resourceName: 'Efficiency Analysis',
+          description: 'A detailed breakdown of manual vs automated vendor risk management costs.',
+        },
+        vra_scoring_spreadsheet: {
+          title: 'VRA Scoring Model',
+          resourceName: 'Excel Template',
+          description: 'Pre-weighted scoring model for standardizing vendor triage.',
+        },
+        vra_checklist: {
+          title: 'Vendor Review Checklist',
+          resourceName: 'Diligence Guide',
+          description: 'Comprehensive checklist for SOC 2 vendor management compliance.',
+        },
+        vra_evidence_templates: {
+          title: 'Evidence Request Templates',
+          resourceName: 'DOCX Templates',
+          description: 'Ready-to-use email and document templates for vendor evidence requests.',
+        },
+      };
+
+      const config = magnetConfigs[templateType] || {
+        title: 'Premium Compliance Resource',
+        resourceName: 'Resource Download',
+        description: 'Custom security documentation generated for your organization.',
+      };
+
+      pdfResult = await generateAndUploadPDF({
+        ...leadDataForTemplate,
+        ...config,
+        data: customData,
+      }, templateType);
+    }
 
     if (!pdfResult.success || !pdfResult.pdfPath || !pdfResult.pdfUrl) {
       // Log failure

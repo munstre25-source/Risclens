@@ -4,6 +4,7 @@ import Script from 'next/script';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AssessmentCTA from '@/components/AssessmentCTA';
+import AboutSection from '@/components/AboutSection';
 import { costIndustries } from '@/lib/navConfig';
 
 const faqs = [
@@ -109,9 +110,9 @@ export default function Soc2CostPage() {
                 </svg>
               </Link>
               <p className="text-sm text-slate-500">Free • No sales calls • Instant results</p>
-              <Link href="/soc-2-timeline" className="text-sm text-brand-700 underline underline-offset-2 hover:text-brand-800">
-                Want timelines? See the SOC 2 Timeline Calculator
-              </Link>
+                <Link href="/soc-2-timeline/estimator" className="text-sm text-brand-700 underline underline-offset-2 hover:text-brand-800">
+                  Want timelines? See the SOC 2 Timeline Calculator
+                </Link>
               <Link href="/penetration-testing/for-soc-2" className="text-sm text-brand-700 underline underline-offset-2 hover:text-brand-800">
                 Related: Penetration Testing for SOC 2
               </Link>
@@ -267,24 +268,11 @@ export default function Soc2CostPage() {
                 <h3 className="text-lg font-semibold text-slate-800">How long does SOC 2 usually take?</h3>
                 <p className="text-slate-600">Readiness can take a few months; Type I typically weeks; Type II adds 3–12 months of observation depending on requirements.</p>
               </div>
-              <div className="border-t border-slate-200 pt-6 text-sm text-slate-600">
-                <p className="font-medium text-slate-700 mb-2">About RiscLens</p>
-                <p className="leading-relaxed">
-                  RiscLens is an independent SOC 2 readiness project built to help early-stage teams understand audit expectations, costs, and gaps — without sales pressure or automation lock-in.
-                </p>
-              </div>
-              <div className="text-sm text-slate-600">
-                <p className="font-medium text-slate-700 mb-2">Your data &amp; privacy</p>
-                <ul className="list-disc list-inside space-y-1 leading-relaxed">
-                  <li>We do not sell or share your information</li>
-                  <li>Responses are used only to calculate your score</li>
-                  <li>You can complete the assessment without providing an email</li>
-                  <li>Aggregated, anonymous data may be used to improve estimates</li>
-                </ul>
-              </div>
             </div>
           </div>
         </section>
+
+        <AboutSection />
 
         <section className="bg-white border-t border-slate-200">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 space-y-4">

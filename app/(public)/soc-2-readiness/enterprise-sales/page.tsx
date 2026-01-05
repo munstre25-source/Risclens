@@ -32,7 +32,7 @@ export default function Soc2EnterpriseSalesPage() {
             >
               Get Your Readiness Score →
             </Link>
-            <p className="mt-4 text-sm text-slate-500">Free • No credit card • Instant results</p>
+            <p className="mt-4 text-sm text-slate-500">Free • No credit card • Business email required</p>
           </div>
         </section>
 
@@ -90,28 +90,17 @@ export default function Soc2EnterpriseSalesPage() {
               >
                 Get Your Readiness Score →
               </Link>
-              <p className="mt-3 text-sm text-slate-500">Free • No credit card • Instant results</p>
+              <p className="mt-3 text-sm text-slate-500">Free • No credit card • Business email required</p>
             </div>
 
             <div className="bg-white/70 border border-slate-200 rounded-lg p-4 space-y-2">
-              <p className="text-sm font-semibold text-slate-800">Related guides</p>
-              <div className="flex flex-wrap gap-3 text-sm text-brand-700">
-                <Link href="/soc-2-cost" className="underline underline-offset-2 hover:text-brand-800">
-                  SOC 2 Cost
-                </Link>
-                <Link href="/soc-2-timeline" className="underline underline-offset-2 hover:text-brand-800">
-                  SOC 2 Timeline
-                </Link>
-                <Link href="/soc-2-type-i-vs-type-ii" className="underline underline-offset-2 hover:text-brand-800">
-                  Type I vs Type II
-                </Link>
-                <Link href="/soc-2-readiness/saas" className="underline underline-offset-2 hover:text-brand-800">
-                  SOC 2 for SaaS
-                </Link>
-                <Link href="/soc-2-readiness/fintech" className="underline underline-offset-2 hover:text-brand-800">
-                  SOC 2 for Fintech
-                </Link>
-              </div>
+              <p className="text-sm font-semibold text-slate-800">Trust &amp; privacy</p>
+              <ul className="list-disc list-inside text-sm text-slate-600 leading-relaxed space-y-1">
+                <li>No login required; business email required.</li>
+                <li>Answers used only to calculate your score</li>
+                <li>Estimates are planning guidance, not audit advice</li>
+              </ul>
+            </div>
             </div>
           </div>
         </section>

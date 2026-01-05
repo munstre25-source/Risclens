@@ -7,11 +7,12 @@ export default function Footer() {
             <h3 className="text-lg font-semibold text-white">RiscLens</h3>
             <p className="text-sm text-slate-400">COMPLIANCE READINESS INFRASTRUCTURE</p>
           </div>
-          <div className="flex items-center gap-6 text-sm">
-            <a href="/privacy" className="hover:text-slate-100 transition-colors">Privacy</a>
-            <a href="/terms" className="hover:text-slate-100 transition-colors">Terms</a>
-            <a href="mailto:hello@risclens.com" className="hover:text-slate-100 transition-colors">Contact</a>
-          </div>
+            <div className="flex items-center gap-6 text-sm">
+              <a href="/about" className="hover:text-slate-100 transition-colors">About</a>
+              <a href="/privacy" className="hover:text-slate-100 transition-colors">Privacy</a>
+              <a href="/terms" className="hover:text-slate-100 transition-colors">Terms</a>
+              <a href="mailto:hello@risclens.com" className="hover:text-slate-100 transition-colors">Contact</a>
+            </div>
         </div>
 
         <div className="border-t border-slate-800 mt-8 pt-8 text-sm text-slate-300 space-y-4">

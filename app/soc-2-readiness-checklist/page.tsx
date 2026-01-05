@@ -45,7 +45,7 @@ export default function Soc2ReadinessChecklistPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </Link>
-            <p className="mt-4 text-sm text-slate-500">Free • No credit card • Instant results</p>
+              <p className="mt-4 text-sm text-slate-500">Free • No credit card • Business email required</p>
             </div>
           </section>
 
@@ -152,17 +152,17 @@ export default function Soc2ReadinessChecklistPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </Link>
-              <p className="text-sm text-slate-500">Free • No credit card • Instant results</p>
-            </div>
-
-            <div className="bg-white/70 border border-slate-200 rounded-lg p-4 space-y-2">
-              <p className="text-sm font-semibold text-slate-800">Trust &amp; privacy</p>
-              <ul className="list-disc list-inside text-sm text-slate-600 leading-relaxed space-y-1">
-                <li>Free, no sales calls</li>
-                <li>Answers used only to calculate your score (email optional)</li>
-                <li>Estimates are planning guidance, not audit advice</li>
-              </ul>
-            </div>
+                <p className="text-sm text-slate-500">Free • No credit card • Business email required</p>
+              </div>
+  
+              <div className="bg-white/70 border border-slate-200 rounded-lg p-4 space-y-2">
+                <p className="text-sm font-semibold text-slate-800">Trust &amp; privacy</p>
+                  <ul className="list-disc list-inside text-sm text-slate-600 leading-relaxed space-y-1">
+                    <li>No login required; business email required.</li>
+                    <li>Answers used only to calculate your score</li>
+                    <li>Estimates are planning guidance, not audit advice</li>
+                  </ul>
+              </div>
 
             <div className="space-y-2">
               <p className="text-sm font-semibold text-slate-800">Related guides</p>

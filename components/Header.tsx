@@ -404,19 +404,21 @@ export default function Header() {
                   openSoc();
                 }}
               >
-                <Link
-                  href="/"
-                  className={`flex items-center gap-2 hover:text-brand-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600 rounded ${
-                    isSocActive ? 'text-brand-700 underline underline-offset-4' : ''
-                  }`}
-                >
-                  SOC 2
-                </Link>
-                <button
-                  type="button"
-                  className={`hover:text-brand-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600 rounded ${
-                    isSocActive ? 'text-brand-700' : ''
-                  }`}
+                    <Link
+                      href="/soc-2"
+                      className={`flex items-center gap-2 transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600 rounded ${
+                        isSocActive 
+                          ? 'text-brand-700 underline underline-offset-4 font-black' 
+                          : 'text-brand-600 font-black hover:text-brand-700'
+                      }`}
+                    >
+                      SOC 2
+                    </Link>
+                  <button
+                    type="button"
+                    className={`transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600 rounded ${
+                      isSocActive ? 'text-brand-700' : 'text-brand-600 hover:text-brand-700'
+                    }`}
                   aria-expanded={isSocOpen}
                   aria-haspopup="menu"
                   aria-controls="soc-menu"
@@ -468,20 +470,47 @@ export default function Header() {
                     {socMenu.overview.label}
                   </Link>
                   <Link href={socMenu.primary.href} role="menuitem" className={menuItemClass}>
-                    <span className="flex items-center gap-2">
-                      {socMenu.primary.label}
-                      {socMenu.primary.badge ? (
-                        <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">{socMenu.primary.badge}</span>
-                      ) : null}
-                    </span>
-                  </Link>
-                  <div className="my-2 border-t border-slate-100" />
-                  <div className={sectionLabelClass}>Guides</div>
-                  {socMenu.guides.map((item) => (
-                    <Link key={item.href} href={item.href} role="menuitem" className={menuItemClass}>
-                      {item.label}
+                      <span className="flex items-center gap-2">
+                        {socMenu.primary.label}
+                        {socMenu.primary.badge ? (
+                          <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">{socMenu.primary.badge}</span>
+                        ) : null}
+                      </span>
                     </Link>
-                  ))}
+                      {socMenu.roi && (
+                        <Link href={socMenu.roi.href} role="menuitem" className={menuItemClass}>
+                          <span className="flex items-center gap-2">
+                            {socMenu.roi.label}
+                            <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">{socMenu.roi.badge}</span>
+                          </span>
+                        </Link>
+                      )}
+                        <Link href="/soc-2-timeline/estimator" role="menuitem" className={menuItemClass}>
+                          <span className="flex items-center gap-2">
+                            SOC 2 Timeline
+                            <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">Tool</span>
+                          </span>
+                        </Link>
+                      <Link href="/soc-2-vs-iso-27001" role="menuitem" className={menuItemClass}>
+                        <span className="flex items-center gap-2">
+                          Gap Calculator
+                          <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">Tool</span>
+                        </span>
+                      </Link>
+                        <div className="my-2 border-t border-slate-100" />
+                    <div className={sectionLabelClass}>Guides</div>
+                    {socMenu.guides.map((item) => (
+                      <Link key={item.href} href={item.href} role="menuitem" className={menuItemClass}>
+                        {item.label}
+                      </Link>
+                    ))}
+                    <div className="my-2 border-t border-slate-100" />
+                    <div className={sectionLabelClass}>Comparisons</div>
+                    {socMenu.comparisons?.map((item) => (
+                      <Link key={item.href} href={item.href} role="menuitem" className={menuItemClass}>
+                        {item.label}
+                      </Link>
+                    ))}
                   <div className="my-2 border-t border-slate-100" />
                   <Link href={socMenu.viewAll.href} role="menuitem" className={viewAllClass + ' rounded-b-lg'}>
                     {socMenu.viewAll.label}
@@ -570,12 +599,19 @@ export default function Header() {
                   <Link href={pentestMenu.overview.href} role="menuitem" className={menuItemClass}>
                     {pentestMenu.overview.label}
                   </Link>
-                  <Link href={pentestMenu.primary.href} role="menuitem" className={menuItemClass}>
-                    <span className="flex items-center gap-2">
-                      {pentestMenu.primary.label}
-                      <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">{pentestMenu.primary.badge}</span>
-                    </span>
-                  </Link>
+                    <Link href={pentestMenu.primary.href} role="menuitem" className={menuItemClass}>
+                      <span className="flex items-center gap-2">
+                        {pentestMenu.primary.label}
+                        <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">{pentestMenu.primary.badge}</span>
+                      </span>
+                    </Link>
+                    <Link href={pentestMenu.scoping.href} role="menuitem" className={menuItemClass}>
+                      <span className="flex items-center gap-2">
+                        {pentestMenu.scoping.label}
+                        <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">{pentestMenu.scoping.badge}</span>
+                      </span>
+                    </Link>
+
                   <div className="my-2 border-t border-slate-100" />
                   <div className={sectionLabelClass}>Guides</div>
                   {pentestMenu.guides.map((item) => (
@@ -666,13 +702,21 @@ export default function Header() {
                   <Link href={vendorMenu.overview.href} role="menuitem" className={menuItemClass}>
                     {vendorMenu.overview.label}
                   </Link>
-                    <Link href={vendorMenu.primary.href} role="menuitem" className={menuItemClass}>
-                      <span className="flex items-center gap-2">
-                        {vendorMenu.primary.label}
-                        <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">{vendorMenu.primary.badge}</span>
-                      </span>
-                    </Link>
-                    {vendorMenu.roi && (
+                      <Link href={vendorMenu.primary.href} role="menuitem" className={menuItemClass}>
+                        <span className="flex items-center gap-2">
+                          {vendorMenu.primary.label}
+                          <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">{vendorMenu.primary.badge}</span>
+                        </span>
+                      </Link>
+                      {vendorMenu.tiering && (
+                        <Link href={vendorMenu.tiering.href} role="menuitem" className={menuItemClass}>
+                          <span className="flex items-center gap-2">
+                            {vendorMenu.tiering.label}
+                            <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">{vendorMenu.tiering.badge}</span>
+                          </span>
+                        </Link>
+                      )}
+                      {vendorMenu.roi && (
                       <Link href={vendorMenu.roi.href} role="menuitem" className={menuItemClass}>
                         <span className="flex items-center gap-2">
                           {vendorMenu.roi.label}
@@ -682,12 +726,24 @@ export default function Header() {
                     )}
                   <div className="my-2 border-t border-slate-100" />
                   <div className={sectionLabelClass}>Guides</div>
-                  {vendorMenu.guides.map((item) => (
-                    <Link key={item.href} href={item.href} role="menuitem" className={menuItemClass}>
-                      {item.label}
-                    </Link>
-                  ))}
-                  <div className="my-2 border-t border-slate-100" />
+                      {vendorMenu.guides.map((item) => (
+                        <Link key={item.href} href={item.href} role="menuitem" className={menuItemClass}>
+                          {item.label}
+                        </Link>
+                      ))}
+                      {vendorMenu.industries && (
+                        <>
+                          <div className="my-2 border-t border-slate-100" />
+                          <div className={sectionLabelClass}>Industries</div>
+                          {vendorMenu.industries.map((item) => (
+                            <Link key={item.href} href={item.href} role="menuitem" className={menuItemClass}>
+                              {item.label}
+                            </Link>
+                          ))}
+                        </>
+                      )}
+                      <div className="my-2 border-t border-slate-100" />
+
                   <Link href={vendorMenu.viewAll.href} role="menuitem" className={viewAllClass + ' rounded-b-lg'}>
                     {vendorMenu.viewAll.label}
                   </Link>
@@ -785,8 +841,17 @@ export default function Header() {
                 </DropdownPortal>
               </div>
 
-                <Link
-                  href="/search"
+                  <Link
+                    href="/about"
+                    className={`flex items-center gap-2 hover:text-brand-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600 rounded ${
+                      pathname === '/about' ? 'text-brand-700 underline underline-offset-4' : ''
+                    }`}
+                  >
+                    About
+                  </Link>
+
+                  <Link
+                    href="/search"
                   className={`flex items-center gap-2 hover:text-brand-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600 rounded ${
                     pathname === '/search' ? 'text-brand-700 underline underline-offset-4' : ''
                   }`}
@@ -952,9 +1017,22 @@ export default function Header() {
                     </svg>
                   </button>
                 </div>
-                  <div className="space-y-2 rounded-xl border border-slate-200">
-                    <Link
-                      href="/search"
+                    <div className="space-y-2 rounded-xl border border-slate-200">
+                      <Link
+                        href="/about"
+                        className="w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-slate-900"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        <span>About</span>
+                        <svg className="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </Link>
+                    </div>
+
+                    <div className="space-y-2 rounded-xl border border-slate-200">
+                      <Link
+                        href="/search"
                       className="w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-slate-900"
                       onClick={() => setMobileOpen(false)}
                     >
@@ -974,9 +1052,9 @@ export default function Header() {
                       onClick={() => toggleMobileSection('soc')}
                     >
 
-                    <span>SOC 2</span>
-                    <svg
-                      className={`w-4 h-4 transition-transform ${mobileSocOpen ? 'rotate-180 text-brand-700' : 'text-slate-500'}`}
+                      <span className="text-brand-700 font-black">SOC 2</span>
+                      <svg
+                        className={`w-4 h-4 transition-transform ${mobileSocOpen ? 'rotate-180 text-brand-700' : 'text-brand-600'}`}
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -995,31 +1073,77 @@ export default function Header() {
                         {socMenu.overview.label}
                       </Link>
                     <Link
-                      href={socMenu.primary.href}
-                      className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      <span className="flex items-center gap-2">
-                        {socMenu.primary.label}
-                        {socMenu.primary.badge ? (
-                          <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">
-                            {socMenu.primary.badge}
-                          </span>
-                        ) : null}
-                      </span>
-                    </Link>
-                      <div className="border-t border-slate-200 my-2" />
-                      <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block">Guides</span>
-                      {socMenu.guides.map((item) => (
+                        href={socMenu.primary.href}
+                        className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        <span className="flex items-center gap-2">
+                          {socMenu.primary.label}
+                          {socMenu.primary.badge ? (
+                            <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">
+                              {socMenu.primary.badge}
+                            </span>
+                          ) : null}
+                        </span>
+                      </Link>
+                      {socMenu.roi && (
                         <Link
-                          key={item.href}
-                          href={item.href}
+                          href={socMenu.roi.href}
                           className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
                           onClick={() => setMobileOpen(false)}
                         >
-                          {item.label}
+                          <span className="flex items-center gap-2">
+                            {socMenu.roi.label}
+                            <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">
+                              {socMenu.roi.badge}
+                            </span>
+                          </span>
                         </Link>
-                      ))}
+                      )}
+                        <Link
+                          href="/soc-2-timeline/estimator"
+                          className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          <span className="flex items-center gap-2">
+                            SOC 2 Timeline
+                            <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">Tool</span>
+                          </span>
+                        </Link>
+                      <Link
+                        href="/soc-2-vs-iso-27001"
+                        className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        <span className="flex items-center gap-2">
+                          Gap Calculator
+                          <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">Tool</span>
+                        </span>
+                      </Link>
+                          <div className="border-t border-slate-200 my-2" />
+                        <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block">Guides</span>
+                        {socMenu.guides.map((item) => (
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                            onClick={() => setMobileOpen(false)}
+                          >
+                            {item.label}
+                          </Link>
+                        ))}
+                        <div className="border-t border-slate-200 my-2" />
+                        <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block">Comparisons</span>
+                        {socMenu.comparisons?.map((item) => (
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                            onClick={() => setMobileOpen(false)}
+                          >
+                            {item.label}
+                          </Link>
+                        ))}
                       <div className="border-t border-slate-200 my-2" />
                       <Link
                         href={socMenu.viewAll.href}
@@ -1060,20 +1184,35 @@ export default function Header() {
                       >
                         {pentestMenu.overview.label}
                       </Link>
-                    <Link
-                      href={pentestMenu.primary.href}
-                      className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      <span className="flex items-center gap-2">
-                        {pentestMenu.primary.label}
-                        {pentestMenu.primary.badge ? (
-                          <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">
-                            {pentestMenu.primary.badge}
-                          </span>
-                        ) : null}
-                      </span>
-                    </Link>
+                      <Link
+                        href={pentestMenu.primary.href}
+                        className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        <span className="flex items-center gap-2">
+                          {pentestMenu.primary.label}
+                          {pentestMenu.primary.badge ? (
+                            <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">
+                              {pentestMenu.primary.badge}
+                            </span>
+                          ) : null}
+                        </span>
+                      </Link>
+                      <Link
+                        href={pentestMenu.scoping.href}
+                        className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        <span className="flex items-center gap-2">
+                          {pentestMenu.scoping.label}
+                          {pentestMenu.scoping.badge ? (
+                            <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">
+                              {pentestMenu.scoping.badge}
+                            </span>
+                          ) : null}
+                        </span>
+                      </Link>
+
                       <div className="border-t border-slate-200 my-2" />
                       <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block">Guides</span>
                       {pentestMenu.guides.map((item) => (
@@ -1133,14 +1272,28 @@ export default function Header() {
                       >
                         <span className="flex items-center gap-2">
                           {vendorMenu.primary.label}
-                          {vendorMenu.primary.badge ? (
-                            <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">
-                              {vendorMenu.primary.badge}
+                            {vendorMenu.primary.badge ? (
+                              <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">
+                                {vendorMenu.primary.badge}
+                              </span>
+                            ) : null}
+                          </span>
+                        </Link>
+                        {vendorMenu.tiering && (
+                          <Link
+                            href={vendorMenu.tiering.href}
+                            className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                            onClick={() => setMobileOpen(false)}
+                          >
+                            <span className="flex items-center gap-2">
+                              {vendorMenu.tiering.label}
+                              <span className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full">
+                                {vendorMenu.tiering.badge}
+                              </span>
                             </span>
-                          ) : null}
-                        </span>
-                      </Link>
-                      {vendorMenu.roi && (
+                          </Link>
+                        )}
+                        {vendorMenu.roi && (
                         <Link
                           href={vendorMenu.roi.href}
                           className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
@@ -1158,17 +1311,34 @@ export default function Header() {
                       )}
                       <div className="border-t border-slate-200 my-2" />
                       <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block">Guides</span>
-                      {vendorMenu.guides.map((item) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
-                          onClick={() => setMobileOpen(false)}
-                        >
-                          {item.label}
-                        </Link>
-                      ))}
-                      <div className="border-t border-slate-200 my-2" />
+                          {vendorMenu.guides.map((item) => (
+                            <Link
+                              key={item.href}
+                              href={item.href}
+                              className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                              onClick={() => setMobileOpen(false)}
+                            >
+                              {item.label}
+                            </Link>
+                          ))}
+                          {vendorMenu.industries && (
+                            <>
+                              <div className="border-t border-slate-200 my-2" />
+                              <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block">Industries</span>
+                              {vendorMenu.industries.map((item) => (
+                                <Link
+                                  key={item.href}
+                                  href={item.href}
+                                  className="block text-sm text-slate-700 hover:text-brand-700 transition-colors"
+                                  onClick={() => setMobileOpen(false)}
+                                >
+                                  {item.label}
+                                </Link>
+                              ))}
+                            </>
+                          )}
+                          <div className="border-t border-slate-200 my-2" />
+
                       <Link
                         href={vendorMenu.viewAll.href}
                         className="block text-sm text-brand-700 hover:text-brand-800 transition-colors"

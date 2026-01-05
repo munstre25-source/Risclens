@@ -27,10 +27,87 @@ const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
 interface EmailTemplateData {
   company_name: string;
-  pdf_url: string;
-  readiness_score: number;
+  pdf_url?: string;
+  readiness_score?: number;
   email: string;
   unsubscribe_token?: string;
+  vendor_name?: string;
+  vendor_tier?: string;
+  requirements?: string[];
+  monitoring_cadence?: string;
+}
+
+/**
+ * Email: Vendor Tiering Result
+ */
+function getVendorTieringTemplate(data: EmailTemplateData): { subject: string; html: string; text: string } {
+  const unsubscribeUrl = `${APP_URL}/api/unsubscribe?email=${encodeURIComponent(data.email)}&token=${data.unsubscribe_token || 'placeholder'}`;
+
+  return {
+    subject: `Vendor Tiering Result: ${data.vendor_name || 'Your Vendor'}`,
+    html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1f2937; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="text-align: center; margin-bottom: 30px;">
+          <h1 style="color: #0369a1; margin: 0;">RiscLens</h1>
+        </div>
+        
+        <h2 style="color: #1f2937;">Vendor Risk Assessment Result</h2>
+        
+        <p>Here are the tiering results for <strong>${data.vendor_name || 'your vendor'}</strong>.</p>
+        
+        <div style="background: #f0f9ff; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
+          <p style="margin: 0 0 10px 0; color: #6b7280;">Assigned Tier</p>
+          <div style="font-size: 32px; font-weight: bold; color: #0369a1;">${data.vendor_tier}</div>
+        </div>
+        
+        <h3 style="color: #1f2937;">Required Evidence</h3>
+        <ul style="padding-left: 20px;">
+          ${data.requirements?.map(req => `<li style="margin-bottom: 8px;">${req}</li>`).join('')}
+        </ul>
+        
+        <div style="background: #f9fafb; padding: 15px; border-radius: 8px; margin-top: 20px;">
+          <p style="margin: 0;"><strong>Monitoring Cadence:</strong> ${data.monitoring_cadence}</p>
+        </div>
+        
+        <p style="margin-top: 30px;">SOC 2 compliance requires a consistent, risk-based approach to vendor management. This tiering helps you demonstrate that oversight to auditors.</p>
+        
+        <p>Best regards,<br>The RiscLens Team</p>
+        
+        <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
+        
+        <p style="font-size: 12px; color: #9ca3af; text-align: center;">
+          <a href="${unsubscribeUrl}" style="color: #9ca3af;">Unsubscribe</a>
+        </p>
+      </body>
+      </html>
+    `,
+    text: `
+Vendor Risk Assessment Result
+
+Here are the tiering results for ${data.vendor_name || 'your vendor'}.
+
+Assigned Tier: ${data.vendor_tier}
+
+Required Evidence:
+${data.requirements?.map(req => `- ${req}`).join('\n')}
+
+Monitoring Cadence: ${data.monitoring_cadence}
+
+SOC 2 compliance requires a consistent, risk-based approach to vendor management. This tiering helps you demonstrate that oversight to auditors.
+
+Best regards,
+The RiscLens Team
+
+---
+Unsubscribe: ${unsubscribeUrl}
+    `.trim(),
+  };
 }
 
 /**
@@ -273,7 +350,7 @@ Unsubscribe: ${unsubscribeUrl}
 // EMAIL SENDING FUNCTIONS
 // =============================================================================
 
-export type EmailType = 'email1' | 'email2' | 'email3';
+export type EmailType = 'email1' | 'email2' | 'email3' | 'vendor_tiering';
 
 export interface SendEmailResult {
   success: boolean;
@@ -301,6 +378,9 @@ export async function sendEmail(
       break;
     case 'email3':
       template = getEmail3Template(data);
+      break;
+    case 'vendor_tiering':
+      template = getVendorTieringTemplate(data);
       break;
     default:
       throw new Error(`Unknown email type: ${emailType}`);

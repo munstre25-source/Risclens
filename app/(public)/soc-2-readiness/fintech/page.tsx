@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import AboutSection from '@/components/AboutSection';
 
 export const metadata: Metadata = {
   title: 'SOC 2 Readiness Assessment for Fintech Companies | RiscLens',
@@ -62,7 +63,7 @@ export default function FintechSoc2ReadinessPage() {
             </svg>
           </Link>
           <p className="mt-4 text-sm text-slate-500">
-            Free • 2 minutes • Instant results
+            Free • 2 minutes • Business email required
           </p>
           <p className="text-sm text-slate-600 mt-2">
             Deciding audit type? Read the{' '}
@@ -79,17 +80,17 @@ export default function FintechSoc2ReadinessPage() {
               Related: Vendor Risk Assessment for Fintech
             </Link>
           </div>
-          <div className="mt-6 bg-white/70 border border-slate-200 rounded-lg p-4 text-left max-w-3xl mx-auto">
-            <p className="text-sm font-semibold text-slate-800 mb-2">Trust &amp; privacy</p>
-            <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">
-              <li>Why free? Built to help early-stage teams understand SOC 2 without sales pressure. No sales calls.</li>
-              <li>What happens to my answers? Used only to calculate your score. You can complete it without email.</li>
-              <li>Reliability: Estimates are directional ranges based on common SOC 2 readiness patterns. Use as planning guidance, not audit advice.</li>
-            </ul>
-            <p className="text-sm text-slate-600 mt-3">
-              About: Built by the RiscLens team (contact: reports@risclens.com). Independent SOC 2 readiness project. See <a href="/terms" className="underline underline-offset-2 text-brand-700 hover:text-brand-800">Terms</a> and <a href="/privacy" className="underline underline-offset-2 text-brand-700 hover:text-brand-800">Privacy</a>. No lock-in.
-            </p>
-          </div>
+            <div className="mt-6 bg-white/70 border border-slate-200 rounded-lg p-4 text-left max-w-3xl mx-auto">
+              <p className="text-sm font-semibold text-slate-800 mb-2">Trust &amp; privacy</p>
+              <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">
+                <li>Why free? Built to help early-stage teams understand SOC 2 without sales pressure. No sales calls.</li>
+                <li>No login required; business email required to see results.</li>
+                <li>Reliability: Estimates are directional ranges based on common SOC 2 readiness patterns. Use as planning guidance, not audit advice.</li>
+              </ul>
+              <p className="text-sm text-slate-600 mt-3">
+                About: Built by the RiscLens team (contact: reports@risclens.com). Independent SOC 2 readiness project. See <a href="/terms" className="underline underline-offset-2 text-brand-700 hover:text-brand-800">Terms</a> and <a href="/privacy" className="underline underline-offset-2 text-brand-700 hover:text-brand-800">Privacy</a>. No lock-in.
+              </p>
+            </div>
         </div>
       </section>
 
@@ -129,29 +130,16 @@ export default function FintechSoc2ReadinessPage() {
               </ul>
             </div>
 
-            <p>
-              SOC 2 serves as a common baseline across financial services — it demonstrates that your organization has implemented controls aligned with industry expectations, even if additional regulatory frameworks apply.
-            </p>
-            </div>
-            <div className="border-t border-slate-200 pt-6 text-sm text-slate-600">
-              <p className="font-medium text-slate-700 mb-2">About RiscLens</p>
-              <p className="leading-relaxed">
-                RiscLens is an independent SOC 2 readiness project built to help early-stage teams understand audit expectations, costs, and gaps — without sales pressure or automation lock-in.
+              <p>
+                SOC 2 serves as a common baseline across financial services — it demonstrates that your organization has implemented controls aligned with industry expectations, even if additional regulatory frameworks apply.
               </p>
-              <div className="mt-3">
-                <p className="font-medium text-slate-700 mb-1">Your data &amp; privacy</p>
-                <ul className="list-disc list-inside space-y-1 leading-relaxed">
-                  <li>We do not sell or share your information</li>
-                  <li>Responses are used only to calculate your score</li>
-                  <li>You can complete the assessment without providing an email</li>
-                  <li>Aggregated, anonymous data may be used to improve estimates</li>
-                </ul>
-              </div>
             </div>
           </div>
         </section>
 
-      {/* Common Readiness Challenges */}
+        <AboutSection />
+
+        {/* Common Readiness Challenges */}
       <section className="py-16 lg:py-20 bg-slate-50 border-t border-slate-200">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <h2 className="text-2xl font-bold text-slate-900 mb-8">

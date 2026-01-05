@@ -20,4 +20,6 @@ export const industryCostLinks: IndustryCostLink[] = [
   { slug: 'devtools', label: 'DevTools', blurb: 'SDLC telemetry, secrets, supply chain.', costHref: '/soc-2-cost/devtools', hubHref: '/soc-2/industries/devtools' },
   { slug: 'edtech', label: 'EdTech', blurb: 'Student data, parent consent, access reviews.', costHref: '/soc-2-cost/edtech', hubHref: '/soc-2/industries/edtech' },
   { slug: 'payments', label: 'Payments', blurb: 'Cardholder data flows, vendor risk, uptime.', costHref: '/soc-2-cost/payments', hubHref: '/soc-2/industries/payments' },
+  { slug: 'proptech', label: 'PropTech', blurb: 'Tenant PII, payments, property management.', costHref: '/soc-2-cost/proptech', hubHref: '/soc-2/industries/proptech' },
+  { slug: 'logistics', label: 'Logistics', blurb: 'Carrier APIs, data integrity, uptime.', costHref: '/soc-2-cost/logistics', hubHref: '/soc-2/industries/logistics' },
 ];

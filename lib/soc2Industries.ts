@@ -765,73 +765,157 @@ export const industryGuides: IndustryGuide[] = [
       },
     ],
   },
-  {
-    slug: 'payments',
-    name: 'Payments',
-    description:
-      'Payments platforms face strict scrutiny on security, availability, and vendor oversight. SOC 2 should align with PCI expectations without overpromising.',
-    trustThemes: [
-      'Transaction security and integrity',
-      'Key management and encryption',
-      'Vendor oversight for processors and banking partners',
-    ],
-    scopeIn: ['Payment processing services and ledgers', 'Key management systems and HSMs', 'Admin/support consoles with payment access'],
-    scopeOut: ['Sandbox/demo environments without real payments', 'Legacy payment connectors decommissioned'],
-    costDrivers: [
-      'Key management, HSM operations, and rotation evidence',
-      'Processor/vendor oversight and contract updates',
-      'Pentest coverage for payment portals and APIs',
-    ],
-    bottlenecks: [
-      'Coordinating with banking partners and processors',
-      'Capturing HSM and key rotation evidence',
-      'Managing segregation of duties for finance vs engineering',
-    ],
-    checklist: [
-      'Map payment flows and key management lifecycle',
-      'Lock down admin consoles and support tools',
-      'Ensure logging and monitoring for payment events',
-      'Schedule pentest for payment portals/APIs with retest',
-      'Collect vendor attestations and SLAs',
-      'Document incident response for payment fraud/outages',
-    ],
-    related: ['fintech', 'marketplaces', 'ecommerce'],
-    faqs: [
-      {
-        question: 'How do payments teams handle keys?',
-        answer: 'Use HSMs or managed KMS, enforce separation of duties, and provide rotation and access logs as evidence.',
-      },
-      {
-        question: 'Do auditors expect PCI evidence?',
-        answer: 'They will reference PCI principles. Provide encryption, access, and monitoring evidence without positioning SOC 2 as PCI compliance.',
-      },
-      {
-        question: 'How do we coordinate with banks?',
-        answer: 'Align on reporting expectations, SLAs, and incident notifications. Keep attestations and SOC reports current.',
-      },
-      {
-        question: 'What pentest scope is expected?',
-        answer: 'Payment portals, APIs, admin consoles, and support tools that can affect transactions.',
-      },
-      {
-        question: 'How do we show availability?',
-        answer: 'Provide uptime metrics, redundancy plans, and incident summaries relevant to payment flows.',
-      },
-      {
-        question: 'How do we handle chargeback data?',
-        answer: 'Restrict access, log reviews, and include fraud/chargeback scenarios in incident response plans.',
-      },
-      {
-        question: 'Can we exclude sandbox?',
-        answer: 'Yes, if only synthetic data is used. State that in scope documents and keep access controlled anyway.',
-      },
-      {
-        question: 'What vendor evidence is needed?',
-        answer: 'SOC reports, SLAs, and security exhibits for processors, gateways, and banking partners.',
-      },
-    ],
-  },
-];
+    {
+      slug: 'payments',
+      name: 'Payments',
+      description:
+        'Payments platforms face strict scrutiny on security, availability, and vendor oversight. SOC 2 should align with PCI expectations without overpromising.',
+      trustThemes: [
+        'Transaction security and integrity',
+        'Key management and encryption',
+        'Vendor oversight for processors and banking partners',
+      ],
+      scopeIn: ['Payment processing services and ledgers', 'Key management systems and HSMs', 'Admin/support consoles with payment access'],
+      scopeOut: ['Sandbox/demo environments without real payments', 'Legacy payment connectors decommissioned'],
+      costDrivers: [
+        'Key management, HSM operations, and rotation evidence',
+        'Processor/vendor oversight and contract updates',
+        'Pentest coverage for payment portals and APIs',
+      ],
+      bottlenecks: [
+        'Coordinating with banking partners and processors',
+        'Capturing HSM and key rotation evidence',
+        'Managing segregation of duties for finance vs engineering',
+      ],
+      checklist: [
+        'Map payment flows and key management lifecycle',
+        'Lock down admin consoles and support tools',
+        'Ensure logging and monitoring for payment events',
+        'Schedule pentest for payment portals/APIs with retest',
+        'Collect vendor attestations and SLAs',
+        'Document incident response for payment fraud/outages',
+      ],
+      related: ['fintech', 'marketplaces', 'ecommerce'],
+      faqs: [
+        {
+          question: 'How do payments teams handle keys?',
+          answer: 'Use HSMs or managed KMS, enforce separation of duties, and provide rotation and access logs as evidence.',
+        },
+        {
+          question: 'Do auditors expect PCI evidence?',
+          answer: 'They will reference PCI principles. Provide encryption, access, and monitoring evidence without positioning SOC 2 as PCI compliance.',
+        },
+        {
+          question: 'How do we coordinate with banks?',
+          answer: 'Align on reporting expectations, SLAs, and incident notifications. Keep attestations and SOC reports current.',
+        },
+        {
+          question: 'What pentest scope is expected?',
+          answer: 'Payment portals, APIs, admin consoles, and support tools that can affect transactions.',
+        },
+        {
+          question: 'How do we show availability?',
+          answer: 'Provide uptime metrics, redundancy plans, and incident summaries relevant to payment flows.',
+        },
+        {
+          question: 'How do we handle chargeback data?',
+          answer: 'Restrict access, log reviews, and include fraud/chargeback scenarios in incident response plans.',
+        },
+        {
+          question: 'Can we exclude sandbox?',
+          answer: 'Yes, if only synthetic data is used. State that in scope documents and keep access controlled anyway.',
+        },
+        {
+          question: 'What vendor evidence is needed?',
+          answer: 'SOC reports, SLAs, and security exhibits for processors, gateways, and banking partners.',
+        },
+      ],
+    },
+    {
+      slug: 'proptech',
+      name: 'PropTech',
+      description:
+        'Property technology companies manage sensitive lease, financial, and personal data. SOC 2 proves your commitment to data privacy and platform reliability for owners and tenants.',
+      trustThemes: [
+        'Data privacy for tenant and owner information',
+        'Financial transaction integrity for rent and fees',
+        'Platform availability for critical property management functions',
+      ],
+      scopeIn: ['Property management platforms and tenant portals', 'Payment processing and ledger systems', 'Document storage for leases and sensitive records'],
+      scopeOut: ['Marketing websites for property listings', 'Internal research tools for market analysis'],
+      costDrivers: [
+        'Evidence for PII and financial data encryption',
+        'Third-party payment processor oversight',
+        'Pentest coverage for tenant/owner portals and APIs',
+      ],
+      bottlenecks: [
+        'Ensuring secure handling of legacy property data',
+        'Coordinating with multiple third-party financial services',
+        'Proving uptime during critical rent collection periods',
+      ],
+      checklist: [
+        'Map data flows for sensitive tenant and financial info',
+        'Lock down access to portals with SSO/MFA',
+        'Document data retention and deletion policies for old records',
+        'Schedule pentest on tenant and owner portals',
+        'Prepare incident response for data breaches or payment outages',
+        'Run access reviews for all property management systems',
+      ],
+      related: ['fintech', 'marketplaces', 'real-estate'],
+      faqs: [
+        {
+          question: 'Why do PropTech companies need SOC 2?',
+          answer: 'It builds trust with large property owners and institutional investors who require proof of security before integrating their assets with your platform.',
+        },
+        {
+          question: 'How do we handle tenant PII?',
+          answer: 'Enforce encryption, restrict access to authorized staff only, and maintain clear audit logs of all PII access.',
+        },
+      ],
+    },
+    {
+      slug: 'logistics',
+      name: 'Logistics',
+      description:
+        'Supply chain and logistics platforms ensure the movement of goods and data. SOC 2 highlights your operational resilience and data integrity for global shipping partners.',
+      trustThemes: [
+        'Operational resilience and platform uptime',
+        'Data integrity for shipment tracking and manifests',
+        'Security of integrations with carriers and warehouse systems',
+      ],
+      scopeIn: ['Logistics management systems and carrier integrations', 'Warehouse management systems (WMS)', 'Customer tracking portals and APIs'],
+      scopeOut: ['Public-facing tracking pages with minimal data', 'Internal employee-only training tools'],
+      costDrivers: [
+        'Redundancy and failover evidence for high availability',
+        'Security of numerous third-party API integrations',
+        'Pentest coverage for critical logistics portals',
+      ],
+      bottlenecks: [
+        'Coordinating security across diverse carrier integrations',
+        'Proving data integrity across complex supply chain handoffs',
+        'Ensuring consistent logging in decentralized warehouse environments',
+      ],
+      checklist: [
+        'Document redundancy and failover plans for critical systems',
+        'Secure and monitor all carrier API integrations',
+        'Enforce MFA for all administrative and operational access',
+        'Schedule pentest on primary logistics and tracking portals',
+        'Create incident response plans for supply chain disruptions',
+        'Run regular access reviews for carrier and WMS portals',
+      ],
+      related: ['cloud-infrastructure', 'enterprise', 'ecommerce'],
+      faqs: [
+        {
+          question: 'How does SOC 2 benefit logistics platforms?',
+          answer: 'It provides a competitive edge when bidding for contracts with global retailers and manufacturers who demand high reliability and security.',
+        },
+        {
+          question: 'What is the focus of an audit for logistics?',
+          answer: 'The focus is often on Availability and Processing Integrity—ensuring the system stays up and that shipment data remains accurate throughout its lifecycle.',
+        },
+      ],
+    },
+  ];
 
 export function getIndustryGuide(slug: string) {
   return industryGuides.find((guide) => guide.slug === slug);

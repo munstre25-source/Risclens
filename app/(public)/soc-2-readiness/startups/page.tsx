@@ -32,7 +32,7 @@ export default function Soc2ReadinessStartupsPage() {
             >
               Get Your Readiness Score →
             </Link>
-            <p className="mt-4 text-sm text-slate-500">Free • No credit card • Instant results</p>
+            <p className="mt-4 text-sm text-slate-500">Free • No credit card • Business email required</p>
           </div>
         </section>
 
@@ -92,7 +92,16 @@ export default function Soc2ReadinessStartupsPage() {
               >
                 Get Your Readiness Score →
               </Link>
-              <p className="mt-3 text-sm text-slate-500">Free • No credit card • Instant results</p>
+              <p className="mt-3 text-sm text-slate-500">Free • No credit card • Business email required</p>
+            </div>
+
+            <div className="bg-white/70 border border-slate-200 rounded-lg p-4 space-y-2 text-left max-w-lg mx-auto">
+              <p className="text-sm font-semibold text-slate-800">Trust &amp; privacy</p>
+              <ul className="list-disc list-inside text-sm text-slate-600 leading-relaxed space-y-1">
+                <li>No login required; business email required.</li>
+                <li>Answers used only to calculate your score</li>
+                <li>Estimates are planning guidance, not audit advice</li>
+              </ul>
             </div>
 
             <div className="bg-white/70 border border-slate-200 rounded-lg p-4 space-y-2">

@@ -2,6 +2,8 @@ import 'server-only';
 
 import React from 'react';
 import PDFTemplate, { PDFLeadData } from '@/pdf/PDFTemplate';
+import ROIPDFTemplate, { ROIPDFData } from '@/pdf/ROIPDFTemplate';
+import GenericLeadMagnetPDF, { GenericPDFData } from '@/pdf/GenericLeadMagnetPDF';
 
 // =============================================================================
 // PDF GENERATION CONFIGURATION
@@ -29,11 +31,34 @@ export interface PDFGenerationResult {
 
 /**
  * Render PDF Template to HTML string
- * Uses dynamic import to avoid bundling react-dom/server in RSC context
  */
-export async function renderPDFToHTML(lead: PDFLeadData): Promise<string> {
+export async function renderPDFToHTML(lead: any, templateType: string = 'readiness'): Promise<string> {
   const { renderToStaticMarkup } = await import('react-dom/server');
-  const element = React.createElement(PDFTemplate, { lead });
+  
+  let element;
+  let title = 'RiscLens Report';
+
+  if (templateType === 'roi') {
+    element = React.createElement(ROIPDFTemplate, { data: lead });
+    title = 'Compliance ROI Report';
+  } else if (templateType === 'readiness') {
+    element = React.createElement(PDFTemplate, { lead });
+    title = 'SOC 2 Readiness Report';
+  } else {
+    // Handle Generic Lead Magnets
+    const genericData: GenericPDFData = {
+      id: lead.id || 'N/A',
+      company_name: lead.company_name || lead.company || 'Organization',
+      email: lead.email || 'N/A',
+      title: lead.title || 'Premium Compliance Resource',
+      subtitle: lead.subtitle,
+      description: lead.description || 'Custom security documentation generated for your organization.',
+      resourceName: lead.resourceName || 'Compliance Template',
+      data: lead.data || {},
+    };
+    element = React.createElement(GenericLeadMagnetPDF, { data: genericData });
+    title = genericData.title;
+  }
   
   // Return full HTML document
   const html = `<!DOCTYPE html>
@@ -41,7 +66,7 @@ export async function renderPDFToHTML(lead: PDFLeadData): Promise<string> {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SOC 2 Readiness Report</title>
+  <title>${title} - RiscLens</title>
 </head>
 <body>
   ${renderToStaticMarkup(element)}
@@ -160,9 +185,9 @@ export async function generatePdf(html: string): Promise<Buffer> {
 /**
  * Generate PDF from lead data
  */
-export async function generatePDF(lead: PDFLeadData): Promise<PDFGenerationResult> {
+export async function generatePDF(lead: any, templateType: string = 'readiness'): Promise<PDFGenerationResult> {
   try {
-    const html = await renderPDFToHTML(lead);
+    const html = await renderPDFToHTML(lead, templateType);
     const pdfBuffer = await generatePdf(html);
 
     return {
@@ -247,14 +272,14 @@ export async function createSignedUrlFromPath(pdfPath: string, leadId: string): 
  * Generate PDF for a lead and upload to storage
  * Returns both the storage path (for DB) and a signed URL (for immediate use)
  */
-export async function generateAndUploadPDF(lead: PDFLeadData): Promise<{
+export async function generateAndUploadPDF(lead: any, templateType: string = 'readiness'): Promise<{
   success: boolean;
   pdfPath?: string;
   pdfUrl?: string;
   error?: string;
 }> {
   // Generate PDF
-  const result = await generatePDF(lead);
+  const result = await generatePDF(lead, templateType);
 
   if (!result.success || !result.pdfBuffer) {
     return {

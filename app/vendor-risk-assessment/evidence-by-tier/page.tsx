@@ -3,6 +3,7 @@ import Script from 'next/script';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { VendorRiskRelatedLinks } from '@/components/vendor-risk/VendorRiskRelatedLinks';
+import VendorRiskLeadMagnet from '@/components/vendor-risk/VendorRiskLeadMagnet';
 
 const faqSchema = {
   '@context': 'https://schema.org',
@@ -126,7 +127,16 @@ export default function EvidenceByTierPage() {
             </ul>
           </div>
 
-          <VendorRiskRelatedLinks />
+            <VendorRiskLeadMagnet
+              title="Evidence Request Templates (DOCX)"
+              description="Download our pre-written evidence request templates for Low, Medium, and High risk vendors. Save dozens of hours on vendor follow-ups."
+              buttonText="Download Evidence Templates"
+              templateId="vra_evidence_templates"
+              resourceName="Vendor_Evidence_Request_Templates"
+            />
+
+            <VendorRiskRelatedLinks />
+
         </div>
       </section>
       <Footer />

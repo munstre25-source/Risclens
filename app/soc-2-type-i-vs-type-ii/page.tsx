@@ -34,7 +34,7 @@ export default function Soc2TypePage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </Link>
-            <p className="mt-4 text-sm text-slate-500">Free • No credit card • Instant results</p>
+            <p className="mt-4 text-sm text-slate-500">Free • No credit card • Business email required</p>
           </div>
         </section>
 

@@ -23,6 +23,7 @@ interface FreeResultsProps {
   results: CalculatorResults;
   leadId: string | null;
   companyName: string;
+  email?: string;
   context?: FreeResultsContext;
 }
 
@@ -30,15 +31,16 @@ export default function FreeResults({
   results,
   leadId,
   companyName,
+  email: initialEmail = '',
   context,
 }: FreeResultsProps) {
-  const [email, setEmail] = useState('');
-  const [consent, setConsent] = useState(false);
+  const [email, setEmail] = useState(initialEmail);
+  const [consent, setConsent] = useState(!!initialEmail);
   const [isRequestingPdf, setIsRequestingPdf] = useState(false);
   const [pdfSent, setPdfSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [reviewType, setReviewType] = useState<'auditor_intro' | 'gap_review'>('auditor_intro');
-  const [reviewEmail, setReviewEmail] = useState('');
+  const [reviewEmail, setReviewEmail] = useState(initialEmail);
   const [reviewStatus, setReviewStatus] = useState<string | null>(null);
   const [isSubmittingReview, setIsSubmittingReview] = useState(false);
 
@@ -424,156 +426,152 @@ const formatCurrency = (amount: number) => {
         </ul>
       </div>
 
-        {/* Mid-page secondary CTA - same flow */}
-        <div className="card mb-6 text-center">
-          <button
-            type="submit"
-            form="pdf-form"
-            className="btn-primary"
-            disabled={isRequestingPdf || pdfSent}
-          >
-            Email me my SOC 2 roadmap (PDF)
-          </button>
-        </div>
-
-        {/* PDF CTA Section - Email Gate */}
-        <div className="card bg-gradient-to-br from-brand-50 via-white to-brand-50 border-brand-100">
-          <div className="text-center">
-              {!pdfSent ? (
-                <>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                    Get Your Full SOC 2 Roadmap PDF
-                  </h3>
-                  <p className="text-gray-600 text-sm mb-4">
-                    We’ll send it to your inbox so you can save or share it internally. The PDF includes a detailed timeline, compliance checklist, 
-                    cost breakdown, and evidence templates.
-                  </p>
-
-                  <form id="pdf-form" onSubmit={handleGetPdf} className="max-w-sm mx-auto text-left">
-                    <div className="mb-3">
-                      <p className="text-xs text-brand-600 font-medium mb-1">We’ll send it to your inbox so you can save or share it internally.</p>
-                      <label htmlFor="pdf-email" className="block text-sm font-medium text-gray-700 mb-1">
-                        Work Email
-                      </label>
-
-                  <input
-                    type="email"
-                    id="pdf-email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="form-input"
-                    placeholder="you@company.com"
-                    required
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="flex items-start gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={consent}
-                      onChange={(e) => setConsent(e.target.checked)}
-                      className="w-4 h-4 text-brand-600 rounded focus:ring-brand-500 mt-0.5"
-                    />
-                    <span className="text-xs text-gray-500">
-                      I agree to receive my PDF report and occasional compliance tips. 
-                      Unsubscribe anytime.
-                    </span>
-                  </label>
-                </div>
-
-                <ul className="text-sm text-gray-600 mb-3 list-disc list-inside space-y-1">
-                  <li>Instant readiness score + cost range</li>
-                  <li>Auditor-style, prioritized recommendations</li>
-                </ul>
-
-                {error && (
-                  <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-                    {error}
-                  </div>
-                )}
-
-                <button
-                  type="submit"
-                  disabled={isRequestingPdf || !email || !consent}
-                  className="btn-primary w-full"
-                >
-                  {isRequestingPdf ? (
-                    <>
-                      <svg
-                        className="animate-spin -ml-1 mr-2 h-5 w-5 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        />
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        />
-                      </svg>
-                      Generating PDF...
-                    </>
-                  ) : (
-                    <>
-                      <svg
-                        className="-ml-1 mr-2 h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                        />
-                      </svg>
-                      Send Me the Full PDF
-                    </>
-                  )}
-                </button>
-
-                <p className="text-xs text-gray-500 text-center mt-3">
-                  No spam. One PDF roadmap + occasional SOC 2 insights. Unsubscribe anytime.
-                </p>
-              </form>
-            </>
-          ) : (
-            <div className="py-2">
-              <div className="inline-flex items-center text-trust-600 mb-2">
-                <svg
-                  className="w-6 h-6 mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-                <span className="font-semibold">PDF Sent!</span>
-              </div>
-              <p className="text-gray-600 mb-1">
-                Check your inbox at <span className="font-medium">{email}</span>
-              </p>
-              <p className="text-sm text-gray-500">
-                (Usually arrives within 1-2 minutes)
-              </p>
-            </div>
-            )}
+          {/* Mid-page secondary CTA - same flow */}
+          <div className="card mb-6 text-center">
+            <button
+              type="submit"
+              form="pdf-form"
+              className="btn-primary"
+              disabled={isRequestingPdf || pdfSent}
+            >
+              {pdfSent ? 'Roadmap Sent!' : initialEmail ? `Email Roadmap to ${initialEmail}` : 'Email me my SOC 2 roadmap (PDF)'}
+            </button>
           </div>
-        </div>
+
+          {/* PDF CTA Section - Email Gate */}
+          <div className="card bg-gradient-to-br from-brand-50 via-white to-brand-50 border-brand-100">
+            <div className="text-center">
+                {!pdfSent ? (
+                  <>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      Get Your Full SOC 2 Roadmap PDF
+                    </h3>
+                    <p className="text-gray-600 text-sm mb-4">
+                      {initialEmail 
+                        ? `We'll send the full report to ${initialEmail}. It includes a detailed timeline, compliance checklist, and evidence templates.`
+                        : "We'll send it to your inbox so you can save or share it internally. The PDF includes a detailed timeline, compliance checklist, cost breakdown, and evidence templates."
+                      }
+                    </p>
+
+                    <form id="pdf-form" onSubmit={handleGetPdf} className="max-w-sm mx-auto text-left">
+                      <div className="mb-3">
+                        <label htmlFor="pdf-email" className="block text-sm font-medium text-gray-700 mb-1">
+                          Work Email
+                        </label>
+
+                    <input
+                      type="email"
+                      id="pdf-email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="form-input"
+                      placeholder="you@company.com"
+                      required
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="flex items-start gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={consent}
+                        onChange={(e) => setConsent(e.target.checked)}
+                        className="w-4 h-4 text-brand-600 rounded focus:ring-brand-500 mt-0.5"
+                      />
+                      <span className="text-xs text-gray-500">
+                        I agree to receive my PDF report and occasional compliance tips. 
+                        Unsubscribe anytime.
+                      </span>
+                    </label>
+                  </div>
+
+                  {error && (
+                    <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                      {error}
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={isRequestingPdf || !email || !consent}
+                    className="btn-primary w-full"
+                  >
+                    {isRequestingPdf ? (
+                      <>
+                        <svg
+                          className="animate-spin -ml-1 mr-2 h-5 w-5 text-white"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          />
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          />
+                        </svg>
+                        Generating PDF...
+                      </>
+                    ) : (
+                      <>
+                        <svg
+                          className="-ml-1 mr-2 h-5 w-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                          />
+                        </svg>
+                        {initialEmail ? 'Send PDF Now' : 'Send Me the Full PDF'}
+                      </>
+                    )}
+                  </button>
+
+                  <p className="text-xs text-gray-500 text-center mt-3">
+                    No spam. One PDF roadmap + occasional SOC 2 insights. Unsubscribe anytime.
+                  </p>
+                </form>
+              </>
+            ) : (
+              <div className="py-2">
+                <div className="inline-flex items-center text-trust-600 mb-2">
+                  <svg
+                    className="w-6 h-6 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                  <span className="font-semibold">PDF Sent!</span>
+                </div>
+                <p className="text-gray-600 mb-1">
+                  Check your inbox at <span className="font-medium">{email}</span>
+                </p>
+                <p className="text-sm text-gray-500">
+                  (Usually arrives within 1-2 minutes)
+                </p>
+              </div>
+              )}
+            </div>
+          </div>
 
         <div className="flex justify-center mt-8">
           <Link

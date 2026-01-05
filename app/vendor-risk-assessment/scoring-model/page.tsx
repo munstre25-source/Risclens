@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { VendorRiskRelatedLinks } from '@/components/vendor-risk/VendorRiskRelatedLinks';
+import VendorRiskLeadMagnet from '@/components/vendor-risk/VendorRiskLeadMagnet';
 
 export const metadata: Metadata = {
   title: 'Vendor Risk Assessment Scoring Model | RiscLens',
@@ -88,7 +89,16 @@ export default function VendorRiskScoringModelPage() {
             </p>
           </div>
 
-          <VendorRiskRelatedLinks />
+            <VendorRiskLeadMagnet
+              title="VRA Scoring Spreadsheet (Excel)"
+              description="Download our pre-weighted scoring model to automate your vendor triage. Includes logic for data sensitivity, access levels, and criticality."
+              buttonText="Download Scoring Model"
+              templateId="vra_scoring_spreadsheet"
+              resourceName="Vendor_Risk_Scoring_Model"
+            />
+
+            <VendorRiskRelatedLinks />
+
         </div>
       </section>
       <Footer />

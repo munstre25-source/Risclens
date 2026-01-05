@@ -101,11 +101,89 @@ export const SEARCH_INDEX: SearchDoc[] = [
     category: "SOC 2",
     keywords: ["controls", "evidence", "framework", "index"]
   },
-  {
-    url: "/penetration-testing/sow",
-    title: "Pentest Scope & SOW",
-    description: "Define the scope for your penetration test. Learn how to draft a Statement of Work that satisfies auditors and enterprise clients.",
-    category: "Pen Test",
-    keywords: ["scope", "sow", "contract", "rules of engagement"]
-  }
-];
+    {
+      url: "/penetration-testing/sow",
+      title: "Pentest Scope & SOW",
+      description: "Define the scope for your penetration test. Learn how to draft a Statement of Work that satisfies auditors and enterprise clients.",
+      category: "Pen Test",
+      keywords: ["scope", "sow", "contract", "rules of engagement"]
+    },
+      {
+        url: "/vendor-risk-assessment/triage",
+        title: "Vendor Risk Triage Tool",
+        description: "Instantly categorize vendors by risk level. Use our triage engine to decide which vendors need deep reviews and which are low risk.",
+        category: "Vendor Risk",
+        keywords: ["triage", "scoring", "prioritization", "vrm", "vendor assessment", "risk scoring", "third party risk assessment"]
+      },
+      {
+        url: "/soc-2/industries/proptech",
+        title: "SOC 2 for PropTech",
+        description: "A specialized guide for PropTech companies. Learn how to secure tenant PII, manage property data, and satisfy institutional investors.",
+        category: "SOC 2",
+        keywords: ["real estate", "property management", "tenant data", "proptech"]
+      },
+      {
+        url: "/soc-2/industries/logistics",
+        title: "SOC 2 for Logistics & Supply Chain",
+        description: "Operational resilience and data integrity for logistics platforms. Secure carrier integrations and warehouse management systems.",
+        category: "SOC 2",
+        keywords: ["supply chain", "shipping", "logistics", "wms"]
+      },
+      {
+        url: "/compare/vanta-vs-drata",
+        title: "Vanta vs Drata Comparison",
+        description: "A deep dive comparison into the two giants of compliance automation. We compare features, integrations, pricing models, and audit support.",
+        category: "SOC 2",
+        keywords: ["vanta", "drata", "comparison", "compliance automation", "automation tools"]
+      },
+        {
+          url: "/compare/secureframe-vs-vanta",
+          title: "Secureframe vs Vanta Comparison",
+          description: "Comparing Secureframe’s expert-led approach with Vanta’s automation-first platform.",
+          category: "SOC 2",
+          keywords: ["secureframe", "vanta", "comparison", "compliance automation", "soc 2 partner"]
+        },
+        {
+          url: "/compare/drata-vs-secureframe",
+          title: "Drata vs Secureframe Comparison",
+          description: "A battle of the heavyweights. We compare Drata’s technical automation with Secureframe’s personalized guidance.",
+          category: "SOC 2",
+          keywords: ["drata", "secureframe", "comparison", "compliance automation"]
+        },
+        {
+          url: "/compare/thoropass-vs-vanta",
+          title: "Thoropass vs Vanta Comparison",
+          description: "Should you bundle your software and auditor together? We compare Thoropass’s combined model with Vanta’s platform approach.",
+          category: "SOC 2",
+          keywords: ["thoropass", "vanta", "comparison", "laika", "bundled audit"]
+        },
+        {
+          url: "/compare/sprinto-vs-vanta",
+          title: "Sprinto vs Vanta Comparison",
+          description: "Sprinto is challenging Vanta with deeper automation and faster onboarding. See how they stack up for SaaS startups.",
+          category: "SOC 2",
+          keywords: ["sprinto", "vanta", "comparison", "compliance automation", "saas compliance"]
+        },
+        {
+          url: "/compare/drata-vs-thoropass",
+          title: "Drata vs Thoropass Comparison",
+          description: "Comparing the most powerful automation platform with the most comprehensive managed service.",
+          category: "SOC 2",
+          keywords: ["drata", "thoropass", "comparison", "compliance automation"]
+        },
+        {
+          url: "/compare/vanta-vs-auditboard",
+          title: "Vanta vs AuditBoard Comparison",
+          description: "When does a company outgrow Vanta? We compare the leader in startup compliance with the leader in Enterprise GRC.",
+          category: "SOC 2",
+          keywords: ["vanta", "auditboard", "comparison", "enterprise grc", "compliance scale"]
+        },
+        {
+          url: "/compliance-roi-calculator",
+          title: "Compliance ROI Calculator",
+          description: "Compare the total cost of Manual, Automation Platform, and All-in-One compliance approaches tailored to your company size.",
+          category: "SOC 2",
+          keywords: ["roi", "cost comparison", "vanta pricing", "drata pricing", "thoropass pricing", "compliance cost"]
+        }
+      ];
+

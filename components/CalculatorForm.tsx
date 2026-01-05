@@ -42,6 +42,7 @@ const ROLES = [
 ];
 
 interface FormData {
+  email: string;
   company_name: string;
   industry: string;
   num_employees: string;
@@ -74,6 +75,7 @@ export default function CalculatorForm() {
   const [utmSource, setUtmSource] = useState<string>('');
 
   const [formData, setFormData] = useState<FormData>({
+    email: '',
     company_name: '',
     industry: '',
     num_employees: '',
@@ -127,7 +129,7 @@ export default function CalculatorForm() {
   const validateStep = (currentStep: number): boolean => {
     switch (currentStep) {
       case 1:
-        return !!formData.company_name && !!formData.industry;
+        return !!formData.email && !!formData.company_name && !!formData.industry;
       case 2:
         return !!formData.num_employees && formData.data_types.length > 0;
       case 3:
@@ -145,7 +147,7 @@ export default function CalculatorForm() {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            email: `partial-${Date.now()}@anonymous.risclens.com`,
+            email: formData.email,
             company: formData.company_name,
             industry: formData.industry,
             lead_type: 'soc2_readiness_partial',
@@ -180,13 +182,11 @@ export default function CalculatorForm() {
     setError(null);
 
     try {
-      const placeholderEmail = 'no-email@readiness.risclens.com';
-
       const response = await fetch('/api/soc2-lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          email: placeholderEmail,
+          email: formData.email,
           company_name: formData.company_name,
           industry: formData.industry,
           num_employees: parseInt(formData.num_employees, 10),
@@ -229,6 +229,7 @@ export default function CalculatorForm() {
         results={results}
         leadId={leadId}
         companyName={formData.company_name}
+        email={formData.email}
       />
     );
   }
@@ -254,9 +255,27 @@ export default function CalculatorForm() {
         {step === 1 && (
           <div className="animate-fade-in">
             <h2 className="text-xl font-semibold text-gray-900 mb-6">
-              Tell us about your company
+              Get your readiness score
             </h2>
             <div className="space-y-4">
+              <div>
+                <label htmlFor="email" className="form-label">
+                  Work Email <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className="form-input"
+                  placeholder="alex@company.com"
+                  required
+                />
+                <p className="mt-1.5 text-xs text-gray-500">
+                  We&apos;ll use this to send your full roadmap and occasional compliance insights.
+                </p>
+              </div>
               <div>
                 <label htmlFor="company_name" className="form-label">
                   Company Name <span className="text-red-500">*</span>

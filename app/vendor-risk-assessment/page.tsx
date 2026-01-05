@@ -42,8 +42,9 @@ const faqSchema = {
 };
 
 const clusterLinks = [
-  { href: '/vendor-risk-assessment/roi-calculator', title: 'VRA ROI Calculator', summary: 'Calculate annual savings and efficiency gains from automating vendor security reviews.' },
-  { href: '/vendor-risk-assessment/triage', title: 'VRA Triage Tool', summary: 'Score vendor risk in minutes with deterministic logic and evidence expectations.' },
+  { href: '/vendor-risk-assessment/roi-calculator', title: 'VRA ROI Calculator', summary: 'Calculate annual savings and efficiency gains from automating vendor security reviews.', type: 'tool' },
+  { href: '/vendor-risk-assessment/tiering', title: 'Vendor Tiering Tool', summary: 'New: Right-size your reviews by instantly scoring vendors into risk tiers.', type: 'tool' },
+  { href: '/vendor-risk-assessment/triage', title: 'VRA Triage Tool', summary: 'Score vendor risk in minutes with deterministic logic and evidence expectations.', type: 'tool' },
   { href: '/vendor-risk-assessment/checklist', title: 'VRA Checklist', summary: 'Prep list for intake, due diligence, contracts, and ongoing monitoring.' },
   { href: '/vendor-risk-assessment/scoring-model', title: 'Scoring Model', summary: 'How the VRA tiers map to control asks and cadence.' },
   { href: '/vendor-risk-assessment/evidence-by-tier', title: 'Evidence by Tier', summary: 'Evidence packs to request at Low, Medium, and High risk.' },
@@ -126,10 +127,32 @@ export default function VendorRiskAssessmentHubPage() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="block border border-slate-200 rounded-xl p-5 bg-slate-50 hover:border-brand-200 transition"
+                className={`block border rounded-xl p-5 transition group ${
+                  item.type === 'tool' 
+                    ? 'bg-white border-brand-100 hover:border-brand-300 shadow-sm' 
+                    : 'bg-slate-50 border-slate-200 hover:border-brand-200'
+                }`}
               >
-                <p className="text-sm font-semibold text-slate-900">{item.title}</p>
-                <p className="text-sm text-slate-700 mt-2 leading-relaxed">{item.summary}</p>
+                <div className="flex justify-between items-start mb-2">
+                  <p className="text-sm font-semibold text-slate-900">{item.title}</p>
+                  {item.type === 'tool' && (
+                    <span className="text-[10px] font-bold text-brand-600 bg-brand-50 px-1.5 py-0.5 rounded uppercase tracking-wider flex items-center gap-1">
+                      <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                      Interactive Tool
+                    </span>
+                  )}
+                </div>
+                <p className="text-sm text-slate-700 leading-relaxed">{item.summary}</p>
+                {item.type === 'tool' && (
+                  <div className="mt-3 flex items-center text-xs font-medium text-brand-600 group-hover:gap-1 transition-all">
+                    Launch tool
+                    <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                  </div>
+                )}
               </Link>
             ))}
           </div>

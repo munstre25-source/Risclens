@@ -96,11 +96,12 @@ export default function ChecklistDownloadForm() {
               id="email"
               required
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@company.com"
-              className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all"
-            />
-          </div>
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@company.com"
+                className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all"
+              />
+              <p className="text-[10px] text-slate-400 mt-1">We'll use this to send your checklist and occasional compliance guides.</p>
+            </div>
           <div>
             <label htmlFor="company" className="block text-sm font-medium text-slate-700 mb-1">
               Company Name
