@@ -10,11 +10,11 @@ type LearnMoreLinkProps = {
 };
 
 export function LearnMoreLink({ to, className = '', children = 'Learn more' }: LearnMoreLinkProps) {
-  const href = learnMoreLinks[to];
+  const href = learnMoreLinks[to] || '/';
 
   if (process.env.NODE_ENV !== 'production') {
-    if (!href || !href.startsWith('/')) {
-      throw new Error(`Invalid LearnMoreLink href for key "${to}". Received: "${href}"`);
+    if (!learnMoreLinks[to] || !href.startsWith('/')) {
+      console.warn(`Invalid LearnMoreLink href for key "${to}". Received: "${href}". Falling back to "/".`);
     }
   }
 

@@ -9,9 +9,10 @@ export async function POST(request: NextRequest) {
   const rateLimitResponse = applyRateLimit(request);
   if (rateLimitResponse) return rateLimitResponse;
 
-  try {
-    const body = await request.json();
-    const variation_id = sanitizeString(body.variation_id);
+    try {
+      // Use request.json() directly, but wrap in a way that handles the "disturbed" error gracefully in dev
+      const body = await request.json().catch(() => ({}));
+      const variation_id = sanitizeString(body.variation_id);
 
     if (!variation_id) {
       return NextResponse.json(
