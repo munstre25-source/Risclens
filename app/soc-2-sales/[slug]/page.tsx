@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AssessmentCTA from '@/components/AssessmentCTA';
+import { CopyButton } from '@/components/CopyButton';
 import { salesGuides, salesGuideBySlug, Soc2GuidePage } from '@/lib/soc2Guides';
 
 interface PageProps {
@@ -201,15 +202,7 @@ to the Trust Services Criteria...
 Signed,
 [CTO/CISO Name]`}
                 </div>
-                <button 
-                  onClick={() => {
-                    navigator.clipboard.writeText(`To Whom It May Concern,\n\nThis letter confirms that [Company Name] has maintained \nthe security controls described in our SOC 2 Type II report \n(dated [Report Date]) from [Period End] to [Current Date].\n\nDuring this "gap period," there have been no material \nchanges to our control environment. We remain committed \nto the Trust Services Criteria...\n\nSigned,\n[CTO/CISO Name]`);
-                    alert('Template copied to clipboard!');
-                  }}
-                  className="mt-4 text-brand-700 text-sm font-semibold hover:underline"
-                >
-                  Copy Template
-                </button>
+                <CopyButton text={`To Whom It May Concern,\n\nThis letter confirms that [Company Name] has maintained \nthe security controls described in our SOC 2 Type II report \n(dated [Report Date]) from [Period End] to [Current Date].\n\nDuring this "gap period," there have been no material \nchanges to our control environment. We remain committed \nto the Trust Services Criteria...\n\nSigned,\n[CTO/CISO Name]`} />
               </div>
             )}
 
