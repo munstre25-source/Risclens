@@ -18,13 +18,12 @@ const tierColors: Record<VendorRiskResult['tier'], string> = {
 export function VendorRiskResults({ result, inputs }: VendorRiskResultsProps) {
   const [templateStatus, setTemplateStatus] = useState<string | null>(null);
 
-  useEffect(() => {
-    trackEvent('vendor_risk_results_viewed', {
-      score: result.score,
-      tier: result.tier,
-      vendor_count: inputs?.vendorCount || 'unknown',
-    });
-  }, [result, inputs]);
+    useEffect(() => {
+      trackEvent('vendor_risk_results_viewed', {
+        score: result.score,
+        tier: result.tier,
+      });
+    }, [result, inputs]);
 
   const handleTemplateRequest = async () => {
     const email = window.prompt("Where should we send the questionnaire + scoring template?");
