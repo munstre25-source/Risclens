@@ -2,6 +2,8 @@ import { Metadata } from 'next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { GapCalculator } from '@/components/calculators/GapCalculator';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
 
 export const metadata: Metadata = {
   title: 'ISO 27001 vs SOC 2 Gap Calculator | RiscLens',
@@ -12,9 +14,10 @@ export default function Soc2VsIsoPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-slate-50 py-20">
+      <main className="min-h-screen bg-slate-50 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <Breadcrumbs items={[{ label: 'SOC 2', href: '/soc-2' }, { label: 'SOC 2 vs ISO 27001', href: '/soc-2-vs-iso-27001' }]} />
+          <div className="text-center mb-16 pt-8">
             <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl">
               ISO 27001 vs SOC 2 Gap Calculator
             </h1>
@@ -62,6 +65,17 @@ export default function Soc2VsIsoPage() {
                 </div>
               </div>
             </div>
+          </div>
+          <div className="mt-20">
+            <RelatedGuidesRow
+              links={[
+                { href: '/soc-2-readiness-checklist', label: 'SOC 2 Checklist' },
+                { href: '/soc-2-evidence', label: 'Evidence Vault' },
+                { href: '/soc-2-cost', label: 'SOC 2 Cost' },
+                { href: '/soc-2-timeline', label: 'SOC 2 Timeline' },
+                { href: '/vendor-risk-assessment', label: 'Vendor Risk Hub' },
+              ]}
+            />
           </div>
         </div>
       </main>

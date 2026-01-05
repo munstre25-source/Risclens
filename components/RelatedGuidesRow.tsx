@@ -4,18 +4,28 @@ type GuideLink = { href: string; label: string };
 
 type RelatedGuidesRowProps = {
   links: GuideLink[];
+  title?: string;
   className?: string;
 };
 
-export function RelatedGuidesRow({ links, className = '' }: RelatedGuidesRowProps) {
+export function RelatedGuidesRow({ links, title = 'Related guides', className = '' }: RelatedGuidesRowProps) {
   if (!links.length) return null;
   return (
-    <div className={`border border-slate-200 rounded-xl bg-white p-4 ${className}`}>
-      <p className="text-sm font-semibold text-slate-900 mb-2">Related guides</p>
-      <div className="flex flex-wrap gap-3 text-sm">
-        {links.slice(0, 3).map((link) => (
-          <Link key={link.href} href={link.href} className="text-brand-700 underline underline-offset-4 hover:text-brand-800">
-            {link.label}
+    <div className={`border border-slate-200 rounded-xl bg-white p-6 ${className}`}>
+      <p className="text-sm font-semibold text-slate-900 mb-4">{title}</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {links.map((link) => (
+          <Link 
+            key={link.href} 
+            href={link.href} 
+            className="flex items-center p-3 rounded-lg border border-slate-100 hover:border-brand-200 hover:bg-brand-50 transition-all text-sm text-brand-700 font-medium group"
+          >
+            <span className="truncate group-hover:translate-x-1 transition-transform">
+              {link.label}
+            </span>
+            <svg className="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
           </Link>
         ))}
       </div>

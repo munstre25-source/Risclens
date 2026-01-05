@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
 
 type RelatedLink = { href: string; label: string };
 
@@ -30,7 +31,15 @@ export function VendorRiskIndustryPage({
       <Header />
 
       <section className="bg-white border-b border-slate-200">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-16 lg:py-20 text-center space-y-6">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8">
+          <Breadcrumbs 
+            items={[
+              { label: 'Vendor Risk Assessment', href: '/vendor-risk-assessment' },
+              { label: `VRA for ${industry}`, href: '#' }
+            ]} 
+          />
+        </div>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 pb-16 lg:pb-20 pt-4 text-center space-y-6">
           <p className="text-sm font-semibold uppercase tracking-wide text-brand-600">Vendor Risk Management</p>
           <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 leading-tight">Vendor Risk for {industry}</h1>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">{heroDescription}</p>

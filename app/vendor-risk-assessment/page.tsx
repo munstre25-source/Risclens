@@ -45,6 +45,7 @@ const clusterLinks = [
   { href: '/vendor-risk-assessment/roi-calculator', title: 'VRA ROI Calculator', summary: 'Calculate annual savings and efficiency gains from automating vendor security reviews.', type: 'tool' },
   { href: '/vendor-risk-assessment/tiering', title: 'Vendor Tiering Tool', summary: 'New: Right-size your reviews by instantly scoring vendors into risk tiers.', type: 'tool' },
   { href: '/vendor-risk-assessment/triage', title: 'VRA Triage Tool', summary: 'Score vendor risk in minutes with deterministic logic and evidence expectations.', type: 'tool' },
+  { href: '/vendor-risk-assessment/questionnaire', title: 'VRA Questionnaire', summary: 'High-intent questionnaire with evidence expectations and scoring tips.', type: 'tool' },
   { href: '/vendor-risk-assessment/checklist', title: 'VRA Checklist', summary: 'Prep list for intake, due diligence, contracts, and ongoing monitoring.' },
   { href: '/vendor-risk-assessment/scoring-model', title: 'Scoring Model', summary: 'How the VRA tiers map to control asks and cadence.' },
   { href: '/vendor-risk-assessment/evidence-by-tier', title: 'Evidence by Tier', summary: 'Evidence packs to request at Low, Medium, and High risk.' },
@@ -52,6 +53,8 @@ const clusterLinks = [
   { href: '/vendor-risk-assessment/contract-clauses', title: 'Contract Clauses', summary: 'Security addenda and DPAs that match the risk tier.' },
   { href: '/vendor-risk-assessment/subprocessors-vs-vendors', title: 'Subprocessors vs Vendors', summary: 'How to track chains of custody and downstream risk.' },
   { href: '/vendor-risk-assessment/common-mistakes', title: 'Common Mistakes', summary: 'Avoid over-collecting evidence or missing critical signals.' },
+  { href: '/vendor-risk-assessment/soc-2-compliance-requirements', title: 'SOC 2 Requirements', summary: 'The 5 core vendor oversight controls required for a SOC 2 audit.' },
+  { href: '/vendor-risk-assessment/automation-vs-manual', title: 'Automation vs Manual', summary: 'Compare different approaches to managing third-party security risk.' },
 ];
 
 export const metadata: Metadata = {
@@ -85,20 +88,29 @@ export default function VendorRiskAssessmentHubPage() {
           <p className="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
             Score vendor risk quickly, pick the right evidence pack, and set a monitoring cadence. Built for SOC 2 vendor management without adding another tool.
           </p>
-          <div className="flex justify-center">
-            <Link
-              href="/vendor-risk-assessment/triage"
-              className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-6 py-3 rounded-lg shadow-sm transition-all"
-            >
-              Run the VRA Triage
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </Link>
-            <div className="ml-3">
-              <HowItWorksButton />
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+              <Link
+                href="/vendor-risk-assessment/triage"
+                className="w-full sm:w-auto inline-flex justify-center items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-8 py-4 rounded-lg shadow-md transition-all text-lg"
+              >
+                Run Vendor Triage
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </Link>
+              <Link
+                href="/vendor-risk-assessment/roi-calculator"
+                className="w-full sm:w-auto inline-flex justify-center items-center gap-2 bg-white hover:bg-slate-50 text-slate-900 border border-slate-200 font-semibold px-8 py-4 rounded-lg shadow-sm transition-all text-lg"
+              >
+                Calculate VRA ROI
+                <svg className="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </Link>
+              <div className="hidden sm:block">
+                <HowItWorksButton />
+              </div>
             </div>
-          </div>
           <p className="text-sm text-slate-500">Guidance only; align outcomes with your risk team. Last updated: {lastUpdated}.</p>
           <div className="max-w-3xl mx-auto">
             <DefinitionCallout

@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import AssessmentCTA from '@/components/AssessmentCTA';
 import AboutSection from '@/components/AboutSection';
 import { costIndustries } from '@/lib/navConfig';
+import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
 
 const faqs = [
   {
@@ -227,19 +228,17 @@ export default function Soc2CostPage() {
               </div>
             </div>
 
-            <div className="border-t border-slate-200 pt-8">
-              <h3 className="text-lg font-semibold text-slate-800 mb-3">Explore related resources</h3>
-              <div className="flex flex-wrap gap-4 text-brand-700">
-                <Link href="/soc-2-readiness-calculator" className="underline underline-offset-2 hover:text-brand-800">
-                  SOC 2 Readiness Index
-                </Link>
-                <Link href="/soc-2-readiness/saas" className="underline underline-offset-2 hover:text-brand-800">
-                  SOC 2 Readiness for SaaS
-                </Link>
-                <Link href="/soc-2-readiness/fintech" className="underline underline-offset-2 hover:text-brand-800">
-                  SOC 2 Readiness for Fintech
-                </Link>
-              </div>
+            <div className="pt-4">
+              <RelatedGuidesRow
+                links={[
+                  { href: '/soc-2-readiness-calculator', label: 'SOC 2 Readiness Index' },
+                  { href: '/soc-2-timeline', label: 'SOC 2 Timeline' },
+                  { href: '/soc-2-readiness-checklist', label: 'Readiness Checklist' },
+                  { href: '/soc-2-evidence/vault', label: 'Evidence Vault' },
+                  { href: '/soc-2/auditor-selection', label: 'Auditor Selection' },
+                  { href: '/penetration-testing/for-soc-2', label: 'Pentest for SOC 2' },
+                ]}
+              />
             </div>
           </div>
         </section>

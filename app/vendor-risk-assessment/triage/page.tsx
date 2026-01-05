@@ -5,6 +5,7 @@ import Footer from '@/components/Footer';
 import { VendorRiskTriageForm } from '@/components/vendor-risk/VendorRiskTriageForm';
 import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
 import { HowItWorksAccordion } from '@/components/HowItWorksAccordion';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
 
 const lastUpdated = '2026-03-20';
 
@@ -65,9 +66,11 @@ export default function VendorRiskAssessmentTriagePage() {
     <main className="min-h-screen flex flex-col bg-slate-100">
       <Script id="vra-triage-faq" type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <Header />
-
       <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 lg:py-20 text-center space-y-4">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8">
+          <Breadcrumbs items={[{ label: 'Vendor Risk Assessment', href: '/vendor-risk-assessment' }, { label: 'Triage', href: '/vendor-risk-assessment/triage' }]} />
+        </div>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 lg:py-14 text-center space-y-4">
           <p className="text-sm font-semibold uppercase tracking-wide text-brand-700">Vendor Risk Assessment</p>
           <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 leading-tight">Vendor Risk Triage</h1>
           <p className="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">

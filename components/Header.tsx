@@ -141,7 +141,18 @@ export default function Header() {
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const mobileToggleRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
-  const primaryCtaHref = pathname.startsWith('/penetration-testing') ? '/penetration-testing/cost-estimator' : CTA.href;
+  const primaryCtaHref = pathname.startsWith('/penetration-testing') 
+    ? '/penetration-testing/cost-estimator' 
+    : pathname.startsWith('/vendor-risk-assessment')
+    ? '/vendor-risk-assessment/roi-calculator'
+    : CTA.href;
+
+  const primaryCtaLabel = pathname.startsWith('/penetration-testing')
+    ? 'Run Pentest Cost Estimator'
+    : pathname.startsWith('/vendor-risk-assessment')
+    ? 'Calculate VRA ROI'
+    : CTA.label;
+
   const handleMobilePrimaryCta = useCallback(() => {
     if (!primaryCtaHref) return;
     setMobileOpen(false);
@@ -954,10 +965,10 @@ export default function Header() {
           </nav>
 
           <Link
-            href={pathname.startsWith('/penetration-testing') ? '/penetration-testing/cost-estimator' : CTA.href}
+            href={primaryCtaHref}
             className="hidden md:inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-4 py-2 rounded-lg shadow-sm transition-all"
           >
-            {pathname.startsWith('/penetration-testing') ? 'Run Pentest Cost Estimator' : CTA.label}
+            {primaryCtaLabel}
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
@@ -1440,16 +1451,16 @@ export default function Header() {
                   )}
                 </div>
 
-                <button
-                  type="button"
-                  className="w-full inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-4 py-2 rounded-lg shadow-sm transition-all"
-                  onClick={handleMobilePrimaryCta}
-                >
-                  {pathname.startsWith('/penetration-testing') ? 'Run Pentest Cost Estimator' : CTA.label}
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </button>
+                  <button
+                    type="button"
+                    className="w-full inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-4 py-2 rounded-lg shadow-sm transition-all"
+                    onClick={handleMobilePrimaryCta}
+                  >
+                    {primaryCtaLabel}
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </button>
               </div>
             </div>
           </>,

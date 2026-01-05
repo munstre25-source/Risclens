@@ -5,6 +5,7 @@ import Footer from '@/components/Footer';
 import PentestEstimatorForm from '@/components/pentest/PentestEstimatorForm';
 import { HowItWorksAccordion } from '@/components/HowItWorksAccordion';
 import { SoftwareApplicationSchema } from '@/components/SoftwareApplicationSchema';
+import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
 
 const breadcrumbSchema = {
   '@context': 'https://schema.org',
@@ -62,9 +63,19 @@ export default function PentestEstimatorPage() {
       </section>
 
       <section className="bg-white border-t border-slate-200">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 space-y-6">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 space-y-12">
           <PentestEstimatorForm />
           <HowItWorksAccordion />
+          <RelatedGuidesRow
+            links={[
+              { href: '/penetration-testing', label: 'Pentest Hub' },
+              { href: '/penetration-testing/scoping', label: 'Scoping Worksheet' },
+              { href: '/penetration-testing/preparation-checklist', label: 'Preparation Checklist' },
+              { href: '/penetration-testing/pricing', label: 'Pricing Guide' },
+              { href: '/penetration-testing/for-soc-2', label: 'Pentest for SOC 2' },
+              { href: '/soc-2-cost', label: 'SOC 2 Cost Guide' },
+            ]}
+          />
         </div>
       </section>
       <Footer />

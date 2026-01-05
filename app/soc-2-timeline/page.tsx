@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import AssessmentCTA from '@/components/AssessmentCTA';
 import AboutSection from '@/components/AboutSection';
 import { timelineGuides } from '@/lib/soc2Guides';
+import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
 
 const faqs = [
   {
@@ -198,18 +199,31 @@ export default function Soc2TimelineGuidePage() {
             </div>
 
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-slate-900">Timeline FAQs</h2>
-              <div className="space-y-6">
-                {faqs.map((faq) => (
-                  <div key={faq.question} className="space-y-2">
-                    <p className="text-base font-semibold text-slate-900">{faq.question}</p>
-                    <p className="text-slate-600 leading-relaxed">{faq.answer}</p>
-                  </div>
-                ))}
+                <h2 className="text-2xl font-bold text-slate-900">Timeline FAQs</h2>
+                <div className="space-y-6">
+                  {faqs.map((faq) => (
+                    <div key={faq.question} className="space-y-2">
+                      <p className="text-base font-semibold text-slate-900">{faq.question}</p>
+                      <p className="text-slate-600 leading-relaxed">{faq.answer}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="pt-4">
+                <RelatedGuidesRow
+                  links={[
+                    { href: '/soc-2-readiness-calculator', label: 'SOC 2 Readiness Index' },
+                    { href: '/soc-2-cost', label: 'SOC 2 Cost Guide' },
+                    { href: '/soc-2-readiness-checklist', label: 'Readiness Checklist' },
+                    { href: '/soc-2-evidence/vault', label: 'Evidence Vault' },
+                    { href: '/soc-2-type-i-vs-type-ii', label: 'Type I vs Type II' },
+                    { href: '/penetration-testing', label: 'Pentest Hub' },
+                  ]}
+                />
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
         <AboutSection />
 

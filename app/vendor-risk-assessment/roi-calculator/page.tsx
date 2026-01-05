@@ -4,6 +4,7 @@ import Footer from '@/components/Footer';
 import VendorRiskRoiCalculator from '@/components/vendor-risk/VendorRiskRoiCalculator';
 import Link from 'next/link';
 import { SoftwareApplicationSchema } from '@/components/SoftwareApplicationSchema';
+import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
 
 export const metadata: Metadata = {
   title: 'Vendor Risk Management ROI Calculator | RiscLens',
@@ -70,24 +71,37 @@ export default function VendorRiskRoiPage() {
                   <p className="text-sm text-slate-600"><span className="font-semibold text-slate-900">Run a Triage Assessment</span> to see which of your current vendors need immediate review.</p>
                 </li>
               </ul>
-              <div className="pt-4 flex flex-col sm:flex-row gap-3">
-                <Link 
-                  href="/vendor-risk-assessment/triage" 
-                  className="flex-1 bg-slate-900 text-white text-center font-semibold py-3 rounded-lg hover:bg-slate-800 transition"
-                >
-                  Start Triage
-                </Link>
-                <Link 
-                  href="/vendor-risk-program" 
-                  className="flex-1 bg-white border border-slate-200 text-slate-900 text-center font-semibold py-3 rounded-lg hover:bg-slate-50 transition"
-                >
-                  View Program Guide
-                </Link>
+                <div className="pt-4 flex flex-col sm:flex-row gap-3">
+                  <Link 
+                    href="/vendor-risk-assessment/triage" 
+                    className="flex-1 bg-slate-900 text-white text-center font-semibold py-3 rounded-lg hover:bg-slate-800 transition"
+                  >
+                    Start Triage
+                  </Link>
+                  <Link 
+                    href="/vendor-risk-program" 
+                    className="flex-1 bg-white border border-slate-200 text-slate-900 text-center font-semibold py-3 rounded-lg hover:bg-slate-50 transition"
+                  >
+                    View Program Guide
+                  </Link>
+                </div>
               </div>
             </div>
+
+            <div className="mt-16">
+              <RelatedGuidesRow
+                links={[
+                  { href: '/vendor-risk-assessment', label: 'Vendor Risk Hub' },
+                  { href: '/vendor-risk-assessment/triage', label: 'VRA Triage Tool' },
+                  { href: '/vendor-risk-assessment/tiering', label: 'Vendor Tiering' },
+                  { href: '/vendor-risk-assessment/checklist', label: 'VRA Checklist' },
+                  { href: '/vendor-risk-assessment/evidence-by-tier', label: 'Evidence by Tier' },
+                  { href: '/soc-2-cost', label: 'SOC 2 Cost Guide' },
+                ]}
+              />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
       <Footer />
     </main>

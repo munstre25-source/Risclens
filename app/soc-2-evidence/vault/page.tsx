@@ -2,6 +2,8 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
 
 export const metadata: Metadata = {
   title: 'SOC 2 Evidence Vault: How to Store Audit Evidence | RiscLens',
@@ -25,7 +27,10 @@ export default function EvidenceVaultPage() {
       <Header />
       <main className="min-h-screen flex flex-col bg-slate-100">
         <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-16 lg:py-22 text-center space-y-4">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8">
+            <Breadcrumbs items={[{ label: 'SOC 2', href: '/soc-2' }, { label: 'Evidence Vault', href: '/soc-2-evidence/vault' }]} />
+          </div>
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 lg:py-14 text-center space-y-4">
             <p className="text-sm font-semibold uppercase tracking-wide text-brand-700">SOC 2 Evidence</p>
             <h1 className="text-4xl sm:text-5xl font-semibold text-slate-900 leading-tight">Build a SOC 2 Evidence Vault</h1>
             <p className="text-lg text-slate-700 max-w-3xl mx-auto leading-relaxed">
@@ -100,19 +105,31 @@ export default function EvidenceVaultPage() {
               <p className="text-slate-700 leading-relaxed">
                 A clean evidence vault speeds audits and reduces back-and-forth. Map owners, keep recency, and store one trusted artifact per control.
               </p>
-              <Link
-                href="/soc-2-readiness-calculator"
-                className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
-              >
-                Get your readiness score
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
+                <Link
+                  href="/soc-2-readiness-calculator"
+                  className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
+                >
+                  Get your readiness score
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </Link>
+              </div>
+
+              <RelatedGuidesRow
+                links={[
+                  { href: '/soc-2-readiness-checklist', label: 'SOC 2 Checklist' },
+                  { href: '/soc-2-type-i-vs-type-ii', label: 'Type I vs Type II' },
+                  { href: '/soc-2-cost', label: 'SOC 2 Cost' },
+                  { href: '/vendor-risk-assessment', label: 'Vendor Risk Hub' },
+                  { href: '/penetration-testing', label: 'Pentest Hub' },
+                ]}
+                className="mt-12"
+              />
             </div>
-          </div>
-        </section>
-      </main>
+          </section>
+        </main>
+
       <Footer />
     </>
   );

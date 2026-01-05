@@ -3,6 +3,8 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AssessmentCTA from '@/components/AssessmentCTA';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
 
 export const metadata: Metadata = {
   title: 'SOC 2 Type I vs Type II Readiness | RiscLens',
@@ -15,7 +17,10 @@ export default function Soc2TypePage() {
       <Header />
       <main className="min-h-screen flex flex-col bg-slate-100">
         <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-16 lg:py-22 text-center">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8">
+            <Breadcrumbs items={[{ label: 'SOC 2', href: '/soc-2' }, { label: 'Type I vs Type II', href: '/soc-2-type-i-vs-type-ii' }]} />
+          </div>
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 lg:py-14 text-center">
             <h1 className="text-4xl sm:text-5xl font-semibold text-slate-900 mb-6 leading-tight tracking-tight">
               SOC 2 Type I vs Type II Readiness
             </h1>
@@ -76,21 +81,33 @@ export default function Soc2TypePage() {
               </ul>
             </div>
 
-            <div className="text-center">
-              <Link
-                href="/soc-2-readiness-calculator"
-                className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
-              >
-                See My Type I vs Type II Readiness
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
-              <p className="mt-3 text-sm text-slate-500">Uses the existing readiness assessment—no new inputs required.</p>
+              <div className="text-center">
+                <Link
+                  href="/soc-2-readiness-calculator"
+                  className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
+                >
+                  See My Type I vs Type II Readiness
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </Link>
+                <p className="mt-3 text-sm text-slate-500">Uses the existing readiness assessment—no new inputs required.</p>
+              </div>
+
+              <RelatedGuidesRow
+                links={[
+                  { href: '/soc-2-readiness-checklist', label: 'SOC 2 Checklist' },
+                  { href: '/soc-2-evidence', label: 'Evidence Vault' },
+                  { href: '/soc-2-cost', label: 'SOC 2 Cost' },
+                  { href: '/soc-2-timeline', label: 'SOC 2 Timeline' },
+                  { href: '/vendor-risk-assessment', label: 'Vendor Risk Hub' },
+                ]}
+                className="mt-12"
+              />
             </div>
-          </div>
-        </section>
-      </main>
+          </section>
+        </main>
+
       <AssessmentCTA />
       <Footer />
     </>

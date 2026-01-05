@@ -211,49 +211,6 @@ export interface SavedFilter {
   updated_at: string;
 }
 
-// =============================================================================
-// DATABASE HELPERS
-// =============================================================================
-
-/**
- * Insert a new lead into the unified leads table
- */
-export async function insertLead(lead: Omit<SOC2Lead, 'id' | 'created_at' | 'updated_at'>): Promise<SOC2Lead> {
-  const supabase = getSupabaseAdmin();
-
-  const { data, error } = await supabase
-    .from('leads')
-    .insert(lead)
-    .select()
-    .single();
-
-  // Fallback: if older DBs are missing the is_test column, retry without it to avoid blocking submissions.
-  if (error && error.message && error.message.toLowerCase().includes('is_test')) {
-    const { data: retryData, error: retryError } = await supabase
-      .from('leads')
-      .insert(({ ...lead, is_test: undefined } as any))
-      .select()
-      .single();
-
-    if (!retryError && retryData) {
-      console.warn('Inserted lead without is_test column fallback');
-      return retryData;
-    }
-
-    if (retryError) {
-      console.error('Failed to insert lead after is_test fallback:', retryError);
-      throw new Error(`Database error: ${retryError.message}`);
-    }
-  }
-
-  if (error) {
-    console.error('Failed to insert lead:', error);
-    throw new Error(`Database error: ${error.message}`);
-  }
-
-  return data;
-}
-
 /**
  * Get a lead by ID
  */
@@ -462,11 +419,11 @@ export async function getHealthMetrics(): Promise<{ lead_count: number; pdf_coun
 }
 
 // =============================================================================
-// ADMIN NOTES FUNCTIONS
+// DATABASE HELPERS
 // =============================================================================
 
 /**
- * Get admin notes for a lead
+ * Get a lead by ID
  */
 export async function getAdminNotes(leadId: string): Promise<AdminNote[]> {
   const supabase = getSupabaseAdmin();

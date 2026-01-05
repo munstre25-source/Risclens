@@ -5,6 +5,7 @@ import Footer from '@/components/Footer';
 import { VendorRiskRelatedLinks } from '@/components/vendor-risk/VendorRiskRelatedLinks';
 import VendorRiskLeadMagnet from '@/components/vendor-risk/VendorRiskLeadMagnet';
 import { FAQSection } from '@/components/FAQSection';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
 
 interface FAQItem {
   question: string;
@@ -43,7 +44,15 @@ export function VendorRiskTopicPage({
       <Header />
 
       <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 lg:py-18 space-y-4 text-center">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8">
+          <Breadcrumbs 
+            items={[
+              { label: 'Vendor Risk Assessment', href: '/vendor-risk-assessment' },
+              { label: title, href: '#' }
+            ]} 
+          />
+        </div>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 pb-14 lg:pb-18 pt-4 space-y-4 text-center">
           <p className="text-sm font-semibold uppercase tracking-wide text-brand-700">{category}</p>
           <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 leading-tight">{title}</h1>
           <p className="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">

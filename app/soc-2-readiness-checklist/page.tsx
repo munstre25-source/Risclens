@@ -4,6 +4,8 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AssessmentCTA from '@/components/AssessmentCTA';
 import ChecklistDownloadForm from '@/components/ChecklistDownloadForm';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
 
 export const metadata: Metadata = {
   title: 'SOC 2 Readiness Checklist (2026) | RiscLens',
@@ -29,7 +31,10 @@ export default function Soc2ReadinessChecklistPage() {
       <Header />
       <main className="min-h-screen flex flex-col bg-slate-100">
         <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-16 lg:py-22 text-center">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8">
+            <Breadcrumbs items={[{ label: 'SOC 2', href: '/soc-2' }, { label: 'Readiness Checklist', href: '/soc-2-readiness-checklist' }]} />
+          </div>
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 lg:py-14 text-center">
             <h1 className="text-4xl sm:text-5xl font-semibold text-slate-900 mb-6 leading-tight tracking-tight">
               SOC 2 Readiness Checklist (2026)
             </h1>
@@ -164,26 +169,16 @@ export default function Soc2ReadinessChecklistPage() {
                   </ul>
               </div>
 
-            <div className="space-y-2">
-              <p className="text-sm font-semibold text-slate-800">Related guides</p>
-              <div className="flex flex-wrap gap-3 text-sm text-brand-700">
-                <Link href="/soc-2-cost" className="underline underline-offset-2 hover:text-brand-800">
-                  SOC 2 Cost
-                </Link>
-                <Link href="/soc-2-timeline" className="underline underline-offset-2 hover:text-brand-800">
-                  SOC 2 Timeline
-                </Link>
-                <Link href="/soc-2-type-i-vs-type-ii" className="underline underline-offset-2 hover:text-brand-800">
-                  Type I vs Type II
-                </Link>
-                <Link href="/soc-2-readiness/saas" className="underline underline-offset-2 hover:text-brand-800">
-                  SOC 2 for SaaS
-                </Link>
-                <Link href="/soc-2-readiness/fintech" className="underline underline-offset-2 hover:text-brand-800">
-                  SOC 2 for Fintech
-                </Link>
-              </div>
-            </div>
+            <RelatedGuidesRow
+              links={[
+                { href: '/soc-2-cost', label: 'SOC 2 Cost' },
+                { href: '/soc-2-timeline', label: 'SOC 2 Timeline' },
+                { href: '/soc-2-type-i-vs-type-ii', label: 'Type I vs Type II' },
+                { href: '/soc-2-readiness/saas', label: 'SOC 2 for SaaS' },
+                { href: '/soc-2-readiness/fintech', label: 'SOC 2 for Fintech' },
+                { href: '/vendor-risk-assessment', label: 'Vendor Risk Hub' },
+              ]}
+            />
           </div>
         </section>
       </main>

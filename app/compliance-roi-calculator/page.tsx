@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
+import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
 
 type ComplianceApproach = 'manual' | 'automation' | 'all_in_one';
 
@@ -507,15 +508,28 @@ export default function ComplianceROICalculator() {
                   <Link href="/compare/thoropass-vs-vanta" className="px-4 py-2 rounded-lg bg-white border border-slate-200 text-sm text-brand-700 hover:border-brand-300">
                     Thoropass vs Vanta
                   </Link>
-                  <Link href="/compare/sprinto-vs-vanta" className="px-4 py-2 rounded-lg bg-white border border-slate-200 text-sm text-brand-700 hover:border-brand-300">
-                    Sprinto vs Vanta
-                  </Link>
+                    <Link href="/compare/sprinto-vs-vanta" className="px-4 py-2 rounded-lg bg-white border border-slate-200 text-sm text-brand-700 hover:border-brand-300">
+                      Sprinto vs Vanta
+                    </Link>
+                  </div>
+                </div>
+
+                <div className="pt-8 border-t border-slate-200">
+                  <RelatedGuidesRow
+                    links={[
+                      { href: '/soc-2-cost', label: 'SOC 2 Cost Guide' },
+                      { href: '/soc-2-timeline', label: 'SOC 2 Timeline' },
+                      { href: '/soc-2-readiness-calculator', label: 'Readiness Score' },
+                      { href: '/penetration-testing/cost-estimator', label: 'Pentest Cost Estimator' },
+                      { href: '/vendor-risk-assessment/roi-calculator', label: 'VRA ROI Calculator' },
+                      { href: '/soc-2/auditor-selection', label: 'Auditor Selection' },
+                    ]}
+                  />
                 </div>
               </div>
-            </div>
-          )}
-        </div>
-      </section>
+            )}
+          </div>
+        </section>
       <Footer />
     </main>
   );
