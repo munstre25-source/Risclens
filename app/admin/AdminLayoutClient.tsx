@@ -12,10 +12,14 @@ const NAV_ITEMS = [
   { href: '/admin/leads', label: 'Leads' },
   { href: '/admin/ooda', label: 'OODA Loop' },
   { href: '/admin/kgr', label: 'KGR Tracker' },
+  { href: '/admin/kgr/explorer', label: 'Keyword Explorer' },
   { href: '/admin/analytics', label: 'Analytics' },
   { href: '/admin/buyers', label: 'Buyers' },
-  { href: '/admin/audit', label: 'Audit Logs' },
-  { href: '/admin/test-mode', label: 'Test Mode' },
+    { href: '/admin/audit', label: 'Audit Logs' },
+    { href: '/admin/intelligence', label: 'Market Intelligence' },
+    { href: '/admin/intelligence/directory', label: 'Signal Directory' },
+    { href: '/admin/test-mode', label: 'Test Mode' },
+
   { href: '/admin/experiments', label: 'Experiments' },
   { href: '/admin/settings', label: 'Settings' },
 ];

@@ -192,123 +192,135 @@ export default function AdminDashboard() {
 
   // Detail panel
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
-  const [leadNotes, setLeadNotes] = useState<AdminNote[]>([]);
-  const [leadEnrichment, setLeadEnrichment] = useState<any[]>([]);
-  const [newNote, setNewNote] = useState('');
-  const [showDetailPanel, setShowDetailPanel] = useState(false);
-  const [loadingEnrichment, setLoadingEnrichment] = useState(false);
+    const [leadNotes, setLeadNotes] = useState<AdminNote[]>([]);
+    const [leadEnrichment, setLeadEnrichment] = useState<any[]>([]);
+    const [leadMatches, setLeadMatches] = useState<any[]>([]);
+    const [newNote, setNewNote] = useState('');
+    const [showDetailPanel, setShowDetailPanel] = useState(false);
+    const [loadingEnrichment, setLoadingEnrichment] = useState(false);
+    const [loadingMatches, setLoadingMatches] = useState(false);
 
-  // Modals
-  const [showSellModal, setShowSellModal] = useState(false);
-  const [sellAmount, setSellAmount] = useState('');
-  const [buyerEmail, setBuyerEmail] = useState('');
-  const [actionLoading, setActionLoading] = useState(false);
+    // Modals
+    const [showSellModal, setShowSellModal] = useState(false);
+    const [sellAmount, setSellAmount] = useState('');
+    const [buyerEmail, setBuyerEmail] = useState('');
+    const [actionLoading, setActionLoading] = useState(false);
 
-  // Save filter modal
-  const [showSaveFilterModal, setShowSaveFilterModal] = useState(false);
-  const [newFilterName, setNewFilterName] = useState('');
+    // Save filter modal
+    const [showSaveFilterModal, setShowSaveFilterModal] = useState(false);
+    const [newFilterName, setNewFilterName] = useState('');
 
-  const getAdminToken = () => {
-    const match = document.cookie.match(/admin_token=([^;]+)/);
-    return match ? match[1] : '';
-  };
+    const getAdminToken = () => {
+      const match = document.cookie.match(/admin_token=([^;]+)/);
+      return match ? match[1] : '';
+    };
 
-  // ==========================================================================
-  // DATA FETCHING
-  // ==========================================================================
+    // ==========================================================================
+    // DATA FETCHING
+    // ==========================================================================
 
-  const fetchData = useCallback(async () => {
-    try {
-      const token = getAdminToken();
+    const fetchData = useCallback(async () => {
+      try {
+        const token = getAdminToken();
+        
+        const params = new URLSearchParams();
+        if (search) params.append('search', search);
+        if (keepOrSell) params.append('keep_or_sell', keepOrSell);
+        if (industry) params.append('industry', industry);
+        if (soldFilter) params.append('sold', soldFilter);
+        if (statusFilter) params.append('lead_status', statusFilter);
+        if (urgencyFilter) params.append('urgency', urgencyFilter);
+
+        const leadsRes = await fetch(`/api/admin/leads?${params.toString()}`, {
+          headers: { 'Authorization': `Bearer ${token}` },
+          credentials: 'include',
+        });
+
+        if (!leadsRes.ok) throw new Error('Failed to fetch leads');
+        const leadsData = await leadsRes.json();
+        setLeads(leadsData.leads || []);
+        setStats(leadsData.stats || { total: 0, keep: 0, sell: 0, revenue: 0 });
+        if (leadsData.metrics) setMetrics(leadsData.metrics);
+
+        // Fetch A/B variants
+        const variantsRes = await fetch('/api/admin/variants', {
+          headers: { 'Authorization': `Bearer ${token}` },
+          credentials: 'include',
+        });
+
+        if (variantsRes.ok) {
+          const variantsData = await variantsRes.json();
+          setVariants(variantsData.variants || []);
+        }
+
+        // Fetch saved filters
+        const filtersRes = await fetch('/api/admin/filters', {
+          headers: { 'Authorization': `Bearer ${token}` },
+          credentials: 'include',
+        });
+
+        if (filtersRes.ok) {
+          const filtersData = await filtersRes.json();
+          setSavedFilters(filtersData.filters || []);
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load data');
+      } finally {
+        setLoading(false);
+      }
+    }, [search, keepOrSell, industry, soldFilter, statusFilter, urgencyFilter]);
+
+    useEffect(() => {
+      fetchData();
+    }, [fetchData]);
+
+    // ==========================================================================
+    // LEAD DETAIL PANEL
+    // ==========================================================================
+
+    const openLeadDetail = async (lead: Lead) => {
+      setSelectedLead(lead);
+      setShowDetailPanel(true);
+      setLoadingEnrichment(true);
+      setLoadingMatches(true);
       
-      const params = new URLSearchParams();
-      if (search) params.append('search', search);
-      if (keepOrSell) params.append('keep_or_sell', keepOrSell);
-      if (industry) params.append('industry', industry);
-      if (soldFilter) params.append('sold', soldFilter);
-      if (statusFilter) params.append('lead_status', statusFilter);
-      if (urgencyFilter) params.append('urgency', urgencyFilter);
+      // Fetch notes, enrichment and matches for this lead
+      const token = getAdminToken();
+      try {
+        const [notesRes, enrichmentRes, matchesRes] = await Promise.all([
+          fetch(`/api/admin/leads/${lead.id}/notes`, {
+            headers: { 'Authorization': `Bearer ${token}` },
+            credentials: 'include',
+          }),
+          fetch(`/api/admin/leads/${lead.id}/enrichment`, {
+            headers: { 'Authorization': `Bearer ${token}` },
+            credentials: 'include',
+          }),
+          fetch(`/api/admin/leads/${lead.id}/best-match`, {
+            headers: { 'Authorization': `Bearer ${token}` },
+            credentials: 'include',
+          })
+        ]);
 
-      const leadsRes = await fetch(`/api/admin/leads?${params.toString()}`, {
-        headers: { 'Authorization': `Bearer ${token}` },
-        credentials: 'include',
-      });
-
-      if (!leadsRes.ok) throw new Error('Failed to fetch leads');
-      const leadsData = await leadsRes.json();
-      setLeads(leadsData.leads || []);
-      setStats(leadsData.stats || { total: 0, keep: 0, sell: 0, revenue: 0 });
-      if (leadsData.metrics) setMetrics(leadsData.metrics);
-
-      // Fetch A/B variants
-      const variantsRes = await fetch('/api/admin/variants', {
-        headers: { 'Authorization': `Bearer ${token}` },
-        credentials: 'include',
-      });
-
-      if (variantsRes.ok) {
-        const variantsData = await variantsRes.json();
-        setVariants(variantsData.variants || []);
+        if (notesRes.ok) {
+          const data = await notesRes.json();
+          setLeadNotes(data.notes || []);
+        }
+        if (enrichmentRes.ok) {
+          const data = await enrichmentRes.json();
+          setLeadEnrichment(data.enrichment || []);
+        }
+        if (matchesRes.ok) {
+          const data = await matchesRes.json();
+          setLeadMatches(data.matches || []);
+        }
+      } catch {
+        // Ignore errors
+      } finally {
+        setLoadingEnrichment(false);
+        setLoadingMatches(false);
       }
-
-      // Fetch saved filters
-      const filtersRes = await fetch('/api/admin/filters', {
-        headers: { 'Authorization': `Bearer ${token}` },
-        credentials: 'include',
-      });
-
-      if (filtersRes.ok) {
-        const filtersData = await filtersRes.json();
-        setSavedFilters(filtersData.filters || []);
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load data');
-    } finally {
-      setLoading(false);
-    }
-  }, [search, keepOrSell, industry, soldFilter, statusFilter, urgencyFilter]);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
-  // ==========================================================================
-  // LEAD DETAIL PANEL
-  // ==========================================================================
-
-  const openLeadDetail = async (lead: Lead) => {
-    setSelectedLead(lead);
-    setShowDetailPanel(true);
-    setLoadingEnrichment(true);
-    
-    // Fetch notes and enrichment for this lead
-    const token = getAdminToken();
-    try {
-      const [notesRes, enrichmentRes] = await Promise.all([
-        fetch(`/api/admin/leads/${lead.id}/notes`, {
-          headers: { 'Authorization': `Bearer ${token}` },
-          credentials: 'include',
-        }),
-        fetch(`/api/admin/leads/${lead.id}/enrichment`, {
-          headers: { 'Authorization': `Bearer ${token}` },
-          credentials: 'include',
-        })
-      ]);
-
-      if (notesRes.ok) {
-        const data = await notesRes.json();
-        setLeadNotes(data.notes || []);
-      }
-      if (enrichmentRes.ok) {
-        const data = await enrichmentRes.json();
-        setLeadEnrichment(data.enrichment || []);
-      }
-    } catch {
-      // Ignore errors
-    } finally {
-      setLoadingEnrichment(false);
-    }
-  };
+    };
 
   const handleAddNote = async () => {
     if (!selectedLead || !newNote.trim()) return;
@@ -1131,39 +1143,87 @@ export default function AdminDashboard() {
                   </div>
                 )}
 
-                {/* Enrichment Data */}
-                <div className="bg-purple-50 rounded-lg p-4 mb-6">
-                  <h3 className="font-semibold text-gray-900 mb-3 flex items-center justify-between">
-                    Enrichment Data
-                    {loadingEnrichment && <span className="text-xs font-normal text-purple-600 animate-pulse">Loading...</span>}
-                  </h3>
-                  {leadEnrichment.length === 0 ? (
-                    <p className="text-sm text-gray-500">{loadingEnrichment ? 'Fetching social data...' : 'No enrichment data found.'}</p>
-                  ) : (
-                    <div className="space-y-3">
-                      {leadEnrichment.map((enrich) => (
-                        <div key={enrich.id} className="text-sm">
-                          <div className="grid grid-cols-2 gap-y-2">
-                            {Object.entries(enrich.enriched_fields || {}).map(([key, value]) => (
-                              <div key={key}>
-                                <div className="text-xs text-purple-600 uppercase font-bold tracking-tighter">{key.replace(/_/g, ' ')}</div>
-                                <div className="truncate font-medium text-gray-800">
-                                  {typeof value === 'string' && value.startsWith('http') ? (
-                                    <a href={value} target="_blank" rel="noopener noreferrer" className="text-brand-600 hover:underline">
-                                      {value.replace('https://', '')}
-                                    </a>
-                                  ) : String(value)}
+                  {/* Enrichment Data */}
+                  <div className="bg-purple-50 rounded-lg p-4 mb-6">
+                    <h3 className="font-semibold text-gray-900 mb-3 flex items-center justify-between">
+                      Enrichment Data
+                      {loadingEnrichment && <span className="text-xs font-normal text-purple-600 animate-pulse">Loading...</span>}
+                    </h3>
+                    {leadEnrichment.length === 0 ? (
+                      <p className="text-sm text-gray-500">{loadingEnrichment ? 'Fetching social data...' : 'No enrichment data found.'}</p>
+                    ) : (
+                      <div className="space-y-3">
+                        {leadEnrichment.map((enrich) => (
+                          <div key={enrich.id} className="text-sm">
+                            <div className="grid grid-cols-2 gap-y-2">
+                              {Object.entries(enrich.enriched_fields || {}).map(([key, value]) => (
+                                <div key={key}>
+                                  <div className="text-xs text-purple-600 uppercase font-bold tracking-tighter">{key.replace(/_/g, ' ')}</div>
+                                  <div className="truncate font-medium text-gray-800">
+                                    {typeof value === 'string' && value.startsWith('http') ? (
+                                      <a href={value} target="_blank" rel="noopener noreferrer" className="text-brand-600 hover:underline">
+                                        {value.replace('https://', '')}
+                                      </a>
+                                    ) : String(value)}
+                                  </div>
                                 </div>
-                              </div>
-                            ))}
+                              ))}
+                            </div>
                           </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
 
-                {/* Distribution Status */}
+                  {/* Best Match Buyers */}
+                  <div className="bg-brand-50 rounded-lg p-4 mb-6">
+                    <h3 className="font-semibold text-slate-900 mb-3 flex items-center justify-between">
+                      Best Match Buyers
+                      {loadingMatches && <span className="text-xs font-normal text-brand-600 animate-pulse">Analyzing...</span>}
+                    </h3>
+                    {leadMatches.length === 0 ? (
+                      <p className="text-sm text-slate-500">{loadingMatches ? 'Matching with active buyers...' : 'No active buyers found.'}</p>
+                    ) : (
+                      <div className="space-y-3">
+                        {leadMatches.map((match, idx) => (
+                          <div key={idx} className="p-3 bg-white border border-brand-100 rounded-xl shadow-sm">
+                            <div className="flex justify-between items-start mb-2">
+                              <div>
+                                <h4 className="font-bold text-slate-900 text-sm">{match.buyer_name}</h4>
+                                <p className="text-[10px] text-slate-400 font-bold uppercase">{match.company_name}</p>
+                              </div>
+                              <div className="text-right">
+                                <div className="text-sm font-bold text-brand-600">{match.match_score}%</div>
+                                <div className="text-[9px] text-slate-400 font-bold uppercase">Match</div>
+                              </div>
+                            </div>
+                            <ul className="space-y-1 mb-3">
+                              {match.reasons.map((reason: string, i: number) => (
+                                <li key={i} className="text-[10px] text-slate-600 flex items-center gap-1">
+                                  <svg className="w-3 h-3 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                  </svg>
+                                  {reason}
+                                </li>
+                              ))}
+                            </ul>
+                            <button
+                              onClick={() => {
+                                setBuyerEmail(match.buyer_id); // Using ID as proxy or update mark sold to handle buyer selection
+                                setSellAmount(match.max_price.toString());
+                                setShowSellModal(true);
+                              }}
+                              className="w-full py-1.5 bg-brand-600 text-white text-[10px] font-bold rounded-lg hover:bg-brand-700 transition-colors"
+                            >
+                              Sell Lead for ${match.max_price}
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Distribution Status */}
                 <div className="bg-green-50 rounded-lg p-4 mb-6">
                   <h3 className="font-semibold text-gray-900 mb-2">Distribution Status</h3>
                   <div className="flex items-center gap-3">

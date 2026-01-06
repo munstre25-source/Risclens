@@ -3,23 +3,24 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AssessmentCTA from '@/components/AssessmentCTA';
-import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
 
 export const metadata: Metadata = {
-  title: 'SOC 2 Type I vs Type II Readiness | RiscLens',
-  description: 'Plain-English SOC 2 Type I vs Type II comparison. Understand scope, timelines, and when each makes sense before choosing an audit path.',
+  title: 'SOC 2 Type I vs Type II: Which is right for you? | RiscLens',
+  description: 'Understand the core differences between SOC 2 Type I (point-in-time) and Type II (6-12 month window). Map your sales needs to audit timelines.',
 };
 
-export default function Soc2TypePage() {
+export default function Soc2TypeComparisonPage() {
   return (
     <>
       <Header />
       <main className="min-h-screen flex flex-col bg-slate-100">
         <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8">
-            <Breadcrumbs items={[{ label: 'SOC 2', href: '/soc-2' }, { label: 'Type I vs Type II', href: '/soc-2-type-i-vs-type-ii' }]} />
+            <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'SOC 2', href: '/soc-2' }, { label: 'Type I vs Type II' }]} />
           </div>
+
           <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 lg:py-14 text-center">
             <h1 className="text-4xl sm:text-5xl font-semibold text-slate-900 mb-6 leading-tight tracking-tight">
               SOC 2 Type I vs Type II Readiness

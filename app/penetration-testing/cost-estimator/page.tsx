@@ -3,6 +3,7 @@ import Script from 'next/script';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import PentestEstimatorForm from '@/components/pentest/PentestEstimatorForm';
+import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { HowItWorksAccordion } from '@/components/HowItWorksAccordion';
 import { SoftwareApplicationSchema } from '@/components/SoftwareApplicationSchema';
 import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
@@ -52,7 +53,16 @@ export default function PentestEstimatorPage() {
       <Script id="pentest-estimator-breadcrumbs" type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <Header />
         <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-14 lg:py-20 text-center space-y-3">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-8">
+            <Breadcrumb 
+              items={[
+                { label: 'Home', href: '/' },
+                { label: 'Pentest', href: '/penetration-testing' },
+                { label: 'Cost Estimator' }
+              ]} 
+            />
+          </div>
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 pb-14 lg:pb-20 pt-4 text-center space-y-3">
             <p className="text-sm font-semibold uppercase tracking-wide text-brand-700">Penetration Testing</p>
             <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 leading-tight">Pentest Cost Estimator</h1>
             <p className="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">

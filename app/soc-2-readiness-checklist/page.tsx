@@ -4,7 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AssessmentCTA from '@/components/AssessmentCTA';
 import ChecklistDownloadForm from '@/components/ChecklistDownloadForm';
-import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
 
 export const metadata: Metadata = {
@@ -32,7 +32,7 @@ export default function Soc2ReadinessChecklistPage() {
       <main className="min-h-screen flex flex-col bg-slate-100">
         <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8">
-            <Breadcrumbs items={[{ label: 'SOC 2', href: '/soc-2' }, { label: 'Readiness Checklist', href: '/soc-2-readiness-checklist' }]} />
+            <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'SOC 2', href: '/soc-2' }, { label: 'Readiness Checklist' }]} />
           </div>
           <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 lg:py-14 text-center">
             <h1 className="text-4xl sm:text-5xl font-semibold text-slate-900 mb-6 leading-tight tracking-tight">

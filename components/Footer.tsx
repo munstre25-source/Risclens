@@ -48,9 +48,10 @@ export default function Footer() {
               <li><Link href="/penetration-testing" className="hover:text-white transition-colors">Pentest Hub</Link></li>
               <li><Link href="/penetration-testing/cost-estimator" className="hover:text-white transition-colors">Pentest Cost Estimator</Link></li>
               <li><Link href="/penetration-testing/scoping" className="hover:text-white transition-colors">Scoping Worksheet</Link></li>
-                <li className="pt-2 font-semibold text-slate-400">Vendor Risk</li>
-                <li><Link href="/vendor-risk-assessment" className="hover:text-white transition-colors">Vendor Risk Hub</Link></li>
-                <li><Link href="/vendor-risk-assessment/triage" className="hover:text-white transition-colors">VRA Triage Tool</Link></li>
+                  <li className="pt-2 font-semibold text-slate-400">Vendor Risk</li>
+                  <li><Link href="/compliance/directory" className="hover:text-white transition-colors font-medium text-brand-400">Security Signals Directory</Link></li>
+                  <li><Link href="/vendor-risk-assessment" className="hover:text-white transition-colors">Vendor Risk Hub</Link></li>
+                  <li><Link href="/vendor-risk-assessment/triage" className="hover:text-white transition-colors">VRA Triage Tool</Link></li>
                 <li><Link href="/vendor-risk-assessment/tiering" className="hover:text-white transition-colors">Vendor Tiering Tool</Link></li>
                 <li><Link href="/vendor-risk-assessment/questionnaire" className="hover:text-white transition-colors">VRA Questionnaire</Link></li>
                 <li><Link href="/vendor-risk-assessment/roi-calculator" className="hover:text-white transition-colors">VRA ROI Calculator</Link></li>

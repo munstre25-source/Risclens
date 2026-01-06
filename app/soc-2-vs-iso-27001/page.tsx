@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { GapCalculator } from '@/components/calculators/GapCalculator';
-import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
 
 export const metadata: Metadata = {
@@ -16,7 +16,7 @@ export default function Soc2VsIsoPage() {
       <Header />
       <main className="min-h-screen bg-slate-50 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Breadcrumbs items={[{ label: 'SOC 2', href: '/soc-2' }, { label: 'SOC 2 vs ISO 27001', href: '/soc-2-vs-iso-27001' }]} />
+          <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'SOC 2', href: '/soc-2' }, { label: 'SOC 2 vs ISO 27001' }]} />
           <div className="text-center mb-16 pt-8">
             <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl">
               ISO 27001 vs SOC 2 Gap Calculator

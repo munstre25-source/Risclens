@@ -4,6 +4,7 @@ import React from 'react';
 import PDFTemplate, { PDFLeadData } from '@/pdf/PDFTemplate';
 import ROIPDFTemplate, { ROIPDFData } from '@/pdf/ROIPDFTemplate';
 import GenericLeadMagnetPDF, { GenericPDFData } from '@/pdf/GenericLeadMagnetPDF';
+import { auditLog } from './audit-logger';
 
 // =============================================================================
 // PDF GENERATION CONFIGURATION
@@ -29,12 +30,40 @@ export interface PDFGenerationResult {
   error?: string;
 }
 
+interface PDFOpts {
+  lead_id?: string;
+  debug_session_id?: string;
+}
+
 /**
  * Render PDF Template to HTML string
  */
-export async function renderPDFToHTML(lead: any, templateType: string = 'readiness'): Promise<string> {
+export async function renderPDFToHTML(lead: any, templateType: string = 'readiness', opts: PDFOpts = {}): Promise<string> {
   const { renderToStaticMarkup } = await import('react-dom/server');
   
+  // Log payload snapshot (keys + nulls only)
+    const keys = Object.keys(lead || {});
+    const nullKeys = keys.filter(k => lead[k] === null || lead[k] === undefined);
+    
+    // Calculate sizes of values
+    const sizes: Record<string, number> = {};
+    keys.forEach(k => {
+      const val = lead[k];
+      if (typeof val === 'string') sizes[k] = val.length;
+      else if (Array.isArray(val)) sizes[k] = val.length;
+      else if (val && typeof val === 'object') sizes[k] = Object.keys(val).length;
+    });
+    
+    await auditLog('pdf_generation_payload_snapshot', {
+      template_type: templateType,
+      keys_present: keys,
+      null_keys: nullKeys,
+      sizes,
+      lead_id: lead.id,
+      company_present: !!(lead.company_name || lead.company),
+      email_present: !!lead.email
+    }, opts);
+
   let element;
   let title = 'RiscLens Report';
 
@@ -44,6 +73,62 @@ export async function renderPDFToHTML(lead: any, templateType: string = 'readine
   } else if (templateType === 'readiness') {
     element = React.createElement(PDFTemplate, { lead });
     title = 'SOC 2 Readiness Report';
+  } else if (templateType === 'audit_delay') {
+    const genericData: GenericPDFData = {
+      id: lead.id || 'N/A',
+      company_name: lead.company_name || lead.company || 'Organization',
+      email: lead.email || 'N/A',
+      title: 'SOC 2 Audit Delay Analysis',
+      subtitle: 'Revenue Risk & Timeline Assessment',
+      description: 'An analysis of the financial and operational impact of SOC 2 audit delays on your organization.',
+      resourceName: 'Audit Delay Report',
+      data: {
+        company_size: lead.num_employees || 'Not specified',
+        current_stage: lead.lead_payload?.inputs?.soc2Stage || 'Not specified',
+        delayed_revenue_low: lead.lead_payload?.result?.delayedRevenueLow || '0',
+        delayed_revenue_high: lead.lead_payload?.result?.delayedRevenueHigh || '0',
+        impact_summary: lead.lead_payload?.result?.impactSummary || 'N/A',
+      },
+    };
+    element = React.createElement(GenericLeadMagnetPDF, { data: genericData });
+    title = genericData.title;
+  } else if (templateType === 'pentest_estimate') {
+    const genericData: GenericPDFData = {
+      id: lead.id || 'N/A',
+      company_name: lead.company_name || lead.company || 'Organization',
+      email: lead.email || 'N/A',
+      title: 'Pentest Scoping & Estimate',
+      subtitle: 'Technical Assessment Scoping Report',
+      description: 'A preliminary scoping report and cost estimate for your upcoming penetration test.',
+      resourceName: 'Pentest Scoping Report',
+      data: {
+        test_type: lead.lead_payload?.test_type || 'General Pentest',
+        scope_size: lead.lead_payload?.scope_size || 'Standard',
+        timeline: lead.lead_payload?.timeline || 'Not specified',
+        compliance_target: lead.lead_payload?.compliance || 'SOC 2',
+        environment: lead.lead_payload?.environment || 'Cloud/SaaS',
+      },
+    };
+    element = React.createElement(GenericLeadMagnetPDF, { data: genericData });
+    title = genericData.title;
+  } else if (templateType === 'vendor_tiering') {
+    const genericData: GenericPDFData = {
+      id: lead.id || 'N/A',
+      company_name: lead.company_name || lead.company || 'Organization',
+      email: lead.email || 'N/A',
+      title: 'Vendor Risk Tiering Report',
+      subtitle: 'Third-Party Risk Management Assessment',
+      description: 'A risk-based tiering assessment for a critical vendor, mapping security requirements to operational criticality.',
+      resourceName: 'Vendor Assessment Report',
+      data: {
+        vendor_name: lead.lead_payload?.vendor_name || 'Vendor',
+        assigned_tier: lead.lead_payload?.tier || 'Unknown',
+        requirements: lead.lead_payload?.requirements || [],
+        monitoring_cadence: lead.lead_payload?.monitoring_cadence || 'Annual',
+      },
+    };
+    element = React.createElement(GenericLeadMagnetPDF, { data: genericData });
+    title = genericData.title;
   } else {
     // Handle Generic Lead Magnets
     const genericData: GenericPDFData = {
@@ -185,17 +270,42 @@ export async function generatePdf(html: string): Promise<Buffer> {
 /**
  * Generate PDF from lead data
  */
-export async function generatePDF(lead: any, templateType: string = 'readiness'): Promise<PDFGenerationResult> {
+export async function generatePDF(lead: any, templateType: string = 'readiness', opts: PDFOpts = {}): Promise<PDFGenerationResult> {
+  const startTime = Date.now();
+  await auditLog('pdf_generation_started', {
+    template_type: templateType,
+    lead_id: lead.id
+  }, opts);
+
   try {
-    const html = await renderPDFToHTML(lead, templateType);
+    const html = await renderPDFToHTML(lead, templateType, opts);
     const pdfBuffer = await generatePdf(html);
+
+    await auditLog('pdf_generation_succeeded', {
+      pdf_bytes: pdfBuffer.length,
+      duration_ms: Date.now() - startTime
+    }, opts);
 
     return {
       success: true,
       pdfBuffer,
     };
-  } catch (error) {
+  } catch (error: any) {
     console.error('PDF generation failed:', error);
+    
+    // Attempt to identify failing field hint
+    let failing_field_hint = 'unknown';
+    if (error.message.includes('toLowerCase')) {
+      failing_field_hint = 'Possibly null value passed to toLowerCase()';
+    }
+
+    await auditLog('pdf_generation_error', {
+      error_message: error.message,
+      stack: error.stack,
+      failing_field_hint,
+      duration_ms: Date.now() - startTime
+    }, opts);
+
     return {
       success: false,
       error: error instanceof Error ? error.message : 'PDF generation failed',
@@ -210,7 +320,8 @@ export async function generatePDF(lead: any, templateType: string = 'readiness')
 export async function uploadPDFToStorage(
   pdfBuffer: Buffer,
   fileName: string,
-  leadId: string
+  leadId: string,
+  opts: PDFOpts = {}
 ): Promise<{ path: string; signedUrl: string }> {
   const { getSupabaseAdmin } = await import('./supabase');
   const supabase = getSupabaseAdmin();
@@ -226,6 +337,10 @@ export async function uploadPDFToStorage(
 
   if (uploadError) {
     console.error('Failed to upload PDF:', uploadError);
+    await auditLog('pdf_upload_error', {
+      error_message: uploadError.message,
+      file_path: filePath
+    }, opts);
     throw new Error(`Storage error: ${uploadError.message}`);
   }
 
@@ -250,7 +365,7 @@ export async function uploadPDFToStorage(
  * Generate a fresh signed URL from an existing pdf_path
  * Use this when sending emails to ensure the URL is valid
  */
-export async function createSignedUrlFromPath(pdfPath: string, leadId: string): Promise<string> {
+export async function createSignedUrlFromPath(pdfPath: string, leadId: string, opts: PDFOpts = {}): Promise<string> {
   const { getSupabaseAdmin } = await import('./supabase');
   const supabase = getSupabaseAdmin();
 
@@ -260,6 +375,10 @@ export async function createSignedUrlFromPath(pdfPath: string, leadId: string): 
 
   if (signedError || !signedData?.signedUrl) {
     console.error('Failed to create signed URL from path:', signedError);
+    await auditLog('pdf_signed_url_error', {
+      error_message: signedError?.message,
+      pdf_path: pdfPath
+    }, opts);
     throw new Error(`Signed URL error: ${signedError?.message || 'Unknown error'}`);
   }
 
@@ -272,14 +391,14 @@ export async function createSignedUrlFromPath(pdfPath: string, leadId: string): 
  * Generate PDF for a lead and upload to storage
  * Returns both the storage path (for DB) and a signed URL (for immediate use)
  */
-export async function generateAndUploadPDF(lead: any, templateType: string = 'readiness'): Promise<{
+export async function generateAndUploadPDF(lead: any, templateType: string = 'readiness', opts: PDFOpts = {}): Promise<{
   success: boolean;
   pdfPath?: string;
   pdfUrl?: string;
   error?: string;
 }> {
   // Generate PDF
-  const result = await generatePDF(lead, templateType);
+  const result = await generatePDF(lead, templateType, opts);
 
   if (!result.success || !result.pdfBuffer) {
     return {
@@ -291,7 +410,7 @@ export async function generateAndUploadPDF(lead: any, templateType: string = 're
   // Upload to storage
   try {
     const fileName = `${lead.id}-${Date.now()}.pdf`;
-    const { path, signedUrl } = await uploadPDFToStorage(result.pdfBuffer, fileName, lead.id);
+    const { path, signedUrl } = await uploadPDFToStorage(result.pdfBuffer, fileName, lead.id, opts);
 
     return {
       success: true,

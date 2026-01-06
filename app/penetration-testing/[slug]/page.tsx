@@ -4,6 +4,7 @@ import Script from 'next/script';
 import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { getPentestPage, pentestPages } from '@/lib/pentestPages';
 
 interface PageProps {
@@ -87,10 +88,20 @@ export default function PentestDetailPage({ params }: PageProps) {
         />
       )}
 
-      <main className="min-h-screen flex flex-col bg-slate-100">
-        <Header />
-        <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 lg:py-20 text-center">
+        <main className="min-h-screen flex flex-col bg-slate-100">
+          <Header />
+          <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8">
+              <Breadcrumb 
+                items={[
+                  { label: 'Home', href: '/' },
+                  { label: 'Pentest', href: '/penetration-testing' },
+                  { label: page.title }
+                ]} 
+              />
+            </div>
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 pb-14 lg:pb-20 pt-4 text-center">
+
             <p className="text-sm font-semibold uppercase tracking-wide text-brand-700 mb-3">Penetration Testing</p>
             <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-5 leading-tight">
               {page.title}

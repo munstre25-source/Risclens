@@ -13,6 +13,13 @@ The `MonetizationCTA` component is integrated into all calculator result views:
 - **Pentest Estimator**: `components/pentest/PentestEstimatorResults.tsx`
 - **Vendor Risk (VRA)**: `components/vendor-risk/VendorRiskResults.tsx`
 
+## Phase 2: Realization (Sale)
+The path is completed when a lead is marked as "Sold" in the Admin dashboard.
+- **Action**: Admin uses the "Mark Sold" modal in the Lead details page.
+- **Tracking**: Logs the sale amount and buyer email.
+- **Event**: Triggers a `REVENUE_EVENT` for final ROI calculation.
+- **Promotion**: The lead is now managed in the `/admin/buyers` section.
+
 ## Expected Buyer Outcome
 - **Deal Velocity**: Unblock enterprise sales cycles faster with a vetted audit path.
 - **Audit Readiness**: Align with an auditor who understands their specific tech stack and scope.

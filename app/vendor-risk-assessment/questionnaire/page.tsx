@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { VRAQuestionnaireBuilder } from '@/components/vendor-risk/VRAQuestionnaireBuilder';
+import { Breadcrumb } from '@/components/ui/Breadcrumb';
 
 export const metadata: Metadata = {
   title: 'Vendor Risk Questionnaire Tool | RiscLens',
@@ -28,7 +29,16 @@ export default function VendorRiskQuestionnairePage() {
       <Header />
       <main className="min-h-screen flex flex-col bg-slate-100">
           <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 py-16 lg:py-22 text-center space-y-4">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8">
+              <Breadcrumb 
+                items={[
+                  { label: 'Home', href: '/' },
+                  { label: 'Vendor Risk', href: '/vendor-risk-assessment' },
+                  { label: 'Questionnaire' }
+                ]} 
+              />
+            </div>
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 lg:py-14 text-center space-y-4">
               <div className="inline-flex items-center gap-2 bg-brand-50 text-brand-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mx-auto">
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 10V3L4 14h7v7l9-11h-7z" />

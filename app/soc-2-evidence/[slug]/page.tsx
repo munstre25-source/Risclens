@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AssessmentCTA from '@/components/AssessmentCTA';
+import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { evidenceGuides, getEvidenceGuide } from '@/lib/soc2Evidence';
 
 interface PageProps {
@@ -59,7 +60,17 @@ export default function EvidencePage({ params }: PageProps) {
       <Script id={`faq-${guide.slug}`} type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <Header />
       <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-14 lg:py-20 text-center space-y-4">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-8">
+          <Breadcrumb 
+            items={[
+              { label: 'Home', href: '/' },
+              { label: 'SOC 2', href: '/soc-2' },
+              { label: 'Evidence', href: '/soc-2-evidence/vault' },
+              { label: guide.title }
+            ]} 
+          />
+        </div>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 pb-14 lg:pb-20 pt-4 text-center space-y-4">
           <p className="text-sm font-semibold uppercase tracking-wide text-brand-700">SOC 2 Evidence Pack</p>
           <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 leading-tight">{guide.title}</h1>
           <p className="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">{guide.description}</p>

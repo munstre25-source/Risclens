@@ -4,6 +4,7 @@ import { generateAndUploadPDF } from '@/lib/pdf';
 import { applyRateLimit } from '@/lib/rate-limit';
 import { isValidUUID } from '@/lib/validation';
 import { calculateLeadScore } from '@/lib/scoring';
+import { auditLog } from '@/lib/audit-logger';
 
 // POST /api/generate-pdf - Generate PDF for a lead
 export async function POST(request: NextRequest) {
@@ -11,9 +12,11 @@ export async function POST(request: NextRequest) {
   const rateLimitResponse = applyRateLimit(request);
   if (rateLimitResponse) return rateLimitResponse;
 
-  try {
-    const { lead_id, template, data: customData } = await request.json();
+  const body = await request.json().catch(() => ({}));
+  const { lead_id, template, data: customData, debug_session_id } = body;
+  const opts = { lead_id, debug_session_id, route: '/api/generate-pdf' };
 
+  try {
     // Validate lead_id
     if (!lead_id || !isValidUUID(lead_id)) {
       return NextResponse.json(
@@ -23,14 +26,20 @@ export async function POST(request: NextRequest) {
     }
 
     // Log PDF generation start
-    await logAuditEvent('pdf_generation_started', {
+    await auditLog('pdf_generation_started', {
       lead_id,
+      template: template || 'readiness',
       timestamp: new Date().toISOString(),
-    });
+    }, opts);
 
     // Fetch lead from database
     const lead = await getLeadById(lead_id);
     if (!lead) {
+      await auditLog('pdf_generation_error', {
+        error_message: 'Lead not found',
+        lead_id,
+        failing_field_hint: 'lead_id'
+      }, opts);
       return NextResponse.json(
         { success: false, error: 'Lead not found' },
         { status: 404 }
@@ -39,6 +48,11 @@ export async function POST(request: NextRequest) {
 
     // Check if lead has email set (required for PDF delivery)
     if (!lead.email) {
+      await auditLog('pdf_generation_error', {
+        error_message: 'Lead has no email',
+        lead_id,
+        failing_field_hint: 'email'
+      }, opts);
       return NextResponse.json(
         { success: false, error: 'Lead has no email. Set email first via /api/lead/set-email.' },
         { status: 400 }
@@ -51,7 +65,7 @@ export async function POST(request: NextRequest) {
       
       // Import createSignedUrlFromPath dynamically
       const { createSignedUrlFromPath } = await import('@/lib/pdf');
-      const freshSignedUrl = await createSignedUrlFromPath(lead.pdf_path, lead_id);
+      const freshSignedUrl = await createSignedUrlFromPath(lead.pdf_path, lead_id, opts);
       
       // Update cached pdf_url with fresh signed URL
       await updateLead(lead_id, { pdf_url: freshSignedUrl });
@@ -121,7 +135,7 @@ export async function POST(request: NextRequest) {
         recommendation: roiData.recommendation,
         breakdown: roiData.breakdown,
         frameworks: lead.frameworks || [],
-      }, 'roi');
+      }, 'roi', opts);
     } else if (templateType === 'readiness') {
       pdfResult = await generateAndUploadPDF({
         ...leadDataForTemplate,
@@ -132,7 +146,7 @@ export async function POST(request: NextRequest) {
         estimated_cost_low: estimatedLow,
         estimated_cost_high: estimatedHigh,
         lead_score: leadScore,
-      }, 'readiness');
+      }, 'readiness', opts);
     } else {
       // Handle custom templates (Pentest SOW, VRA Magnets, etc.)
       const magnetConfigs: Record<string, any> = {
@@ -178,7 +192,7 @@ export async function POST(request: NextRequest) {
         ...leadDataForTemplate,
         ...config,
         data: customData,
-      }, templateType);
+      }, templateType, opts);
     }
 
     if (!pdfResult.success || !pdfResult.pdfPath || !pdfResult.pdfUrl) {

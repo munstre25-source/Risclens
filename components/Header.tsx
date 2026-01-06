@@ -243,8 +243,8 @@ export default function Header() {
     'block px-4 py-2.5 text-sm font-semibold text-brand-700 hover:bg-brand-50 transition-colors';
   const sectionLabelClass = 'px-4 pt-3 pb-1 text-[11px] font-semibold uppercase tracking-wider text-slate-400';
 
-  const Badge = () => (
-    <span className="text-[10px] font-bold text-brand-700 bg-brand-50 px-1.5 py-0.5 rounded">Tool</span>
+  const Badge = ({ label }: { label?: string }) => (
+    <span className="text-[10px] font-bold text-brand-700 bg-brand-50 px-1.5 py-0.5 rounded">{label || 'Tool'}</span>
   );
 
   return (
@@ -299,16 +299,16 @@ export default function Header() {
                 {socMenu.overview.label}
               </Link>
               <div className={sectionLabelClass}>Tools</div>
-              <Link href={socMenu.primary.href} role="menuitem" className={menuItemWithBadgeClass}>
-                {socMenu.primary.label}
-                <Badge />
-              </Link>
-              {socMenu.tools.map((item) => (
-                <Link key={item.href} href={item.href} role="menuitem" className={menuItemWithBadgeClass}>
-                  {item.label}
-                  <Badge />
+                <Link href={socMenu.primary.href} role="menuitem" className={menuItemWithBadgeClass}>
+                  {socMenu.primary.label}
+                  <Badge label={socMenu.primary.badge} />
                 </Link>
-              ))}
+                {socMenu.tools.map((item) => (
+                  <Link key={item.href} href={item.href} role="menuitem" className={menuItemWithBadgeClass}>
+                    {item.label}
+                    <Badge label={item.badge} />
+                  </Link>
+                ))}
               <div className="my-1 border-t border-slate-100" />
               <div className={sectionLabelClass}>Guides</div>
               {socMenu.guides.map((item) => (
@@ -363,16 +363,16 @@ export default function Header() {
                 {pentestMenu.overview.label}
               </Link>
               <div className={sectionLabelClass}>Tools</div>
-              <Link href={pentestMenu.primary.href} role="menuitem" className={menuItemWithBadgeClass}>
-                {pentestMenu.primary.label}
-                <Badge />
-              </Link>
-              {pentestMenu.tools.map((item) => (
-                <Link key={item.href} href={item.href} role="menuitem" className={menuItemWithBadgeClass}>
-                  {item.label}
-                  <Badge />
+                <Link href={pentestMenu.primary.href} role="menuitem" className={menuItemWithBadgeClass}>
+                  {pentestMenu.primary.label}
+                  <Badge label={pentestMenu.primary.badge} />
                 </Link>
-              ))}
+                {pentestMenu.tools.map((item) => (
+                  <Link key={item.href} href={item.href} role="menuitem" className={menuItemWithBadgeClass}>
+                    {item.label}
+                    <Badge label={item.badge} />
+                  </Link>
+                ))}
               <div className="my-1 border-t border-slate-100" />
               <div className={sectionLabelClass}>Guides</div>
               {pentestMenu.guides.map((item) => (
@@ -420,16 +420,16 @@ export default function Header() {
                 {vendorMenu.overview.label}
               </Link>
               <div className={sectionLabelClass}>Tools</div>
-              <Link href={vendorMenu.primary.href} role="menuitem" className={menuItemWithBadgeClass}>
-                {vendorMenu.primary.label}
-                <Badge />
-              </Link>
-              {vendorMenu.tools.map((item) => (
-                <Link key={item.href} href={item.href} role="menuitem" className={menuItemWithBadgeClass}>
-                  {item.label}
-                  <Badge />
+                <Link href={vendorMenu.primary.href} role="menuitem" className={menuItemWithBadgeClass}>
+                  {vendorMenu.primary.label}
+                  <Badge label={vendorMenu.primary.badge} />
                 </Link>
-              ))}
+                {vendorMenu.tools.map((item) => (
+                  <Link key={item.href} href={item.href} role="menuitem" className={menuItemWithBadgeClass}>
+                    {item.label}
+                    <Badge label={item.badge} />
+                  </Link>
+                ))}
               <div className="my-1 border-t border-slate-100" />
               <div className={sectionLabelClass}>Guides</div>
               {vendorMenu.guides.map((item) => (
@@ -608,16 +608,16 @@ export default function Header() {
                         {socMenu.overview.label}
                       </Link>
                       <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 pt-2">Tools</p>
-                      <Link href={socMenu.primary.href} className="flex items-center justify-between text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
-                        {socMenu.primary.label}
-                        <Badge />
-                      </Link>
-                      {socMenu.tools.map((item) => (
-                        <Link key={item.href} href={item.href} className="flex items-center justify-between text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
-                          {item.label}
-                          <Badge />
+                        <Link href={socMenu.primary.href} className="flex items-center justify-between text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
+                          {socMenu.primary.label}
+                          <Badge label={socMenu.primary.badge} />
                         </Link>
-                      ))}
+                        {socMenu.tools.map((item) => (
+                          <Link key={item.href} href={item.href} className="flex items-center justify-between text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
+                            {item.label}
+                            <Badge label={item.badge} />
+                          </Link>
+                        ))}
                       <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 pt-2">Guides</p>
                       {socMenu.guides.map((item) => (
                         <Link key={item.href} href={item.href} className="block text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
@@ -653,16 +653,16 @@ export default function Header() {
                         {pentestMenu.overview.label}
                       </Link>
                       <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 pt-2">Tools</p>
-                      <Link href={pentestMenu.primary.href} className="flex items-center justify-between text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
-                        {pentestMenu.primary.label}
-                        <Badge />
-                      </Link>
-                      {pentestMenu.tools.map((item) => (
-                        <Link key={item.href} href={item.href} className="flex items-center justify-between text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
-                          {item.label}
-                          <Badge />
+                        <Link href={pentestMenu.primary.href} className="flex items-center justify-between text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
+                          {pentestMenu.primary.label}
+                          <Badge label={pentestMenu.primary.badge} />
                         </Link>
-                      ))}
+                        {pentestMenu.tools.map((item) => (
+                          <Link key={item.href} href={item.href} className="flex items-center justify-between text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
+                            {item.label}
+                            <Badge label={item.badge} />
+                          </Link>
+                        ))}
                       <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 pt-2">Guides</p>
                       {pentestMenu.guides.map((item) => (
                         <Link key={item.href} href={item.href} className="block text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
@@ -698,16 +698,16 @@ export default function Header() {
                         {vendorMenu.overview.label}
                       </Link>
                       <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 pt-2">Tools</p>
-                      <Link href={vendorMenu.primary.href} className="flex items-center justify-between text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
-                        {vendorMenu.primary.label}
-                        <Badge />
-                      </Link>
-                      {vendorMenu.tools.map((item) => (
-                        <Link key={item.href} href={item.href} className="flex items-center justify-between text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
-                          {item.label}
-                          <Badge />
+                        <Link href={vendorMenu.primary.href} className="flex items-center justify-between text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
+                          {vendorMenu.primary.label}
+                          <Badge label={vendorMenu.primary.badge} />
                         </Link>
-                      ))}
+                        {vendorMenu.tools.map((item) => (
+                          <Link key={item.href} href={item.href} className="flex items-center justify-between text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
+                            {item.label}
+                            <Badge label={item.badge} />
+                          </Link>
+                        ))}
                       <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 pt-2">Guides</p>
                       {vendorMenu.guides.map((item) => (
                         <Link key={item.href} href={item.href} className="block text-sm text-slate-700" onClick={() => setMobileOpen(false)}>

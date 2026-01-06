@@ -42,6 +42,13 @@ const faqSchema = {
 
 const SOC2_TOOLS = [
   {
+    id: 'delay',
+    href: '/soc-2-audit-delay-cost',
+    title: 'Audit Delay Cost Calculator',
+    summary: 'Estimate revenue stalled by audit timelines and enterprise deal pressure.',
+    cta: 'Calculate Delay Cost'
+  },
+  {
     id: 'readiness',
     href: '/soc-2-readiness-calculator',
     title: 'SOC 2 Readiness Calculator',
@@ -72,6 +79,7 @@ const SOC2_TOOLS = [
 ];
 
 const SOC2_GUIDES = [
+  { href: '/soc-2-audit-delays-cost', title: 'Why Audits Get Delayed', summary: 'Learn why SOC 2 timelines slip and the compounding impact on enterprise deals.' },
   { href: '/soc-2-readiness-checklist', title: 'Readiness Checklist', summary: 'A step-by-step prep list for technical, operational, and HR controls.' },
   { href: '/soc-2-evidence', title: 'Evidence Vault', summary: 'Browse common evidence requests and auditor expectations for each trust criteria.' },
   { href: '/soc-2-type-i-vs-type-ii', title: 'Type I vs Type II', summary: 'Understand the difference in scope, cost, and effort between reports.' },
@@ -124,20 +132,20 @@ export default function Soc2HubPage() {
             
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
-                href="/soc-2-readiness-calculator"
+                href="/soc-2-audit-delay-cost"
                 className="w-full sm:w-auto inline-flex justify-center items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-8 py-4 rounded-lg shadow-md transition-all text-lg"
               >
-                {messaging.soc2Hub.hero.cta}
+                Calculate Audit Delay Cost
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </Link>
 
             <Link
-              href="/compliance-roi-calculator"
+              href="/soc-2-readiness-calculator"
               className="w-full sm:w-auto inline-flex justify-center items-center gap-2 bg-white hover:bg-slate-50 text-slate-900 border border-slate-200 font-semibold px-8 py-4 rounded-lg shadow-sm transition-all text-lg"
             >
-              Calculate Compliance ROI
+              Check Readiness Score
               <svg className="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
@@ -167,7 +175,7 @@ export default function Soc2HubPage() {
             <p className="text-slate-600">Interactive calculators to de-risk your compliance journey.</p>
           </div>
           
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {SOC2_TOOLS.map((tool) => (
               <Link
                 key={tool.href}

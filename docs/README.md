@@ -3,7 +3,7 @@
 Central hub for the risclens.com product. Each document owns a specific topic—link instead of duplicating.
 
 ## Start Here
-- Product: [PRODUCT.md](PRODUCT.md) → [PRODUCT_OVERVIEW.md](PRODUCT_OVERVIEW.md)
+- Product: [PRODUCT.md](PRODUCT.md) → [PRODUCT_OVERVIEW.md](PRODUCT_OVERVIEW.md) → [REVENUE_WORKFLOW.md](REVENUE_WORKFLOW.md)
 - Developer: [DEVELOPER_WORKFLOW.md](DEVELOPER_WORKFLOW.md) → [TECHNICAL.md](TECHNICAL.md) → [ARCHITECTURE.md](ARCHITECTURE.md)
 - Ops: [RUNBOOK.md](RUNBOOK.md) → [DEPLOYMENT.md](DEPLOYMENT.md)
 - Security: [SECURITY.md](SECURITY.md) → [THREAT_MODEL.md](THREAT_MODEL.md)

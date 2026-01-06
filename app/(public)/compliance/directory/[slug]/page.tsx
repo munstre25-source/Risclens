@@ -1,0 +1,215 @@
+import React from 'react';
+import { Metadata, ResolvingMetadata } from 'next';
+import { notFound } from 'next/navigation';
+import { getSupabaseAdmin } from '@/lib/supabase';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import { SignalScore } from '@/components/compliance/SignalScore';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
+import Link from 'next/link';
+
+interface Props {
+  params: { slug: string };
+}
+
+export async function generateStaticParams() {
+  const supabase = getSupabaseAdmin();
+  const { data: companies } = await supabase
+    .from('company_signals')
+    .select('slug')
+    .eq('indexable', true);
+
+  return companies?.map((company) => ({
+    slug: company.slug,
+  })) || [];
+}
+
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const supabase = getSupabaseAdmin();
+  const { data: company } = await supabase
+    .from('company_signals')
+    .select('company_name, indexable')
+    .eq('slug', params.slug)
+    .single();
+
+  if (!company) {
+    return { title: 'Company Not Found' };
+  }
+
+  return {
+    title: `${company.company_name} Security Profile & Public Signals | RiscLens`,
+    description: `Analysis of public security disclosures, SOC 2 mentions, and transparency signals for ${company.company_name}.`,
+    robots: company.indexable ? 'index, follow' : 'noindex, nofollow',
+    alternates: {
+      canonical: `/compliance/directory/${params.slug}`,
+    },
+  };
+}
+
+export default async function CompanyProfilePage({ params }: Props) {
+  const supabase = getSupabaseAdmin();
+  
+  const { data: company, error } = await supabase
+    .from('company_signals')
+    .select('*')
+    .eq('slug', params.slug)
+    .single();
+
+  if (error || !company) {
+    notFound();
+  }
+
+  const signals = company.public_signals || {};
+
+  const signalItems = [
+    { label: 'Security page detected', value: signals.has_security_page },
+    { label: 'Trust / compliance page detected', value: signals.has_trust_page },
+    { label: 'SOC 2 publicly mentioned (claim only)', value: signals.mentions_soc2 },
+    { label: 'Compliance tooling mentioned (Vanta, Drata, Secureframe)', value: signals.mentions_compliance_tool },
+    { label: 'Responsible disclosure / bug bounty', value: signals.has_responsible_disclosure },
+    { label: 'Security contact email or page', value: signals.has_security_contact },
+  ];
+
+  return (
+    <div className="min-h-screen bg-white flex flex-col">
+      <Header />
+      
+      <main className="flex-grow">
+        {/* Hero Section */}
+        <div className="bg-gray-50 border-b border-gray-100 py-12">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <Breadcrumbs 
+              items={[
+                { label: 'Compliance', href: '/compliance' },
+                { label: 'Directory', href: '/compliance/directory' },
+                { label: company.company_name, href: `/compliance/directory/${company.slug}` },
+              ]} 
+            />
+            
+            <div className="mt-8 flex flex-col md:flex-row md:items-center justify-between gap-8">
+              <div>
+                <h1 className="text-4xl font-bold text-gray-900 mb-2">
+                  {company.company_name}
+                </h1>
+                <p className="text-xl text-gray-500 font-medium">
+                  Public Security Profile
+                </p>
+                <div className="mt-4 text-gray-600 text-lg max-w-2xl leading-relaxed">
+                  {company.ai_summary || `Analysis of publicly available security signals and disclosures for ${company.company_name}.`}
+                </div>
+              </div>
+              
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex-shrink-0">
+                <SignalScore score={company.signal_score} size="md" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Content Section */}
+        <div className="container mx-auto px-4 py-12 max-w-4xl">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            
+            {/* Main Content */}
+            <div className="md:col-span-2 space-y-12">
+              
+              {/* Public Security Signals Checklist */}
+              <section>
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">Public Security Signals</h2>
+                <div className="space-y-4">
+                  {signalItems.map((item, index) => (
+                    <div key={index} className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg border border-gray-100">
+                      <div className={`mt-0.5 flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center ${item.value ? 'bg-green-100 text-green-600' : 'bg-gray-200 text-gray-400'}`}>
+                        {item.value ? (
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                          </svg>
+                        ) : (
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        )}
+                      </div>
+                      <span className={`text-base font-medium ${item.value ? 'text-gray-900' : 'text-gray-400'}`}>
+                        {item.label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              {/* Educational Context */}
+              <section className="bg-blue-50 rounded-xl p-8 border border-blue-100">
+                <h3 className="text-xl font-bold text-blue-900 mb-4">About Public Disclosures</h3>
+                <div className="prose prose-blue text-blue-800">
+                  <p>
+                    Public disclosures help with vendor risk reviews by providing a baseline of transparency. 
+                    A lack of public disclosure does not necessarily indicate a lack of security controls, 
+                    but it may require more direct inquiry during a procurement process.
+                  </p>
+                  <p className="mt-4 font-medium italic">
+                    Note: This profile is based only on publicly observable data and automated discovery.
+                  </p>
+                </div>
+              </section>
+
+              {/* CTA */}
+              <section className="text-center py-8">
+                <Link 
+                  href="/readiness-review"
+                  className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-xl shadow-lg transition-all transform hover:-translate-y-1"
+                >
+                  Request a SOC 2 readiness review
+                </Link>
+                <p className="mt-4 text-gray-500 text-sm">
+                  Get a comprehensive internal review of your security posture and compliance gaps.
+                </p>
+              </section>
+
+            </div>
+
+            {/* Sidebar / Meta info */}
+            <div className="space-y-8">
+              <div className="p-6 bg-gray-50 rounded-xl border border-gray-100">
+                <h4 className="font-bold text-gray-900 mb-4 uppercase text-xs tracking-wider">Company Details</h4>
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-xs text-gray-400 block uppercase">Legal Name</label>
+                    <span className="font-medium text-gray-900">{company.company_name}</span>
+                  </div>
+                  <div>
+                    <label className="text-xs text-gray-400 block uppercase">Domain</label>
+                    <a href={`https://${company.domain}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline break-all">
+                      {company.domain}
+                    </a>
+                  </div>
+                  <div>
+                    <label className="text-xs text-gray-400 block uppercase">Last Updated</label>
+                    <span className="text-gray-600 text-sm">
+                      {new Date(company.updated_at).toLocaleDateString()}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-6 bg-yellow-50 rounded-xl border border-yellow-100">
+                <h4 className="font-bold text-yellow-900 mb-2 text-sm">Disclaimer</h4>
+                <p className="text-xs text-yellow-800 leading-relaxed">
+                  The "Public Security Signals Score" reflects publicly visible security disclosures only. 
+                  It is not an audit, a security rating, or a confirmation of compliance status. 
+                  Information is discovered automatically and may be incomplete.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </main>
+
+      <Footer />
+    </div>
+  );
+}

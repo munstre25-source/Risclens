@@ -6,6 +6,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AssessmentCTA from '@/components/AssessmentCTA';
 import DefinitionCallout from '@/components/DefinitionCallout';
+import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { readinessGuides, readinessGuideBySlug, Soc2GuidePage } from '@/lib/soc2Guides';
 import { AuthorBio, VerifiedBy } from '@/components/AuthorBio';
 import { authors } from '@/lib/authors';
@@ -107,10 +108,20 @@ export default function Soc2ReadinessGuidePage({ params }: PageProps) {
       <>
         <Script id={`readiness-faq-${page.slug}`} type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
         <Script id={`author-schema-${page.slug}`} type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }} />
-        <main className="min-h-screen flex flex-col bg-slate-100">
-          <Header />
-          <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 lg:py-20 text-center">
+          <main className="min-h-screen flex flex-col bg-slate-100">
+            <Header />
+            <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
+              <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8">
+                <Breadcrumb 
+                  items={[
+                    { label: 'Home', href: '/' },
+                    { label: 'SOC 2', href: '/soc-2' },
+                    { label: 'Readiness', href: '/soc-2-readiness-index' },
+                    { label: page.title }
+                  ]} 
+                />
+              </div>
+              <div className="max-w-4xl mx-auto px-4 sm:px-6 pb-14 lg:pb-20 pt-4 text-center">
               <div className="flex justify-center mb-6">
                 <VerifiedBy authorId="alex" />
               </div>

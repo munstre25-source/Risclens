@@ -2,13 +2,18 @@ import { NextRequest, NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 import { getSavedFilters, createSavedFilter, deleteSavedFilter } from '@/lib/supabase';
 
+import { validateAdminAuth } from '@/lib/validation';
+
 const ADMIN_SECRET = process.env.ADMIN_SECRET || '';
 
 function validateAuth(request: NextRequest): boolean {
-  const headersList = headers();
-  const authHeader = headersList.get('Authorization');
-  const token = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : authHeader;
-  return token === ADMIN_SECRET;
+  const authHeader = request.headers.get('authorization') || request.headers.get('x-admin-secret');
+  const cookieToken = request.cookies.get('admin_token')?.value;
+  
+  return (
+    (Boolean(ADMIN_SECRET) && cookieToken === ADMIN_SECRET) ||
+    (Boolean(ADMIN_SECRET) && validateAdminAuth(authHeader, ADMIN_SECRET))
+  );
 }
 
 // GET /api/admin/filters - Get all saved filters

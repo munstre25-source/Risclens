@@ -37,6 +37,7 @@ export const HUB_ROUTES = [
   '/soc-2-sales',
   '/soc-2-evidence/vault',
   '/learn/soc-2-readiness',
+  '/compliance/directory',
 ];
 
 export const LEGAL_ROUTES = [
@@ -45,6 +46,7 @@ export const LEGAL_ROUTES = [
 ];
 
 export const COMMERCIAL_ROUTES = [
+  '/soc-2-audit-delays-cost',
   '/about',
   '/security',
   '/methodology',

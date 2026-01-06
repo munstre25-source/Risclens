@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { Breadcrumb } from '@/components/ui/Breadcrumb';
 
 type RelatedLink = { href: string; label: string };
 
@@ -32,10 +32,11 @@ export function VendorRiskIndustryPage({
 
       <section className="bg-white border-b border-slate-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8">
-          <Breadcrumbs 
+          <Breadcrumb 
             items={[
-              { label: 'Vendor Risk Assessment', href: '/vendor-risk-assessment' },
-              { label: `VRA for ${industry}`, href: '#' }
+              { label: 'Home', href: '/' },
+              { label: 'Vendor Risk', href: '/vendor-risk-assessment' },
+              { label: industry }
             ]} 
           />
         </div>

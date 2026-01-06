@@ -7,6 +7,7 @@ import { VendorRiskRelatedLinks } from '@/components/vendor-risk/VendorRiskRelat
 import DefinitionCallout from '@/components/DefinitionCallout';
 import CommonForIndustries from '@/components/CommonForIndustries';
 import { HowItWorksButton } from '@/components/HowItWorksButton';
+import { Breadcrumb } from '@/components/ui/Breadcrumb';
 
 import { messaging } from '@/src/content/messaging';
 
@@ -82,9 +83,16 @@ export default function VendorRiskAssessmentHubPage() {
     <main className="min-h-screen flex flex-col bg-slate-100">
       <Script id="vra-hub-faq" type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <Header />
-
       <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-14 lg:py-20 text-center space-y-5">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-8">
+          <Breadcrumb 
+            items={[
+              { label: 'Home', href: '/' },
+              { label: 'Vendor Risk' }
+            ]} 
+          />
+        </div>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 pb-14 lg:pb-20 pt-4 text-center space-y-5">
           <p className="text-sm font-semibold uppercase tracking-wide text-brand-700">Vendor Risk Assessment</p>
           <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 leading-tight">
             {messaging.vendorRisk.hero.headline}

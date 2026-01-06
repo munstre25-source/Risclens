@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
 
 export const metadata: Metadata = {
@@ -28,9 +28,15 @@ export default function EvidenceVaultPage() {
       <main className="min-h-screen flex flex-col bg-slate-100">
         <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8">
-            <Breadcrumbs items={[{ label: 'SOC 2', href: '/soc-2' }, { label: 'Evidence Vault', href: '/soc-2-evidence/vault' }]} />
+            <Breadcrumb 
+              items={[
+                { label: 'Home', href: '/' },
+                { label: 'SOC 2', href: '/soc-2' },
+                { label: 'Evidence Vault' }
+              ]} 
+            />
           </div>
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 lg:py-14 text-center space-y-4">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 pb-10 lg:pb-14 pt-4 text-center space-y-4">
             <p className="text-sm font-semibold uppercase tracking-wide text-brand-700">SOC 2 Evidence</p>
             <h1 className="text-4xl sm:text-5xl font-semibold text-slate-900 leading-tight">Build a SOC 2 Evidence Vault</h1>
             <p className="text-lg text-slate-700 max-w-3xl mx-auto leading-relaxed">

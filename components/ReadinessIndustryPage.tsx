@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import ReadinessNav from '@/components/ReadinessNav';
 import AboutSection from '@/components/AboutSection';
 import { ReactNode } from 'react';
 
@@ -46,10 +47,11 @@ export default function ReadinessIndustryPage({
     <main className="min-h-screen flex flex-col bg-slate-100">
       <Header />
 
-      {/* Hero Section */}
-      <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 lg:py-24 text-center">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mb-6 leading-tight tracking-tight">
+        {/* Hero Section */}
+        <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 lg:py-24 text-center">
+            <ReadinessNav />
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mb-6 leading-tight tracking-tight">
             <span className="block">SOC 2 Readiness Assessment</span>
             <span className="block text-brand-600">for {industryName}</span>
           </h1>
@@ -70,15 +72,20 @@ export default function ReadinessIndustryPage({
               <li>Top next steps auditors expect (highest impact first)</li>
             </ul>
           </div>
-          <Link
-            href="/soc-2-readiness-calculator"
-            className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
-          >
-            {heroCtaText}
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </Link>
+            <div className="flex flex-col items-center gap-2">
+              <Link
+                href="/soc-2-readiness-calculator"
+                className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
+              >
+                {heroCtaText}
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+              <p className="text-xs text-slate-400">
+                No sales pitch — just clarity on what’s slowing your audit.
+              </p>
+            </div>
           <p className="mt-4 text-sm text-slate-500">
             Free • 2 minutes • Business email required
           </p>

@@ -5,7 +5,7 @@ import Footer from '@/components/Footer';
 import { VendorRiskRelatedLinks } from '@/components/vendor-risk/VendorRiskRelatedLinks';
 import VendorRiskLeadMagnet from '@/components/vendor-risk/VendorRiskLeadMagnet';
 import { FAQSection } from '@/components/FAQSection';
-import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { Breadcrumb } from '@/components/ui/Breadcrumb';
 
 interface FAQItem {
   question: string;
@@ -45,10 +45,11 @@ export function VendorRiskTopicPage({
 
       <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8">
-          <Breadcrumbs 
+          <Breadcrumb 
             items={[
-              { label: 'Vendor Risk Assessment', href: '/vendor-risk-assessment' },
-              { label: title, href: '#' }
+              { label: 'Home', href: '/' },
+              { label: 'Vendor Risk', href: '/vendor-risk-assessment' },
+              { label: title }
             ]} 
           />
         </div>

@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import CalculatorForm from '@/components/CalculatorForm';
+import ReadinessNav from '@/components/ReadinessNav';
 import { HowItWorksAccordion } from '@/components/HowItWorksAccordion';
 import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
 import { SoftwareApplicationSchema } from '@/components/SoftwareApplicationSchema';
@@ -70,26 +71,32 @@ export default function CalculatorPage() {
 
         <section className="py-10 md:py-12">
 
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 space-y-4">
-            <div id="calculator" className="space-y-6">
+          <div className="mx-auto max-w-5xl px-4 sm:px-6 space-y-4 text-center">
+            <ReadinessNav />
+            <div id="calculator" className="space-y-6 text-left">
               <div className="rounded-2xl border border-slate-200 bg-white p-6">
                 <Suspense fallback={<FormSkeleton />}>
                   <CalculatorForm />
                 </Suspense>
               </div>
               
-              <div className="rounded-xl border border-brand-100 bg-brand-50/50 p-6 flex flex-col md:flex-row items-center justify-between gap-6">
-                <div className="space-y-1">
-                  <h3 className="text-lg font-bold text-slate-900">Validate this with a compliance expert</h3>
-                  <p className="text-sm text-slate-600">Get a 15-minute technical sanity check on your readiness plan. No sales demo.</p>
+                <div className="rounded-xl border border-brand-100 bg-brand-50/50 p-6 flex flex-col md:flex-row items-center justify-between gap-6">
+                  <div className="space-y-1">
+                    <h3 className="text-lg font-bold text-slate-900">Validate this with a compliance expert</h3>
+                    <p className="text-sm text-slate-600">Get a 15-minute technical sanity check on your readiness plan.</p>
+                  </div>
+                  <div className="flex flex-col items-center gap-2">
+                    <Link 
+                      href="/readiness-review"
+                      className="btn-primary whitespace-nowrap"
+                    >
+                      Confirm Readiness
+                    </Link>
+                    <p className="text-[10px] text-slate-400">
+                      No sales pitch — just clarity on what’s slowing your audit.
+                    </p>
+                  </div>
                 </div>
-                <Link 
-                  href="/readiness-review"
-                  className="btn-primary whitespace-nowrap"
-                >
-                  Confirm Readiness
-                </Link>
-              </div>
             </div>
         </div>
       </section>
@@ -177,12 +184,13 @@ export default function CalculatorPage() {
               <HowItWorksAccordion defaultExpandedOnDesktop={false} />
                 <RelatedGuidesRow
                   links={[
-                    { href: '/compare', label: 'Compare Platforms' },
+                    { href: '/soc-2-audit-delay-cost', label: 'Audit Delay Cost Calculator' },
                     { href: '/soc-2-cost', label: 'SOC 2 Cost guide' },
                     { href: '/soc-2-timeline', label: 'SOC 2 Timeline' },
                     { href: '/penetration-testing/cost-estimator', label: 'Pentest Cost Estimator' },
                   ]}
                 />
+
 
             </div>
           </div>

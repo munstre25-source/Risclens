@@ -3,6 +3,7 @@ import { getLeadById, updateLead, logAuditEvent } from '@/lib/supabase';
 import { applyRateLimit } from '@/lib/rate-limit';
 import { isValidUUID, sanitizeString, sanitizeBoolean } from '@/lib/validation';
 import { triggerBuyerWebhooks } from '@/lib/webhooks';
+import { auditLog } from '@/lib/audit-logger';
 
 // Email regex
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -13,15 +14,23 @@ export async function POST(request: NextRequest) {
   const rateLimitResponse = applyRateLimit(request);
   if (rateLimitResponse) return rateLimitResponse;
 
+  const body = await request.json().catch(() => ({}));
+  const { lead_id, debug_session_id } = body;
+  const opts = { lead_id, debug_session_id, route: '/api/lead/set-email' };
+
   try {
-    const body = await request.json();
-    
-    const leadId = body.lead_id;
-    const email = sanitizeString(body.email).toLowerCase();
+    const emailRaw = body.email;
+    const email = sanitizeString(emailRaw || "").toLowerCase();
     const consent = sanitizeBoolean(body.consent);
 
+    await auditLog('email_pipeline_started', {
+      lead_id,
+      source: 'set_email',
+      has_email: !!email
+    }, opts);
+
     // Validate lead_id
-    if (!leadId || !isValidUUID(leadId)) {
+    if (!lead_id || !isValidUUID(lead_id)) {
       return NextResponse.json(
         { success: false, error: 'Valid lead_id is required' },
         { status: 400 }
@@ -30,6 +39,12 @@ export async function POST(request: NextRequest) {
 
     // Validate email
     if (!email || !EMAIL_REGEX.test(email)) {
+      await auditLog('email_pipeline_completed', {
+        outcome: 'failed',
+        stage_failed: 'validation',
+        error: 'Invalid email'
+      }, opts);
+
       return NextResponse.json(
         { success: false, error: 'Valid email is required' },
         { status: 400 }
@@ -45,8 +60,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Fetch lead to verify it exists
-    const lead = await getLeadById(leadId);
+    const lead = await getLeadById(lead_id);
     if (!lead) {
+      await auditLog('email_pipeline_completed', {
+        outcome: 'failed',
+        stage_failed: 'fetch_lead',
+        error: 'Lead not found'
+      }, opts);
+
       return NextResponse.json(
         { success: false, error: 'Lead not found' },
         { status: 404 }
@@ -54,7 +75,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Update lead with email and consent, and clear is_partial
-    await updateLead(leadId, {
+    await updateLead(lead_id, {
       email: email,
       consent: consent,
       is_partial: false,
@@ -62,25 +83,31 @@ export async function POST(request: NextRequest) {
     } as any);
 
     // Trigger buyer webhooks in background
-    triggerBuyerWebhooks(leadId).catch(console.error);
+    triggerBuyerWebhooks(lead_id).catch(console.error);
 
     // Log audit event
     await logAuditEvent('lead_email_set', {
-      lead_id: leadId,
+      lead_id,
       email: email,
       consent: consent,
       timestamp: new Date().toISOString(),
     });
 
-    console.log('Email set for lead:', leadId, email);
+    console.log('Email set for lead:', lead_id, email);
 
     return NextResponse.json({
       success: true,
-      lead_id: leadId,
+      lead_id,
       email: email,
     });
   } catch (error) {
     console.error('Set email error:', error);
+
+    await auditLog('email_pipeline_completed', {
+      outcome: 'failed',
+      stage_failed: 'unhandled_exception',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    }, opts);
 
     await logAuditEvent('lead_email_set_failed', {
       error: error instanceof Error ? error.message : 'Unknown error',

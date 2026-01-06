@@ -47,22 +47,42 @@ export async function POST(request: NextRequest) {
 
     const leadId = leadResult.id;
 
-    // Send the email
-    const unsubscribeToken = Buffer.from(`${email}:${leadId}`).toString('base64');
-    
-    const emailResult = await sendEmail(email, 'vendor_tiering', {
-      email,
-      company_name: 'Your Company',
-      vendor_name,
-      vendor_tier: result.tier,
-      requirements: result.requirements,
-      monitoring_cadence: result.monitoringCadence,
-      unsubscribe_token: unsubscribeToken,
-    });
+    // Generate PDF and send email
+    const { generateAndUploadPDF } = await import('@/lib/pdf');
+    const { getLeadById, updateLead } = await import('@/lib/supabase');
 
-    if (!emailResult.success) {
-      console.error('Email send failed:', emailResult.error);
-    }
+    // For Vendor Risk, we can do this background or awaited.
+    // Let's do it background to keep the response fast, similar to others.
+    (async () => {
+      try {
+        const fullLead = await getLeadById(leadId);
+        if (fullLead) {
+          const pdfResult = await generateAndUploadPDF(fullLead, 'vendor_tiering');
+          
+          if (pdfResult.success && pdfResult.pdfPath && pdfResult.pdfUrl) {
+            await updateLead(leadId, { pdf_path: pdfResult.pdfPath });
+            
+            const unsubscribeToken = Buffer.from(`${email}:${leadId}`).toString('base64');
+            const emailResult = await sendEmail(email, 'vendor_tiering', {
+              email,
+              company_name: 'Your Company',
+              vendor_name,
+              vendor_tier: result.tier,
+              requirements: result.requirements,
+              monitoring_cadence: result.monitoringCadence,
+              pdf_url: pdfResult.pdfUrl,
+              unsubscribe_token: unsubscribeToken,
+            });
+
+            if (!emailResult.success) {
+              console.error('Email send failed:', emailResult.error);
+            }
+          }
+        }
+      } catch (e) {
+        console.error('Vendor risk background processing failed:', e);
+      }
+    })();
 
     await logAuditEvent('vendor_tiering_submitted', {
       lead_id: leadId,

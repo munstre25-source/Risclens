@@ -5,7 +5,7 @@ import Footer from '@/components/Footer';
 import { VendorRiskTriageForm } from '@/components/vendor-risk/VendorRiskTriageForm';
 import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
 import { HowItWorksAccordion } from '@/components/HowItWorksAccordion';
-import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { Breadcrumb } from '@/components/ui/Breadcrumb';
 
 const lastUpdated = '2026-03-20';
 
@@ -68,7 +68,13 @@ export default function VendorRiskAssessmentTriagePage() {
       <Header />
       <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8">
-          <Breadcrumbs items={[{ label: 'Vendor Risk Assessment', href: '/vendor-risk-assessment' }, { label: 'Triage', href: '/vendor-risk-assessment/triage' }]} />
+          <Breadcrumb 
+            items={[
+              { label: 'Home', href: '/' },
+              { label: 'Vendor Risk', href: '/vendor-risk-assessment' },
+              { label: 'Triage' }
+            ]} 
+          />
         </div>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 lg:py-14 text-center space-y-4">
           <p className="text-sm font-semibold uppercase tracking-wide text-brand-700">Vendor Risk Assessment</p>

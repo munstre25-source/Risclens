@@ -23,10 +23,11 @@ What users experience across risclens.com. See [PRODUCT.md](PRODUCT.md) for posi
 - **Learning**: `/soc-2/guides`, `/learn/soc-2-readiness` (+ `[slug]`), evidence library `/soc-2-evidence/[slug]`.
 - **Policies**: `/privacy`, `/terms`. Admin: `/admin` (leads, filters, audit logs, variants, CSV export, test-mode toggles, **OODA Analytics**).
 
-## Lead Capture & Output
+## Lead Capture & Revenue Layer
 - Forms submit to server APIs (`/api/submit`, `/api/soc2-lead`, `/api/pentest-lead`, `/api/vendor-risk-assessment`) with validation and optional email capture.
 - Results can be emailed as PDF (`/api/generate-pdf`, `/api/send-email`); email is optional and gated behind consent.
-- Lead data stored in unified `leads` table; audit events in `audit_logs`; AB test impressions/submissions tracked in `ab_variants` and RPC helpers.
+- **Conversion to Buyer**: Leads are enriched via AI news extraction in the Admin UI and can be marked as "Sold" to track revenue attribution (`REVENUE_EVENTS`).
+- **Data Management**: Lead data stored in unified `leads` table; buyers in `buyers`; audit events in `audit_logs`.
 
 ## What We Do Not Do
 - No live auditor attestation, no persistent user accounts, no automated control monitoring.

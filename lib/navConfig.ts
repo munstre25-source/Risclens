@@ -10,6 +10,7 @@ export const navConfig = {
     overview: { label: 'SOC 2 Overview', href: '/soc-2' },
       primary: { label: 'Readiness Score', href: CTA.href, badge: 'Tool' },
       tools: [
+        { label: 'Audit Delay Cost', href: '/soc-2-audit-delay-cost', badge: 'Tool' },
         { label: 'Cost Calculator', href: '/compliance-roi-calculator', badge: 'Tool' },
         { label: 'Timeline Estimator', href: '/soc-2-timeline/estimator', badge: 'Tool' },
         { label: 'SOC 2 vs ISO Gap', href: '/soc-2-vs-iso-27001', badge: 'Tool' },
@@ -48,6 +49,7 @@ export const navConfig = {
     overview: { label: 'Vendor Risk Overview', href: '/vendor-risk-assessment' },
     primary: { label: 'Risk Triage', href: '/vendor-risk-assessment/triage', badge: 'Tool' },
     tools: [
+      { label: 'Security Signals Directory', href: '/compliance/directory', badge: 'New' },
       { label: 'Vendor Tiering', href: '/vendor-risk-assessment/tiering', badge: 'Tool' },
       { label: 'ROI Calculator', href: '/vendor-risk-assessment/roi-calculator', badge: 'Tool' },
       { label: 'VRA Questionnaire', href: '/vendor-risk-assessment/questionnaire', badge: 'Tool' },

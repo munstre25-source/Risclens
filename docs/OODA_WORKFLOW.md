@@ -25,8 +25,16 @@ Implement the decided changes using the "Messaging Pack" (`src/content/messaging
 - Update copy/headlines.
 - Switch variants for A/B tests.
 - Deploy new micro-disclaimers or methodology updates.
+- **Revenue Realization**: Mark high-value leads as "Sold" in the Admin UI to promote them to the Buyers list and log attribution data.
+
+## 5. Monetization Closure (Realization)
+The loop closes when an action results in a sale.
+- **Conversion**: Admin uses the `Mark Sold` tool on a lead.
+- **Tracking**: A `REVENUE_EVENT` is logged, tying the dollar amount back to the initial entry page and keyword.
+- **Feedback**: High-revenue paths are prioritized for the next OODA iteration.
 
 ## Success Metrics
 - Increase in **CRO (Conversion Rate Optimization)**: Leads / Impressions.
 - Increase in **CTR (Click-Through Rate)**: Submissions / Impressions.
+- Increase in **Revenue per Lead (RPL)**: Total Revenue / Total Leads.
 - Reduction in drop-off between `calculator_started` and `calculator_completed`.

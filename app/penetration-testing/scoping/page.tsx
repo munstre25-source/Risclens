@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ScopingWorksheet from '@/components/pentest/ScopingWorksheet';
+import { Breadcrumb } from '@/components/ui/Breadcrumb';
 
 export const metadata: Metadata = {
   title: 'Pentest Scoping Worksheet | RiscLens',
@@ -16,7 +17,16 @@ export default function ScopingPage() {
       <Header />
       
         <section className="bg-white border-b border-slate-200">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16 lg:py-20 text-center space-y-4">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-8">
+            <Breadcrumb 
+              items={[
+                { label: 'Home', href: '/' },
+                { label: 'Pentest', href: '/penetration-testing' },
+                { label: 'Scoping Worksheet' }
+              ]} 
+            />
+          </div>
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 lg:py-16 text-center space-y-4">
             <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
               Pentest Scoping Worksheet
             </h1>

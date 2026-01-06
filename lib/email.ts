@@ -3,6 +3,7 @@ import 'server-only';
 import sgMail from '@sendgrid/mail';
 import nodemailer from 'nodemailer';
 import { getSupabaseAdmin } from './supabase';
+import { auditLog } from './audit-logger';
 
 // =============================================================================
 // EMAIL CONFIGURATION
@@ -35,6 +36,148 @@ interface EmailTemplateData {
   vendor_tier?: string;
   requirements?: string[];
   monitoring_cadence?: string;
+  audit_delay_days?: number;
+  delayed_revenue?: string;
+  test_type?: string;
+  scope_size?: string;
+}
+
+/**
+ * Email: Audit Delay Result
+ */
+function getAuditDelayTemplate(data: EmailTemplateData): { subject: string; html: string; text: string } {
+  const unsubscribeUrl = `${APP_URL}/api/unsubscribe?email=${encodeURIComponent(data.email)}&token=${data.unsubscribe_token || 'placeholder'}`;
+
+  return {
+    subject: `Your SOC 2 Audit Delay Analysis`,
+    html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1f2937; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="text-align: center; margin-bottom: 30px;">
+          <h1 style="color: #0369a1; margin: 0;">RiscLens</h1>
+        </div>
+        
+        <h2 style="color: #1f2937;">Audit Delay Analysis</h2>
+        
+        <p>Your SOC 2 Audit Delay assessment is ready.</p>
+        
+        <div style="background: #fff7ed; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center; border: 1px solid #ffedd5;">
+          <p style="margin: 0 0 10px 0; color: #9a3412; font-weight: 600;">Estimated Revenue at Risk</p>
+          <div style="font-size: 32px; font-weight: bold; color: #c2410c;">${data.delayed_revenue || 'Calculating...'}</div>
+        </div>
+        
+        <p>Audit delays aren't just an IT problem—they are a revenue problem. Based on your inputs, your organization could face significant blockers in closing enterprise deals if your SOC 2 timeline slips.</p>
+        
+        <p style="text-align: center; margin-top: 30px;">
+          <a href="${data.pdf_url}" style="display: inline-block; background: #0369a1; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600;">
+            View Full Analysis (PDF)
+          </a>
+        </p>
+        
+        <p style="margin-top: 30px;">If you'd like to discuss strategies for accelerating your audit, just reply to this email.</p>
+        
+        <p>Best regards,<br>The RiscLens Team</p>
+        
+        <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
+        
+        <p style="font-size: 12px; color: #9ca3af; text-align: center;">
+          <a href="${unsubscribeUrl}" style="color: #9ca3af;">Unsubscribe</a>
+        </p>
+      </body>
+      </html>
+    `,
+    text: `
+Audit Delay Analysis
+
+Your SOC 2 Audit Delay assessment is ready.
+
+Estimated Revenue at Risk: ${data.delayed_revenue}
+
+Audit delays aren't just an IT problem—they are a revenue problem. Based on your inputs, your organization could face significant blockers in closing enterprise deals if your SOC 2 timeline slips.
+
+View your full analysis here: ${data.pdf_url}
+
+Best regards,
+The RiscLens Team
+
+---
+Unsubscribe: ${unsubscribeUrl}
+    `.trim(),
+  };
+}
+
+/**
+ * Email: Pentest Estimate Result
+ */
+function getPentestEstimateTemplate(data: EmailTemplateData): { subject: string; html: string; text: string } {
+  const unsubscribeUrl = `${APP_URL}/api/unsubscribe?email=${encodeURIComponent(data.email)}&token=${data.unsubscribe_token || 'placeholder'}`;
+
+  return {
+    subject: `Your Penetration Testing Estimate`,
+    html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1f2937; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="text-align: center; margin-bottom: 30px;">
+          <h1 style="color: #0369a1; margin: 0;">RiscLens</h1>
+        </div>
+        
+        <h2 style="color: #1f2937;">Pentest Scoping & Estimate</h2>
+        
+        <p>We've generated a preliminary estimate for your upcoming <strong>${data.test_type || 'penetration test'}</strong>.</p>
+        
+        <div style="background: #f0fdf4; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center; border: 1px solid #dcfce7;">
+          <p style="margin: 0 0 10px 0; color: #166534; font-weight: 600;">Test Scope</p>
+          <div style="font-size: 24px; font-weight: bold; color: #15803d;">${data.scope_size || 'Standard'}</div>
+        </div>
+        
+        <p>Proper scoping is the most critical step in ensuring your pentest satisfies both auditors and enterprise security reviewers.</p>
+        
+        <p style="text-align: center; margin-top: 30px;">
+          <a href="${data.pdf_url}" style="display: inline-block; background: #0369a1; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600;">
+            Download Your Scoping Report (PDF)
+          </a>
+        </p>
+        
+        <p style="margin-top: 30px;">If you have specific scoping questions or need to refine this estimate, just reply to this email.</p>
+        
+        <p>Best regards,<br>The RiscLens Team</p>
+        
+        <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
+        
+        <p style="font-size: 12px; color: #9ca3af; text-align: center;">
+          <a href="${unsubscribeUrl}" style="color: #9ca3af;">Unsubscribe</a>
+        </p>
+      </body>
+      </html>
+    `,
+    text: `
+Pentest Scoping & Estimate
+
+We've generated a preliminary estimate for your upcoming ${data.test_type}.
+
+Test Scope: ${data.scope_size}
+
+Proper scoping is the most critical step in ensuring your pentest satisfies both auditors and enterprise security reviewers.
+
+Download your scoping report here: ${data.pdf_url}
+
+Best regards,
+The RiscLens Team
+
+---
+Unsubscribe: ${unsubscribeUrl}
+    `.trim(),
+  };
 }
 
 /**
@@ -350,7 +493,7 @@ Unsubscribe: ${unsubscribeUrl}
 // EMAIL SENDING FUNCTIONS
 // =============================================================================
 
-export type EmailType = 'email1' | 'email2' | 'email3' | 'vendor_tiering';
+export type EmailType = 'email1' | 'email2' | 'email3' | 'vendor_tiering' | 'audit_delay' | 'pentest_estimate';
 
 export interface SendEmailResult {
   success: boolean;
@@ -359,49 +502,110 @@ export interface SendEmailResult {
   error?: string;
 }
 
+interface SendEmailOpts {
+  lead_id?: string;
+  debug_session_id?: string;
+  pdf_bytes?: number;
+}
+
 /**
  * Send an email using SendGrid (preferred) or SMTP fallback
  */
 export async function sendEmail(
   to: string,
   emailType: EmailType,
-  data: EmailTemplateData
+  data: EmailTemplateData,
+  opts: SendEmailOpts = {}
 ): Promise<SendEmailResult> {
+  const startTime = Date.now();
+  
+  await auditLog('email_send_started', {
+    provider: sendgridApiKey ? 'sendgrid' : 'smtp',
+    to_domain: to?.split('@')[1] || 'unknown',
+    email_type: emailType,
+    has_attachment: !!data.pdf_url,
+    pdf_bytes: opts.pdf_bytes,
+    data_keys: Object.keys(data)
+  }, opts);
+
   // Get the appropriate template
   let template: { subject: string; html: string; text: string };
-  switch (emailType) {
-    case 'email1':
-      template = getEmail1Template(data);
-      break;
-    case 'email2':
-      template = getEmail2Template(data);
-      break;
-    case 'email3':
-      template = getEmail3Template(data);
-      break;
-    case 'vendor_tiering':
-      template = getVendorTieringTemplate(data);
-      break;
-    default:
-      throw new Error(`Unknown email type: ${emailType}`);
+  try {
+    switch (emailType) {
+      case 'email1':
+        template = getEmail1Template(data);
+        break;
+      case 'email2':
+        template = getEmail2Template(data);
+        break;
+      case 'email3':
+        template = getEmail3Template(data);
+        break;
+      case 'vendor_tiering':
+        template = getVendorTieringTemplate(data);
+        break;
+      case 'audit_delay':
+        template = getAuditDelayTemplate(data);
+        break;
+      case 'pentest_estimate':
+        template = getPentestEstimateTemplate(data);
+        break;
+      default:
+        throw new Error(`Unknown email type: ${emailType}`);
+    }
+  } catch (err: any) {
+    await auditLog('email_send_error', {
+      error_message: err.message,
+      stage: 'template_generation'
+    }, opts);
+    throw err;
   }
+
+  let result: SendEmailResult;
 
   // Try SendGrid first
   if (sendgridApiKey) {
     try {
-      const result = await sendWithSendGrid(to, template);
-      return result;
-    } catch (error) {
+      result = await sendWithSendGrid(to, template);
+      
+      await auditLog('email_send_provider_response', {
+        provider: 'sendgrid',
+        status: result.success ? 'success' : 'failed',
+        message_id: result.messageId,
+        duration_ms: Date.now() - startTime
+      }, opts);
+
+      if (result.success) return result;
+    } catch (error: any) {
       console.error('SendGrid failed, falling back to SMTP:', error);
+      await auditLog('email_send_error', {
+        provider: 'sendgrid',
+        error_message: error.message,
+        duration_ms: Date.now() - startTime
+      }, opts);
     }
   }
 
   // Fallback to SMTP
   try {
-    const result = await sendWithSMTP(to, template);
+    result = await sendWithSMTP(to, template);
+    
+    await auditLog('email_send_provider_response', {
+      provider: 'smtp',
+      status: result.success ? 'success' : 'failed',
+      message_id: result.messageId,
+      duration_ms: Date.now() - startTime
+    }, opts);
+
     return result;
-  } catch (error) {
+  } catch (error: any) {
     console.error('SMTP also failed:', error);
+    await auditLog('email_send_error', {
+      provider: 'smtp',
+      error_message: error.message,
+      duration_ms: Date.now() - startTime
+    }, opts);
+    
     return {
       success: false,
       provider: 'smtp',
@@ -481,13 +685,15 @@ async function sendWithSMTP(
  * Check if email is unsubscribed
  */
 export async function isUnsubscribed(email: string): Promise<boolean> {
+  if (!email) return false;
+  
   try {
     const supabase = getSupabaseAdmin();
     
     const { data, error } = await supabase
       .from('UNSUBSCRIBED_EMAILS')
       .select('id')
-      .eq('email', email.toLowerCase())
+      .eq('email', (email ?? "").toString().toLowerCase())
       .single();
 
     if (error) {
@@ -510,13 +716,15 @@ export async function isUnsubscribed(email: string): Promise<boolean> {
  * Add email to unsubscribe list
  */
 export async function addToUnsubscribeList(email: string): Promise<void> {
+  if (!email) return;
+
   try {
     const supabase = getSupabaseAdmin();
     
     const { error } = await supabase
       .from('UNSUBSCRIBED_EMAILS')
       .upsert(
-        { email: email.toLowerCase(), unsubscribed_at: new Date().toISOString() },
+        { email: (email ?? "").toString().toLowerCase(), unsubscribed_at: new Date().toISOString() },
         { onConflict: 'email' }
       );
 

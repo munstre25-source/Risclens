@@ -11,6 +11,7 @@ A production-ready SOC 2 compliance cost calculator built with Next.js (App Rout
 - 📄 **PDF Generation**: Automated PDF report generation with Playwright/Chromium
 - 📧 **Email Automation**: SendGrid + SMTP fallback with day-3/day-7 follow-ups
 - 👤 **Admin Dashboard**: Lead management, OODA analytics, CSV export, A/B testing controls
+- 💸 **Revenue Workflow**: End-to-end "Leads to Buyers" conversion and attribution (see [REVENUE_WORKFLOW.md](docs/REVENUE_WORKFLOW.md))
 - 🔄 **A/B Testing**: Built-in variation tracking and conversion metrics
 - ⏰ **Scheduled Follow-ups**: Vercel Cron-compatible batch email jobs
 - 🔒 **Rate Limiting**: In-memory rate limiting on all write endpoints
