@@ -99,7 +99,7 @@ export default function Soc2CostPage() {
               SOC 2 pricing isn&apos;t one-size-fits-all. Auditor selection, scope, timeline, tooling, and your starting readiness all influence the final number. Use this guide to anchor your budget, then run the readiness assessment to get tailored ranges.
             </p>
             <p className="text-sm text-slate-500 mb-6">
-              Ready to see your score? Start the SOC 2 Readiness Index.
+              Ready to see your score? Start the SOC 2 Readiness Assessment.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3">
               <Link
@@ -239,7 +239,7 @@ export default function Soc2CostPage() {
             <div className="pt-4">
               <RelatedGuidesRow
                 links={[
-                  { href: '/soc-2-readiness-calculator', label: 'SOC 2 Readiness Index' },
+                  { href: '/soc-2-readiness-calculator', label: 'SOC 2 Readiness Assessment' },
                   { href: '/soc-2-timeline', label: 'SOC 2 Timeline' },
                   { href: '/soc-2-readiness-checklist', label: 'Readiness Checklist' },
                   { href: '/soc-2-evidence/vault', label: 'Evidence Vault' },

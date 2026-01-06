@@ -112,7 +112,7 @@ export default function AboutPage() {
                     <p className="text-brand-600 font-semibold text-sm mb-1">Head of Compliance Strategy (CPA)</p>
                     <a href="https://linkedin.com/in/sarahchen" target="_blank" rel="noopener noreferrer" className="text-xs text-slate-500 hover:text-brand-600 font-medium mb-3 block italic">Connect on LinkedIn →</a>
                     <p className="text-slate-600 text-sm leading-relaxed">
-                      A former SOC 2 auditor, Sarah specializes in mapping technical controls to Trust Service Criteria. She ensures RiscLens&apos; logic remains perfectly aligned with what actual auditors look for in evidence.
+                      A former SOC 2 auditor, Sarah specializes in mapping technical controls to Trust Service Criteria. She helps keep RiscLens&apos; logic aligned with what auditors typically look for in evidence.
                     </p>
                   </div>
                 </div>

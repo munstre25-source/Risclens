@@ -92,21 +92,38 @@ export default function GlossaryPage() {
               
               <AuthorBio authorId="sarah" />
 
-              <div className="mt-16 p-8 bg-brand-50 rounded-2xl border border-brand-100 text-center">
+                <div className="mt-16 grid md:grid-cols-2 gap-8">
+                  <div className="p-8 bg-brand-50 rounded-2xl border border-brand-100 text-center flex flex-col">
+                    <h2 className="text-2xl font-bold text-slate-900 mb-4">
+                      Assess Your Readiness
+                    </h2>
+                    <p className="text-slate-600 mb-8 max-w-xl mx-auto flex-1">
+                      Our free assessment tool uses these terms in action to give you a deterministic readiness score.
+                    </p>
+                    <Link 
+                      href="/soc-2-readiness-calculator"
+                      className="inline-block bg-brand-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-brand-700 transition-colors shadow-lg shadow-brand-200"
+                    >
+                      Start Free Assessment
+                    </Link>
+                  </div>
 
-              <h2 className="text-2xl font-bold text-slate-900 mb-4">
-                Ready to assess your compliance?
-              </h2>
-              <p className="text-slate-600 mb-8 max-w-xl mx-auto">
-                Our free assessment tool uses these terms in action to give you a deterministic readiness score.
-              </p>
-              <Link 
-                href="/soc-2-readiness-calculator"
-                className="inline-block bg-brand-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-brand-700 transition-colors shadow-lg shadow-brand-200"
-              >
-                Start Free Assessment
-              </Link>
-            </div>
+                  <div className="p-8 bg-emerald-50 rounded-2xl border border-emerald-100 text-center flex flex-col">
+                    <h2 className="text-2xl font-bold text-slate-900 mb-4">
+                      Request Auditor Quotes
+                    </h2>
+                    <p className="text-slate-600 mb-8 max-w-xl mx-auto flex-1">
+                      Ready to hire? Generate a standardized RFP and get competitive quotes from vetted auditors.
+                    </p>
+                    <Link 
+                      href="/auditor-match"
+                      className="inline-block bg-emerald-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-200"
+                    >
+                      Generate RFP Now →
+                    </Link>
+                  </div>
+                </div>
+
           </div>
         </section>
       </div>

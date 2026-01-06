@@ -94,13 +94,13 @@ export const SEARCH_INDEX: SearchDoc[] = [
     category: "Vendor Risk",
     keywords: ["vrm", "questionnaire", "template", "vsa"]
   },
-  {
-    url: "/soc-2-readiness-index",
-    title: "SOC 2 Readiness Index",
-    description: "A comprehensive library of SOC 2 controls, evidence requirements, and implementation guides for every trust service criterion.",
-    category: "SOC 2",
-    keywords: ["controls", "evidence", "framework", "index"]
-  },
+    {
+      url: "/soc-2-readiness-index",
+      title: "SOC 2 Readiness Assessment",
+      description: "A comprehensive library of SOC 2 controls, evidence requirements, and implementation guides for every trust service criterion.",
+      category: "SOC 2",
+      keywords: ["controls", "evidence", "framework", "index"]
+    },
     {
       url: "/penetration-testing/sow",
       title: "Pentest Scope & SOW",

@@ -8,6 +8,8 @@ import DefinitionCallout from '@/components/DefinitionCallout';
 import CommonForIndustries from '@/components/CommonForIndustries';
 import { HowItWorksButton } from '@/components/HowItWorksButton';
 
+import { messaging } from '@/src/content/messaging';
+
 const lastUpdated = '2026-03-20';
 
 const faqSchema = {
@@ -44,7 +46,7 @@ const faqSchema = {
 const clusterLinks = [
   { href: '/vendor-risk-assessment/roi-calculator', title: 'VRA ROI Calculator', summary: 'Calculate annual savings and efficiency gains from automating vendor security reviews.', type: 'tool' },
   { href: '/vendor-risk-assessment/tiering', title: 'Vendor Tiering Tool', summary: 'New: Right-size your reviews by instantly scoring vendors into risk tiers.', type: 'tool' },
-  { href: '/vendor-risk-assessment/triage', title: 'VRA Triage Tool', summary: 'Score vendor risk in minutes with deterministic logic and evidence expectations.', type: 'tool' },
+  { href: '/vendor-risk-assessment/triage', title: 'VRA Triage Tool', summary: 'Score vendor risk in minutes with risk-based scoring logic and evidence expectations.', type: 'tool' },
   { href: '/vendor-risk-assessment/questionnaire', title: 'VRA Questionnaire', summary: 'High-intent questionnaire with evidence expectations and scoring tips.', type: 'tool' },
   { href: '/vendor-risk-assessment/checklist', title: 'VRA Checklist', summary: 'Prep list for intake, due diligence, contracts, and ongoing monitoring.' },
   { href: '/vendor-risk-assessment/scoring-model', title: 'Scoring Model', summary: 'How the VRA tiers map to control asks and cadence.' },
@@ -58,19 +60,19 @@ const clusterLinks = [
 ];
 
 export const metadata: Metadata = {
-  title: 'Vendor Risk Assessment Hub | SOC 2 Vendor Management | RiscLens',
-  description: 'Vendor risk assessment templates, triage tool, evidence by tier, and monitoring cadence to keep SOC 2 vendor management credible.',
+  title: 'Right-size your vendor risk management for SOC 2 | RiscLens',
+  description: 'Automate vendor risk tiering and review cycles to reduce third-party risk and save time. Validate your approach before the audit.',
   alternates: { canonical: '/vendor-risk-assessment' },
   openGraph: {
-    title: 'Vendor Risk Assessment Hub | SOC 2 Vendor Management | RiscLens',
-    description: 'Vendor risk assessment templates, triage tool, evidence by tier, and monitoring cadence to keep SOC 2 vendor management credible.',
+    title: 'Right-size your vendor risk management for SOC 2 | RiscLens',
+    description: 'Automate vendor risk tiering and review cycles to reduce third-party risk and save time. Validate your approach before the audit.',
     url: 'https://risclens.com/vendor-risk-assessment',
     images: [{ url: '/og.png', width: 1200, height: 630, alt: 'RiscLens Vendor Risk Assessment' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Vendor Risk Assessment Hub | SOC 2 Vendor Management | RiscLens',
-    description: 'Vendor risk assessment templates, triage tool, evidence by tier, and monitoring cadence to keep SOC 2 vendor management credible.',
+    title: 'Right-size your vendor risk management for SOC 2 | RiscLens',
+    description: 'Automate vendor risk tiering and review cycles to reduce third-party risk and save time. Validate your approach before the audit.',
     images: ['/og.png'],
   },
 };
@@ -84,9 +86,11 @@ export default function VendorRiskAssessmentHubPage() {
       <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-14 lg:py-20 text-center space-y-5">
           <p className="text-sm font-semibold uppercase tracking-wide text-brand-700">Vendor Risk Assessment</p>
-          <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 leading-tight">SOC 2 Vendor Risk Assessment Hub</h1>
+          <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 leading-tight">
+            {messaging.vendorRisk.hero.headline}
+          </h1>
           <p className="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
-            Score vendor risk quickly, pick the right evidence pack, and set a monitoring cadence. Built for SOC 2 vendor management without adding another tool.
+            {messaging.vendorRisk.hero.subhead}
           </p>
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
               <Link
@@ -111,6 +115,14 @@ export default function VendorRiskAssessmentHubPage() {
                 <HowItWorksButton />
               </div>
             </div>
+
+            <div className="flex flex-col sm:flex-row gap-6 items-center justify-center pt-8">
+              <div className="text-center sm:text-left p-4 bg-brand-50 rounded-xl border border-brand-100">
+                <p className="text-sm font-semibold text-slate-900">Validate this with a compliance expert</p>
+                <p className="text-xs text-slate-500">Confirm readiness before engaging an auditor. No sales demo.</p>
+              </div>
+            </div>
+
           <p className="text-sm text-slate-500">Guidance only; align outcomes with your risk team. Last updated: {lastUpdated}.</p>
           <div className="max-w-3xl mx-auto">
             <DefinitionCallout
@@ -219,22 +231,21 @@ export default function VendorRiskAssessmentHubPage() {
             <div className="border border-slate-200 rounded-xl p-5 bg-white space-y-2">
               <p className="text-sm font-semibold text-slate-900">SaaS vendors</p>
               <p className="text-sm text-slate-700">Focus on multi-tenant data handling, support access controls, and change evidence. Keep cadence annual + quarterly attestations.</p>
-              <Link href="/vendor-risk-assessment/triage" className="text-sm text-brand-700 underline underline-offset-4">Run triage</Link>
+                <Link href="/vendor-risk-assessment/triage" className="text-sm text-brand-700 underline underline-offset-4">Triage SaaS Vendors</Link>
             </div>
             <div className="border border-slate-200 rounded-xl p-5 bg-slate-50 space-y-2" id="fintech">
               <p className="text-sm font-semibold text-slate-900">Fintech vendors</p>
-              <p className="text-sm text-slate-700">Payment/financial data pushes for stronger evidence (SOC 2 Type II, pentest summaries) and semiannual attestations.</p>
-              <Link href="/vendor-risk-assessment/triage" className="text-sm text-brand-700 underline underline-offset-4">Run triage</Link>
+                <Link href="/vendor-risk-assessment/triage" className="text-sm text-brand-700 underline underline-offset-4">Triage Fintech Vendors</Link>
             </div>
             <div className="border border-slate-200 rounded-xl p-5 bg-slate-50 space-y-2" id="healthcare">
               <p className="text-sm font-semibold text-slate-900">Healthcare vendors</p>
               <p className="text-sm text-slate-700">PHI drives deeper review of subprocessors, breach notice, and IR/BCP evidence; cadence often semiannual.</p>
-              <Link href="/vendor-risk-assessment/triage" className="text-sm text-brand-700 underline underline-offset-4">Run triage</Link>
+                <Link href="/vendor-risk-assessment/triage" className="text-sm text-brand-700 underline underline-offset-4">Triage Healthcare Vendors</Link>
             </div>
             <div className="border border-slate-200 rounded-xl p-5 bg-white space-y-2" id="b2b-apis">
               <p className="text-sm font-semibold text-slate-900">B2B APIs</p>
               <p className="text-sm text-slate-700">Data flows and scopes matter most; show auth, rate limits, and logging. Annual reviews with quarterly attestations work well.</p>
-              <Link href="/vendor-risk-assessment/triage" className="text-sm text-brand-700 underline underline-offset-4">Run triage</Link>
+                <Link href="/vendor-risk-assessment/triage" className="text-sm text-brand-700 underline underline-offset-4">Triage B2B APIs</Link>
             </div>
           </div>
 

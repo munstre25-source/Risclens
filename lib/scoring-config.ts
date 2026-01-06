@@ -20,7 +20,7 @@ export const READINESS_BANDS = {
     min: 0,
     max: 30,
     label: 'Pre-audit',
-    description: 'Early exploration stage. Significant preparation required before audit engagement.',
+    description: 'Early exploration stage. Significant preparation typically needed before audit engagement.',
     templateText: 'Your organization is in the pre-audit phase. This means foundational security controls, policies, and documentation are not yet in place. Focus on establishing baseline security practices before engaging an auditor.',
   },
   EARLY_STAGE: {
@@ -81,11 +81,11 @@ export const SCORING_WEIGHTS = {
   dataTypes: {
     inputField: 'data_types',
     weights: [
-      { value: 'pii', points: 10, label: 'PII', controlCategory: 'CC6.1', rationale: 'Personal data requires classification controls' },
-      { value: 'financial', points: 10, label: 'Financial', controlCategory: 'CC6.1', rationale: 'Financial data requires encryption and access logging' },
-      { value: 'health', points: 12, label: 'Health/PHI', controlCategory: 'CC6.1', rationale: 'PHI requires HIPAA-aligned controls' },
-      { value: 'intellectual_property', points: 6, label: 'IP', controlCategory: 'CC6.7', rationale: 'IP requires access restrictions' },
-      { value: 'customer_data', points: 6, label: 'Customer Data', controlCategory: 'CC6.1', rationale: 'Customer data requires confidentiality controls' },
+      { value: 'pii', points: 10, label: 'PII', controlCategory: 'CC6.1', rationale: 'Personal data typically needs classification controls' },
+      { value: 'financial', points: 10, label: 'Financial', controlCategory: 'CC6.1', rationale: 'Financial data typically needs encryption and access logging' },
+      { value: 'health', points: 12, label: 'Health/PHI', controlCategory: 'CC6.1', rationale: 'PHI typically needs HIPAA-aligned controls' },
+      { value: 'intellectual_property', points: 6, label: 'IP', controlCategory: 'CC6.7', rationale: 'IP typically needs access restrictions' },
+      { value: 'customer_data', points: 6, label: 'Customer Data', controlCategory: 'CC6.1', rationale: 'Customer data typically needs confidentiality controls' },
     ],
     maxPoints: 44, // Sum of all possible
   },
@@ -120,8 +120,8 @@ export const SCORING_WEIGHTS = {
   industry: {
     inputField: 'industry',
     weights: [
-      { value: 'fintech', points: 10, label: 'Fintech', riskProfile: 'high', rationale: 'Regulated industry with strict requirements' },
-      { value: 'healthcare', points: 10, label: 'Healthcare', riskProfile: 'high', rationale: 'HIPAA and PHI requirements' },
+      { value: 'fintech', points: 10, label: 'Fintech', riskProfile: 'high', rationale: 'Regulated industry with stricter expectations' },
+      { value: 'healthcare', points: 10, label: 'Healthcare', riskProfile: 'high', rationale: 'HIPAA and PHI considerations' },
       { value: 'saas', points: 4, label: 'SaaS', riskProfile: 'medium', rationale: 'Standard B2B compliance needs' },
       { value: 'ecommerce', points: 4, label: 'E-commerce', riskProfile: 'medium', rationale: 'PCI and customer data considerations' },
       { value: 'consulting', points: 2, label: 'Consulting', riskProfile: 'low', rationale: 'Client data handling varies' },

@@ -48,10 +48,12 @@ export default function Footer() {
               <li><Link href="/penetration-testing" className="hover:text-white transition-colors">Pentest Hub</Link></li>
               <li><Link href="/penetration-testing/cost-estimator" className="hover:text-white transition-colors">Pentest Cost Estimator</Link></li>
               <li><Link href="/penetration-testing/scoping" className="hover:text-white transition-colors">Scoping Worksheet</Link></li>
-              <li className="pt-2 font-semibold text-slate-400">Vendor Risk</li>
-              <li><Link href="/vendor-risk-assessment" className="hover:text-white transition-colors">Vendor Risk Hub</Link></li>
-              <li><Link href="/vendor-risk-assessment/triage" className="hover:text-white transition-colors">VRA Triage Tool</Link></li>
-              <li><Link href="/vendor-risk-assessment/roi-calculator" className="hover:text-white transition-colors">VRA ROI Calculator</Link></li>
+                <li className="pt-2 font-semibold text-slate-400">Vendor Risk</li>
+                <li><Link href="/vendor-risk-assessment" className="hover:text-white transition-colors">Vendor Risk Hub</Link></li>
+                <li><Link href="/vendor-risk-assessment/triage" className="hover:text-white transition-colors">VRA Triage Tool</Link></li>
+                <li><Link href="/vendor-risk-assessment/tiering" className="hover:text-white transition-colors">Vendor Tiering Tool</Link></li>
+                <li><Link href="/vendor-risk-assessment/questionnaire" className="hover:text-white transition-colors">VRA Questionnaire</Link></li>
+                <li><Link href="/vendor-risk-assessment/roi-calculator" className="hover:text-white transition-colors">VRA ROI Calculator</Link></li>
             </ul>
           </div>
 
@@ -74,9 +76,12 @@ export default function Footer() {
           <div className="space-y-4">
             <h4 className="text-sm font-bold text-white uppercase tracking-wider">Resources</h4>
             <ul className="space-y-2 text-sm">
-              <li><Link href="/about" className="hover:text-white transition-colors">About RiscLens</Link></li>
-              <li><Link href="/soc-2/guides" className="hover:text-white transition-colors">All Guides</Link></li>
-              <li><Link href="/search" className="hover:text-white transition-colors">Search Library</Link></li>
+                  <li><Link href="/about" className="hover:text-white transition-colors">About RiscLens</Link></li>
+                  <li><Link href="/readiness-review" className="hover:text-white transition-colors font-semibold text-brand-400">Talk to a compliance expert</Link></li>
+                  <li><Link href="/methodology" className="hover:text-white transition-colors">Methodology & Assumptions</Link></li>
+
+                <li><Link href="/soc-2/guides" className="hover:text-white transition-colors">All Guides</Link></li>
+                <li><Link href="/search" className="hover:text-white transition-colors">Search Library</Link></li>
               <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
               <li><Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
               <li><a href="mailto:hello@risclens.com" className="hover:text-white transition-colors">Contact Support</a></li>
@@ -90,7 +95,7 @@ export default function Footer() {
               <p className="text-xs font-bold text-white uppercase tracking-widest">Disclaimer</p>
               <p className="text-xs text-slate-400 leading-relaxed">
                 RiscLens provides informational estimates and readiness tools only. We are not a CPA firm, law firm, or SOC 2 auditor. 
-                We do not provide legal advice, audit services, or formal SOC 2 certifications. All results are based on self-reported inputs 
+                We do not provide legal advice, audit services, or formal SOC 2 attestations. All results are based on self-reported inputs 
                 and should be used for internal planning and budgeting purposes only. For formal compliance guidance or a SOC 2 report, 
                 always consult a qualified independent auditor.
               </p>

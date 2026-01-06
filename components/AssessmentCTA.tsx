@@ -1,20 +1,38 @@
-import Link from 'next/link';
+'use client';
 
-export default function AssessmentCTA() {
+import Link from 'next/link';
+import { trackEvent } from '@/lib/analytics';
+
+interface AssessmentCTAProps {
+  label?: string;
+  href?: string;
+}
+
+export default function AssessmentCTA({ 
+  label = 'Validate Readiness Now', 
+  href = '/soc-2-readiness-calculator' 
+}: AssessmentCTAProps) {
   return (
     <section className="border-t border-slate-200 bg-white">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 lg:py-12 text-center space-y-3">
-        <p className="text-sm font-semibold text-slate-800">Not sure where you stand?</p>
-        <p className="text-base text-slate-700">Get a SOC 2 readiness score + cost range in under 2 minutes.</p>
-        <Link
-          href="/soc-2-readiness-calculator"
-          className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all"
-        >
-          Get Your Readiness Score →
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-          </svg>
-        </Link>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 lg:py-12 text-center space-y-4">
+        <div className="inline-flex items-center gap-2 px-2 py-0.5 rounded-full bg-brand-50 border border-brand-100 mb-1 mx-auto">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-brand-700">Audit Readiness Validation</span>
+        </div>
+        <h2 className="text-2xl font-bold text-slate-900">Establish Your Audit Baseline</h2>
+        <p className="text-slate-600 max-w-xl mx-auto">Get your readiness score, identify critical gaps, and unblock enterprise deal velocity in under 2 minutes.</p>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-2">
+          <Link
+            href={href}
+            onClick={() => trackEvent('cta_click', { cta_label: label, destination: href })}
+            className="btn-primary text-lg px-8 py-4"
+          >
+            {label}
+          </Link>
+          <div className="text-center sm:text-left border-l border-slate-200 pl-6 hidden sm:block">
+            <p className="text-sm font-semibold text-slate-900">Technical Sanity Check</p>
+            <p className="text-xs text-slate-500">Confirm readiness with an expert. No sales demo.</p>
+          </div>
+        </div>
       </div>
     </section>
   );

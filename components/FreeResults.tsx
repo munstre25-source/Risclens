@@ -4,6 +4,10 @@ import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { PostResultsCTA } from './PostResultsCTA';
 import { companySizeBand, scoreBand, trackEvent } from '@/lib/analytics';
+import { MonetizationCTA } from './MonetizationCTA';
+import { HumanCheckCTA } from './HumanCheckCTA';
+import { AuditorMatchCTA } from './AuditorMatchCTA';
+import { EstimateDisclaimer } from './EstimateDisclaimer';
 
 interface CalculatorResults {
   readiness_score: number;
@@ -275,15 +279,18 @@ const formatCurrency = (amount: number) => {
             </div>
           </div>
 
-          <div className={`inline-block px-4 py-1.5 rounded-full text-sm font-semibold ${
-            results.readiness_score >= 70 ? 'bg-green-100 text-green-700' :
-            results.readiness_score >= 40 ? 'bg-yellow-100 text-yellow-700' :
-            'bg-red-100 text-red-700'
-          }`}>
-            {getScoreLabel(results.readiness_score)}
+            <div className={`inline-block px-4 py-1.5 rounded-full text-sm font-semibold ${
+              results.readiness_score >= 70 ? 'bg-green-100 text-green-700' :
+              results.readiness_score >= 40 ? 'bg-yellow-100 text-yellow-700' :
+              'bg-red-100 text-red-700'
+            }`}>
+              {getScoreLabel(results.readiness_score)}
+            </div>
+            
+            <EstimateDisclaimer variant="readiness" className="max-w-md mx-auto" />
           </div>
         </div>
-      </div>
+
 
       <div className="card mb-6 bg-white border-slate-200">
         <h3 className="text-lg font-semibold text-gray-900 mb-3">
@@ -304,7 +311,60 @@ const formatCurrency = (amount: number) => {
         </ul>
       </div>
 
-        {showReadinessCTA && (
+      <div className="card mb-6 bg-slate-50 border-brand-100">
+        <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+          <svg className="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+          </svg>
+          Suggested Next Steps (Business Impact)
+        </h3>
+        <p className="text-sm text-slate-600 mb-6">
+          Now that you have your readiness baseline, evaluate the commercial implications of these results:
+        </p>
+        <div className="grid sm:grid-cols-3 gap-4">
+          <Link href="/soc-2-cost-calculator" className="flex flex-col p-4 bg-white border border-slate-200 rounded-xl hover:border-brand-300 hover:shadow-sm transition-all group">
+            <span className="text-xs font-bold text-brand-600 uppercase tracking-wider mb-1">Money</span>
+            <span className="font-semibold text-slate-900 group-hover:text-brand-700 transition-colors">Cost Calculator</span>
+            <span className="text-xs text-slate-500 mt-2 leading-relaxed">Detailed budget breakdown based on your gaps.</span>
+          </Link>
+          <Link href="/soc-2-timeline/estimator" className="flex flex-col p-4 bg-white border border-slate-200 rounded-xl hover:border-brand-300 hover:shadow-sm transition-all group">
+            <span className="text-xs font-bold text-brand-600 uppercase tracking-wider mb-1">Risk</span>
+            <span className="font-semibold text-slate-900 group-hover:text-brand-700 transition-colors">Timeline Estimator</span>
+            <span className="text-xs text-slate-500 mt-2 leading-relaxed">Predict deal delay and audit completion risk.</span>
+          </Link>
+          <Link href="/compliance-roi-calculator" className="flex flex-col p-4 bg-white border border-slate-200 rounded-xl hover:border-brand-300 hover:shadow-sm transition-all group">
+            <span className="text-xs font-bold text-brand-600 uppercase tracking-wider mb-1">Strategy</span>
+            <span className="font-semibold text-slate-900 group-hover:text-brand-700 transition-colors">Compliance ROI</span>
+            <span className="text-xs text-slate-500 mt-2 leading-relaxed">Build the internal case for compliance spend.</span>
+          </Link>
+        </div>
+      </div>
+
+      <div className="card mb-6 bg-white border-slate-200">
+        <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+          <svg className="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+          </svg>
+          Execution Prep (Implementation)
+        </h3>
+        <p className="text-sm text-slate-600 mb-6">
+          You are proceeding with your SOC 2 journey. Use these execution tools to scope correctly and avoid common implementation errors:
+        </p>
+        <div className="grid sm:grid-cols-2 gap-4">
+          <Link href="/penetration-testing/scoping" className="flex flex-col p-4 bg-slate-50 border border-slate-200 rounded-xl hover:border-brand-300 hover:shadow-sm transition-all group">
+            <span className="text-xs font-bold text-brand-600 uppercase tracking-wider mb-1">Action</span>
+            <span className="font-semibold text-slate-900 group-hover:text-brand-700 transition-colors">Pentest Scoping Worksheet</span>
+            <span className="text-xs text-slate-500 mt-2 leading-relaxed">Scope the technical work correctly before engaging vendors.</span>
+          </Link>
+          <Link href="/vendor-risk-assessment/tiering" className="flex flex-col p-4 bg-slate-50 border border-slate-200 rounded-xl hover:border-brand-300 hover:shadow-sm transition-all group">
+            <span className="text-xs font-bold text-brand-600 uppercase tracking-wider mb-1">Action</span>
+            <span className="font-semibold text-slate-900 group-hover:text-brand-700 transition-colors">Vendor Tiering Tool</span>
+            <span className="text-xs text-slate-500 mt-2 leading-relaxed">Categorize your vendors by risk to satisfy audit requirements.</span>
+          </Link>
+        </div>
+      </div>
+
+      {showReadinessCTA && (
           <PostResultsCTA
             title="Avoid surprises during your SOC 2 audit"
             description="Based on your inputs, there are a few areas auditors commonly challenge at this stage. Get a focused readiness review to identify gaps before you commit to an audit timeline."
@@ -337,60 +397,20 @@ const formatCurrency = (amount: number) => {
             <p className="text-2xl font-bold text-brand-700">{formatCurrency(results.estimated_cost_high)}</p>
           </div>
         </div>
-        <p className="text-xs text-gray-500 text-center sm:text-left mt-3">
-          Use this to budget remediation and auditor prep; confirm exact scope with your auditor.
-        </p>
-      </div>
-
-      <div className="card mb-6 border border-slate-200">
-        <div className="space-y-4">
-          <div>
-            <p className="text-sm font-semibold text-gray-900">Need extra help?</p>
-            <p className="text-sm text-gray-600">
-              Optional: request a quick gap review or an intro to an auditor. Your score remains free and instant.
-            </p>
-          </div>
-          <form onSubmit={handleReviewSubmit} className="space-y-3">
-            <div>
-              <label className="text-sm font-medium text-gray-700">Choose one</label>
-              <select
-                className="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-brand-500"
-                value={reviewType}
-                onChange={(e) => setReviewType(e.target.value as 'auditor_intro' | 'gap_review')}
-              >
-                <option value="auditor_intro">Auditor introduction</option>
-                <option value="gap_review">Gap review</option>
-              </select>
-            </div>
-            <div>
-              <label className="text-sm font-medium text-gray-700">Work email (optional)</label>
-              <input
-                type="email"
-                value={reviewEmail}
-                onChange={(e) => setReviewEmail(e.target.value)}
-                className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-brand-500"
-                placeholder="you@company.com"
-              />
-              <p className="text-xs text-gray-500 mt-1">We’ll only use this to respond. No spam.</p>
-            </div>
-            <div className="flex items-center justify-between">
-              <button
-                type="submit"
-                disabled={isSubmittingReview}
-                className="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 disabled:opacity-60"
-              >
-                {isSubmittingReview ? 'Submitting...' : 'Request help'}
-              </button>
-              {reviewStatus && (
-                <p className="text-sm text-gray-600">{reviewStatus}</p>
-              )}
-            </div>
-          </form>
+          <p className="text-xs text-gray-500 text-center sm:text-left mt-3">
+            Estimates are for planning purposes only and do not constitute a legal audit opinion or guarantee of compliance. Confirm exact scope with your auditor.
+          </p>
+          <EstimateDisclaimer variant="cost" />
         </div>
+
+
+      <div className="space-y-6 mb-12">
+        <AuditorMatchCTA leadId={leadId} email={email} context="SOC 2 Readiness" />
+        <MonetizationCTA leadId={leadId} email={email} context="SOC 2 Readiness" />
+        <HumanCheckCTA leadId={leadId} email={email} context="SOC 2 Readiness" />
       </div>
 
-      <div className="card mb-6">
-
+      <div className="card mb-6 bg-white border-slate-200">
         <h3 className="text-base font-semibold text-gray-900 mb-2">About these estimates</h3>
         <p className="text-sm text-gray-600 leading-relaxed">
           Cost and readiness ranges are directional, not guarantees. Typical variance is ±15–25%, depending on auditor, scope changes, and control maturity.
@@ -562,13 +582,30 @@ const formatCurrency = (amount: number) => {
                   </svg>
                   <span className="font-semibold">PDF Sent!</span>
                 </div>
-                <p className="text-gray-600 mb-1">
-                  Check your inbox at <span className="font-medium">{email}</span>
-                </p>
-                <p className="text-sm text-gray-500">
-                  (Usually arrives within 1-2 minutes)
-                </p>
-              </div>
+                  <p className="text-gray-600 mb-4">
+                    Check your inbox at <span className="font-medium">{email}</span>
+                  </p>
+                  
+                  <div className="bg-white border border-brand-100 rounded-lg p-5 text-left shadow-sm max-w-sm mx-auto">
+                    <h4 className="font-bold text-slate-900 mb-1 flex items-center gap-2 text-sm">
+                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-brand-100 text-brand-700 text-[10px]">NEXT</span>
+                      Find the right SOC 2 automation
+                    </h4>
+                    <p className="text-xs text-slate-600 mb-3">
+                      See which compliance tools fit companies your size and budget.
+                    </p>
+                    <a 
+                      href="/compare"
+                      className="inline-flex items-center justify-center w-full px-3 py-2 bg-brand-600 text-white rounded-md text-sm font-semibold hover:bg-brand-700 transition-colors"
+                    >
+                      Compare SOC 2 Tools →
+                    </a>
+                  </div>
+
+                  <p className="text-xs text-gray-500 mt-4">
+                    (Usually arrives within 1-2 minutes)
+                  </p>
+                </div>
               )}
             </div>
           </div>

@@ -86,25 +86,28 @@ export function GapCalculator() {
             ))}
           </div>
 
-          <div className="mt-10 bg-brand-600 rounded-2xl p-8 text-white text-center">
-            <h3 className="text-xl font-bold mb-2">Want a full mapping document?</h3>
-            <p className="text-brand-100 mb-6">Download our SOC 2 to ISO 27001 mapping spreadsheet (Excel/CSV).</p>
-            <button className="bg-white text-brand-600 px-8 py-3 rounded-lg font-bold hover:bg-brand-50 transition-colors">
-              Download Mapping Guide
-            </button>
+            <div className="mt-10 bg-brand-600 rounded-2xl p-8 text-white text-center">
+              <h3 className="text-xl font-bold mb-2">Want a full mapping document?</h3>
+              <p className="text-brand-100 mb-6">Download our SOC 2 to ISO 27001 mapping spreadsheet (Excel/CSV).</p>
+              <button className="bg-white text-brand-600 px-8 py-3 rounded-lg font-bold hover:bg-brand-50 transition-colors">
+                Download Mapping Guide
+              </button>
+            </div>
+            <p className="mt-6 text-[10px] text-gray-400 text-center leading-relaxed italic">
+              Estimates are for planning purposes only and do not constitute a legal audit opinion or guarantee of compliance.
+            </p>
           </div>
         </div>
-      </div>
-    );
-  }
+      );
+    }
 
-  return (
-    <CalculatorCard 
-      title="ISO 27001 vs SOC 2 Gap Calculator" 
-      description="Already have one framework? See exactly what's missing to achieve the next one."
-      step={step}
-      totalSteps={3}
-    >
+    return (
+      <CalculatorCard 
+        title="ISO 27001 vs SOC 2 Gap Calculator" 
+        description="Already have one framework? Identify potential gaps to achieve the next one."
+        step={step}
+        totalSteps={3}
+      >
       {step === 1 && (
         <div className="space-y-6">
           <label className="block">

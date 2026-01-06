@@ -67,22 +67,55 @@ export default function GenericLeadMagnetPDF({ data }: GenericLeadMagnetPDFProps
           <div className="section">
             <div className="section-title">Configuration & Context</div>
             <div className="content-box">
-              <table className="data-table">
-                <thead>
-                  <tr>
-                    <th>Parameter</th>
-                    <th>Value</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {Object.entries(data.data).map(([key, value]) => (
-                    <tr key={key}>
-                      <td style={{ textTransform: 'capitalize' }}>{key.replace(/_/g, ' ')}</td>
-                      <td>{typeof value === 'object' ? JSON.stringify(value) : String(value)}</td>
+              {data.title.includes('Pentest SOW') ? (
+                <div style={{ fontSize: '11pt' }}>
+                  <p><strong>Targets:</strong></p>
+                  <ul style={{ paddingLeft: '20px', marginBottom: '15px' }}>
+                    {(data.data.formattedTargets || []).map((t: string, i: number) => (
+                      <li key={i}>{t}</li>
+                    ))}
+                  </ul>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+                    <div>
+                      <p><strong>Asset Type:</strong> {data.data.assetType}</p>
+                      <p><strong>Environment:</strong> {data.data.environment}</p>
+                    </div>
+                    <div>
+                      <p><strong>Testing Type:</strong> {data.data.testingType}</p>
+                      <p><strong>Testing Window:</strong> {data.data.testingWindow}</p>
+                    </div>
+                  </div>
+                </div>
+              ) : data.title.includes('VRA Questionnaire') ? (
+                <div style={{ fontSize: '11pt' }}>
+                  <p><strong>Vendor Name:</strong> {data.data.vendorName}</p>
+                  <p><strong>Service Type:</strong> {data.data.serviceType}</p>
+                  <p><strong>Criticality:</strong> {data.data.criticality}</p>
+                  <p><strong>Data Access:</strong></p>
+                  <ul style={{ paddingLeft: '20px' }}>
+                    {(data.data.dataTypes || []).map((t: string, i: number) => (
+                      <li key={i} style={{ textTransform: 'uppercase' }}>{t}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : (
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Parameter</th>
+                      <th>Value</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {Object.entries(data.data).map(([key, value]) => (
+                      <tr key={key}>
+                        <td style={{ textTransform: 'capitalize' }}>{key.replace(/_/g, ' ')}</td>
+                        <td>{typeof value === 'object' ? JSON.stringify(value) : String(value)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </div>
         )}

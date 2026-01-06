@@ -93,7 +93,7 @@ export default function CalculatorPage() {
                   <div>
                     <h3 className="text-lg font-semibold text-slate-800 mb-4">How the Readiness Score Is Derived</h3>
                     <p className="text-slate-600 mb-4 leading-relaxed">
-                      Your score (0–100) is calculated using a <strong>deterministic, rules-based algorithm</strong>—not AI guesswork. Each input maps to explicit weights based on the <strong>AICPA Trust Services Criteria (TSC)</strong> and practical audit experience.
+                      Your score (0–100) is calculated using a <strong>risk-based scoring logic</strong>—not AI guesswork. Each input maps to explicit weights based on the <strong>AICPA Trust Services Criteria (TSC)</strong> and practical audit experience.
                     </p>
                     <ul className="space-y-3 text-slate-600 list-none pl-0">
                       <li className="flex gap-3">

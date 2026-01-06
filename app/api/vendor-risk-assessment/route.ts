@@ -76,16 +76,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'insert_failed' }, { status: 500 });
     }
 
-    await logAuditEvent('vendor_risk_assessment_submitted', {
-      email: data.email,
-      score: data.result.score,
-      tier: data.result.tier,
-      source_url: data.source_url ?? '',
-      timestamp: new Date().toISOString(),
-    }).catch(console.error);
+      await logAuditEvent('vendor_risk_assessment_submitted', {
+        email: data.email,
+        score: data.result.score,
+        tier: data.result.tier,
+        source_url: data.source_url ?? '',
+        timestamp: new Date().toISOString(),
+      }).catch(console.error);
 
-    return NextResponse.json({ ok: true });
-  } catch (error) {
+      return NextResponse.json({ ok: true, lead_id: leadResult.id });
+    } catch (error) {
     console.error('Vendor risk assessment lead failure', error);
     return NextResponse.json({ error: 'server_error' }, { status: 500 });
   }

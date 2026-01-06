@@ -51,7 +51,7 @@ export function SearchIntentCTA({ query }: SearchIntentCTAProps) {
     content = {
       headline: "Navigate SOC 2 Controls & Evidence",
       description: "Explore our comprehensive library of trust service criteria, control mappings, and implementation examples.",
-      buttonLabel: "Browse Readiness Index",
+        buttonLabel: "Browse Readiness Assessment",
       buttonHref: "/soc-2-readiness-index",
       secondaryHref: "/soc-2-readiness-calculator"
     };

@@ -78,7 +78,7 @@ export default function AutomationVsManualPage() {
       <div className="border border-slate-200 rounded-xl p-6 bg-white space-y-4">
         <h2 className="text-lg font-semibold text-slate-900">Which path is right for you?</h2>
         <p className="text-sm text-slate-700 leading-relaxed">
-          For most startups, the "Hybrid" approach works best: Use deterministic logic to triage vendors (like our <Link href="/vendor-risk-assessment/triage" className="text-brand-700 underline">VRA Triage Tool</Link>), and only invest in heavy automation once your vendor count exceeds your ability to review them manually in 1-2 hours per month.
+          For most startups, the "Hybrid" approach works best: Use risk-based scoring logic to triage vendors (like our <Link href="/vendor-risk-assessment/triage" className="text-brand-700 underline">VRA Triage Tool</Link>), and only invest in heavy automation once your vendor count exceeds your ability to review them manually in 1-2 hours per month.
         </p>
         <div className="bg-slate-50 p-4 rounded-lg">
           <h4 className="text-sm font-semibold text-slate-900 mb-2">The Efficiency Test</h4>

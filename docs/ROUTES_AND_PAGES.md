@@ -34,10 +34,15 @@ Route map with purpose, key components, and data dependencies. See [PRODUCT_OVER
 | `/security` | RiscLens Trust Center explaining our own security posture. | `Header`, `Footer`, security feature blocks | Static |
 | `/iso-27001-checklist` | Checklist for ISO 27001 readiness. | `Header`, `Footer`, `ChecklistDownloadForm` | Static |
 | `/auditor-directory` | Curated list of reputable CPA firms for SOC 2 audits. | `Header`, `Footer`, auditor list | Static |
+| `/auditor-match` | Matching tool for connecting companies with CPAs. | `AuditorMatchForm`, `AuditorMatchCTA` | Static |
+| `/methodology` | Detailed explanation of deterministic scoring and RiscLens approach. | Methodology content | Static |
+| `/penetration-testing/sow` | Pentest Statement of Work (SOW) generator. | `PentestSOWBuilder` | Static |
+| `/penetration-testing/scoping` | Pentest scoping worksheet for requirements gathering. | `ScopingWorksheet` | Static |
+| `/vendor-risk-assessment/questionnaire` | Vendor risk assessment questionnaire builder. | `VRAQuestionnaireBuilder` | Static |
 | `/sitemap.xml` | Generated sitemap. | `app/sitemap.ts` | Static generation |
 
 ## Admin & Ops (protected)
-- `/admin`, `/admin/leads`, `/admin/experiments`, `/admin/settings`, `/admin/test-mode`, `/admin/leads/[id]` notes/status (API only): Supabase-admin powered dashboards for leads, variants, CSV export, audit logs, and test-mode purge. Depends on `lib/supabase-auth.ts` guards.
+- `/admin`, `/admin/leads`, `/admin/experiments`, `/admin/settings`, `/admin/test-mode`, `/admin/leads/[id]` notes/status, `/admin/ooda` (Analytics): Supabase-admin powered dashboards for leads, variants, CSV export, audit logs, test-mode purge, and OODA analytics. Depends on `lib/supabase-auth.ts` guards.
 
 ## API Routes (server)
 - Lead capture: `/api/submit`, `/api/soc2-lead`, `/api/pentest-lead`, `/api/vendor-risk-assessment`, `/api/lead/set-email`, `/api/lead/request-review`.

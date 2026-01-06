@@ -8,13 +8,12 @@ export const CTA = {
 export const navConfig = {
   soc: {
     overview: { label: 'SOC 2 Overview', href: '/soc-2' },
-    primary: { label: 'Readiness Score', href: CTA.href, badge: 'Tool' },
-    tools: [
-      { label: 'Cost Calculator', href: '/soc-2-cost-calculator', badge: 'Tool' },
-      { label: 'Timeline Estimator', href: '/soc-2-timeline/estimator', badge: 'Tool' },
-      { label: 'Compliance ROI', href: '/compliance-roi-calculator', badge: 'Tool' },
-      { label: 'SOC 2 vs ISO Gap', href: '/soc-2-vs-iso-27001', badge: 'Tool' },
-    ],
+      primary: { label: 'Readiness Score', href: CTA.href, badge: 'Tool' },
+      tools: [
+        { label: 'Cost Calculator', href: '/compliance-roi-calculator', badge: 'Tool' },
+        { label: 'Timeline Estimator', href: '/soc-2-timeline/estimator', badge: 'Tool' },
+        { label: 'SOC 2 vs ISO Gap', href: '/soc-2-vs-iso-27001', badge: 'Tool' },
+      ],
     guides: [
       { label: 'SOC 2 Cost Guide', href: '/soc-2-cost' },
       { label: 'SOC 2 Timeline', href: '/soc-2-timeline' },
@@ -35,13 +34,13 @@ export const navConfig = {
     primary: { label: 'Cost Estimator', href: '/penetration-testing/cost-estimator', badge: 'Tool' },
     tools: [
       { label: 'Scoping Worksheet', href: '/penetration-testing/scoping', badge: 'Tool' },
+      { label: 'SOW Builder', href: '/penetration-testing/sow', badge: 'Tool' },
     ],
     guides: [
       { label: 'Pentest Pricing', href: '/penetration-testing/pricing' },
       { label: 'Web App vs Network', href: '/penetration-testing/web-app-vs-network' },
       { label: 'Pentest vs Scan', href: '/penetration-testing/vs-vulnerability-scan' },
       { label: 'For SOC 2', href: '/penetration-testing/for-soc-2' },
-      { label: 'SOW Template', href: '/penetration-testing/sow' },
     ],
     viewAll: { label: 'View all Pentest →', href: '/penetration-testing' },
   },
@@ -51,12 +50,12 @@ export const navConfig = {
     tools: [
       { label: 'Vendor Tiering', href: '/vendor-risk-assessment/tiering', badge: 'Tool' },
       { label: 'ROI Calculator', href: '/vendor-risk-assessment/roi-calculator', badge: 'Tool' },
+      { label: 'VRA Questionnaire', href: '/vendor-risk-assessment/questionnaire', badge: 'Tool' },
     ],
     guides: [
       { label: 'Checklist', href: '/vendor-risk-assessment/checklist' },
       { label: 'Auto vs Manual', href: '/vendor-risk-assessment/automation-vs-manual' },
       { label: 'SOC 2 Requirements', href: '/vendor-risk-assessment/soc-2-compliance-requirements' },
-      { label: 'Questionnaire', href: '/vendor-risk-assessment/questionnaire' },
     ],
     industries: [
       { label: 'Healthcare', href: '/vendor-risk-assessment/industries/healthcare' },

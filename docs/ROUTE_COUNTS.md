@@ -23,19 +23,19 @@ Source: `app/sitemap.ts` output (ROUTES + noindex filtering). Duplicate sitemap 
 ## SOC 2 Sales — 7 URLs
 /soc-2-sales, /soc-2-sales/{bridge-letters,security-questionnaires,trust-centers,subservice-organizations,qualified-opinions,multi-framework-mapping}
 
-## Pentest — 15 URLs
-/penetration-testing, /penetration-testing/{api,cloud,cost-estimator,mobile,pricing,report,vs-vulnerability-scan,web-application,sow,retesting-remediation,compliance-buyers,saas,fintech,for-soc-2}
+## Pentest — 16 URLs
+/penetration-testing, /penetration-testing/{api,cloud,cost-estimator,mobile,pricing,report,vs-vulnerability-scan,web-application,sow,retesting-remediation,compliance-buyers,saas,fintech,for-soc-2,scoping}
 
-## Vendor Risk (VAR) — 11 URLs
-/vendor-risk-assessment, /vendor-risk-assessment/{checklist,common-mistakes,contract-clauses,evidence-by-tier,monitoring-cadence,scoring-model,subprocessors-vs-vendors,triage,questionnaire,roi-calculator}
+## Vendor Risk (VAR) — 13 URLs
+/vendor-risk-assessment, /vendor-risk-assessment/{checklist,common-mistakes,contract-clauses,evidence-by-tier,monitoring-cadence,scoring-model,subprocessors-vs-vendors,triage,questionnaire,roi-calculator,automation-vs-manual,tiering}
 
-## Other (non-category) — 6 URLs
-/, /about, /privacy, /terms, /glossary, /security
+## Other (non-category) — 8 URLs
+/, /about, /privacy, /terms, /glossary, /security, /auditor-match, /methodology
 
 ## Totals (sitemap)
 - SOC 2: 100
 - SOC 2 Sales: 7
-- Pentest: 15
-- Vendor Risk (VAR): 11
-- Other: 6
-- **All sitemap URLs**: 139
+- Pentest: 16
+- Vendor Risk (VAR): 13
+- Other: 8
+- **All sitemap URLs**: 144

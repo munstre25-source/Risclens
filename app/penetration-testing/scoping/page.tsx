@@ -15,27 +15,26 @@ export default function ScopingPage() {
     <main className="min-h-screen flex flex-col bg-slate-50">
       <Header />
       
-      <section className="bg-white border-b border-slate-200">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16 lg:py-20 text-center space-y-4">
-          <p className="text-sm font-semibold uppercase tracking-wider text-brand-600">Free Security Tool</p>
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
-            Pentest Scoping Worksheet
-          </h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            Stop guessing your pentest scope. Answer a few questions to define your targets, complexity, and compliance goals, and get a professional summary for auditors and vendors.
-          </p>
-        </div>
-      </section>
+        <section className="bg-white border-b border-slate-200">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16 lg:py-20 text-center space-y-4">
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
+              Pentest Scoping Worksheet
+            </h1>
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+              Scope correctly before engaging vendors. Finalize your audit targets, complexity, and compliance goals to ensure a successful audit execution.
+            </p>
+          </div>
+        </section>
 
-      <section className="flex-grow py-12 px-4 sm:px-6">
-        <ScopingWorksheet />
-      </section>
+        <section className="flex-grow py-12 px-4 sm:px-6">
+          <ScopingWorksheet />
+        </section>
 
-      <section className="bg-white border-t border-slate-200 py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div className="space-y-4">
-              <h3 className="text-xl font-bold text-slate-900">Why use this worksheet?</h3>
+        <section className="bg-white border-t border-slate-200 py-16">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold text-slate-900">Why scope before execution?</h3>
               <ul className="space-y-3 text-slate-600">
                 <li className="flex gap-3">
                   <svg className="w-5 h-5 text-brand-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">

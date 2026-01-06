@@ -14,14 +14,14 @@ export default function VendorTieringPage() {
       <Header />
       <main className="min-h-screen bg-slate-50 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl">
-              Vendor Tiering Logic Tool
-            </h1>
-            <p className="mt-4 text-xl text-gray-600 max-w-2xl mx-auto">
-              Not all vendors are created equal. Use this tool to right-size your security reviews and avoid wasting time on low-risk suppliers.
-            </p>
-          </div>
+            <div className="text-center mb-16">
+              <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl">
+                Vendor Tiering Logic Tool
+              </h1>
+              <p className="mt-4 text-xl text-gray-600 max-w-2xl mx-auto">
+                Standardize your vendor risk management for audit execution. Right-size security reviews and eliminate operational bottlenecks before your next SOC 2 audit.
+              </p>
+            </div>
 
           <VendorTieringTool />
 

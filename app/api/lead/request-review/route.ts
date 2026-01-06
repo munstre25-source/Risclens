@@ -39,12 +39,29 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'update_failed' }, { status: 500 });
     }
 
-    await logAuditEvent('lead_review_requested', {
-      lead_id,
-      review_type,
-      has_email: !!updates.email,
-      timestamp: new Date().toISOString(),
-    }).catch(() => {});
+    // Log to REVENUE_EVENTS for OODA loop tracking
+    if (review_type === 'auditor_intro') {
+      const { data: leadData } = await supabase
+        .from('leads')
+        .select('lead_type')
+        .eq('id', lead_id)
+        .single();
+
+        await supabase.from('REVENUE_EVENTS').insert({
+          lead_id,
+          calculator_page: leadData?.lead_type || 'unknown',
+          event_type: 'monetization_cta_clicked',
+          event_value: 1,
+          event_date: new Date().toISOString()
+        });
+      }
+  
+      await logAuditEvent('lead_review_requested', {
+        lead_id,
+        review_type,
+        has_email: !!updates.email,
+        timestamp: new Date().toISOString(),
+      });
 
     return NextResponse.json({ success: true });
   } catch (error) {

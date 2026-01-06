@@ -5,7 +5,11 @@ import type { FormEvent } from 'react';
 import { VendorRiskInput, VendorRiskResult } from '@/lib/vendorRisk';
 import { PostResultsCTA } from '../PostResultsCTA';
 import { trackEvent } from '@/lib/analytics';
+import { MonetizationCTA } from '../MonetizationCTA';
+import { HumanCheckCTA } from '../HumanCheckCTA';
+import { AuditorMatchCTA } from '../AuditorMatchCTA';
 import Link from 'next/link';
+import { EstimateDisclaimer } from '../EstimateDisclaimer';
 
 interface VendorRiskResultsProps {
   result: VendorRiskResult;
@@ -40,22 +44,47 @@ export function VendorRiskResults({ result, inputs, email: initialEmail }: Vendo
     setIsSubmitting(true);
     trackEvent('vendor_risk_unlocked', { email: unlockEmail });
 
-    try {
-      // Capture lead and results
-      await fetch('/api/vendor-risk-assessment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: unlockEmail,
-          company: 'Unknown (Value-First)',
-          industry: 'VRA Triage',
-          inputs,
-          result,
-          source_url: window.location.href,
-        }),
-      });
-      setIsUnlocked(true);
-    } catch (err) {
+      try {
+        // Capture lead and results
+        const response = await fetch('/api/vendor-risk-assessment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: unlockEmail,
+            company: 'Unknown (Value-First)',
+            industry: 'VRA Triage',
+            inputs,
+            result,
+            source_url: window.location.href,
+          }),
+        });
+
+        const data = await response.json();
+        if (data.lead_id) {
+          // Trigger PDF and Email
+          try {
+            const pdfRes = await fetch('/api/generate-pdf', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ 
+                lead_id: data.lead_id,
+                template: 'vra_triage'
+              }),
+            });
+            
+            if (pdfRes.ok) {
+              await fetch('/api/send-email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ lead_id: data.lead_id }),
+              });
+            }
+          } catch (pdfErr) {
+            console.error('Failed to trigger automatic PDF email:', pdfErr);
+          }
+        }
+        setIsUnlocked(true);
+      } catch (err) {
       console.error(err);
       setIsUnlocked(true); // Unlock anyway for UX
     } finally {
@@ -106,13 +135,15 @@ export function VendorRiskResults({ result, inputs, email: initialEmail }: Vendo
             <span className="text-sm text-slate-600">Score {result.score}/100</span>
           </div>
         </div>
-        <div className="sm:text-right">
-          <p className="text-sm font-semibold text-slate-800">Reassessment cadence</p>
-          <p className="text-sm text-slate-600 max-w-xs">{result.cadence}</p>
+          <div className="sm:text-right">
+            <p className="text-sm font-semibold text-slate-800">Reassessment cadence</p>
+            <p className="text-sm text-slate-600 max-w-xs">{result.cadence}</p>
+          </div>
         </div>
-      </div>
+        <EstimateDisclaimer variant="vra" />
 
-      {!isUnlocked ? (
+        {!isUnlocked ? (
+
         <div className="relative">
           {/* Blurred Background Content */}
           <div className="grid gap-4 md:grid-cols-2 opacity-20 pointer-events-none filter blur-sm">
@@ -196,20 +227,27 @@ export function VendorRiskResults({ result, inputs, email: initialEmail }: Vendo
                 </li>
               ))}
             </ul>
-            <p className="text-xs text-slate-500">Guidance only. Use this to prioritize reviews; always confirm with your risk team.</p>
+            <p className="text-xs text-slate-500">Scoring provides a framework for diligence; final tiering should align with internal Risk Management Policy.</p>
           </div>
 
-          <PostResultsCTA
-            title="Turn this into a repeatable vendor risk program"
-            description="Implement a lightweight scoring model, review cadence, and evidence flow that auditors accept—without heavyweight GRC tooling."
-            primaryCtaLabel="Set Up Vendor Risk Program"
-            primaryCtaHref="/vendor-risk-program"
-            primaryCtaOnClick={() => trackEvent('vendor_risk_program_cta_clicked')}
-            secondaryCtaLabel={templateStatus || "Download questionnaire + scoring template"}
-            secondaryCtaOnClick={handleTemplateRequest}
-            footnote="Designed for early-stage teams."
-          />
-        </>
+            <PostResultsCTA
+              title="Turn this into a repeatable vendor risk program"
+              description="Implement a lightweight scoring model, review cadence, and evidence flow that auditors accept—without heavyweight GRC tooling."
+              primaryCtaLabel="Set Up Vendor Risk Program"
+              primaryCtaHref="/vendor-risk-program"
+              primaryCtaOnClick={() => trackEvent('vendor_risk_program_cta_clicked')}
+              secondaryCtaLabel={templateStatus || "Download questionnaire + scoring template"}
+              secondaryCtaOnClick={handleTemplateRequest}
+              footnote="Designed for early-stage teams."
+            />
+
+            <div className="space-y-6 mb-12">
+              <AuditorMatchCTA type="vendor" context="Vendor Risk Assessment" />
+              <MonetizationCTA leadId={null} email={initialEmail || unlockEmail} context="Vendor Risk Assessment" />
+              <HumanCheckCTA leadId={null} email={initialEmail || unlockEmail} context="Vendor Risk Assessment" />
+            </div>
+          </>
+
       )}
 
       <div className="flex justify-center mt-4">

@@ -5,6 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import DefinitionCallout from '@/components/DefinitionCallout';
 import { HowItWorksButton } from '@/components/HowItWorksButton';
+import { messaging } from '@/src/content/messaging';
 
 const lastUpdated = '2026-01-05';
 
@@ -17,7 +18,7 @@ const faqSchema = {
       name: 'What is SOC 2 compliance?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'SOC 2 is an auditing procedure that ensures your service providers securely manage your data to protect the interests of your organization and the privacy of its clients.',
+        text: 'SOC 2 is an auditing framework that evaluates whether your service providers have controls in place to help protect customer data. It assesses security practices across five Trust Service Criteria.',
       },
     },
     {
@@ -44,14 +45,14 @@ const SOC2_TOOLS = [
     id: 'readiness',
     href: '/soc-2-readiness-calculator',
     title: 'SOC 2 Readiness Calculator',
-    summary: 'Flagship gap assessment tool to find exactly what you are missing for an audit.',
+    summary: 'Flagship gap assessment tool to identify potential gaps for an audit.',
     cta: 'Start Readiness Assessment'
   },
   {
     id: 'cost',
     href: '/soc-2-cost-calculator',
     title: 'SOC 2 Cost Calculator',
-    summary: 'Industry-standard pricing estimator for audits, tools, and engineering time.',
+    summary: 'Market-aligned pricing estimator for audits, tools, and engineering time.',
     cta: 'Estimate Audit Costs'
   },
   {
@@ -87,19 +88,19 @@ const SOC2_INDUSTRIES = [
 ];
 
 export const metadata: Metadata = {
-  title: 'SOC 2 Compliance Hub | Readiness, Cost, & Timeline | RiscLens',
-  description: 'The central hub for SOC 2 planning. Use our readiness calculator, cost estimator, and timeline tools to prepare for your audit with confidence.',
+  title: 'SOC 2 Readiness Hub | Audit Prep, Cost, & Timeline | RiscLens',
+  description: 'The mission control for SOC 2 readiness. Use our gap assessment, cost estimator, and timeline tools to prepare for your audit with confidence.',
   alternates: { canonical: '/soc-2' },
   openGraph: {
-    title: 'SOC 2 Compliance Hub | Readiness, Cost, & Timeline | RiscLens',
-    description: 'The central hub for SOC 2 planning. Use our readiness calculator, cost estimator, and timeline tools.',
+    title: 'SOC 2 Readiness Hub | Audit Prep, Cost, & Timeline | RiscLens',
+    description: 'The mission control for SOC 2 readiness. Use our gap assessment, cost estimator, and timeline tools.',
     url: 'https://risclens.com/soc-2',
     images: [{ url: '/og.png', width: 1200, height: 630, alt: 'RiscLens SOC 2 Hub' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'SOC 2 Compliance Hub | Readiness, Cost, & Timeline | RiscLens',
-    description: 'The central hub for SOC 2 planning. Use our readiness calculator, cost estimator, and timeline tools.',
+    title: 'SOC 2 Readiness Hub | Audit Prep, Cost, & Timeline | RiscLens',
+    description: 'The mission control for SOC 2 readiness. Use our gap assessment, cost estimator, and timeline tools.',
     images: ['/og.png'],
   },
 };
@@ -110,25 +111,28 @@ export default function Soc2HubPage() {
       <Script id="soc2-hub-faq" type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <Header />
 
-      {/* HERO SECTION */}
-      <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100 border-b border-slate-200">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-20 text-center space-y-6">
-          <p className="text-sm font-semibold uppercase tracking-wide text-brand-700">The Ultimate Compliance Hub</p>
-          <h1 className="text-4xl sm:text-6xl font-extrabold text-slate-900 leading-tight">SOC 2 Compliance Hub</h1>
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-            Everything you need to plan, budget, and execute your SOC 2 audit. From readiness gaps to ROI analysis, we provide the tools to make compliance predictable.
-          </p>
-          
-          <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              href="/soc-2-readiness-calculator"
-              className="w-full sm:w-auto inline-flex justify-center items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-8 py-4 rounded-lg shadow-md transition-all text-lg"
-            >
-              Start Readiness Assessment
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </Link>
+        {/* HERO SECTION */}
+        <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100 border-b border-slate-200">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-20 text-center space-y-6">
+            <p className="text-sm font-semibold uppercase tracking-wide text-brand-700">The SOC 2 Readiness Engine</p>
+            <h1 className="text-4xl sm:text-6xl font-extrabold text-slate-900 leading-tight">
+              {messaging.soc2Hub.hero.headline}
+            </h1>
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+              {messaging.soc2Hub.hero.subhead}
+            </p>
+            
+            <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link
+                href="/soc-2-readiness-calculator"
+                className="w-full sm:w-auto inline-flex justify-center items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-8 py-4 rounded-lg shadow-md transition-all text-lg"
+              >
+                {messaging.soc2Hub.hero.cta}
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </Link>
+
             <Link
               href="/compliance-roi-calculator"
               className="w-full sm:w-auto inline-flex justify-center items-center gap-2 bg-white hover:bg-slate-50 text-slate-900 border border-slate-200 font-semibold px-8 py-4 rounded-lg shadow-sm transition-all text-lg"
@@ -209,12 +213,12 @@ export default function Soc2HubPage() {
               >
                 <h3 className="text-lg font-bold text-slate-900 mb-2 group-hover:text-brand-700">{guide.title}</h3>
                 <p className="text-sm text-slate-600 leading-relaxed mb-4">{guide.summary}</p>
-                <span className="text-xs font-semibold text-brand-700 flex items-center">
-                  Read Guide
-                  <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </span>
+                  <span className="text-xs font-semibold text-brand-700 flex items-center">
+                    Review Checklist
+                    <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </span>
               </Link>
             ))}
           </div>
@@ -238,7 +242,7 @@ export default function Soc2HubPage() {
               >
                 <h3 className="text-base font-bold text-slate-900 mb-2">{industry.name}</h3>
                 <p className="text-sm text-slate-600 leading-relaxed mb-4">{industry.summary}</p>
-                <span className="text-xs font-medium text-brand-700 underline underline-offset-4">View Roadmap</span>
+                  <span className="text-xs font-medium text-brand-700 underline underline-offset-4">Execute Roadmap</span>
               </Link>
             ))}
           </div>

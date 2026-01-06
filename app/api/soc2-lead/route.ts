@@ -233,7 +233,7 @@ export async function POST(request: NextRequest) {
       error: error instanceof Error ? error.message : 'Unknown error',
       ip,
       timestamp: new Date().toISOString(),
-    }).catch(console.error);
+    });
 
     return NextResponse.json(
       { ok: false, error: 'submission_failed' },

@@ -171,7 +171,7 @@ export const toolComparisons: ToolComparison[] = [
     toolA: { name: 'Drata' },
     toolB: { name: 'Thoropass' },
     tableRows: [
-      { feature: 'Primary Value', toolAValue: 'Continuous monitoring and automation', toolBValue: 'Guaranteed audit success and simplicity' },
+      { feature: 'Primary Value', toolAValue: 'Continuous monitoring and automation', toolBValue: 'Streamlined audit experience and simplicity' },
       { feature: 'Control Ownership', toolAValue: 'You manage controls via their platform', toolBValue: 'They guide you through control implementation' },
       { feature: 'Audit Experience', toolAValue: 'Platform-agnostic (bring any auditor)', toolBValue: 'Integrated (use their auditors)' },
     ],

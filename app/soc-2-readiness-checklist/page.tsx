@@ -99,7 +99,7 @@ export default function Soc2ReadinessChecklistPage() {
             <div className="space-y-3">
               <h2 className="text-2xl font-semibold text-slate-900">What a SOC 2 readiness checklist is (and isn’t)</h2>
               <p className="text-slate-700 leading-relaxed">
-                Use this checklist to map people, processes, and evidence to auditor expectations. It’s a planning tool—not a certification or audit opinion.
+                Use this checklist to map people, processes, and evidence to auditor expectations. It’s a planning tool—not an attestation or audit opinion.
               </p>
             </div>
 

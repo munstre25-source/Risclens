@@ -140,5 +140,10 @@ export const ROUTES: string[] = [
     '/security',
     '/iso-27001-checklist',
     '/auditor-directory',
+    '/auditor-match',
+    '/methodology',
+    '/penetration-testing/scoping',
+    '/vendor-risk-assessment/automation-vs-manual',
+    '/vendor-risk-assessment/tiering',
   ];
 

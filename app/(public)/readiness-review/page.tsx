@@ -20,6 +20,7 @@ export default function ReadinessReviewPage() {
         successMessage="Thanks! We've received your request. One of our specialists will review your inputs and reach out within 24 hours."
         endpoint="/api/lead/submit"
         analyticsEvent="soc2_readiness_review"
+        pdfTemplate="readiness"
         disclaimer="No sales calls unless requested. One-time review of your current state."
         fields={[
           { name: 'name', label: 'Full Name', type: 'text', required: true, placeholder: 'Jane Doe' },
@@ -41,6 +42,23 @@ export default function ReadinessReviewPage() {
           { name: 'lead_type', label: '', type: 'text', required: false }, // Hidden field via initialData
         ]}
         initialData={{ lead_type: 'soc2_readiness_review' }}
+        postSubmitNode={
+          <div className="mt-8 bg-slate-50 border border-slate-200 rounded-lg p-6 text-left">
+            <h4 className="font-bold text-slate-900 mb-2 flex items-center gap-2">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-200 text-slate-700 text-xs">TIP</span>
+              While you wait...
+            </h4>
+            <p className="text-sm text-slate-600 mb-4">
+              Many teams find it helpful to benchmark their expected costs before the review. Check out our cost calculator.
+            </p>
+            <a 
+              href="/soc-2-cost-calculator"
+              className="inline-flex items-center justify-center w-full px-4 py-2 bg-white border border-slate-300 text-slate-700 rounded-md font-semibold hover:bg-slate-50 transition-colors shadow-sm"
+            >
+              Bookmark the SOC 2 Cost Calculator →
+            </a>
+          </div>
+        }
       />
     </div>
   );

@@ -7,6 +7,7 @@ import DefinitionCallout from '@/components/DefinitionCallout';
 import CommonForIndustries from '@/components/CommonForIndustries';
 import { HowItWorksButton } from '@/components/HowItWorksButton';
 import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
+import { messaging } from '@/src/content/messaging';
 
 const lastUpdated = '2026-01-05';
 
@@ -42,7 +43,7 @@ const faqSchema = {
 };
 
 const clusterLinks = [
-  { href: '/penetration-testing/cost-estimator', title: 'Pentest Cost Estimator', summary: 'Get deterministic pricing ranges based on your app, API, and environment scope.', type: 'tool' },
+  { href: '/penetration-testing/cost-estimator', title: 'Pentest Cost Estimator', summary: 'Get estimated market pricing ranges based on your app, API, and environment scope.', type: 'tool' },
   { href: '/penetration-testing/scoping', title: 'Pentest Scoping Worksheet', summary: 'New: Define your targets and complexity to get accurate quotes and auditor-ready scope.', type: 'tool' },
   { href: '/penetration-testing/sow', title: 'Pentest SOW Template', summary: 'Standardized Statement of Work to ensure your test covers the right controls.', type: 'tool' },
   { href: '/penetration-testing/retesting-remediation', title: 'Retesting Guidance', summary: 'How to handle findings and prove remediation to your auditor.' },
@@ -73,23 +74,26 @@ export default function PentestHubPage() {
       <Script id="pentest-hub-faq" type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <Header />
 
-      <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-14 lg:py-20 text-center space-y-5">
-          <p className="text-sm font-semibold uppercase tracking-wide text-brand-700">Penetration Testing</p>
-          <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 leading-tight">SOC 2 Pentest Hub</h1>
-          <p className="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
-            Plan pentests that auditors accept and enterprise buyers trust. Use our scoping tools and cost estimators to get the right evidence without overpaying.
-          </p>
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-              <Link
-                href="/penetration-testing/scoping"
-                className="w-full sm:w-auto inline-flex justify-center items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-8 py-4 rounded-lg shadow-md transition-all text-lg"
-              >
-                Start Scoping Worksheet
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </Link>
+        <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-14 lg:py-20 text-center space-y-5">
+            <p className="text-sm font-semibold uppercase tracking-wide text-brand-700">Penetration Testing</p>
+            <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 leading-tight">
+              {messaging.pentestHub.hero.headline}
+            </h1>
+            <p className="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
+              {messaging.pentestHub.hero.subhead}
+            </p>
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+                <Link
+                  href="/penetration-testing/scoping"
+                  className="w-full sm:w-auto inline-flex justify-center items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-8 py-4 rounded-lg shadow-md transition-all text-lg"
+                >
+                  {messaging.pentestHub.hero.cta}
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </Link>
+
               <Link
                 href="/penetration-testing/cost-estimator"
                 className="w-full sm:w-auto inline-flex justify-center items-center gap-2 bg-white hover:bg-slate-50 text-slate-900 border border-slate-200 font-semibold px-8 py-4 rounded-lg shadow-sm transition-all text-lg"
@@ -211,12 +215,12 @@ export default function PentestHubPage() {
               <div className="border border-slate-200 rounded-xl p-5 bg-white space-y-2">
                 <p className="text-sm font-semibold text-slate-900">SaaS pentests</p>
                 <p className="text-sm text-slate-700">Focus on multi-tenant data isolation, API auth, and session management. Usually requires annual testing.</p>
-                <Link href="/penetration-testing/saas" className="text-sm text-brand-700 underline underline-offset-4">View SaaS Guide</Link>
+                  <Link href="/penetration-testing/saas" className="text-sm text-brand-700 underline underline-offset-4">Review SaaS Scoping</Link>
               </div>
               <div className="border border-slate-200 rounded-xl p-5 bg-slate-50 space-y-2" id="fintech">
                 <p className="text-sm font-semibold text-slate-900">Fintech pentests</p>
                 <p className="text-sm text-slate-700">High scrutiny on payment flows, encryption, and segregation of duties. Often includes API and network layers.</p>
-                <Link href="/penetration-testing/fintech" className="text-sm text-brand-700 underline underline-offset-4">View Fintech Guide</Link>
+                  <Link href="/penetration-testing/fintech" className="text-sm text-brand-700 underline underline-offset-4">Review Fintech Scoping</Link>
               </div>
               <div className="border border-slate-200 rounded-xl p-5 bg-slate-50 space-y-2" id="healthcare">
                 <p className="text-sm font-semibold text-slate-900">Healthcare pentests</p>

@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import FreeResults from './FreeResults';
+import { trackEvent } from '@/lib/analytics';
 
 // Industry options
 const INDUSTRIES = [
@@ -73,6 +74,7 @@ export default function CalculatorForm() {
   // Hidden fields for A/B testing and UTM tracking
   const [variationId, setVariationId] = useState<string>('default');
   const [utmSource, setUtmSource] = useState<string>('');
+  const startedRef = useRef(false);
 
   const [formData, setFormData] = useState<FormData>({
     email: '',
@@ -106,6 +108,11 @@ export default function CalculatorForm() {
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    if (!startedRef.current) {
+      startedRef.current = true;
+      trackEvent('calculator_started', { tool_id: 'soc2_readiness' });
+    }
   };
 
   const handleDataTypeChange = (value: string) => {
@@ -216,6 +223,11 @@ export default function CalculatorForm() {
       setLeadId(data.lead_id);
       setResults(data.results);
       setShowResults(true);
+      trackEvent('calculator_completed', { 
+        tool_id: 'soc2_readiness',
+        score: data.results.readiness_score,
+        industry: formData.industry 
+      });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {

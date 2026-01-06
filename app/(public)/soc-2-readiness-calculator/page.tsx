@@ -1,9 +1,11 @@
 import { Suspense } from 'react';
 import { Metadata } from 'next';
+import Link from 'next/link';
 import CalculatorForm from '@/components/CalculatorForm';
 import { HowItWorksAccordion } from '@/components/HowItWorksAccordion';
 import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
 import { SoftwareApplicationSchema } from '@/components/SoftwareApplicationSchema';
+import { messaging } from '@/src/content/messaging';
 
 export const metadata: Metadata = {
   title: 'SOC 2 Readiness Score in Under 2 Minutes | RiscLens',
@@ -40,20 +42,55 @@ function FormSkeleton() {
 
 export default function CalculatorPage() {
   return (
-    <main className="bg-gray-50">
-      <SoftwareApplicationSchema
-        name="SOC 2 Readiness Calculator"
-        description="Get an instant SOC 2 readiness score and gap analysis."
-        url="https://risclens.com/soc-2-readiness-calculator"
-        category="SecurityApplication"
-      />
-      <section className="py-10 md:py-12">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 space-y-4">
-          <div id="calculator" className="rounded-2xl border border-slate-200 bg-white p-6">
-            <Suspense fallback={<FormSkeleton />}>
-              <CalculatorForm />
-            </Suspense>
+      <main className="bg-gray-50">
+        <SoftwareApplicationSchema
+          name="SOC 2 Readiness Calculator"
+          description="Get an instant SOC 2 readiness score and gap analysis."
+          url="https://risclens.com/soc-2-readiness-calculator"
+          category="SecurityApplication"
+        />
+
+          <section className="bg-white border-b border-slate-200">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 text-center space-y-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 border border-brand-100 text-brand-700 text-sm font-medium mb-2 mx-auto">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
+                </span>
+                Recommended starting point for serious buyers
+              </div>
+              <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 leading-tight">
+                {messaging.readinessCalculator.hero.headline}
+              </h1>
+            <p className="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
+              {messaging.readinessCalculator.hero.subhead}
+            </p>
           </div>
+        </section>
+
+        <section className="py-10 md:py-12">
+
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 space-y-4">
+            <div id="calculator" className="space-y-6">
+              <div className="rounded-2xl border border-slate-200 bg-white p-6">
+                <Suspense fallback={<FormSkeleton />}>
+                  <CalculatorForm />
+                </Suspense>
+              </div>
+              
+              <div className="rounded-xl border border-brand-100 bg-brand-50/50 p-6 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div className="space-y-1">
+                  <h3 className="text-lg font-bold text-slate-900">Validate this with a compliance expert</h3>
+                  <p className="text-sm text-slate-600">Get a 15-minute technical sanity check on your readiness plan. No sales demo.</p>
+                </div>
+                <Link 
+                  href="/readiness-review"
+                  className="btn-primary whitespace-nowrap"
+                >
+                  Confirm Readiness
+                </Link>
+              </div>
+            </div>
         </div>
       </section>
 
@@ -96,7 +133,7 @@ export default function CalculatorPage() {
                   <div>
                     <h3 className="text-lg font-semibold text-slate-800 mb-4">How the Readiness Score Is Derived</h3>
                     <p className="text-slate-600 mb-4 leading-relaxed">
-                      Your score (0–100) is calculated using a <strong>deterministic, rules-based algorithm</strong>—not AI guesswork. Each input maps to explicit weights based on the <strong>AICPA Trust Services Criteria (TSC)</strong> and practical audit experience.
+                      Your score (0–100) is calculated using a <strong>risk-based scoring logic</strong>—not AI guesswork. Each input maps to explicit weights based on the <strong>AICPA Trust Services Criteria (TSC)</strong> and practical audit experience.
                     </p>
                     <ul className="space-y-3 text-slate-600 list-none pl-0">
                       <li className="flex gap-3">
@@ -119,7 +156,7 @@ export default function CalculatorPage() {
                     <ul className="space-y-3 text-slate-600 list-none pl-0">
                       <li className="flex gap-3">
                         <span className="text-brand-600 font-medium shrink-0">•</span>
-                        <span><strong>Benchmark</strong>: Identify exactly where you sit on the 0-100 readiness scale.</span>
+                        <span><strong>Benchmark</strong>: Identify potential gaps in your readiness on the 0-100 readiness scale.</span>
                       </li>
                       <li className="flex gap-3">
                         <span className="text-brand-600 font-medium shrink-0">•</span>

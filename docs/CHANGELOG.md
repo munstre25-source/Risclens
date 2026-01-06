@@ -2,6 +2,17 @@
 
 Most recent first. For commit-level notes see [COMMITS_SUMMARY.md](COMMITS_SUMMARY.md).
 
+## 2026-01-06
+- Auditor Match Tool: Added `/auditor-match` for connecting companies with CPAs.
+- Methodology Page: Created `/methodology` to explain deterministic scoring and RiscLens approach.
+- Admin OODA Dashboard: Added `/admin/ooda` for Observe, Orient, Decide, Act analytics.
+- Pentest SOW Builder: Integrated Statement of Work generator at `/penetration-testing/sow`.
+- Scoping Worksheet: Added `/penetration-testing/scoping` for detailed pentest requirements.
+- Vendor Risk Questionnaire Builder: Added `/vendor-risk-assessment/questionnaire` for creating vendor assessments.
+- Lead Magnet System: Enhanced PDF generation with `GenericLeadMagnetPDF` and updated API routes.
+- Strategy & Architecture Docs: Added comprehensive documentation on flagship paths, monetization, human-in-loop patterns, and CTA hierarchy.
+- Bug Fix: Fixed `Link` component import in SOC 2 readiness calculator.
+
 ## 2026-01-05
 - High-intent PenTest pages: Added `/penetration-testing/saas` and `/penetration-testing/fintech` industry guides.
 - Vendor Risk ROI Calculator: Created `/vendor-risk-assessment/roi-calculator` to help build automation business cases.

@@ -19,22 +19,26 @@ interface LeadFormProps {
   endpoint: string;
   ctaLabel: string;
   successMessage: string;
-  disclaimer?: string;
-  analyticsEvent: string;
-  initialData?: Record<string, string>;
-}
-
-export function LeadForm({
-  title,
-  description,
-  fields,
-  endpoint,
-  ctaLabel,
-  successMessage,
-  disclaimer,
-  analyticsEvent,
-  initialData = {},
-}: LeadFormProps) {
+    disclaimer?: string;
+    analyticsEvent: string;
+    initialData?: Record<string, string>;
+    postSubmitNode?: React.ReactNode;
+    pdfTemplate?: string;
+  }
+  
+  export function LeadForm({
+    title,
+    description,
+    fields,
+    endpoint,
+    ctaLabel,
+    successMessage,
+    disclaimer,
+    analyticsEvent,
+    initialData = {},
+    postSubmitNode,
+    pdfTemplate,
+  }: LeadFormProps) {
   const [formData, setFormData] = useState<Record<string, string>>(initialData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -66,9 +70,34 @@ export function LeadForm({
         throw new Error('Something went wrong. Please try again.');
       }
 
-      setIsSuccess(true);
-      trackEvent(`${analyticsEvent}_submitted`, formData);
-    } catch (err) {
+        setIsSuccess(true);
+        trackEvent(`${analyticsEvent}_submitted`, formData);
+
+        // NEW: Handle automatic PDF generation and email if template provided
+        const data = await response.json();
+        if (pdfTemplate && data.lead_id) {
+          try {
+            const pdfRes = await fetch('/api/generate-pdf', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ 
+                lead_id: data.lead_id,
+                template: pdfTemplate
+              }),
+            });
+            
+            if (pdfRes.ok) {
+              await fetch('/api/send-email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ lead_id: data.lead_id }),
+              });
+            }
+          } catch (pdfErr) {
+            console.error('Failed to trigger automatic PDF email:', pdfErr);
+          }
+        }
+      } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setIsSubmitting(false);
@@ -83,11 +112,12 @@ export function LeadForm({
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Success!</h2>
-        <p className="text-gray-600 mb-6">{successMessage}</p>
-      </div>
-    );
-  }
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Success!</h2>
+          <p className="text-gray-600 mb-6">{successMessage}</p>
+          {postSubmitNode}
+        </div>
+      );
+    }
 
   return (
     <div className="card p-6 sm:p-8 max-w-xl mx-auto">

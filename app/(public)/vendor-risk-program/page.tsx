@@ -1,5 +1,6 @@
 import { LeadForm } from '@/components/LeadForm';
 import { Metadata } from 'next';
+import { messaging } from '@/src/content/messaging';
 
 export const metadata: Metadata = {
   title: 'Set Up Vendor Risk Program | Risclens',
@@ -14,9 +15,9 @@ export default function VendorRiskProgramPage() {
   return (
     <div className="container-narrow py-16">
       <LeadForm
-        title="Set Up Your Vendor Risk Program"
-        description="Implement a repeatable vendor risk flow that matches your stage. We help you design a scoring model and review cadence that auditors accept without heavyweight GRC tooling."
-        ctaLabel="Build Program"
+        title={messaging.vendorRisk.hero.headline}
+        description={messaging.vendorRisk.hero.subhead}
+        ctaLabel={messaging.vendorRisk.hero.cta}
         successMessage="Thanks! We've received your request. We'll send over the program overview and template links shortly, and reach out to discuss your specific needs."
         endpoint="/api/lead/submit"
         analyticsEvent="vendor_risk_program"

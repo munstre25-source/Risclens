@@ -732,7 +732,7 @@ export default function PDFTemplate({ lead }: PDFTemplateProps) {
         <div className="disclaimer">
           <strong>⚠️ Important Disclaimer</strong>
           This report provides a readiness estimate based on provided inputs and does not constitute 
-          an audit opinion. RiscLens does not provide legal advice, audit services, or SOC 2 certification. 
+          an audit opinion. RiscLens does not provide legal advice, audit services, or SOC 2 attestations. 
           All results are based on self-reported inputs and should be used for internal planning purposes only. 
           For formal compliance guidance, please consult a qualified auditor or legal professional.
         </div>

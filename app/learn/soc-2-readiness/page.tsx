@@ -12,20 +12,25 @@ export default function LearnSoc2ReadinessPage() {
   return (
     <main className="min-h-screen bg-slate-50">
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12 space-y-6">
-        <div className="space-y-3 text-center">
-          <p className="text-sm font-semibold uppercase tracking-wide text-brand-700">SOC 2 Readiness</p>
-          <h1 className="text-4xl font-bold text-slate-900">Readiness Controls</h1>
-          <p className="text-lg text-slate-600 max-w-3xl mx-auto">
-            Explore every SOC 2 readiness control: what auditors care about, what to implement, and the evidence to keep audit-ready.
-          </p>
-          <div className="max-w-3xl mx-auto">
-            <DefinitionCallout
-              title="What SOC 2 readiness means"
-              description="SOC 2 readiness is a pre-audit assessment of how prepared you are for a SOC 2 audit—gaps, timelines, and evidence expectations. It is not a certification or audit opinion."
-              linkKey="soc2ReadinessIndex"
-            />
+          <div className="space-y-3 text-center">
+            <p className="text-sm font-semibold uppercase tracking-wide text-brand-700">Buyer Guide</p>
+            <h1 className="text-4xl font-bold text-slate-900">SOC 2 Preparation Guides</h1>
+            <p className="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
+              Operational guides for founders and security leads closing enterprise deals. No fluff—just the requirements, evidence patterns, and auditor expectations you need to unblock revenue.
+            </p>
+            <div className="max-w-3xl mx-auto">
+              <div className="bg-brand-50 border border-brand-100 rounded-xl p-6 text-left flex flex-col md:flex-row items-center gap-6">
+                <div className="flex-1 space-y-2">
+                  <h3 className="font-bold text-slate-900">Measure Your Readiness First</h3>
+                  <p className="text-sm text-slate-600">Don&apos;t guess your compliance posture. Use our deterministic calculator to find your actual gaps before reading the deep-dives.</p>
+                </div>
+                <Link href="/soc-2-readiness-calculator" className="btn-primary whitespace-nowrap">
+                  Get Readiness Score →
+                </Link>
+              </div>
+            </div>
           </div>
-        </div>
+
 
         <div className="grid gap-4 md:grid-cols-2">
           {controls.map((item) => (

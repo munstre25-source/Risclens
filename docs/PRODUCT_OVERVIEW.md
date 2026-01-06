@@ -17,10 +17,11 @@ What users experience across risclens.com. See [PRODUCT.md](PRODUCT.md) for posi
 - **SOC 2 Timeline** `/soc-2-timeline` (+ size variants).
 - **SOC 2 Type I vs Type II**, **Readiness Checklist**, **Industries** hub `/soc-2/industries` (+ `[slug]` pages).
 - **SOC 2 vs ISO 27001** hub `/soc-2-vs-iso-27001` (+ `[slug]` comparisons).
-- **Pentest**: overview `/penetration-testing`, estimator `/penetration-testing/cost-estimator`, and industry-specific high-intent guides (`/saas`, `/fintech`).
-- **Vendor Risk**: hub `/vendor-risk-assessment`, triage tool `/vendor-risk-assessment/triage`, and **ROI Calculator** `/vendor-risk-assessment/roi-calculator`.
+- **Pentest**: overview `/penetration-testing`, estimator `/penetration-testing/cost-estimator`, **SOW Builder** `/penetration-testing/sow`, **Scoping Worksheet** `/penetration-testing/scoping`, and industry-specific high-intent guides (`/saas`, `/fintech`).
+- **Vendor Risk**: hub `/vendor-risk-assessment`, triage tool `/vendor-risk-assessment/triage`, **Questionnaire Builder** `/vendor-risk-assessment/questionnaire`, and **ROI Calculator** `/vendor-risk-assessment/roi-calculator`.
+- **Match & Methodology**: **Auditor Match** `/auditor-match` (CPA connections) and **Methodology** `/methodology` (deterministic scoring explainers).
 - **Learning**: `/soc-2/guides`, `/learn/soc-2-readiness` (+ `[slug]`), evidence library `/soc-2-evidence/[slug]`.
-- **Policies**: `/privacy`, `/terms`. Admin: `/admin` (leads, filters, audit logs, variants, CSV export, test-mode toggles).
+- **Policies**: `/privacy`, `/terms`. Admin: `/admin` (leads, filters, audit logs, variants, CSV export, test-mode toggles, **OODA Analytics**).
 
 ## Lead Capture & Output
 - Forms submit to server APIs (`/api/submit`, `/api/soc2-lead`, `/api/pentest-lead`, `/api/vendor-risk-assessment`) with validation and optional email capture.

@@ -10,6 +10,7 @@ type AuthState = 'loading' | 'unauthenticated' | 'authenticated';
 const NAV_ITEMS = [
   { href: '/admin', label: 'Dashboard' },
   { href: '/admin/leads', label: 'Leads' },
+  { href: '/admin/ooda', label: 'OODA Loop' },
   { href: '/admin/kgr', label: 'KGR Tracker' },
   { href: '/admin/analytics', label: 'Analytics' },
   { href: '/admin/buyers', label: 'Buyers' },

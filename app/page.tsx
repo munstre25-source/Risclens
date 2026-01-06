@@ -6,20 +6,21 @@ import Footer from '@/components/Footer';
 import InfoAccordion from '@/components/InfoAccordion';
 import InfoDisclosure from '@/components/InfoDisclosure';
 import AboutSection from '@/components/AboutSection';
+import { messaging } from '@/src/content/messaging';
 
 export const metadata: Metadata = {
-  title: 'SOC 2 Readiness Index for Early-Stage Companies | RiscLens',
+  title: 'SOC 2 Readiness Assessment for Early-Stage Companies | RiscLens',
   description:
     'Get a free SOC 2 readiness score and cost estimate in under 2 minutes. See gaps, what auditors will ask next, and a clear path forward.',
   openGraph: {
-    title: 'SOC 2 Readiness Index for Early-Stage Companies | RiscLens',
+    title: 'SOC 2 Readiness Assessment for Early-Stage Companies | RiscLens',
     description:
       'Get a free SOC 2 readiness score and cost estimate in under 2 minutes. See gaps, what auditors will ask next, and a clear path forward.',
     images: [{ url: '/og.png', width: 1200, height: 630, alt: 'RiscLens' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'SOC 2 Readiness Index for Early-Stage Companies | RiscLens',
+    title: 'SOC 2 Readiness Assessment for Early-Stage Companies | RiscLens',
     description:
       'Get a free SOC 2 readiness score and cost estimate in under 2 minutes. See gaps, what auditors will ask next, and a clear path forward.',
     images: ['/og.png'],
@@ -44,7 +45,7 @@ const faqSchema = {
         "name": "How is SOC 2 readiness calculated?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "RiscLens calculates SOC 2 readiness on a 0–100 scale using a deterministic, rules-based algorithm. Each score is derived from explicit weights mapped to the AICPA Trust Services Criteria (TSC). Key factors include company size and team structure, data sensitivity (PII, financial, or health data mapped to CC6.1), audit timeline urgency, and industry vertical. The result includes a readiness band (Pre-audit, Early-stage, Near-ready, or Audit-ready) and a cost range estimate covering auditor fees, internal effort, and tooling."
+          "text": "RiscLens calculates SOC 2 readiness on a 0–100 scale using a risk-based scoring logic. Each score is derived from explicit weights mapped to the AICPA Trust Services Criteria (TSC). Key factors include company size and team structure, data sensitivity (PII, financial, or health data mapped to CC6.1), audit timeline urgency, and industry vertical. The result includes a readiness band (Pre-audit, Early-stage, Near-ready, or Audit-ready) and a cost range estimate covering auditor fees, internal effort, and tooling."
         }
       },
     {
@@ -73,11 +74,11 @@ const faqSchema = {
     },
     {
       "@type": "Question",
-      "name": "Is this a SOC 2 audit or certification?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "No. RiscLens provides a readiness assessment, not an audit or certification. SOC 2 audits must be performed by licensed CPA firms. SOC 2 reports (often called certifications) are formal attestations issued by auditors. Our assessment provides planning estimates and identifies potential gaps — it is not a substitute for a formal SOC 2 engagement with a qualified auditor."
-      }
+          "name": "Is this a SOC 2 audit or attestation?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. RiscLens provides a readiness assessment, not an audit or attestation. SOC 2 audits must be performed by licensed CPA firms. SOC 2 reports are formal attestations issued by auditors. Our assessment provides planning estimates and identifies potential gaps — it is not a substitute for a formal SOC 2 engagement with a qualified auditor."
+          }
     }
   ]
 };
@@ -98,36 +99,44 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <section className="bg-white border-b border-slate-200/70">
-        <div className="section-shell py-14 lg:py-20">
+        <div className="section-shell pt-8 pb-12 lg:pt-12 lg:pb-16">
           <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] items-start">
-            <div className="space-y-5">
-                <p className="text-sm font-bold uppercase tracking-[0.12em] text-slate-600">
-                  SOC 2 Readiness Index
-                </p>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-medium text-slate-900 leading-tight">
-                Get a SOC 2 readiness score in 2 minutes
-              </h1>
-              <p className="text-lg text-slate-700 leading-relaxed max-w-2xl">
-                For early-stage companies
-              </p>
-              <p className="text-sm text-slate-600">
-                Readiness assessment only — not a certification, audit, or compliance software.
-              </p>
-                <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
-                  <Link
-                    href="/soc-2-readiness-calculator"
-                    className="btn-primary text-base px-8 py-3"
-                  >
-                    Get your readiness score
-                  </Link>
-                    <Link
-                      href="/soc-2-readiness-checklist#download"
-                      className="btn-secondary text-base px-8 py-3 border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 transition-colors rounded-lg font-medium"
-                    >
+                  <div className="space-y-4">
+                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 border border-brand-100">
+                        <span className="relative flex h-2 w-2">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
+                        </span>
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-brand-700">Recommended starting point</span>
+                      </div>
+                    <p className="text-sm font-semibold text-slate-500 uppercase tracking-wide">
+                      Before choosing tools or auditors, understand your SOC 2 readiness.
+                    </p>
+                    <h1 className="text-4xl sm:text-5xl lg:text-5xl font-medium text-slate-900 leading-tight">
+                      {messaging.home.hero.headline}
+                    </h1>
 
-                    Download SOC 2 Checklist
-                  </Link>
-                </div>
+                  <p className="text-lg text-slate-700 leading-relaxed max-w-2xl">
+                    {messaging.home.hero.subhead}
+                  </p>
+                    
+                      <div className="flex flex-col gap-4">
+                        <div className="flex flex-col sm:flex-row gap-6 sm:items-center">
+                        <Link
+                          href="/soc-2-readiness-calculator"
+                          className="btn-primary text-base px-8 py-3"
+                        >
+                          {messaging.home.hero.cta}
+                        </Link>
+
+                        <Link
+                          href="/soc-2-readiness-checklist#download"
+                          className="text-sm font-medium text-slate-500 hover:text-slate-700 transition-colors"
+                        >
+                          Prefer a checklist instead? Download the SOC 2 checklist.
+                      </Link>
+                    </div>
+                  </div>
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-slate-600">Free • No credit card • Business email required</span>
                   </div>
@@ -169,26 +178,20 @@ export default function HomePage() {
                 <div className="grid gap-6 sm:grid-cols-2 pt-2">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold uppercase tracking-wider text-slate-900">SOC 2</span>
+                      <span className="text-xs font-bold uppercase tracking-wider text-slate-900">SOC 2 Audit</span>
                       <div className="h-px flex-1 bg-slate-100"></div>
                     </div>
                     <p className="text-sm text-slate-600 leading-relaxed">
-                      Independent audit framework against the Trust Service Criteria (security, availability, confidentiality).{' '}
-                      <Link href="#soc2-definitions" className="text-brand-600 font-medium hover:underline decoration-brand-200 underline-offset-4">
-                        What it means
-                      </Link>
+                      Independent validation of security controls required to close enterprise deals.
                     </p>
                   </div>
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold uppercase tracking-wider text-slate-900">Readiness</span>
+                      <span className="text-xs font-bold uppercase tracking-wider text-slate-900">Readiness Gap</span>
                       <div className="h-px flex-1 bg-slate-100"></div>
                     </div>
                     <p className="text-sm text-slate-600 leading-relaxed">
-                      How prepared you are to pass an audit—policies, controls, and evidence aligned to auditor expectations.{' '}
-                      <Link href="#soc2-definitions" className="text-brand-600 font-medium hover:underline decoration-brand-200 underline-offset-4">
-                        Learn more
-                      </Link>
+                      Distance between your current infrastructure and auditor expectations.
                     </p>
                   </div>
                 </div>
@@ -205,47 +208,54 @@ export default function HomePage() {
                   </span>
                 </div>
 
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 pt-4">
-                  {[
-                    {
-                      title: 'Readiness score',
-                      body: '0–100 score + band (Early-stage / Near-ready / Audit-ready)',
-                      icon: (
-                        <svg className="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                        </svg>
-                      ),
-                    },
-                    {
-                      title: 'Cost range',
-                      body: 'Estimated SOC 2 cost based on scope, timeline, and team size',
-                      icon: (
-                        <svg className="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .843-3 1.882 0 1.038 1.343 1.881 3 1.881s3 .843 3 1.88C15 15.881 13.657 16.724 12 16.724c-1.26 0-2.342-.457-2.812-1.1M12 6v12m9-6a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      ),
-                    },
-                    {
-                      title: 'Next steps',
-                      body: 'Top fixes auditors expect—prioritized by impact',
-                      icon: (
-                        <svg className="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      ),
-                    },
-                  ].map((item) => (
-                    <div key={item.title} className="group relative bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-brand-200 transition-all duration-200">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-brand-50 group-hover:bg-brand-100 transition-colors">
-                          {item.icon}
+                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 pt-4">
+                    {[
+                      {
+                        step: '01',
+                        title: 'Readiness Score',
+                        body: 'Instant gap analysis and score (0–100) based on real auditor expectations.',
+                        icon: (
+                          <svg className="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                          </svg>
+                        ),
+                      },
+                      {
+                        step: '02',
+                        title: 'Cost Planning',
+                        body: 'Deterministic budget range including auditor fees, tools, and internal effort.',
+                        icon: (
+                          <svg className="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .843-3 1.882 0 1.038 1.343 1.881 3 1.881s3 .843 3 1.88C15 15.881 13.657 16.724 12 16.724c-1.26 0-2.342-.457-2.812-1.1M12 6v12m9-6a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        ),
+                      },
+                      {
+                        step: '03',
+                        title: 'Auditor Match',
+                        body: 'Generate a standardized RFP and get competitive quotes from vetted firms.',
+                        icon: (
+                          <svg className="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        ),
+                      },
+                    ].map((item) => (
+                      <div key={item.title} className="group relative bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-brand-200 transition-all duration-200">
+                        <div className="absolute -top-3 left-4 px-2 py-0.5 bg-brand-600 text-white text-[10px] font-bold rounded shadow-sm">
+                          STEP {item.step}
                         </div>
-                        <p className="text-sm font-bold text-slate-900 tracking-tight">{item.title}</p>
+                        <div className="flex items-center gap-3 mb-3 pt-2">
+                          <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-brand-50 group-hover:bg-brand-100 transition-colors">
+                            {item.icon}
+                          </div>
+                          <p className="text-sm font-bold text-slate-900 tracking-tight">{item.title}</p>
+                        </div>
+                        <p className="text-sm text-slate-600 leading-relaxed">{item.body}</p>
                       </div>
-                      <p className="text-sm text-slate-600 leading-relaxed">{item.body}</p>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+
             </div>
 
                 {/* Hero preview card */}
@@ -372,73 +382,20 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div id="soc2-definitions" className="grid gap-6 md:grid-cols-2">
-            <InfoAccordion
-              triggerLabel="What SOC 2 actually means"
-              body="SOC 2 (System and Organization Controls) is an independent audit framework used by enterprise customers to evaluate how a company protects customer data. It focuses on whether your internal controls, processes, and evidence meet real-world security expectations — not whether you claim to be secure."
-              clarifier="SOC 2 is not a certification, badge, or software product. It’s an audit outcome based on documented evidence."
-            />
-            <InfoDisclosure
-              collapsible
-              triggerLabel="What is SOC 2 readiness?"
-              title="What SOC 2 readiness is not"
-              body="Clarifies the boundaries of the readiness assessment so expectations stay grounded."
-              bullets={[
-                'Not a SOC 2 certification or badge',
-                'Not a CPA audit or attestation',
-                'Not a replacement for an auditor',
-                'Not a compliance automation platform',
-              ]}
-              showTitle={false}
-            />
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <div className="bg-white border border-slate-200 rounded-lg p-4">
-              <p className="text-sm font-semibold text-slate-800 mb-2">What signing up does</p>
-              <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">
-                <li>Provide company size, industry, data types, and timeline.</li>
-                <li>Receive readiness score, cost range, and prioritized next steps.</li>
-                <li>Takes ~2 minutes.</li>
-              </ul>
-            </div>
-            <div className="bg-white border border-slate-200 rounded-lg p-4">
-              <p className="text-sm font-semibold text-slate-800 mb-2">Accuracy</p>
-              <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">
-                <li>Deterministic, rules-based scoring.</li>
-                <li>Cost ranges are directional, not quotes.</li>
-                <li>Variance is typically ±15–25% depending on scope and maturity.</li>
-              </ul>
-            </div>
-              <div className="bg-white border border-slate-200 rounded-lg p-4">
-                <p className="text-sm font-semibold text-slate-800 mb-2">Data handling</p>
-                <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">
-                  <li>Inputs are not sold or shared.</li>
-                  <li>Used only for scoring.</li>
-                  <li>Aggregated, anonymous data may improve estimates.</li>
-                </ul>
+            <div className="flex flex-col sm:flex-row gap-6 items-center justify-center pt-4">
+              <Link 
+                href="/soc-2-readiness-calculator"
+                className="btn-primary text-base px-8 py-3"
+              >
+                Validate Readiness Now
+              </Link>
+              <div className="text-center sm:text-left">
+                <p className="text-sm font-semibold text-slate-900">Technical Validation</p>
+                <p className="text-xs text-slate-500">Sanity-check your plan with a compliance expert. No sales demo.</p>
               </div>
-            <div className="bg-white border border-slate-200 rounded-lg p-4">
-              <p className="text-sm font-semibold text-slate-800 mb-2">Built for</p>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                SaaS, fintech, data platforms, marketplaces, and AI/ML companies preparing for SOC 2. Independent project by RiscLens — no lock-in, no sales calls.
-              </p>
             </div>
           </div>
-
-          <div className="border border-slate-200 rounded-xl bg-white p-5">
-            <p className="text-sm font-semibold text-slate-800 mb-2">Related tools</p>
-            <div className="flex flex-wrap gap-3 text-sm text-brand-700">
-              <Link href="/penetration-testing/pricing" className="underline underline-offset-4 hover:text-brand-800">
-                Penetration Testing Pricing
-              </Link>
-              <Link href="/vendor-risk-assessment" className="underline underline-offset-4 hover:text-brand-800">
-                Vendor Risk Assessment
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
 
         {/* How It Works Section */}
         <section className="py-16 lg:py-20 bg-white border-t border-slate-200">
@@ -481,7 +438,7 @@ export default function HomePage() {
                 How the Readiness Score Is Derived
               </h3>
               <p className="text-slate-600 mb-4 leading-relaxed">
-                Your score (0–100) is calculated using a <strong>deterministic, rules-based algorithm</strong>—not AI guesswork. Each input maps to explicit weights based on the <strong>AICPA Trust Services Criteria (TSC)</strong> and practical audit experience.
+                Your score (0–100) is calculated using a <strong>risk-based scoring logic</strong>—not AI guesswork. Each input maps to explicit weights based on the <strong>AICPA Trust Services Criteria (TSC)</strong> and practical audit experience.
               </p>
               <p className="text-slate-600 mb-4 leading-relaxed">
                 The scoring methodology weighs factors correlating with compliance effort:
@@ -513,16 +470,16 @@ export default function HomePage() {
               <ul className="space-y-3 text-slate-600 mb-4">
                 <li className="flex gap-3">
                   <span className="text-brand-600 font-medium shrink-0">•</span>
-                  <span><strong>Benchmark</strong>: Identify exactly where you sit on the 0-100 readiness scale.</span>
+                  <span><strong>Benchmark</strong>: Identify potential gaps in your readiness on the 0-100 readiness scale.</span>
                 </li>
                 <li className="flex gap-3">
                   <span className="text-brand-600 font-medium shrink-0">•</span>
                   <span><strong>Budget</strong>: Use the estimated cost ranges for internal planning and vendor selection.</span>
                 </li>
-                <li className="flex gap-3">
-                  <span className="text-brand-600 font-medium shrink-0">•</span>
-                  <span><strong>Prioritize</strong>: Focus on the specific &quot;Gaps&quot; identified by the algorithm before engaging an auditor.</span>
-                </li>
+                  <li className="flex gap-3">
+                    <span className="text-brand-600 font-medium shrink-0">•</span>
+                    <span><strong>Prioritize</strong>: Focus on the specific potential gaps identified by the assessment before engaging an auditor.</span>
+                  </li>
               </ul>
               <p className="text-slate-600 italic text-sm">
                 The estimates provide a starting point for internal planning — not a substitute for professional audit services.
@@ -571,17 +528,17 @@ export default function HomePage() {
                   How is SOC 2 readiness calculated?
                 </h3>
                 <p className="text-slate-600 leading-relaxed mb-3">
-                  RiscLens calculates SOC 2 readiness on a <strong>0–100 scale</strong> using a <strong>deterministic, rules-based algorithm</strong>. Every score is derived from explicit weights mapped to the <strong>AICPA Trust Services Criteria (TSC)</strong>:
+                  RiscLens calculates SOC 2 readiness on a <strong>0–100 scale</strong> using a <strong>risk-based scoring logic</strong>. Every score is derived from explicit weights mapped to the <strong>AICPA Trust Services Criteria (TSC)</strong>:
                 </p>
                 <ul className="space-y-2 text-slate-600 mb-3">
                   <li className="flex gap-3">
                     <span className="text-brand-600 font-medium shrink-0">•</span>
                     <span><strong>Company Size & Structure</strong> affects documentation scope and control ownership complexity.</span>
                   </li>
-                  <li className="flex gap-3">
-                    <span className="text-brand-600 font-medium shrink-0">•</span>
-                    <span><strong>Data Sensitivity</strong> (PII, financial, health) determines required controls (mapped to CC6.1).</span>
-                  </li>
+                    <li className="flex gap-3">
+                      <span className="text-brand-600 font-medium shrink-0">•</span>
+                      <span><strong>Data Sensitivity</strong> (PII, financial, health) determines commonly expected controls (mapped to CC6.1).</span>
+                    </li>
                   <li className="flex gap-3">
                     <span className="text-brand-600 font-medium shrink-0">•</span>
                     <span><strong>Audit Timeline</strong> urgency impacts resource allocation and preparation costs.</span>
@@ -674,27 +631,27 @@ export default function HomePage() {
             </div>
 
             {/* FAQ 6 */}
-            <div>
-              <h3 className="text-lg font-semibold text-slate-800 mb-3">
-                Is this a SOC 2 audit or certification?
-              </h3>
-              <p className="text-slate-600 leading-relaxed mb-3">
-                No. RiscLens provides a <strong>readiness assessment</strong>, not an audit or certification.
-              </p>
-              <ul className="space-y-2 text-slate-600 mb-3">
-                <li className="flex gap-3">
-                  <span className="text-brand-600 font-medium">•</span>
-                  <span><strong>SOC 2 audits</strong> must be performed by licensed CPA firms</span>
-                </li>
-                <li className="flex gap-3">
-                  <span className="text-brand-600 font-medium">•</span>
-                  <span><strong>SOC 2 reports</strong> (often called &quot;certifications&quot;) are formal attestations issued by auditors</span>
-                </li>
-                <li className="flex gap-3">
-                  <span className="text-brand-600 font-medium">•</span>
-                  <span><strong>Readiness assessments</strong> help organizations prepare before engaging auditors</span>
-                </li>
-              </ul>
+              <div>
+                <h3 className="text-lg font-semibold text-slate-800 mb-3">
+                  Is this a SOC 2 audit or attestation?
+                </h3>
+                <p className="text-slate-600 leading-relaxed mb-3">
+                  No. RiscLens provides a <strong>readiness assessment</strong>, not an audit or attestation.
+                </p>
+                <ul className="space-y-2 text-slate-600 mb-3">
+                  <li className="flex gap-3">
+                    <span className="text-brand-600 font-medium">•</span>
+                    <span><strong>SOC 2 audits</strong> must be performed by licensed CPA firms</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="text-brand-600 font-medium">•</span>
+                    <span><strong>SOC 2 reports</strong> are formal attestations issued by auditors</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="text-brand-600 font-medium">•</span>
+                    <span><strong>Readiness assessments</strong> help organizations prepare before engaging auditors</span>
+                  </li>
+                </ul>
               <p className="text-slate-600 leading-relaxed">
                 Our assessment provides planning estimates and identifies potential gaps — it is not a substitute for a formal SOC 2 engagement with a qualified auditor.
               </p>

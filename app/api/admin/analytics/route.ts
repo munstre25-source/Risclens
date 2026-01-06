@@ -33,6 +33,14 @@ export async function GET(request: NextRequest) {
 
     if (variantsError) throw variantsError;
 
+    // 3. Fetch Revenue Events for OODA (Gap #2)
+    const { data: revenueEvents, error: revenueError } = await supabase
+      .from('REVENUE_EVENTS')
+      .select('calculator_page, event_type')
+      .eq('event_type', 'monetization_cta_clicked');
+
+    if (revenueError) throw revenueError;
+
     // --- Calculations ---
     const totalLeads = leads.length;
     const totalImpressions = variants.reduce((sum, v) => sum + (v.impressions || 0), 0);
@@ -119,6 +127,34 @@ export async function GET(request: NextRequest) {
     const qualifiedCount = leads.filter(l => l.lead_status !== 'new' && l.lead_status !== 'closed_lost').length;
     const closedWonCount = leads.filter(l => l.lead_status === 'closed_won').length;
 
+    // Tool Performance (OODA Gap #2)
+    const toolTypes = ['soc2-readiness', 'soc2-cost', 'pentest-estimator', 'vendor-risk-assessment', 'roi_calculator'];
+    const toolPerformance = toolTypes.map(type => {
+      const typeLeads = leads.filter(l => l.lead_type === type).length;
+      
+      // Real monetization clicks from REVENUE_EVENTS
+      const monetizationClicks = (revenueEvents || [])
+        .filter(e => e.calculator_page === type).length;
+
+      // Map tool type to variation name for impressions
+      const variationName = type === 'soc2-readiness' ? 'soc2-readiness-v1' : 
+                          type === 'soc2-cost' ? 'soc2-cost-v1' :
+                          type === 'pentest-estimator' ? 'pentest-v1' :
+                          type === 'roi_calculator' ? 'roi-v1' :
+                          'vra-v1';
+      
+      const variant = variants.find(v => v.name === variationName);
+      const impressions = variant?.impressions || 1; // Avoid div by zero
+      
+      return {
+        name: type,
+        resultsViewed: impressions,
+        leadsSubmitted: typeLeads,
+        conversionRate: ((typeLeads / impressions) * 100).toFixed(1) + '%',
+        monetizationClicks
+      };
+    });
+
     return NextResponse.json({
       success: true,
       summary: {
@@ -138,6 +174,7 @@ export async function GET(request: NextRequest) {
       typeBreakdown,
       revenueBreakdown,
       variationStats,
+      toolPerformance, // Added for OODA Gap #2
       funnel: {
         impressions: totalImpressions,
         submissions: totalSubmissions,

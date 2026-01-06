@@ -4,17 +4,17 @@
 
 /* Base styles */
 @layer base {
-  :root {
-    --header-h: 64px;
-    --anchor-offset: calc(var(--header-h) + 20px);
-  }
-
-  @media (min-width: 768px) {
     :root {
-      --header-h: 88px;
+      --header-h: 64px;
       --anchor-offset: calc(var(--header-h) + 20px);
     }
-  }
+  
+    @media (min-width: 1024px) {
+      :root {
+        --header-h: 80px;
+        --anchor-offset: calc(var(--header-h) + 20px);
+      }
+    }
 
   html {
     scroll-behavior: smooth;

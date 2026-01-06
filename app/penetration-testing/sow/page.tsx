@@ -2,18 +2,19 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { PentestSOWBuilder } from '@/components/pentest/PentestSOWBuilder';
 
 export const metadata: Metadata = {
   title: 'Penetration Testing SOW Template | RiscLens',
-  description: 'Scope, deliverables, and clauses for a clean pen test SOW. Avoid rework and get actionable findings.',
+  description: 'Download a standardized Statement of Work (SOW) template for SOC 2 penetration testing. Lock in scope, deliverables, and rules of engagement.',
   alternates: { canonical: '/penetration-testing/sow' },
 };
 
 const sections = [
-  { title: 'Scope definition', items: ['In-scope assets (apps, APIs, cloud, network) with URLs/IP ranges.', 'Authentication flows and test accounts; MFA/SSO notes.', 'Data sensitivity, third-party dependencies, and change freeze windows.'] },
-  { title: 'Methodology & rules of engagement', items: ['Testing windows and expected noise levels.', 'Exploitation depth (read-only vs proof-of-concept) and social engineering in/out of scope.', 'Rate limits, safe list configuration, and kill switch contacts.'] },
-  { title: 'Deliverables', items: ['Executive summary + technical report with CVSS/likelihood + remediation.', 'Evidence for each finding (repro steps, screenshots, payloads).', 'Retest window and what evidence is required to close findings.'] },
-  { title: 'Legal & compliance clauses', items: ['Data handling and retention (where reports and evidence live, how long).', 'Liability caps and breach notification triggers.', 'Right to share a sanitized report with customers (as allowed).'] },
+  { title: 'Scope Definition', items: ['In-scope assets (apps, APIs, cloud, network) with URLs/IP ranges.', 'Authentication flows and test accounts; MFA/SSO notes.', 'Data sensitivity, third-party dependencies, and change freeze windows.'] },
+  { title: 'Methodology & ROE', items: ['Testing windows and expected noise levels.', 'Exploitation depth (read-only vs POC) and social engineering limits.', 'Rate limits, safe list configuration, and kill switch contacts.'] },
+  { title: 'Deliverables', items: ['Executive summary + technical report with CVSS/likelihood.', 'Evidence for each finding (repro steps, screenshots, payloads).', 'Retest window and what evidence is required to close findings.'] },
+  { title: 'Legal & Compliance', items: ['Data handling and retention (where reports live, how long).', 'Liability caps and breach notification triggers.', 'Right to share a sanitized report with customers.'] },
 ];
 
 export default function PenTestSOWPage() {
@@ -21,70 +22,89 @@ export default function PenTestSOWPage() {
     <>
       <Header />
       <main className="min-h-screen flex flex-col bg-slate-100">
-        <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-16 lg:py-22 text-center space-y-4">
-            <p className="text-sm font-semibold uppercase tracking-wide text-brand-700">Penetration Testing</p>
-            <h1 className="text-4xl sm:text-5xl font-semibold text-slate-900 leading-tight">Penetration Testing SOW Template</h1>
-            <p className="text-lg text-slate-700 max-w-3xl mx-auto leading-relaxed">
-              Lock in scope, deliverables, and ROE so your pen test finishes on time and produces actionable findings.
+        <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100 border-b border-slate-200">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-16 lg:py-24 text-center space-y-6">
+            <div className="inline-flex items-center gap-2 bg-brand-50 text-brand-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              Interactive Tool
+            </div>
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 leading-tight tracking-tight">
+              Pentest SOW Builder
+            </h1>
+            <p className="text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
+              Standardize your Statement of Work to ensure your test covers the right controls and provides the evidence auditors require.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3">
-              <Link
-                href="/penetration-testing/cost-estimator"
-                className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
-              >
-                Run the cost estimator
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
-              <Link href="/penetration-testing/pricing" className="text-sm text-brand-700 underline underline-offset-4">
-                See pricing signals →
-              </Link>
+          </div>
+        </section>
+
+        <section className="py-16 bg-white">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6">
+            <div className="grid lg:grid-cols-2 gap-16 items-start">
+              <div className="space-y-10">
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-slate-900">What's in the template?</h2>
+                  <p className="text-slate-600">
+                    A professional SOW removes surprises. Our template covers the four critical pillars of a SOC 2-ready penetration test.
+                  </p>
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {sections.map((section) => (
+                    <div key={section.title} className="border border-slate-200 rounded-xl p-5 bg-slate-50 shadow-sm space-y-3">
+                      <h3 className="text-base font-bold text-slate-900">{section.title}</h3>
+                      <ul className="space-y-2 text-xs text-slate-600">
+                        {section.items.map((item) => (
+                          <li key={item} className="flex gap-2">
+                            <span className="text-brand-600 font-bold">•</span>
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="p-6 bg-brand-50 border border-brand-100 rounded-xl space-y-3">
+                  <h3 className="font-bold text-brand-900 flex items-center gap-2">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Auditor Tip
+                  </h3>
+                  <p className="text-sm text-brand-800 leading-relaxed">
+                    Auditors check your SOW to verify that the "System Boundary" described in your SOC 2 report matches the targets actually tested. Misalignment here is a common cause of audit delays.
+                  </p>
+                </div>
+              </div>
+
+              <div id="builder" className="lg:sticky lg:top-8">
+                <PentestSOWBuilder />
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="py-12 lg:py-16 bg-white border-t border-slate-200">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-10">
-            <div className="grid gap-4 md:grid-cols-2">
-              {sections.map((section) => (
-                <div key={section.title} className="border border-slate-200 rounded-xl p-5 bg-white shadow-sm space-y-3">
-                  <h2 className="text-lg font-semibold text-slate-900">{section.title}</h2>
-                  <ul className="space-y-2 text-sm text-slate-700">
-                    {section.items.map((item) => (
-                      <li key={item} className="flex gap-2">
-                        <span className="text-brand-600">•</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-
-            <div className="border border-slate-200 rounded-xl p-6 bg-slate-50 space-y-3">
-              <h2 className="text-lg font-semibold text-slate-900">Clauses that prevent rework</h2>
-              <ul className="space-y-2 text-sm text-slate-700">
-                <li className="flex gap-2"><span className="text-brand-600">•</span><span>Retest window and criteria for closure included in base price.</span></li>
-                <li className="flex gap-2"><span className="text-brand-600">•</span><span>Clear findings format: repro, impact, likelihood, fix.</span></li>
-                <li className="flex gap-2"><span className="text-brand-600">•</span><span>Escalation path for blockers and out-of-scope issues discovered.</span></li>
-              </ul>
-            </div>
-
-            <div className="text-center space-y-3">
-              <p className="text-slate-700 leading-relaxed">
-                A good SOW removes surprises: scope, evidence, and retest expectations are clear before testing starts.
-              </p>
-              <Link
-                href="/penetration-testing/cost-estimator"
-                className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
-              >
-                Run the cost estimator
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
+        <section className="py-16 bg-slate-50 border-t border-slate-200">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-8">
+            <h2 className="text-3xl font-bold text-slate-900">Why this tool works</h2>
+            <div className="grid sm:grid-cols-3 gap-8">
+              <div className="space-y-2">
+                <div className="text-brand-600 font-bold text-xl">01</div>
+                <h3 className="font-bold text-slate-900">Zero Ambiguity</h3>
+                <p className="text-sm text-slate-600">Clearly defines what is (and isn't) being tested to avoid scope creep.</p>
+              </div>
+              <div className="space-y-2">
+                <div className="text-brand-600 font-bold text-xl">02</div>
+                <h3 className="font-bold text-slate-900">Auditor Approved</h3>
+                <p className="text-sm text-slate-600">Structured to provide the specific evidence trust service criteria require.</p>
+              </div>
+              <div className="space-y-2">
+                <div className="text-brand-600 font-bold text-xl">03</div>
+                <h3 className="font-bold text-slate-900">Fixed Results</h3>
+                <p className="text-sm text-slate-600">Helps establish expectations for a retest window and clean reporting format.</p>
+              </div>
             </div>
           </div>
         </section>

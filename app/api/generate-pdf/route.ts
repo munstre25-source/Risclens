@@ -161,6 +161,11 @@ export async function POST(request: NextRequest) {
           resourceName: 'DOCX Templates',
           description: 'Ready-to-use email and document templates for vendor evidence requests.',
         },
+        vra_questionnaire: {
+          title: 'Vendor Risk Questionnaire Package',
+          resourceName: 'VRA Questionnaire',
+          description: 'A comprehensive vendor risk questionnaire with evidence checklists and scoring tips.',
+        },
       };
 
       const config = magnetConfigs[templateType] || {

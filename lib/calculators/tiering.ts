@@ -52,7 +52,7 @@ export function calculateVendorTier(inputs: TieringInputs): TieringResult {
     monitoringCadence = 'Biennial Review';
   } else {
     tier = 'Tier 4 (Low)';
-    requirements = ['Basic Security Profile', 'Self-Certification'];
+    requirements = ['Basic Security Profile', 'Self-Attestation'];
     monitoringCadence = 'As needed';
   }
 

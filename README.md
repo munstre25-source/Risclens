@@ -4,11 +4,13 @@ A production-ready SOC 2 compliance cost calculator built with Next.js (App Rout
 
 ## Features
 
-- 📊 **Interactive Calculator**: Multi-step form with real-time validation
+- 📊 **Interactive Calculators**: Multi-step forms for SOC 2, Pentest, and Vendor Risk ROI
 - 📈 **Lead Scoring**: Deterministic scoring logic for lead qualification (1-10 scale)
+- 🤝 **Auditor Match**: Connecting companies with vetted CPA firms
+- 📝 **SOW & Scoping**: Automated Statement of Work and scoping worksheet generation
 - 📄 **PDF Generation**: Automated PDF report generation with Playwright/Chromium
 - 📧 **Email Automation**: SendGrid + SMTP fallback with day-3/day-7 follow-ups
-- 👤 **Admin Dashboard**: Lead management, CSV export, A/B testing controls, mark sold
+- 👤 **Admin Dashboard**: Lead management, OODA analytics, CSV export, A/B testing controls
 - 🔄 **A/B Testing**: Built-in variation tracking and conversion metrics
 - ⏰ **Scheduled Follow-ups**: Vercel Cron-compatible batch email jobs
 - 🔒 **Rate Limiting**: In-memory rate limiting on all write endpoints

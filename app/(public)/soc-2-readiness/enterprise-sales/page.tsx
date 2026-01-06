@@ -65,7 +65,7 @@ export default function Soc2EnterpriseSalesPage() {
             <div className="space-y-3">
               <h2 className="text-2xl font-semibold text-slate-900">What sales teams misunderstand</h2>
               <ul className="list-disc list-inside space-y-2 text-slate-700 leading-relaxed">
-                <li>SOC 2 does not guarantee “pass/fail”; it’s evidence-based readiness.</li>
+                <li>SOC 2 does not produce a "pass/fail" outcome; it's evidence-based readiness.</li>
                 <li>Automation tools alone do not satisfy auditors without ownership and process.</li>
                 <li>Evidence timing matters: stale exports create churn with buyers.</li>
               </ul>

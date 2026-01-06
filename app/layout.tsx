@@ -8,10 +8,10 @@ import { HashScrollFix } from '@/components/HashScrollFix';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://risclens.com'),
-  title: {
-    default: 'SOC 2 Readiness Index for Early-Stage Companies | RiscLens',
-    template: '%s | RiscLens',
-  },
+    title: {
+      default: 'SOC 2 Readiness Assessment for Early-Stage Companies | RiscLens',
+      template: '%s | RiscLens',
+    },
   description:
     'Get a free SOC 2 readiness score and cost estimate in under 2 minutes. See gaps, what auditors will ask next, and a clear path forward.',
   openGraph: {
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://risclens.com',
     siteName: 'RiscLens',
-    title: 'SOC 2 Readiness Index for Early-Stage Companies | RiscLens',
+    title: 'SOC 2 Readiness Assessment for Early-Stage Companies | RiscLens',
     description:
       'Get a free SOC 2 readiness score and cost estimate in under 2 minutes. See gaps, what auditors will ask next, and a clear path forward.',
     images: [
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'SOC 2 Readiness Index for Early-Stage Companies | RiscLens',
+    title: 'SOC 2 Readiness Assessment for Early-Stage Companies | RiscLens',
     description:
       'Get a free SOC 2 readiness score and cost estimate in under 2 minutes. See gaps, what auditors will ask next, and a clear path forward.',
     images: ['/og.png'],

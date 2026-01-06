@@ -317,7 +317,7 @@ export default function VendorRiskRoiCalculator() {
           </div>
           <div className="space-y-1">
             <p className="font-medium text-slate-800">Risk Scoring</p>
-            <p className="text-slate-600 text-xs">Standardized triage logic ensures you only spend deep-dive time on high-risk vendors.</p>
+            <p className="text-slate-600 text-xs">Standardized triage logic helps prioritize deep-dive time on higher-risk vendors.</p>
           </div>
           <div className="space-y-1">
             <p className="font-medium text-slate-800">Evidence Vault</p>

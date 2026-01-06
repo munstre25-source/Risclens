@@ -20,7 +20,7 @@ export function RelatedGuidesRow({ links, title = 'Related guides', className = 
             href={link.href} 
             className="flex items-center p-3 rounded-lg border border-slate-100 hover:border-brand-200 hover:bg-brand-50 transition-all text-sm text-brand-700 font-medium group"
           >
-            <span className="truncate group-hover:translate-x-1 transition-transform">
+            <span className="group-hover:translate-x-1 transition-transform">
               {link.label}
             </span>
             <svg className="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">

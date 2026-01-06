@@ -31,11 +31,11 @@ export function Breadcrumbs({ items, className = '' }: BreadcrumbsProps) {
           const isLast = index === items.length - 1;
           return (
             <li key={item.href} className="flex items-center">
-              {isLast ? (
-                <span className="font-medium text-slate-900 truncate max-w-[200px] sm:max-w-none" aria-current="page">
-                  {item.label}
-                </span>
-              ) : (
+                {isLast ? (
+                  <span className="font-medium text-slate-900" aria-current="page">
+                    {item.label}
+                  </span>
+                ) : (
                 <>
                   <Link href={item.href} className="hover:text-brand-700 transition-colors">
                     {item.label}

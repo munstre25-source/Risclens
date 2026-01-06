@@ -253,15 +253,15 @@ export default function Header() {
         isScrolled ? 'bg-white/95 backdrop-blur border-slate-200 shadow-sm' : 'bg-white border-slate-100'
       }`}
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-24 flex items-center justify-between">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 lg:h-20 flex items-center justify-between">
               <Link href="/" className="flex items-center gap-3 shrink-0">
                 <Image
                   src="/logo/logo-wordmark.png"
                   alt="RiscLens"
-                  width={300}
-                  height={90}
+                  width={280}
+                  height={84}
                   priority
-                  className="h-[88px] w-auto object-contain"
+                  className="h-14 lg:h-[72px] w-auto object-contain"
                 />
               </Link>
 
@@ -571,7 +571,7 @@ export default function Header() {
                               alt="RiscLens"
                               width={280}
                               height={82}
-                              className="h-[72px] w-auto object-contain"
+                              className="h-[88px] w-auto object-contain"
                             />
                         </Link>
                     <button
