@@ -20,8 +20,9 @@ function parseDocCounts(md: string) {
   return { total, soc, pentest, vr, other };
 }
 
-function countSitemap() {
-  const data = sitemap().map((d) => d.url.replace('https://risclens.com', ''));
+async function countSitemap() {
+  const result = await sitemap();
+  const data = result.map((d) => d.url.replace('https://risclens.com', ''));
   const soc = data.filter((u) => u.startsWith('/soc-2') || u.startsWith('/learn/soc-2') || u.startsWith('/when-do-you-need-soc-2')).length;
   const pentest = data.filter((u) => u.startsWith('/penetration-testing')).length;
   const vr = data.filter((u) => u.startsWith('/vendor-risk-assessment')).length;
@@ -29,14 +30,14 @@ function countSitemap() {
   return { total: data.length, soc, pentest, vr, other };
 }
 
-function main() {
+async function main() {
   const md = fs.readFileSync(docPath, 'utf8');
   const doc = parseDocCounts(md);
   if (!doc) {
     console.error('Could not parse counts from docs/ROUTE_COUNTS.md');
     process.exit(1);
   }
-  const map = countSitemap();
+  const map = await countSitemap();
 
   const mismatch = Object.entries(doc).filter(([k, v]) => map[k as keyof typeof map] !== v);
   if (mismatch.length) {

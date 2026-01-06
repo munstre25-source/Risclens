@@ -47,11 +47,18 @@ async function probeUrl(url: string) {
       ok: response.ok, 
       status: response.status, 
       url: response.url,
-      text: response.ok ? await response.text() : ''
+      text: response.ok ? await response.text() : '',
+      error: null as string | null
     };
   } catch (error: any) {
     clearTimeout(timeoutId);
-    return { ok: false, status: 0, error: error.message };
+    return { 
+      ok: false, 
+      status: 0, 
+      url: url,
+      text: '',
+      error: error.message as string
+    };
   }
 }
 
