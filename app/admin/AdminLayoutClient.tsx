@@ -178,14 +178,14 @@ export default function AdminLayoutClient({
         <aside className="w-56 bg-white border-r border-slate-200 hidden md:flex flex-col">
           <div className="px-4 py-5 border-b border-slate-200">
                 <Link href="/admin" className="flex items-center gap-2 text-lg font-semibold text-slate-900">
-                  <Image
-                    src="/logo/logo-wordmark.png"
-                    alt="RiscLens"
-                    width={315}
-                    height={125}
-                    className="w-auto"
-                    style={{ height: '8.75rem' }}
-                  />
+                            <Image
+                              src="/logo/logo-wordmark.png"
+                              alt="RiscLens"
+                                width={315}
+                                height={125}
+                                className="w-auto"
+                                  style={{ height: '5rem' }}
+                              />
                   <span className="text-sm text-slate-700">Admin</span>
                 </Link>
           </div>
@@ -231,16 +231,16 @@ export default function AdminLayoutClient({
           {/* Mobile top nav */}
           <header className="md:hidden sticky top-0 z-20 bg-white border-b border-slate-200 relative">
             <div className="px-4 py-3 flex items-center justify-between">
-                  <Link href="/admin" className="flex items-center gap-2">
-                    <Image
-                      src="/logo/logo-wordmark.png"
-                      alt="RiscLens"
-                      width={250}
-                      height={75}
-                      className="h-[70px] w-auto object-contain"
-                    />
-                    <span className="text-sm font-semibold text-slate-900">Admin</span>
-                  </Link>
+                    <Link href="/admin" className="flex items-center gap-2">
+                              <Image
+                                src="/logo/logo-wordmark.png"
+                                alt="RiscLens"
+                                width={250}
+                                height={100}
+                                  className="h-20 w-auto object-contain"
+                              />
+                      <span className="text-sm font-semibold text-slate-900">Admin</span>
+                    </Link>
               <button
                 type="button"
                 className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600"

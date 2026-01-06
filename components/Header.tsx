@@ -253,7 +253,7 @@ export default function Header() {
         isScrolled ? 'bg-white/95 backdrop-blur border-slate-200 shadow-sm' : 'bg-white border-slate-100'
       }`}
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 lg:h-20 flex items-center justify-between">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-20 lg:h-24 flex items-center justify-between">
               <Link href="/" className="flex items-center gap-3 shrink-0">
                 <Image
                   src="/logo/logo-wordmark.png"
@@ -261,7 +261,7 @@ export default function Header() {
                   width={280}
                   height={84}
                   priority
-                  className="h-14 lg:h-[72px] w-auto object-contain"
+                  className="h-16 lg:h-20 w-auto object-contain"
                 />
               </Link>
 
@@ -565,15 +565,15 @@ export default function Header() {
             >
               <div className="px-4 py-4 space-y-3 h-full overflow-y-auto overscroll-contain">
                     <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                        <Link href="/" className="flex items-center gap-3 shrink-0" onClick={() => setMobileOpen(false)}>
-                            <Image
-                              src="/logo/logo-wordmark.png"
-                              alt="RiscLens"
-                              width={280}
-                              height={82}
-                              className="h-[88px] w-auto object-contain"
-                            />
-                        </Link>
+                          <Link href="/" className="flex items-center gap-3 shrink-0" onClick={() => setMobileOpen(false)}>
+                              <Image
+                                src="/logo/logo-wordmark.png"
+                                alt="RiscLens"
+                                width={280}
+                                height={82}
+                                className="h-[100px] w-auto object-contain"
+                              />
+                          </Link>
                     <button
                     type="button"
                     className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50"
