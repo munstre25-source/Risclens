@@ -19,7 +19,7 @@ interface CompanySignal {
   ai_summary: string;
 }
 
-export function SignalDirectoryManager() {
+function SignalDirectoryManager() {
   const [companies, setCompanies] = useState<CompanySignal[]>([]);
   const [inputText, setInputText] = useState('');
   const [loading, setLoading] = useState(true);
