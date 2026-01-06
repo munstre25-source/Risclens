@@ -1,149 +1,123 @@
-// Update ROUTES when adding new pages so they appear in sitemap.
+import { readinessGuides, costGuides, timelineGuides, salesGuides } from '@/lib/soc2Guides';
+import { industryGuides } from '@/lib/soc2Industries';
+import { pentestPages } from '@/lib/pentestPages';
+import { comparisonPages } from '@/lib/soc2Comparisons';
+import { evidenceGuides } from '@/lib/soc2Evidence';
 
-export const ROUTES: string[] = [
+/**
+ * SITEMAP BUCKETS & PRIORITIES
+ * 
+ * 1.0:  Flagship Tools
+ * 0.95: High-Intent Calculators
+ * 0.90: Main Hubs
+ * 0.85: Commercial Sub-pages
+ * 0.70: Default / Other
+ * 0.65: Learn Cluster
+ * 0.40: Legal
+ */
+
+export const FLAGSHIP_ROUTES = [
   '/',
-  '/soc-2-cost',
-  '/soc-2-cost/saas',
-  '/soc-2-cost/fintech',
-  '/soc-2-cost/startups',
-  '/soc-2-cost/enterprise',
-  '/soc-2-cost/healthcare',
-  '/soc-2-cost/ecommerce',
-  '/soc-2-cost/marketplaces',
-  '/soc-2-cost/ai-data',
-  '/soc-2-cost/b2b-saas',
-  '/soc-2-cost/cloud-infrastructure',
-  '/soc-2-cost/devtools',
-  '/soc-2-cost/edtech',
-  '/soc-2-cost/payments',
-  '/soc-2-cost/industries',
-    '/soc-2-readiness/saas',
-    '/soc-2-readiness/fintech',
-    '/soc-2-readiness/startups',
-    '/soc-2-readiness/enterprise-sales',
-    '/soc-2-readiness-calculator',
-    '/compliance-roi-calculator',
-    '/about',
-    '/privacy',
-    '/terms',
-    '/learn/soc-2-readiness',
-    '/soc-2-timeline',
-    '/soc-2-type-i-vs-type-ii',
-    '/soc-2-cost-breakdown',
-    '/when-do-you-need-soc-2',
-    '/soc-2-vs-iso-27001',
-    '/penetration-testing',
-    '/penetration-testing/pricing',
-    '/penetration-testing/cost-estimator',
-    '/penetration-testing/web-application',
-    '/penetration-testing/api',
-    '/penetration-testing/mobile',
-    '/penetration-testing/cloud',
-    '/penetration-testing/vs-vulnerability-scan',
-    '/penetration-testing/report',
-    '/penetration-testing/for-soc-2',
-    '/soc-2-cost/auditor-fees',
-    '/soc-2-cost/automation-tools-vanta-drata',
-    '/soc-2-cost/internal-time-and-headcount',
-    '/soc-2-cost/policies-and-documentation',
-    '/soc-2-cost/evidence-collection',
-    '/soc-2-cost/penetration-testing',
-    '/soc-2-cost/vendor-management',
-    '/soc-2-cost/security-tooling',
-    '/soc-2-cost/legal-and-grc-support',
-    '/soc-2-cost/type-1-vs-type-2-cost',
-    '/soc-2-cost/hidden-costs',
-    '/soc-2-cost/5-10-employees',
-    '/soc-2-cost/10-50-employees',
-    '/soc-2-cost/50-200-employees',
-    '/soc-2-timeline/startups',
-    '/soc-2-timeline/saas',
-    '/soc-2-timeline/fintech',
-    '/soc-2-timeline/5-10-employees',
-    '/soc-2-timeline/10-50-employees',
-    '/soc-2-timeline/50-200-employees',
-    '/soc-2-evidence/vault',
-    '/soc-2-readiness-checklist',
-    '/soc-2/guides',
-    '/soc-2/industries',
-    '/soc-2/industries/startups',
-    '/soc-2/industries/enterprise',
-    '/soc-2/industries/saas',
-    '/soc-2/industries/b2b-saas',
-    '/soc-2/industries/fintech',
-    '/soc-2/industries/healthcare',
-    '/soc-2/industries/edtech',
-    '/soc-2/industries/marketplaces',
-    '/soc-2/industries/ai-data',
-    '/soc-2/industries/devtools',
-    '/soc-2/industries/cloud-infrastructure',
-    '/soc-2/industries/ecommerce',
-    '/soc-2/industries/payments',
-    '/soc-2/auditor-selection',
-    '/soc-2/continuous-monitoring',
-    '/soc-2-vs-iso-27001/timeline-and-effort',
-    '/soc-2-vs-iso-27001/cost-comparison',
-    '/soc-2-vs-iso-27001/which-to-choose',
-    '/soc-2-vs-iso-27001/for-startups',
-    '/soc-2-vs-iso-27001/for-enterprise-sales',
-    '/soc-2-vs-iso-27001/mapping-controls-overview',
-    '/vendor-risk-assessment/questionnaire',
-    '/soc-2-evidence/access-control',
-    '/soc-2-evidence/change-management',
-    '/soc-2-evidence/logging-monitoring',
-    '/soc-2-evidence/incident-response',
-    '/soc-2-evidence/vendor-management',
-    '/soc-2-evidence/business-continuity',
-    '/learn/soc-2-readiness/access-control',
-    '/learn/soc-2-readiness/user-access-reviews',
-    '/learn/soc-2-readiness/mfa-and-authentication',
-    '/learn/soc-2-readiness/change-management',
-    '/learn/soc-2-readiness/secure-sdlc',
-    '/learn/soc-2-readiness/logging-and-monitoring',
-    '/learn/soc-2-readiness/incident-response',
-    '/learn/soc-2-readiness/vulnerability-management',
-    '/learn/soc-2-readiness/patch-management',
-    '/learn/soc-2-readiness/vendor-management',
-    '/learn/soc-2-readiness/asset-inventory',
-    '/learn/soc-2-readiness/data-encryption',
-    '/learn/soc-2-readiness/backup-and-recovery',
-    '/learn/soc-2-readiness/business-continuity',
-    '/learn/soc-2-readiness/security-awareness-training',
-    '/learn/soc-2-readiness/risk-assessment',
-    '/learn/soc-2-readiness/audit-logging-evidence',
-    '/learn/soc-2-readiness/least-privilege',
-    '/learn/soc-2-readiness/endpoint-security',
-    '/learn/soc-2-readiness/policies-and-procedures',
-    '/soc-2-sales',
-    '/soc-2-sales/bridge-letters',
-    '/soc-2-sales/security-questionnaires',
-    '/soc-2-sales/trust-centers',
-    '/soc-2-sales/subservice-organizations',
-    '/soc-2-sales/qualified-opinions',
-    '/soc-2-sales/multi-framework-mapping',
-    '/vendor-risk-assessment',
-    '/vendor-risk-assessment/triage',
-    '/vendor-risk-assessment/checklist',
-    '/vendor-risk-assessment/scoring-model',
-    '/vendor-risk-assessment/evidence-by-tier',
-    '/vendor-risk-assessment/monitoring-cadence',
-    '/vendor-risk-assessment/contract-clauses',
-    '/vendor-risk-assessment/subprocessors-vs-vendors',
-    '/vendor-risk-assessment/common-mistakes',
-    '/penetration-testing/sow',
-    '/penetration-testing/retesting-remediation',
-    '/penetration-testing/compliance-buyers',
-    '/penetration-testing/saas',
-    '/penetration-testing/fintech',
-    '/vendor-risk-assessment/roi-calculator',
-    '/glossary',
-    '/security',
-    '/iso-27001-checklist',
-    '/auditor-directory',
-    '/auditor-match',
-    '/methodology',
-    '/penetration-testing/scoping',
-    '/vendor-risk-assessment/automation-vs-manual',
-    '/vendor-risk-assessment/tiering',
-  ];
+];
 
+export const CALCULATOR_ROUTES = [
+  '/soc-2-readiness-calculator',
+  '/soc-2-cost',
+  '/soc-2-timeline',
+  '/auditor-match',
+  '/compliance-roi-calculator',
+  '/penetration-testing/cost-estimator',
+];
+
+export const HUB_ROUTES = [
+  '/penetration-testing',
+  '/vendor-risk-assessment',
+  '/soc-2/guides',
+  '/soc-2/industries',
+  '/soc-2-sales',
+  '/soc-2-evidence/vault',
+  '/learn/soc-2-readiness',
+];
+
+export const LEGAL_ROUTES = [
+  '/privacy',
+  '/terms',
+];
+
+export const COMMERCIAL_ROUTES = [
+  '/about',
+  '/security',
+  '/methodology',
+  '/auditor-directory',
+  '/iso-27001-checklist',
+  '/soc-2-readiness-checklist',
+  '/soc-2-cost-breakdown',
+  '/when-do-you-need-soc-2',
+  '/soc-2-vs-iso-27001',
+  '/soc-2-type-i-vs-type-ii',
+  ...costGuides.map(g => `${g.parent}/${g.slug}`),
+  ...timelineGuides.map(g => `${g.parent}/${g.slug}`),
+  ...salesGuides.map(g => `${g.parent}/${g.slug}`),
+  ...industryGuides.map(g => `/soc-2/industries/${g.slug}`),
+  ...pentestPages.map(p => `/penetration-testing/${p.slug}`),
+  ...comparisonPages.map(c => `/compare/${c.slug}`),
+  ...evidenceGuides.map(e => `/soc-2-evidence/${e.slug}`),
+  // Static subpages from file system not in libs
+  '/penetration-testing/pricing',
+  '/penetration-testing/sow',
+  '/penetration-testing/retesting-remediation',
+  '/penetration-testing/compliance-buyers',
+  '/penetration-testing/scoping',
+  '/vendor-risk-assessment/questionnaire',
+  '/vendor-risk-assessment/triage',
+  '/vendor-risk-assessment/checklist',
+  '/vendor-risk-assessment/scoring-model',
+  '/vendor-risk-assessment/evidence-by-tier',
+  '/vendor-risk-assessment/monitoring-cadence',
+  '/vendor-risk-assessment/contract-clauses',
+  '/vendor-risk-assessment/subprocessors-vs-vendors',
+  '/vendor-risk-assessment/common-mistakes',
+  '/vendor-risk-assessment/roi-calculator',
+  '/vendor-risk-assessment/automation-vs-manual',
+  '/vendor-risk-assessment/tiering',
+  '/vendor-risk-assessment/industries/saas',
+  '/vendor-risk-assessment/industries/fintech',
+  '/vendor-risk-assessment/industries/healthcare',
+  '/vendor-risk-assessment/soc-2-compliance-requirements',
+  '/soc-2-sales/multi-framework-mapping',
+  '/soc-2-sales/qualified-opinions',
+  '/soc-2-sales/subservice-organizations',
+  '/soc-2/continuous-monitoring',
+  '/soc-2/auditor-selection',
+];
+
+export const LEARN_ROUTES = [
+  ...readinessGuides.map(g => `${g.parent}/${g.slug}`),
+  '/glossary',
+];
+
+/**
+ * Combined list of all public, indexable routes.
+ * Excludes /admin, /api, /experiments, and internal utility routes.
+ */
+export const ROUTES = Array.from(new Set([
+  ...FLAGSHIP_ROUTES,
+  ...CALCULATOR_ROUTES,
+  ...HUB_ROUTES,
+  ...COMMERCIAL_ROUTES,
+  ...LEARN_ROUTES,
+  ...LEGAL_ROUTES,
+])).sort();
+
+/**
+ * Helper to determine the bucket for a given path
+ */
+export function getRouteBucket(path: string): 'flagship' | 'calculator' | 'hub' | 'commercial' | 'learn' | 'legal' | 'other' {
+  if (FLAGSHIP_ROUTES.includes(path)) return 'flagship';
+  if (CALCULATOR_ROUTES.includes(path)) return 'calculator';
+  if (HUB_ROUTES.includes(path)) return 'hub';
+  if (LEGAL_ROUTES.includes(path)) return 'legal';
+  if (LEARN_ROUTES.some(r => path.startsWith(r)) || path.startsWith('/learn/')) return 'learn';
+  if (COMMERCIAL_ROUTES.includes(path)) return 'commercial';
+  return 'other';
+}

@@ -1,94 +1,67 @@
 import { MetadataRoute } from 'next';
-import { ROUTES } from '@/src/seo/routes';
+import { ROUTES, getRouteBucket } from '@/src/seo/routes';
 
 const baseUrl = 'https://risclens.com';
 
-type RouteEntry = {
-  path: string;
-  changeFrequency?: MetadataRoute.Sitemap[number]['changeFrequency'];
-  priority?: number;
-  lastModified?: Date;
-};
-
-const monthlyPaths = new Set(['/privacy', '/terms']);
-const highIntentPaths = new Set([
-  '/soc-2-cost',
-  '/penetration-testing/pricing',
-]);
-
-const noindexPaths = new Set([
-  '/soc-2-cost/cloud-and-infrastructure',
-  '/start',
-]);
-
-const routes: RouteEntry[] = ROUTES.map((path) => {
-  const normalizedPath = normalizePath(path);
-  const isRoot = normalizedPath === '/';
-
-  if (noindexPaths.has(normalizedPath)) {
-    return null as unknown as RouteEntry;
-  }
-
-  const isHighIntent = highIntentPaths.has(normalizedPath) || normalizedPath.startsWith('/soc-2-cost/');
-
-  return {
-    path: normalizedPath,
-    changeFrequency: monthlyPaths.has(normalizedPath) ? 'monthly' : 'weekly',
-    priority: isRoot ? 1 : (isHighIntent ? 0.9 : 0.8),
-    // Only include lastModified when per-page accuracy is available; omitted by default to avoid misleading metadata.
-  };
-})
-  .filter(Boolean)
-  .map((entry) => ({ ...entry, path: normalizePath(entry!.path) })) as RouteEntry[];
-
-function normalizePath(path: string): string {
-  if (!path) return '/';
-  const trimmed = path.trim();
-  if (trimmed === '/') return '/';
-  const withLeadingSlash = trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
-  return withLeadingSlash.replace(/\/+$/, '');
-}
-
-function toAbsoluteUrl(path: string): string {
-  const normalizedPath = normalizePath(path);
-  return normalizedPath === '/' ? baseUrl : new URL(normalizedPath, baseUrl).toString();
-}
-
-function dedupeByUrl(entries: RouteEntry[]): RouteEntry[] {
-  const seen = new Set<string>();
-  const duplicates: string[] = [];
-  const unique: RouteEntry[] = [];
-
-  entries.forEach((entry) => {
-    const url = toAbsoluteUrl(entry.path);
-    if (seen.has(url)) {
-      duplicates.push(url);
-      return;
-    }
-    seen.add(url);
-    unique.push(entry);
-  });
-
-  if (duplicates.length && process.env.NODE_ENV !== 'production') {
-    // Dev-only guardrail to surface accidental duplicates during local checks.
-    console.warn('[sitemap] Removed duplicate URLs:', Array.from(new Set(duplicates)));
-  }
-
-  return unique;
-}
+// Build date used as fallback for lastmod
+const BUILD_DATE = new Date();
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const unique = dedupeByUrl(routes);
-  const sorted = unique.sort((a, b) => {
-    const urlA = toAbsoluteUrl(a.path);
-    const urlB = toAbsoluteUrl(b.path);
-    return urlA.localeCompare(urlB);
+  const entries = ROUTES.map((path) => {
+    const bucket = getRouteBucket(path);
+    
+    // Priority logic per bucket
+    let priority = 0.7; // Default fallback
+    let changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency'] = 'monthly';
+
+    switch (bucket) {
+      case 'flagship':
+        priority = 1.0;
+        changeFrequency = 'weekly';
+        break;
+      case 'calculator':
+        priority = 0.95;
+        changeFrequency = 'weekly';
+        break;
+      case 'hub':
+        priority = 0.9;
+        changeFrequency = 'weekly';
+        break;
+      case 'commercial':
+        priority = 0.8; // 0.75-0.85 range
+        changeFrequency = 'weekly';
+        break;
+      case 'learn':
+        priority = 0.7; // 0.65-0.75 range
+        changeFrequency = 'monthly';
+        break;
+      case 'legal':
+        priority = 0.4;
+        changeFrequency = 'monthly'; // "yearly or monthly" - using monthly as safer default
+        break;
+    }
+
+    return {
+      url: `${baseUrl}${path === '/' ? '' : path}`,
+      lastModified: BUILD_DATE,
+      changeFrequency,
+      priority,
+    };
   });
 
-  return sorted.map(({ path, changeFrequency, priority, lastModified }) => ({
-    url: toAbsoluteUrl(path),
-    changeFrequency,
-    priority,
-    ...(lastModified ? { lastModified } : {}),
-  }));
+  // Sanity check summary in dev
+  if (process.env.NODE_ENV !== 'production') {
+    const summary = ROUTES.reduce((acc, path) => {
+      const bucket = getRouteBucket(path);
+      acc[bucket] = (acc[bucket] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+    
+    console.log('--- Sitemap Generation Summary ---');
+    console.table(summary);
+    console.log(`Total indexable routes: ${ROUTES.length}`);
+    console.log('----------------------------------');
+  }
+
+  return entries;
 }
