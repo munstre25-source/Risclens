@@ -35,7 +35,7 @@ Source: `app/sitemap.ts` output (ROUTES + noindex filtering). Duplicate sitemap 
 ## Totals (Summary)
 - Core Routes: 145 (Static architectural pages)
 - Dynamic Profiles: 101 (Company directory pages)
-- **Total Sitemap URL's**: 246
+- **Total Sitemap URLs**: 246
 
 > **Architecture Note**: We track "Core Routes" (145) separately to monitor the site's structural growth. The 101 dynamic company profiles (accessible via `/compliance/directory/[slug]`) are included in the final `sitemap.xml` for SEO indexing but are not counted towards the architectural core.
 

@@ -72,13 +72,14 @@ const domains = [
   "grammarly.com", "hemingwayapp.com", "pro-writing-aid.com", "quillbot.com", "wordtune.com", "deepl.com", "google.translate", "bing.translate", "papago.naver.com", "yandex.translate"
 ];
 
-const ADMIN_SECRET = "a8e2567986da30c57f73f12fec9f2ac030b6cfe42b90b68d88902507a54994ccfdmin";
+const APP_URL = process.env.APP_URL || "http://localhost:3000";
+const ADMIN_SECRET = process.env.ADMIN_SECRET || "a8e2567986da30c57f73f12fec9f2ac030b6cfe42b90b68d88902507a54994ccfdmin";
 const BATCH_SIZE = 5;
 
 async function processBatch(batch) {
-  console.log(`Processing batch of ${batch.length}...`);
+  console.log(`Processing batch of ${batch.length} at ${APP_URL}...`);
   try {
-    const response = await fetch("http://localhost:3000/api/admin/intelligence/directory/extract", {
+    const response = await fetch(`${APP_URL}/api/admin/intelligence/directory/extract`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
