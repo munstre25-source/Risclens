@@ -9,7 +9,13 @@ export const metadata: Metadata = {
   title: 'Vendor Risk Questionnaire Tool | RiscLens',
   description:
     'Download a high-intent vendor risk questionnaire with critical controls, evidence expectations, and scoring tips.',
-  alternates: { canonical: '/vendor-risk-assessment/questionnaire' },
+  alternates: {
+    canonical: 'https://risclens.com/vendor-risk-assessment/questionnaire',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function VendorRiskQuestionnairePage() {

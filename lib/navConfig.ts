@@ -48,12 +48,11 @@ export const navConfig = {
   vendor: {
     overview: { label: 'Vendor Risk Overview', href: '/vendor-risk-assessment' },
     primary: { label: 'Risk Triage', href: '/vendor-risk-assessment/triage', badge: 'Tool' },
-    tools: [
-      { label: 'Security Signals Directory', href: '/compliance/directory', badge: 'New' },
-      { label: 'Vendor Tiering', href: '/vendor-risk-assessment/tiering', badge: 'Tool' },
-      { label: 'ROI Calculator', href: '/vendor-risk-assessment/roi-calculator', badge: 'Tool' },
-      { label: 'VRA Questionnaire', href: '/vendor-risk-assessment/questionnaire', badge: 'Tool' },
-    ],
+      tools: [
+        { label: 'Vendor Tiering', href: '/vendor-risk-assessment/tiering', badge: 'Tool' },
+        { label: 'ROI Calculator', href: '/vendor-risk-assessment/roi-calculator', badge: 'Tool' },
+        { label: 'VRA Questionnaire', href: '/vendor-risk-assessment/questionnaire', badge: 'Tool' },
+      ],
     guides: [
       { label: 'Checklist', href: '/vendor-risk-assessment/checklist' },
       { label: 'Auto vs Manual', href: '/vendor-risk-assessment/automation-vs-manual' },
@@ -69,6 +68,7 @@ export const navConfig = {
   resources: {
     about: { label: 'About RiscLens', href: '/about' },
     guides: [
+      { label: 'Compliance Directory', href: '/compliance/directory' },
       { label: 'All SOC 2 Guides', href: '/soc-2/guides' },
       { label: 'SOC 2 Cost Breakdown', href: '/soc-2-cost-breakdown' },
       { label: 'SOC 2 vs ISO 27001', href: '/soc-2-vs-iso-27001' },

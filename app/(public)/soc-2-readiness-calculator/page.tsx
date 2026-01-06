@@ -25,6 +25,13 @@ export const metadata: Metadata = {
       'Answer a few questions and get an instant SOC 2 readiness score, gap highlights, and what auditors will likely ask next—built for early-stage teams.',
     images: ['/og.png'],
   },
+  alternates: {
+    canonical: 'https://risclens.com/soc-2-readiness-calculator',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 function FormSkeleton() {

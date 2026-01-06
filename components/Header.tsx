@@ -387,69 +387,80 @@ export default function Header() {
             </DropdownPortal>
           </div>
 
-          <div
-            ref={vendorRef}
-            className="relative"
-            onMouseEnter={() => {
-              socIntent.immediateClose();
-              pentestIntent.immediateClose();
-              resourcesIntent.immediateClose();
-              vendorIntent.scheduleOpen();
-            }}
-            onMouseLeave={() => vendorIntent.scheduleClose()}
-          >
-            <Link
-              href="/vendor-risk-assessment"
-              className={`flex items-center gap-1.5 px-3 py-2 text-sm font-semibold rounded-lg transition-colors ${
-                isVendorActive ? 'text-brand-700 bg-brand-50' : 'text-slate-700 hover:text-brand-700 hover:bg-slate-50'
-              }`}
-            >
-              Vendor Risk
-              <svg className={`w-4 h-4 transition-transform ${vendorIntent.open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </Link>
-            <DropdownPortal
-              id="vendor-menu"
-              isOpen={vendorIntent.open}
-              anchorRef={vendorRef}
-              onMouseEnter={() => vendorIntent.scheduleOpen()}
+            <div
+              ref={vendorRef}
+              className="relative"
+              onMouseEnter={() => {
+                socIntent.immediateClose();
+                pentestIntent.immediateClose();
+                resourcesIntent.immediateClose();
+                vendorIntent.scheduleOpen();
+              }}
               onMouseLeave={() => vendorIntent.scheduleClose()}
             >
-              <Link href={vendorMenu.overview.href} role="menuitem" className={`${menuItemClass} rounded-t-xl font-medium`}>
-                {vendorMenu.overview.label}
+              <Link
+                href="/vendor-risk-assessment"
+                className={`flex items-center gap-1.5 px-3 py-2 text-sm font-semibold rounded-lg transition-colors ${
+                  isVendorActive ? 'text-brand-700 bg-brand-50' : 'text-slate-700 hover:text-brand-700 hover:bg-slate-50'
+                }`}
+              >
+                Vendor Risk
+                <svg className={`w-4 h-4 transition-transform ${vendorIntent.open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
               </Link>
-              <div className={sectionLabelClass}>Tools</div>
-                <Link href={vendorMenu.primary.href} role="menuitem" className={menuItemWithBadgeClass}>
-                  {vendorMenu.primary.label}
-                  <Badge label={vendorMenu.primary.badge} />
+              <DropdownPortal
+                id="vendor-menu"
+                isOpen={vendorIntent.open}
+                anchorRef={vendorRef}
+                onMouseEnter={() => vendorIntent.scheduleOpen()}
+                onMouseLeave={() => vendorIntent.scheduleClose()}
+              >
+                <Link href={vendorMenu.overview.href} role="menuitem" className={`${menuItemClass} rounded-t-xl font-medium`}>
+                  {vendorMenu.overview.label}
                 </Link>
-                {vendorMenu.tools.map((item) => (
-                  <Link key={item.href} href={item.href} role="menuitem" className={menuItemWithBadgeClass}>
+                <div className={sectionLabelClass}>Tools</div>
+                  <Link href={vendorMenu.primary.href} role="menuitem" className={menuItemWithBadgeClass}>
+                    {vendorMenu.primary.label}
+                    <Badge label={vendorMenu.primary.badge} />
+                  </Link>
+                  {vendorMenu.tools.map((item) => (
+                    <Link key={item.href} href={item.href} role="menuitem" className={menuItemWithBadgeClass}>
+                      {item.label}
+                      <Badge label={item.badge} />
+                    </Link>
+                  ))}
+                <div className="my-1 border-t border-slate-100" />
+                <div className={sectionLabelClass}>Guides</div>
+                {vendorMenu.guides.map((item) => (
+                  <Link key={item.href} href={item.href} role="menuitem" className={menuItemClass}>
                     {item.label}
-                    <Badge label={item.badge} />
                   </Link>
                 ))}
-              <div className="my-1 border-t border-slate-100" />
-              <div className={sectionLabelClass}>Guides</div>
-              {vendorMenu.guides.map((item) => (
-                <Link key={item.href} href={item.href} role="menuitem" className={menuItemClass}>
-                  {item.label}
+                <div className="my-1 border-t border-slate-100" />
+                <div className={sectionLabelClass}>By Industry</div>
+                {vendorMenu.industries.map((item) => (
+                  <Link key={item.href} href={item.href} role="menuitem" className={menuItemClass}>
+                    {item.label}
+                  </Link>
+                ))}
+                <div className="my-1 border-t border-slate-100" />
+                <Link href={vendorMenu.viewAll.href} role="menuitem" className={`${viewAllClass} rounded-b-xl`}>
+                  {vendorMenu.viewAll.label}
                 </Link>
-              ))}
-              <div className="my-1 border-t border-slate-100" />
-              <div className={sectionLabelClass}>By Industry</div>
-              {vendorMenu.industries.map((item) => (
-                <Link key={item.href} href={item.href} role="menuitem" className={menuItemClass}>
-                  {item.label}
-                </Link>
-              ))}
-              <div className="my-1 border-t border-slate-100" />
-              <Link href={vendorMenu.viewAll.href} role="menuitem" className={`${viewAllClass} rounded-b-xl`}>
-                {vendorMenu.viewAll.label}
-              </Link>
-            </DropdownPortal>
-          </div>
+              </DropdownPortal>
+            </div>
+
+            <Link
+              href="/compliance/directory"
+              className={`flex items-center gap-1.5 px-3 py-2 text-sm font-semibold rounded-lg transition-colors ${
+                pathname.startsWith('/compliance/directory') ? 'text-brand-700 bg-brand-50' : 'text-slate-700 hover:text-brand-700 hover:bg-slate-50'
+              }`}
+            >
+              Directory
+              <span className="ml-1 px-1.5 py-0.5 text-[10px] font-bold text-white bg-brand-500 rounded uppercase tracking-wider">New</span>
+            </Link>
+
 
           <div
             ref={resourcesRef}
@@ -762,11 +773,24 @@ export default function Header() {
                   </div>
 
 
-                <Link
-                  href="/search"
-                  className="flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium text-slate-700"
-                  onClick={() => setMobileOpen(false)}
-                >
+                  <Link
+                    href="/compliance/directory"
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium text-slate-700"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    <svg className="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                    Compliance Directory
+                    <span className="ml-auto px-1.5 py-0.5 text-[10px] font-bold text-white bg-brand-500 rounded uppercase tracking-wider">New</span>
+                  </Link>
+
+                  <Link
+                    href="/search"
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium text-slate-700"
+                    onClick={() => setMobileOpen(false)}
+                  >
+
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>

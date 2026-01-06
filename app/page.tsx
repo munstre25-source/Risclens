@@ -22,6 +22,13 @@ export const metadata: Metadata = {
       'SOC 2 audit delays quietly stall revenue — see what it may be costing you in under 60 seconds.',
     images: ['/og.png'],
   },
+  alternates: {
+    canonical: 'https://risclens.com',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 // FAQ Schema for SEO
@@ -133,55 +140,62 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Secondary Platform Positioning */}
-        <section id="readiness" className="bg-slate-50 py-20 border-t border-slate-200">
-          <div className="max-w-5xl mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-2xl font-bold text-slate-900">
-                Not urgent? Start with readiness.
-              </h2>
-            </div>
+          {/* Secondary Platform Positioning */}
+          <section id="readiness" className="bg-slate-50 py-20 border-t border-slate-200">
+            <div className="max-w-5xl mx-auto px-4">
+              <div className="text-center mb-12">
+                <h2 className="text-2xl font-bold text-slate-900">
+                  Not urgent? Start with readiness.
+                </h2>
+              </div>
 
-              <div className="grid gap-6 md:grid-cols-2">
-                {[
-                  {
-                    title: "Why SOC 2 audits get delayed",
-                    description: "Understand the common pitfalls that stall compliance and how they impact your revenue.",
-                    link: "/soc-2-audit-delays-cost"
-                  },
-                  {
-                    title: "SOC 2 Readiness Index",
-                    description: "Benchmark your current security posture against auditor expectations.",
-                    link: "/soc-2-readiness-index"
-                  },
-                  {
-                    title: "SOC 2 Cost Calculator",
-                    description: "Estimate total audit costs including tools, auditors, and internal effort.",
-                    link: "/soc-2-cost-calculator"
-                  },
-                  {
-                    title: "Guides & Templates",
-                    description: "Actionable frameworks for evidence collection and policy development.",
-                    link: "/soc-2/guides"
-                  }
-                ].map((card) => (
+                <div className="grid gap-6 md:grid-cols-2">
+                  {[
+                    {
+                      title: "Compliance Directory",
+                      description: "Explore security signals, trust centers, and compliance markers for 100+ top companies.",
+                      link: "/compliance/directory",
+                      badge: "New"
+                    },
+                    {
+                      title: "Why SOC 2 audits get delayed",
+                      description: "Understand the common pitfalls that stall compliance and how they impact your revenue.",
+                      link: "/soc-2-audit-delays-cost"
+                    },
+                    {
+                      title: "SOC 2 Readiness Index",
+                      description: "Benchmark your current security posture against auditor expectations.",
+                      link: "/soc-2-readiness-index"
+                    },
+                    {
+                      title: "SOC 2 Cost Calculator",
+                      description: "Estimate total audit costs including tools, auditors, and internal effort.",
+                      link: "/soc-2-cost-calculator"
+                    }
+                  ].map((card) => (
 
-                <Link 
-                  key={card.title}
-                  href={card.link}
-                  className="group bg-white p-8 rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-brand-200 transition-all"
-                >
-                  <h3 className="text-lg font-bold text-slate-900 mb-3 group-hover:text-brand-600 transition-colors">
-                    {card.title}
-                  </h3>
-                  <p className="text-sm text-slate-600 leading-relaxed">
-                    {card.description}
-                  </p>
-                </Link>
-              ))}
+                  <Link 
+                    key={card.title}
+                    href={card.link}
+                    className="group bg-white p-8 rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-brand-200 transition-all relative"
+                  >
+                    {card.badge && (
+                      <span className="absolute top-4 right-4 px-2 py-1 text-[10px] font-bold text-white bg-brand-500 rounded uppercase tracking-wider">
+                        {card.badge}
+                      </span>
+                    )}
+                    <h3 className="text-lg font-bold text-slate-900 mb-3 group-hover:text-brand-600 transition-colors">
+                      {card.title}
+                    </h3>
+                    <p className="text-sm text-slate-600 leading-relaxed">
+                      {card.description}
+                    </p>
+                  </Link>
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+
 
         <AboutSection />
         

@@ -99,6 +99,14 @@ export const LEARN_ROUTES = [
 ];
 
 /**
+ * Routes that should be excluded from the sitemap and marked as noindex.
+ */
+export const NOINDEX_ROUTES = [
+  '/soc-2-cost/cloud-and-infrastructure',
+  '/start',
+];
+
+/**
  * Combined list of all public, indexable routes.
  * Excludes /admin, /api, /experiments, and internal utility routes.
  */
@@ -109,7 +117,7 @@ export const ROUTES = Array.from(new Set([
   ...COMMERCIAL_ROUTES,
   ...LEARN_ROUTES,
   ...LEGAL_ROUTES,
-])).sort();
+])).filter(path => !NOINDEX_ROUTES.includes(path)).sort();
 
 /**
  * Helper to determine the bucket for a given path

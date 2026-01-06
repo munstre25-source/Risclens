@@ -5,11 +5,32 @@ import { getSupabaseAdmin } from '@/lib/supabase';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { SignalScore } from '@/components/compliance/SignalScore';
+import { SOC2ReadinessSignals } from '@/components/compliance/SOC2ReadinessSignals';
+import { RelatedProfiles } from '@/components/compliance/RelatedProfiles';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import Link from 'next/link';
 
 interface Props {
   params: { slug: string };
+}
+
+interface CompanySignals {
+  id: string;
+  company_name: string;
+  domain: string;
+  slug: string;
+  indexable: boolean;
+  signal_score: number;
+  public_signals: {
+    has_security_page?: boolean;
+    has_trust_page?: boolean;
+    mentions_soc2?: boolean;
+    mentions_compliance_tool?: boolean;
+    has_responsible_disclosure?: boolean;
+    has_security_contact?: boolean;
+  };
+  ai_summary?: string;
+  updated_at: string;
 }
 
 export async function generateStaticParams() {
@@ -40,14 +61,90 @@ export async function generateMetadata(
   }
 
   return {
-    title: `${company.company_name} Security Profile & Public Signals | RiscLens`,
-    description: `Analysis of public security disclosures, SOC 2 mentions, and transparency signals for ${company.company_name}.`,
-    robots: company.indexable ? 'index, follow' : 'noindex, nofollow',
+    title: `${company.company_name} Security & SOC 2 Signals | Public Security Profile`,
+    description: `View ${company.company_name}'s public SOC 2 and security signals: trust center, security page, disclosures, and transparency markers.`,
+    robots: {
+      index: company.indexable ? true : false,
+      follow: true,
+    },
     alternates: {
-      canonical: `/compliance/directory/${params.slug}`,
+      canonical: `https://risclens.com/compliance/directory/${params.slug}`,
     },
   };
 }
+
+function generateJsonLd(company: CompanySignals) {
+  const baseUrl = 'https://risclens.com';
+  const profileUrl = `${baseUrl}/compliance/directory/${company.slug}`;
+
+  const breadcrumbList = {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: baseUrl,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Compliance',
+        item: `${baseUrl}/compliance`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: 'Directory',
+        item: `${baseUrl}/compliance/directory`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 4,
+        name: company.company_name,
+        item: profileUrl,
+      },
+    ],
+  };
+
+  const organization = {
+    '@type': 'Organization',
+    '@id': `${profileUrl}#organization`,
+    name: company.company_name,
+    url: `https://${company.domain}`,
+    identifier: {
+      '@type': 'PropertyValue',
+      propertyID: 'domain',
+      value: company.domain,
+    },
+    additionalProperty: [
+      {
+        '@type': 'PropertyValue',
+        name: 'Public Security Signals Score',
+        value: String(company.signal_score),
+      },
+    ],
+  };
+
+  const profilePage = {
+    '@type': 'ProfilePage',
+    '@id': profileUrl,
+    url: profileUrl,
+    name: `${company.company_name} Public Security Profile`,
+    description: `Public SOC 2 and security signals for ${company.company_name}: trust center, security page, disclosures, and transparency markers.`,
+    dateModified: company.updated_at,
+    mainEntity: {
+      '@id': `${profileUrl}#organization`,
+    },
+  };
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [breadcrumbList, organization, profilePage],
+  };
+}
+
+export const revalidate = 0;
 
 export default async function CompanyProfilePage({ params }: Props) {
   const supabase = getSupabaseAdmin();
@@ -63,6 +160,7 @@ export default async function CompanyProfilePage({ params }: Props) {
   }
 
   const signals = company.public_signals || {};
+  const jsonLd = generateJsonLd(company as CompanySignals);
 
   const signalItems = [
     { label: 'Security page detected', value: signals.has_security_page },
@@ -75,6 +173,10 @@ export default async function CompanyProfilePage({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Header />
       
       <main className="flex-grow">
@@ -83,7 +185,6 @@ export default async function CompanyProfilePage({ params }: Props) {
           <div className="container mx-auto px-4 max-w-4xl">
             <Breadcrumbs 
               items={[
-                { label: 'Compliance', href: '/compliance' },
                 { label: 'Directory', href: '/compliance/directory' },
                 { label: company.company_name, href: `/compliance/directory/${company.slug}` },
               ]} 
@@ -92,11 +193,8 @@ export default async function CompanyProfilePage({ params }: Props) {
             <div className="mt-8 flex flex-col md:flex-row md:items-center justify-between gap-8">
               <div>
                 <h1 className="text-4xl font-bold text-gray-900 mb-2">
-                  {company.company_name}
+                  {company.company_name} Public Security Profile
                 </h1>
-                <p className="text-xl text-gray-500 font-medium">
-                  Public Security Profile
-                </p>
                 <div className="mt-4 text-gray-600 text-lg max-w-2xl leading-relaxed">
                   {company.ai_summary || `Analysis of publicly available security signals and disclosures for ${company.company_name}.`}
                 </div>
@@ -118,7 +216,7 @@ export default async function CompanyProfilePage({ params }: Props) {
               
               {/* Public Security Signals Checklist */}
               <section>
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">Public Security Signals</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">Public SOC 2 and Security Signals for {company.company_name}</h2>
                 <div className="space-y-4">
                   {signalItems.map((item, index) => (
                     <div key={index} className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg border border-gray-100">
@@ -155,6 +253,8 @@ export default async function CompanyProfilePage({ params }: Props) {
                   </p>
                 </div>
               </section>
+
+              <SOC2ReadinessSignals companyName={company.company_name} />
 
               {/* CTA */}
               <section className="text-center py-8">
@@ -206,6 +306,13 @@ export default async function CompanyProfilePage({ params }: Props) {
             </div>
 
           </div>
+
+          <RelatedProfiles 
+            currentCompanySlug={params.slug} 
+            currentSignals={{ ...signals, signal_score: company.signal_score }} 
+            limit={8}
+            mode="related"
+          />
         </div>
       </main>
 

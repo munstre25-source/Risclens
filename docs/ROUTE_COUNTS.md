@@ -29,13 +29,13 @@ Source: `app/sitemap.ts` output (ROUTES + noindex filtering). Duplicate sitemap 
 ## Vendor Risk (VAR) — 13 URLs
 /vendor-risk-assessment, /vendor-risk-assessment/{checklist,common-mistakes,contract-clauses,evidence-by-tier,monitoring-cadence,scoring-model,subprocessors-vs-vendors,triage,questionnaire,roi-calculator,automation-vs-manual,tiering}
 
-## Other (non-category) — 8 URLs
-/, /about, /privacy, /terms, /glossary, /security, /auditor-match, /methodology
+## Other (non-category) — 9 URLs
+/, /about, /privacy, /terms, /glossary, /security, /auditor-match, /methodology, /compliance/directory
 
-## Totals (sitemap)
-- SOC 2: 100
-- SOC 2 Sales: 7
-- Pentest: 16
-- Vendor Risk (VAR): 13
-- Other: 8
-- **All sitemap URLs**: 144
+## Totals (Summary)
+- Core Routes: 145 (Static architectural pages)
+- Dynamic Profiles: 101 (Company directory pages)
+- **Total Sitemap URLs**: 246
+
+> **Architecture Note**: We track "Core Routes" (145) separately to monitor the site's structural growth. The 101 dynamic company profiles (accessible via `/compliance/directory/[slug]`) are included in the final `sitemap.xml` for SEO indexing but are not counted towards the architectural core.
+

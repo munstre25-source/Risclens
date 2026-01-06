@@ -5,6 +5,13 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'SOC 2 Audit Delay Cost Calculator | RiscLens',
   description: 'Calculate the revenue impact of SOC 2 audit delays on your enterprise sales pipeline.',
+  alternates: {
+    canonical: 'https://risclens.com/soc-2-audit-delay-cost',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function Soc2AuditDelayPage() {

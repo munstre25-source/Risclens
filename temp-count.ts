@@ -1,11 +1,6 @@
 
 import { ROUTES } from './src/seo/routes';
 
-const noindexPaths = new Set([
-  '/soc-2-cost/cloud-and-infrastructure',
-  '/start',
-]);
-
 function normalizePath(path: string): string {
   if (!path) return '/';
   const trimmed = path.trim();
@@ -14,7 +9,7 @@ function normalizePath(path: string): string {
   return withLeadingSlash.replace(/\/+$/, '');
 }
 
-const data = Array.from(new Set(ROUTES.map(normalizePath))).filter(p => !noindexPaths.has(p));
+const data = Array.from(new Set(ROUTES.map(normalizePath)));
 
 const soc = data.filter((u) => u.startsWith('/soc-2') || u.startsWith('/learn/soc-2') || u.startsWith('/when-do-you-need-soc-2') || u.startsWith('/compliance-roi-calculator') || u.startsWith('/iso-27001-checklist') || u.startsWith('/auditor-directory')).length;
 // Wait, the script in check-sitemap-vs-doc.ts defines SOC category as:
