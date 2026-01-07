@@ -9,6 +9,10 @@ export const metadata: Metadata = {
   title: 'SOC 2 Readiness Score in Under 2 Minutes | RiscLens',
   description:
     'Answer a few questions and get an instant SOC 2 readiness score, gap highlights, and what auditors will likely ask next—built for early-stage teams.',
+  robots: {
+    index: false,
+    follow: false,
+  },
   openGraph: {
     title: 'SOC 2 Readiness Score in Under 2 Minutes | RiscLens',
     description:

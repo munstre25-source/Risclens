@@ -24,16 +24,20 @@ export const CALCULATOR_ROUTES = [
   '/soc-2-readiness-calculator',
   '/soc-2-cost',
   '/soc-2-timeline',
+  '/soc-2-timeline/estimator',
   '/auditor-match',
   '/compliance-roi-calculator',
   '/penetration-testing/cost-estimator',
+  '/soc-2-audit-delay-cost',
 ];
 
 export const HUB_ROUTES = [
+  '/soc-2',
   '/penetration-testing',
   '/vendor-risk-assessment',
   '/soc-2/guides',
   '/soc-2/industries',
+  '/soc-2-cost/industries',
   '/soc-2-sales',
   '/soc-2-evidence/vault',
   '/learn/soc-2-readiness',
@@ -46,6 +50,7 @@ export const LEGAL_ROUTES = [
 ];
 
 export const COMMERCIAL_ROUTES = [
+  '/compare',
   '/soc-2-audit-delays-cost',
   '/about',
   '/security',

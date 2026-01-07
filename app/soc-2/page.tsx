@@ -55,17 +55,17 @@ const SOC2_TOOLS = [
     summary: 'Flagship gap assessment tool to identify potential gaps for an audit.',
     cta: 'Start Readiness Assessment'
   },
-  {
+    {
     id: 'cost',
-    href: '/soc-2-cost-calculator',
-    title: 'SOC 2 Cost Calculator',
+    href: '/soc-2-cost',
+    title: 'SOC 2 Cost Guide',
     summary: 'Market-aligned pricing estimator for audits, tools, and engineering time.',
     cta: 'Estimate Audit Costs'
   },
   {
     id: 'timeline',
-    href: '/soc-2-timeline/estimator',
-    title: 'SOC 2 Timeline Estimator',
+    href: '/soc-2-timeline',
+    title: 'SOC 2 Timeline Guide',
     summary: 'Plan your Type I and Type II windows based on your security maturity.',
     cta: 'Plan Your Timeline'
   },
@@ -81,7 +81,7 @@ const SOC2_TOOLS = [
 const SOC2_GUIDES = [
   { href: '/soc-2-audit-delays-cost', title: 'Why Audits Get Delayed', summary: 'Learn why SOC 2 timelines slip and the compounding impact on enterprise deals.' },
   { href: '/soc-2-readiness-checklist', title: 'Readiness Checklist', summary: 'A step-by-step prep list for technical, operational, and HR controls.' },
-  { href: '/soc-2-evidence', title: 'Evidence Vault', summary: 'Browse common evidence requests and auditor expectations for each trust criteria.' },
+  { href: '/soc-2-evidence/vault', title: 'Evidence Vault', summary: 'Browse common evidence requests and auditor expectations for each trust criteria.' },
   { href: '/soc-2-type-i-vs-type-ii', title: 'Type I vs Type II', summary: 'Understand the difference in scope, cost, and effort between reports.' },
   { href: '/soc-2-vs-iso-27001', title: 'SOC 2 vs ISO 27001', summary: 'Compare the two most popular security frameworks for B2B companies.' },
   { href: '/soc-2-sales', title: 'Sales Enablement', summary: 'How to use your SOC 2 report to close enterprise deals faster.' },
@@ -89,11 +89,12 @@ const SOC2_GUIDES = [
 ];
 
 const SOC2_INDUSTRIES = [
-  { name: 'SaaS', summary: 'Focus on multi-tenancy, SDLC, and cloud infrastructure security.', href: '/soc-2/industries/saas', bg: 'bg-white' },
+  { name: 'SaaS', summary: 'Focus on multi-tenancy, SDLC, and cloud infrastructure security.', href: '/soc-2/industries/b2b-saas', bg: 'bg-white' },
   { name: 'Fintech', summary: 'Deep review of transaction integrity, encryption, and segregation of duties.', href: '/soc-2/industries/fintech', bg: 'bg-slate-50' },
   { name: 'Healthcare', summary: 'Emphasis on ePHI protection, breach notification, and HIPAA crossover.', href: '/soc-2/industries/healthcare', bg: 'bg-slate-50' },
   { name: 'Startups', summary: 'Lean compliance path: prioritize Security TSC and automate evidence.', href: '/soc-2/industries/startups', bg: 'bg-white' },
 ];
+
 
 export const metadata: Metadata = {
   title: 'SOC 2 Readiness Hub | Audit Prep, Cost, & Timeline | RiscLens',
