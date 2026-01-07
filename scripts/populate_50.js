@@ -7,7 +7,12 @@ const domains = [
   "spotify.com", "uber.com", "lyft.com", "airbnb.com", "door_dash.com", "instacart.com", "robinhood.com", "coinbase.com", "kraken.com", "binance.com"
 ];
 
-const ADMIN_SECRET = "a8e2567986da30c57f73f12fec9f2ac030b6cfe42b90b68d88902507a54994ccfdmin";
+const ADMIN_SECRET = process.env.ADMIN_SECRET;
+
+if (!ADMIN_SECRET) {
+  console.error("ADMIN_SECRET environment variable is required");
+  process.exit(1);
+}
 const BATCH_SIZE = 5;
 
 async function processBatch(batch) {

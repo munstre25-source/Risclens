@@ -1,4 +1,19 @@
 #!/bin/bash
-export NEXT_PUBLIC_SUPABASE_URL="https://txbluzobjjlpbocpyygt.supabase.co"
-export SUPABASE_SERVICE_ROLE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR4Ymx1em9iampscGJvY3B5eWd0Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NzA5ODQwOSwiZXhwIjoyMDgyNjc0NDA5fQ.3INm8wfRiRwbecJVHsK8FSU3b_LsqOs1fMU9PIDuJeg"
-npx tsx /home/qpay/Risclens/scripts/seed-companies.ts
+
+# Load .env.local if it exists
+if [ -f .env.local ]; then
+  export $(grep -v '^#' .env.local | xargs)
+fi
+
+# Ensure required variables are set
+if [ -z "$NEXT_PUBLIC_SUPABASE_URL" ]; then
+  echo "Error: NEXT_PUBLIC_SUPABASE_URL is not set"
+  exit 1
+fi
+
+if [ -z "$SUPABASE_SERVICE_ROLE_KEY" ]; then
+  echo "Error: SUPABASE_SERVICE_ROLE_KEY is not set"
+  exit 1
+fi
+
+npx tsx scripts/seed-companies.ts
