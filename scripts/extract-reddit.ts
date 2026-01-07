@@ -1,6 +1,7 @@
 import { getSupabaseAdmin } from '../lib/supabase';
 
 const supabase = getSupabaseAdmin();
+const openaiApiKey = process.env.OPENAI_API_KEY;
 
 const SUBREDDITS = ['msp', 'startups', 'cybersecurity'];
 const SEARCH_QUERIES = [

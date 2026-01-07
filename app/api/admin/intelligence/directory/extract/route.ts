@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { validateAdminAuth } from '@/lib/validation';
+import { getSupabaseAdmin } from '@/lib/supabase';
 
 const SCORING_LOGIC = {
   has_security_page: 20,

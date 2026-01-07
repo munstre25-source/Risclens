@@ -81,7 +81,9 @@ export type LeadStatus = 'new' | 'qualified' | 'contacted' | 'in_conversation' |
 export interface SOC2Lead {
   id: string;
   is_test?: boolean;
+  is_partial?: boolean;
   company_name: string;
+  company?: string; // Legacy/magnet support
   industry: string;
   num_employees: number;
   data_types: string[];
@@ -111,6 +113,68 @@ export interface SOC2Lead {
   followup_day7_sent: boolean;
   created_at: string;
   updated_at: string;
+  lead_type?: string | null;
+  payload?: any;
+  frameworks?: string[];
+}
+
+export interface Buyer {
+  id: string;
+  name: string;
+  contact_email: string;
+  company_name: string | null;
+  active: boolean;
+  lead_types: string[];
+  min_score: number;
+  max_price_per_lead: number;
+  created_at?: string;
+}
+
+export interface BuyerWebhook {
+  id: string;
+  buyer_id: string;
+  url: string;
+  secret_header: string;
+  secret_value: string | null;
+  is_active: boolean;
+  created_at?: string;
+}
+
+export interface SavedFilter {
+  id: string;
+  name: string;
+  filter_config: any;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface AdminNote {
+  id: string;
+  lead_id: string;
+  note: string;
+  author: string;
+  created_at: string;
+}
+
+export interface LeadEnrichment {
+  id: string;
+  lead_id: string;
+  provider: string;
+  raw_data: any;
+  enriched_fields: any;
+  created_at: string;
+}
+
+export interface RevenueEvent {
+  id?: string;
+  lead_id: string | null;
+  keyword_id: string | null;
+  calculator_page: string;
+  event_type: string;
+  event_value: number;
+  event_date: string;
+  notes: string | null;
+  is_test?: boolean;
 }
 
 /**
@@ -242,15 +306,133 @@ export async function updateLeadStatus(leadId: string, status: LeadStatus): Prom
   return data;
 }
 
-export async function getBuyers(): Promise<any[]> {
+// =============================================================================
+// BUYERS & WEBHOOKS
+// =============================================================================
+
+export async function getBuyers(): Promise<Buyer[]> {
   const supabase = getSupabaseAdmin();
   const { data, error } = await supabase.from('buyers').select('*').order('created_at', { ascending: false });
   if (error) throw new Error(`Database error: ${error.message}`);
   return data || [];
 }
 
+export async function upsertBuyer(buyer: Partial<Buyer>): Promise<Buyer> {
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase.from('buyers').upsert(buyer).select().single();
+  if (error) throw new Error(`Database error: ${error.message}`);
+  return data;
+}
+
 export async function deleteBuyer(id: string): Promise<void> {
   const supabase = getSupabaseAdmin();
   const { error } = await supabase.from('buyers').delete().eq('id', id);
   if (error) throw new Error(`Database error: ${error.message}`);
+}
+
+export async function getBuyerWebhooks(buyerId: string): Promise<BuyerWebhook[]> {
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase.from('buyer_webhooks').select('*').eq('buyer_id', buyerId);
+  if (error) throw new Error(`Database error: ${error.message}`);
+  return data || [];
+}
+
+export async function upsertBuyerWebhook(webhook: Partial<BuyerWebhook>): Promise<BuyerWebhook> {
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase.from('buyer_webhooks').upsert(webhook).select().single();
+  if (error) throw new Error(`Database error: ${error.message}`);
+  return data;
+}
+
+export async function deleteBuyerWebhook(id: string): Promise<void> {
+  const supabase = getSupabaseAdmin();
+  const { error } = await supabase.from('buyer_webhooks').delete().eq('id', id);
+  if (error) throw new Error(`Database error: ${error.message}`);
+}
+
+// =============================================================================
+// SAVED FILTERS
+// =============================================================================
+
+export async function getSavedFilters(): Promise<SavedFilter[]> {
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase.from('SAVED_FILTERS').select('*').order('created_at', { ascending: false });
+  if (error) throw new Error(`Database error: ${error.message}`);
+  return data || [];
+}
+
+export async function createSavedFilter(name: string, filter_config: any): Promise<SavedFilter> {
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase.from('SAVED_FILTERS').insert({ name, filter_config }).select().single();
+  if (error) throw new Error(`Database error: ${error.message}`);
+  return data;
+}
+
+export async function deleteSavedFilter(id: string): Promise<boolean> {
+  const supabase = getSupabaseAdmin();
+  const { error } = await supabase.from('SAVED_FILTERS').delete().eq('id', id);
+  if (error) throw new Error(`Database error: ${error.message}`);
+  return true;
+}
+
+// =============================================================================
+// ADMIN NOTES
+// =============================================================================
+
+export async function getAdminNotes(leadId: string): Promise<AdminNote[]> {
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase.from('ADMIN_NOTES').select('*').eq('lead_id', leadId).order('created_at', { ascending: false });
+  if (error) throw new Error(`Database error: ${error.message}`);
+  return data || [];
+}
+
+export async function addAdminNote(lead_id: string, note: string, author: string): Promise<AdminNote> {
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase.from('ADMIN_NOTES').insert({ lead_id, note, author }).select().single();
+  if (error) throw new Error(`Database error: ${error.message}`);
+  return data;
+}
+
+// =============================================================================
+// ENRICHMENT & METRICS
+// =============================================================================
+
+export async function getLeadEnrichment(leadId: string): Promise<LeadEnrichment[]> {
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase.from('lead_enrichment').select('*').eq('lead_id', leadId);
+  if (error) throw new Error(`Database error: ${error.message}`);
+  return data || [];
+}
+
+export async function recordRevenueEvent(event: RevenueEvent): Promise<void> {
+  const supabase = getSupabaseAdmin();
+  const { error } = await supabase.from('REVENUE_EVENTS').insert(event);
+  if (error) console.error('Failed to record revenue event:', error);
+}
+
+export async function incrementABCounter(variation_id: string, field: 'impressions' | 'submissions'): Promise<void> {
+  const supabase = getSupabaseAdmin();
+  const { error } = await supabase.rpc('increment_ab_counter', { p_variation_id: variation_id, p_field: field });
+  if (error) console.error('Failed to increment A/B counter:', error);
+}
+
+export async function getEnhancedMetrics(): Promise<any> {
+  const supabase = getSupabaseAdmin();
+  
+  // Basic metrics
+  const { data: leads, error: leadError } = await supabase.from('leads').select('readiness_score, created_at, sold, sale_amount');
+  const { data: revenue, error: revError } = await supabase.from('REVENUE_EVENTS').select('event_value, event_date');
+  
+  if (leadError || revError) return {};
+
+  const totalLeads = leads?.length || 0;
+  const avgReadiness = totalLeads > 0 ? (leads?.reduce((acc, curr) => acc + curr.readiness_score, 0) || 0) / totalLeads : 0;
+  const totalRevenue = revenue?.reduce((acc, curr) => acc + (curr.event_value || 0), 0) || 0;
+
+  return {
+    totalLeads,
+    avgReadiness: Math.round(avgReadiness),
+    totalRevenue,
+    conversionRate: totalLeads > 0 ? (leads?.filter(l => l.sold).length || 0) / totalLeads : 0
+  };
 }
