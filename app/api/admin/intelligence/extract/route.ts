@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseAdmin } from '@/lib/supabase';
 
 const SUBREDDITS = ['msp', 'startups', 'cybersecurity', 'comply'];
 
@@ -80,15 +80,13 @@ async function analyzeWithAI(text: string, topic: string, openaiApiKey: string) 
 export async function POST(request: Request) {
   const { topic = 'SOC 2' } = await request.json().catch(() => ({}));
   
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const openaiApiKey = process.env.OPENAI_API_KEY;
 
-  if (!supabaseUrl || !supabaseServiceKey || !openaiApiKey) {
+  if (!openaiApiKey) {
     return NextResponse.json({ error: 'Missing configuration' }, { status: 500 });
   }
 
-  const supabase = createClient(supabaseUrl, supabaseServiceKey);
+  const supabase = getSupabaseAdmin();
 
   // 1. Fetch existing keywords to use as filters (if needed, though here we use them to ensure we don't duplicate efforts)
   const { data: keywords } = await supabase.from('KEYWORDS').select('keyword');

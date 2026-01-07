@@ -1,16 +1,6 @@
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseAdmin } from '../lib/supabase';
 
-// Load environment variables
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const openaiApiKey = process.env.OPENAI_API_KEY;
-
-if (!supabaseUrl || !supabaseServiceKey || !openaiApiKey) {
-  console.error('Error: Missing environment variables');
-  process.exit(1);
-}
-
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
+const supabase = getSupabaseAdmin();
 
 const SUBREDDITS = ['msp', 'startups', 'cybersecurity'];
 const SEARCH_QUERIES = [

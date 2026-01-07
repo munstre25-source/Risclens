@@ -20,15 +20,15 @@ export async function RelatedProfiles({
   
   let profiles: any[] = [];
   
-  if (mode === 'related' && currentCompanySlug) {
-    // Logic for related profiles
-    const { data: allCompanies } = await supabase
-      .from('company_signals')
-      .select('company_name, slug, signal_score, domain, public_signals')
-      .eq('indexable', true)
-      .neq('slug', currentCompanySlug)
-      .order('signal_score', { ascending: false })
-      .limit(50);
+    if (mode === 'related' && currentCompanySlug) {
+      // Logic for related profiles
+      const { data: allCompanies } = await supabase
+        .from('company_signals')
+        .select('name, slug, signal_score, domain, public_signals')
+        .eq('indexable', true)
+        .neq('slug', currentCompanySlug)
+        .order('signal_score', { ascending: false })
+        .limit(50);
 
     if (allCompanies && allCompanies.length > 0) {
       const scored = allCompanies.map((c) => {
@@ -54,17 +54,17 @@ export async function RelatedProfiles({
 
       profiles = scored.slice(0, limit);
     }
-  } else {
-    // Logic for explore profiles (high-signal companies)
-    const { data: highSignalCompanies } = await supabase
-      .from('company_signals')
-      .select('company_name, slug, signal_score, domain, public_signals')
-      .eq('indexable', true)
-      .order('signal_score', { ascending: false })
-      .limit(limit || 20);
-      
-    profiles = highSignalCompanies || [];
-  }
+    } else {
+      // Logic for explore profiles (high-signal companies)
+      const { data: highSignalCompanies } = await supabase
+        .from('company_signals')
+        .select('name, slug, signal_score, domain, public_signals')
+        .eq('indexable', true)
+        .order('signal_score', { ascending: false })
+        .limit(limit || 20);
+        
+      profiles = highSignalCompanies || [];
+    }
 
   if (profiles.length === 0) return null;
 
@@ -75,15 +75,15 @@ export async function RelatedProfiles({
           Explore SOC 2 & Security Profiles by Company
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {profiles.map((profile) => (
-            <Link
-              key={profile.slug}
-              href={`/compliance/directory/${profile.slug}`}
-              className="text-blue-600 hover:underline text-sm font-medium"
-            >
-              {profile.company_name} SOC 2 & security profile
-            </Link>
-          ))}
+            {profiles.map((profile) => (
+              <Link
+                key={profile.slug}
+                href={`/compliance/directory/${profile.slug}`}
+                className="text-blue-600 hover:underline text-sm font-medium"
+              >
+                {profile.name} SOC 2 & security profile
+              </Link>
+            ))}
         </div>
       </section>
     );
@@ -106,12 +106,12 @@ export async function RelatedProfiles({
                 className="flex flex-col p-4 bg-white rounded-lg border border-gray-100 hover:shadow-md transition-shadow h-full group"
               >
                 <div className="flex justify-between items-start gap-3 mb-2">
-                  <div className="min-w-0 flex-grow">
-                    <h3 className="font-semibold text-gray-900 text-sm line-clamp-2 leading-tight group-hover:text-blue-600 transition-colors">
-                      {profile.company_name}
-                    </h3>
-                    <p className="text-xs text-gray-400 mt-1">{profile.domain}</p>
-                  </div>
+                    <div className="min-w-0 flex-grow">
+                      <h3 className="font-semibold text-gray-900 text-sm line-clamp-2 leading-tight group-hover:text-blue-600 transition-colors">
+                        {profile.name}
+                      </h3>
+                      <p className="text-xs text-gray-400 mt-1">{profile.domain}</p>
+                    </div>
                   <div className="flex-shrink-0">
                     <SignalScore score={profile.signal_score} size="sm" minimal={true} />
                   </div>

@@ -1,0 +1,4 @@
+#!/bin/bash
+export NEXT_PUBLIC_SUPABASE_URL="https://txbluzobjjlpbocpyygt.supabase.co"
+export SUPABASE_SERVICE_ROLE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR4Ymx1em9iampscGJvY3B5eWd0Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NzA5ODQwOSwiZXhwIjoyMDgyNjc0NDA5fQ.3INm8wfRiRwbecJVHsK8FSU3b_LsqOs1fMU9PIDuJeg"
+npx tsx /home/qpay/Risclens/scripts/seed-companies.ts

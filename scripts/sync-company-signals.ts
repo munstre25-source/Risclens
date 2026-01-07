@@ -1,28 +1,22 @@
+import { getSupabaseAdmin } from '../lib/supabase';
 
-import { createClient } from '@supabase/supabase-js';
-
-// SOURCE: ugqklluhjdcztuwduesx
-const SOURCE_URL = 'https://ugqklluhjdcztuwduesx.supabase.co';
-const SOURCE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVncWtsbHVoamRjenR1d2R1ZXN4Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NzYxMTUzNiwiZXhwIjoyMDgzMTg3NTM2fQ.SGNRR9EMkDDpzTiqxsUtgnCFuyGTJdeAbDemanyesoI';
-
-// DESTINATION: txbluzobjjlpbocpyygt
-const DEST_URL = 'https://txbluzobjjlpbocpyygt.supabase.co';
-const DEST_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR4Ymx1em9iampscGJvY3B5eWd0Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NzA5ODQwOSwiZXhwIjoyMDgyNjc0NDA5fQ.3INm8wfRiRwbecJVHsK8FSU3b_LsqOs1fMU9PIDuJeg';
-
-const sourceClient = createClient(SOURCE_URL, SOURCE_KEY);
-const destClient = createClient(DEST_URL, DEST_KEY);
+// SOURCE: External project (ugqklluhjdcztuwduesx)
+const SOURCE_URL = process.env.SOURCE_SUPABASE_URL || 'https://ugqklluhjdcztuwduesx.supabase.co';
+const SOURCE_KEY = process.env.SOURCE_SUPABASE_SERVICE_ROLE_KEY;
 
 async function sync() {
-  console.log('🚀 Starting sync from old project to new project...');
+  console.log('🚀 Starting sync from source project to current project...');
 
-  // 1. Check/Fix Schema in Destination
-  console.log('🛠 Checking destination schema...');
-  
-  // We'll try to run an RPC or use the REST API to check columns.
-  // Since we can't run raw SQL easily without a connection string, we'll try to insert a dummy record or use the API.
-  // Actually, let's just try to insert the data and see what happens.
-  
-  // 2. Fetch data from Source
+  if (!SOURCE_KEY) {
+    console.error('Missing SOURCE_SUPABASE_SERVICE_ROLE_KEY environment variable.');
+    process.exit(1);
+  }
+
+  const { createClient } = await import('@supabase/supabase-js');
+  const sourceClient = createClient(SOURCE_URL, SOURCE_KEY);
+  const destClient = getSupabaseAdmin();
+
+  // 1. Fetch data from Source
   console.log('📥 Fetching data from source...');
   const { data: companies, error: fetchError } = await sourceClient
     .from('company_signals')
@@ -40,23 +34,19 @@ async function sync() {
     return;
   }
 
-  // 3. Clear existing data in Destination (optional but safer for clean sync)
+  // 2. Clear existing data in Destination
   console.log('🗑 Clearing destination table...');
   const { error: deleteError } = await destClient
     .from('company_signals')
     .delete()
-    .neq('slug', ''); // delete all
+    .neq('slug', ''); 
 
   if (deleteError) {
-    console.warn('⚠️ Could not clear destination (it might be empty or missing table):', deleteError.message);
+    console.warn('⚠️ Could not clear destination:', deleteError.message);
   }
 
-  // 4. Insert data into Destination
+  // 3. Insert data into Destination
   console.log('📤 Inserting data into destination...');
-  
-  // Map data if needed. 
-  // Source has: company_name, slug, signal_score, domain, public_signals, indexable
-  // Destination might have different columns. Let's try to insert using the names the code expects.
   
   const mappedCompanies = companies.map(c => ({
     company_name: c.company_name,
@@ -65,7 +55,13 @@ async function sync() {
     domain: c.domain,
     public_signals: c.public_signals,
     indexable: c.indexable,
-    created_at: c.created_at
+    created_at: c.created_at,
+    updated_at: c.updated_at,
+    markers: c.markers,
+    signals: c.signals,
+    ai_summary: c.ai_summary,
+    score_breakdown: c.score_breakdown,
+    indexable_locked: c.indexable_locked
   }));
 
   const { error: insertError } = await destClient
@@ -74,12 +70,6 @@ async function sync() {
 
   if (insertError) {
     console.error('❌ Error inserting into destination:', insertError);
-    if (insertError.message.includes('column') || insertError.message.includes('does not exist')) {
-        console.log('💡 It seems the destination table structure is wrong. We need to fix the columns.');
-        // We'll try to use an RPC if available or ask user. 
-        // But since I'm the agent, I'll try to "fix it" by suggesting the user run a SQL script in their dashboard 
-        // OR I can try to use a dummy table if I can't alter.
-    }
   } else {
     console.log('✅ Successfully synced all companies!');
   }

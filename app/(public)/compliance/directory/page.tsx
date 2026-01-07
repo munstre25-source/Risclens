@@ -21,6 +21,7 @@ export const metadata: Metadata = {
   },
 };
 
+export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function DirectoryPage() {
@@ -28,7 +29,7 @@ export default async function DirectoryPage() {
   
   const { data: companies, error } = await supabase
     .from('company_signals')
-    .select('company_name, slug, signal_score, domain, public_signals')
+    .select('name, slug, signal_score, domain, public_signals')
     .eq('indexable', true)
     .order('signal_score', { ascending: false });
 
@@ -89,16 +90,16 @@ export default async function DirectoryPage() {
                 {popularProfiles.map((company) => (
                   <Link
                     key={company.slug}
-                    href={`/compliance/directory/${company.slug}`}
-                    aria-label={`View ${company.company_name} security profile`}
-                    className="block p-3 bg-white rounded-lg border border-gray-100 hover:shadow-md transition-shadow text-center h-full"
-                  >
-                    <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">
-                      {company.signal_score}
-                    </span>
-                      <h3 className="font-medium text-gray-900 text-xs mt-2 line-clamp-2 leading-tight">
-                        {company.company_name} SOC 2 & Security Signals
-                      </h3>
+                      href={`/compliance/directory/${company.slug}`}
+                      aria-label={`View ${company.name} security profile`}
+                      className="block p-3 bg-white rounded-lg border border-gray-100 hover:shadow-md transition-shadow text-center h-full"
+                    >
+                      <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">
+                        {company.signal_score}
+                      </span>
+                        <h3 className="font-medium text-gray-900 text-xs mt-2 line-clamp-2 leading-tight">
+                          {company.name} SOC 2 & Security Signals
+                        </h3>
                       <p className="text-[9px] text-gray-500 mt-1 line-clamp-1">
                         {getSignalsSummary(company.public_signals)}
                       </p>
@@ -111,18 +112,18 @@ export default async function DirectoryPage() {
 
         <h2 className="text-xl font-bold text-gray-900 mb-6">All Company Profiles</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {companies?.map((company) => (
-              <Link 
-                key={company.slug} 
-                href={`/compliance/directory/${company.slug}`}
-                aria-label={`View ${company.company_name} security profile`}
-                className="flex flex-col bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow p-6 group h-full"
-              >
-                <div className="flex justify-between items-start gap-4 mb-4">
-                  <div className="flex-grow min-w-0">
-                    <h3 className="text-lg font-bold text-gray-900 line-clamp-2 leading-tight group-hover:text-blue-600 transition-colors">
-                      {company.company_name} SOC 2 & Security Signals
-                    </h3>
+              {companies?.map((company) => (
+                <Link 
+                  key={company.slug} 
+                  href={`/compliance/directory/${company.slug}`}
+                  aria-label={`View ${company.name} security profile`}
+                  className="flex flex-col bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow p-6 group h-full"
+                >
+                  <div className="flex justify-between items-start gap-4 mb-4">
+                    <div className="flex-grow min-w-0">
+                      <h3 className="text-lg font-bold text-gray-900 line-clamp-2 leading-tight group-hover:text-blue-600 transition-colors">
+                        {company.name} SOC 2 & Security Signals
+                      </h3>
                     <p className="text-sm text-gray-500 mt-1">{company.domain}</p>
                     <p className="text-xs text-gray-400 mt-2 line-clamp-2 italic">
                       {getSignalsSummary(company.public_signals)}

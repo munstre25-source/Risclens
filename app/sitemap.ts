@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next';
 import { ROUTES, getRouteBucket } from '@/src/seo/routes';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseAdmin } from '@/lib/supabase';
 
 const baseUrl = 'https://risclens.com';
 
@@ -8,9 +8,7 @@ const baseUrl = 'https://risclens.com';
 const BUILD_DATE = new Date();
 
 async function getDynamicRoutes() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-  const supabase = createClient(supabaseUrl, supabaseKey);
+  const supabase = getSupabaseAdmin();
 
   const { data } = await supabase
     .from('company_signals')

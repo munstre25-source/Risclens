@@ -16,6 +16,7 @@ interface Props {
 
 interface CompanySignals {
   id: string;
+  name: string;
   company_name: string;
   domain: string;
   slug: string;
@@ -52,7 +53,7 @@ export async function generateMetadata(
   const supabase = getSupabaseAdmin();
   const { data: company } = await supabase
     .from('company_signals')
-    .select('company_name, indexable')
+    .select('name, indexable')
     .eq('slug', params.slug)
     .single();
 
@@ -61,8 +62,8 @@ export async function generateMetadata(
   }
 
   return {
-    title: `${company.company_name} Security & SOC 2 Signals | Public Security Profile`,
-    description: `View ${company.company_name}'s public SOC 2 and security signals: trust center, security page, disclosures, and transparency markers.`,
+    title: `${company.name} Security & SOC 2 Signals | Public Security Profile`,
+    description: `View ${company.name}'s public SOC 2 and security signals: trust center, security page, disclosures, and transparency markers.`,
     robots: {
       index: company.indexable ? true : false,
       follow: true,
@@ -98,20 +99,20 @@ function generateJsonLd(company: CompanySignals) {
         name: 'Directory',
         item: `${baseUrl}/compliance/directory`,
       },
-      {
-        '@type': 'ListItem',
-        position: 4,
-        name: company.company_name,
-        item: profileUrl,
-      },
-    ],
-  };
-
-  const organization = {
-    '@type': 'Organization',
-    '@id': `${profileUrl}#organization`,
-    name: company.company_name,
-    url: `https://${company.domain}`,
+        {
+          '@type': 'ListItem',
+          position: 4,
+          name: company.name,
+          item: profileUrl,
+        },
+      ],
+    };
+  
+    const organization = {
+      '@type': 'Organization',
+      '@id': `${profileUrl}#organization`,
+      name: company.name,
+      url: `https://${company.domain}`,
     identifier: {
       '@type': 'PropertyValue',
       propertyID: 'domain',
@@ -126,17 +127,17 @@ function generateJsonLd(company: CompanySignals) {
     ],
   };
 
-  const profilePage = {
-    '@type': 'ProfilePage',
-    '@id': profileUrl,
-    url: profileUrl,
-    name: `${company.company_name} Public Security Profile`,
-    description: `Public SOC 2 and security signals for ${company.company_name}: trust center, security page, disclosures, and transparency markers.`,
-    dateModified: company.updated_at,
-    mainEntity: {
-      '@id': `${profileUrl}#organization`,
-    },
-  };
+    const profilePage = {
+      '@type': 'ProfilePage',
+      '@id': profileUrl,
+      url: profileUrl,
+      name: `${company.name} Public Security Profile`,
+      description: `Public SOC 2 and security signals for ${company.name}: trust center, security page, disclosures, and transparency markers.`,
+      dateModified: company.updated_at,
+      mainEntity: {
+        '@id': `${profileUrl}#organization`,
+      },
+    };
 
   return {
     '@context': 'https://schema.org',
@@ -144,9 +145,10 @@ function generateJsonLd(company: CompanySignals) {
   };
 }
 
+export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-export default async function CompanyProfilePage({ params }: Props) {
+export default async function Page({ params }: { params: { slug: string } }) {
   const supabase = getSupabaseAdmin();
   
   const { data: company, error } = await supabase
@@ -183,22 +185,22 @@ export default async function CompanyProfilePage({ params }: Props) {
         {/* Hero Section */}
         <div className="bg-gray-50 border-b border-gray-100 py-12">
           <div className="container mx-auto px-4 max-w-4xl">
-            <Breadcrumbs 
-              items={[
-                { label: 'Directory', href: '/compliance/directory' },
-                { label: company.company_name, href: `/compliance/directory/${company.slug}` },
-              ]} 
-            />
-            
-            <div className="mt-8 flex flex-col md:flex-row md:items-center justify-between gap-8">
-              <div>
-                <h1 className="text-4xl font-bold text-gray-900 mb-2">
-                  {company.company_name} Public Security Profile
-                </h1>
-                <div className="mt-4 text-gray-600 text-lg max-w-2xl leading-relaxed">
-                  {company.ai_summary || `Analysis of publicly available security signals and disclosures for ${company.company_name}.`}
+              <Breadcrumbs 
+                items={[
+                  { label: 'Directory', href: '/compliance/directory' },
+                  { label: company.name, href: `/compliance/directory/${company.slug}` },
+                ]} 
+              />
+              
+              <div className="mt-8 flex flex-col md:flex-row md:items-center justify-between gap-8">
+                <div>
+                  <h1 className="text-4xl font-bold text-gray-900 mb-2">
+                    {company.name} Public Security Profile
+                  </h1>
+                  <div className="mt-4 text-gray-600 text-lg max-w-2xl leading-relaxed">
+                    {company.ai_summary || `Analysis of publicly available security signals and disclosures for ${company.name}.`}
+                  </div>
                 </div>
-              </div>
               
               <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex-shrink-0">
                 <SignalScore score={company.signal_score} size="md" />
@@ -214,47 +216,47 @@ export default async function CompanyProfilePage({ params }: Props) {
             {/* Main Content */}
             <div className="md:col-span-2 space-y-12">
               
-              {/* Public Security Signals Checklist */}
-              <section>
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">Public SOC 2 and Security Signals for {company.company_name}</h2>
-                <div className="space-y-4">
-                  {signalItems.map((item, index) => (
-                    <div key={index} className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg border border-gray-100">
-                      <div className={`mt-0.5 flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center ${item.value ? 'bg-green-100 text-green-600' : 'bg-gray-200 text-gray-400'}`}>
-                        {item.value ? (
-                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                          </svg>
-                        ) : (
-                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
-                          </svg>
-                        )}
+                {/* Public Security Signals Checklist */}
+                <section>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-6">Public SOC 2 and Security Signals for {company.name}</h2>
+                  <div className="space-y-4">
+                    {signalItems.map((item, index) => (
+                      <div key={index} className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg border border-gray-100">
+                        <div className={`mt-0.5 flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center ${item.value ? 'bg-green-100 text-green-600' : 'bg-gray-200 text-gray-400'}`}>
+                          {item.value ? (
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                            </svg>
+                          ) : (
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          )}
+                        </div>
+                        <span className={`text-base font-medium ${item.value ? 'text-gray-900' : 'text-gray-400'}`}>
+                          {item.label}
+                        </span>
                       </div>
-                      <span className={`text-base font-medium ${item.value ? 'text-gray-900' : 'text-gray-400'}`}>
-                        {item.label}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </section>
-
-              {/* Educational Context */}
-              <section className="bg-blue-50 rounded-xl p-8 border border-blue-100">
-                <h3 className="text-xl font-bold text-blue-900 mb-4">About Public Disclosures</h3>
-                <div className="prose prose-blue text-blue-800">
-                  <p>
-                    Public disclosures help with vendor risk reviews by providing a baseline of transparency. 
-                    A lack of public disclosure does not necessarily indicate a lack of security controls, 
-                    but it may require more direct inquiry during a procurement process.
-                  </p>
-                  <p className="mt-4 font-medium italic">
-                    Note: This profile is based only on publicly observable data and automated discovery.
-                  </p>
-                </div>
-              </section>
-
-              <SOC2ReadinessSignals companyName={company.company_name} />
+                    ))}
+                  </div>
+                </section>
+                
+                {/* Educational Context */}
+                <section className="bg-blue-50 rounded-xl p-8 border border-blue-100">
+                  <h3 className="text-xl font-bold text-blue-900 mb-4">About Public Disclosures</h3>
+                  <div className="prose prose-blue text-blue-800">
+                    <p>
+                      Public disclosures help with vendor risk reviews by providing a baseline of transparency. 
+                      A lack of public disclosure does not necessarily indicate a lack of security controls, 
+                      but it may require more direct inquiry during a procurement process.
+                    </p>
+                    <p className="mt-4 font-medium italic">
+                      Note: This profile is based only on publicly observable data and automated discovery.
+                    </p>
+                  </div>
+                </section>
+  
+                <SOC2ReadinessSignals companyName={company.name} />
 
               {/* CTA */}
               <section className="text-center py-8">
@@ -278,7 +280,7 @@ export default async function CompanyProfilePage({ params }: Props) {
                 <div className="space-y-4">
                   <div>
                     <label className="text-xs text-gray-400 block uppercase">Legal Name</label>
-                    <span className="font-medium text-gray-900">{company.company_name}</span>
+                    <span className="font-medium text-gray-900">{company.name}</span>
                   </div>
                   <div>
                     <label className="text-xs text-gray-400 block uppercase">Domain</label>
