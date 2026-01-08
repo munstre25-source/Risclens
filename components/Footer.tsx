@@ -36,9 +36,10 @@ export default function Footer() {
               <li><Link href="/soc-2-cost" className="hover:text-white transition-colors">SOC 2 Cost Guide</Link></li>
               <li><Link href="/soc-2-timeline" className="hover:text-white transition-colors">Timeline Estimator</Link></li>
               <li><Link href="/soc-2-readiness-checklist" className="hover:text-white transition-colors">Readiness Checklist</Link></li>
-              <li><Link href="/soc-2-evidence/vault" className="hover:text-white transition-colors">Evidence Vault</Link></li>
-              <li><Link href="/compliance-roi-calculator" className="hover:text-white transition-colors">Compliance ROI</Link></li>
-            </ul>
+                <li><Link href="/soc-2-evidence/vault" className="hover:text-white transition-colors">Evidence Vault</Link></li>
+                <li><Link href="/compliance-roi-calculator" className="hover:text-white transition-colors">Compliance ROI</Link></li>
+                <li><Link href="/iso-27001-checklist" className="hover:text-white transition-colors">ISO 27001 Checklist</Link></li>
+              </ul>
           </div>
 
           {/* Pentest & Vendor Risk Column */}
@@ -81,8 +82,9 @@ export default function Footer() {
                   <li><Link href="/readiness-review" className="hover:text-white transition-colors font-semibold text-brand-400">Talk to a compliance expert</Link></li>
                   <li><Link href="/methodology" className="hover:text-white transition-colors">Methodology & Assumptions</Link></li>
 
-                <li><Link href="/soc-2/guides" className="hover:text-white transition-colors">All Guides</Link></li>
-                <li><Link href="/search" className="hover:text-white transition-colors">Search Library</Link></li>
+                  <li><Link href="/soc-2/guides" className="hover:text-white transition-colors">All Guides</Link></li>
+                  <li><Link href="/glossary" className="hover:text-white transition-colors">Compliance Glossary</Link></li>
+                  <li><Link href="/search" className="hover:text-white transition-colors">Search Library</Link></li>
               <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
               <li><Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
               <li><a href="mailto:hello@risclens.com" className="hover:text-white transition-colors">Contact Support</a></li>

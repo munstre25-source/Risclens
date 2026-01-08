@@ -165,7 +165,7 @@ export default function HomePage() {
                     {
                       title: "Why SOC 2 audits get delayed",
                       description: "Understand the common pitfalls that stall compliance and how they impact your revenue.",
-                      link: "/soc-2-audit-delays-cost"
+                      link: "/soc-2-audit-delay-cost"
                     },
                     {
                       title: "SOC 2 Readiness Index",
@@ -201,8 +201,45 @@ export default function HomePage() {
             </div>
           </section>
 
+          {/* Industry Hubs Section */}
+          <section className="bg-white py-20 border-t border-slate-200">
+            <div className="max-w-5xl mx-auto px-4">
+              <div className="text-center mb-12">
+                <h2 className="text-2xl font-bold text-slate-900">
+                  Compliance by Industry
+                </h2>
+                <p className="text-slate-600 mt-2">
+                  Tailored readiness guides and cost benchmarks for your specific vertical.
+                </p>
+              </div>
 
-        <AboutSection />
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {[
+                  { label: 'SaaS', href: '/soc-2/industries/saas', icon: '☁️' },
+                  { label: 'Fintech', href: '/soc-2-cost/fintech', icon: '💰' },
+                  { label: 'Healthcare', href: '/soc-2-cost/healthcare', icon: '🏥' },
+                  { label: 'Startups', href: '/soc-2-cost/startups', icon: '🚀' },
+                ].map((industry) => (
+                  <Link
+                    key={industry.label}
+                    href={industry.href}
+                    className="flex flex-col items-center p-6 bg-slate-50 rounded-xl border border-slate-100 hover:border-brand-200 hover:bg-white hover:shadow-sm transition-all text-center"
+                  >
+                    <span className="text-3xl mb-3">{industry.icon}</span>
+                    <span className="font-bold text-slate-900">{industry.label}</span>
+                  </Link>
+                ))}
+              </div>
+              
+              <div className="mt-10 text-center">
+                <Link href="/soc-2/industries" className="text-brand-600 font-semibold hover:text-brand-700 transition-colors">
+                  View all industry benchmarks →
+                </Link>
+              </div>
+            </div>
+          </section>
+
+          <AboutSection />
         
         <Footer />
       </main>

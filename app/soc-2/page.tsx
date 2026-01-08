@@ -79,7 +79,7 @@ const SOC2_TOOLS = [
 ];
 
 const SOC2_GUIDES = [
-  { href: '/soc-2-audit-delays-cost', title: 'Why Audits Get Delayed', summary: 'Learn why SOC 2 timelines slip and the compounding impact on enterprise deals.' },
+  { href: '/soc-2-audit-delay-cost', title: 'Why Audits Get Delayed', summary: 'Learn why SOC 2 timelines slip and the compounding impact on enterprise deals.' },
   { href: '/soc-2-readiness-checklist', title: 'Readiness Checklist', summary: 'A step-by-step prep list for technical, operational, and HR controls.' },
   { href: '/soc-2-evidence/vault', title: 'Evidence Vault', summary: 'Browse common evidence requests and auditor expectations for each trust criteria.' },
   { href: '/soc-2-type-i-vs-type-ii', title: 'Type I vs Type II', summary: 'Understand the difference in scope, cost, and effort between reports.' },

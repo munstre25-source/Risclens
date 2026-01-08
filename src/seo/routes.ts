@@ -51,7 +51,7 @@ export const LEGAL_ROUTES = [
 
 export const COMMERCIAL_ROUTES = [
   '/compare',
-  '/soc-2-audit-delays-cost',
+  '/soc-2-audit-delay-cost',
   '/about',
   '/security',
   '/methodology',

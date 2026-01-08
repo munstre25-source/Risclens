@@ -12,6 +12,11 @@ const nextConfig = {
         destination: '/soc-2-readiness-calculator',
         permanent: true,
       },
+      {
+        source: '/soc-2-audit-delays-cost',
+        destination: '/soc-2-audit-delay-cost',
+        permanent: true,
+      },
     ];
   },
   // Enable experimental server actions
