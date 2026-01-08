@@ -1,19 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  async redirects() {
-    return [
-      {
-        source: '/start',
-        destination: '/soc-2-readiness-calculator',
-        permanent: true,
-      },
-      {
-        source: '/soc-2-audit-delays-cost',
-        destination: '/soc-2-audit-delay-cost',
-        permanent: true,
-      },
-    ];
-  },
+    async redirects() {
+      return [
+        {
+          source: '/start',
+          destination: '/soc-2-readiness-calculator',
+          permanent: true,
+        },
+      ];
+    },
   // Enable experimental server actions
   experimental: {
     serverActions: {

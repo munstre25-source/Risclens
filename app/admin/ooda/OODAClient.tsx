@@ -36,6 +36,51 @@ export function OODAClient() {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const getAiSuggestions = async (tool: any) => {
+    setIsGenerating(true);
+    try {
+      const response = await fetch('/api/admin/ooda/suggest', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          targetPage: tool.name,
+          currentPerformance: {
+            views: tool.resultsViewed,
+            leads: tool.leadsSubmitted,
+            rate: tool.conversionRate
+          }
+        })
+      });
+      const json = await response.json();
+      if (json.success) {
+        setSuggestions(json.suggestions);
+      }
+    } catch (err) {
+      console.error('Failed to get suggestions', err);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const applySuggestion = async (suggestion: any) => {
+    try {
+      const response = await fetch('/api/admin/variants', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(suggestion)
+      });
+      const json = await response.json();
+      if (json.success) {
+        alert('Variation created and saved to experiments!');
+        setSuggestions([]);
+      }
+    } catch (err) {
+      alert('Failed to apply suggestion');
+    }
+  };
 
   useEffect(() => {
     const fetchAnalytics = async () => {
@@ -198,16 +243,29 @@ export function OODAClient() {
                     })
                     .map((tool, idx) => (
                       <tr key={tool.name} className={idx === 0 ? "bg-amber-50/30" : ""}>
-                        <td className="px-6 py-4">
-                          <span className="font-semibold text-slate-900 capitalize">
-                            {tool.name.replace(/-/g, ' ')}
-                          </span>
-                          {idx === 0 && (
-                            <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-700 uppercase">
-                              Optimization Target
-                            </span>
-                          )}
-                        </td>
+                          <td className="px-6 py-4">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <span className="font-semibold text-slate-900 capitalize">
+                                  {tool.name.replace(/-/g, ' ')}
+                                </span>
+                                {idx === 0 && (
+                                  <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-700 uppercase">
+                                    Optimization Target
+                                  </span>
+                                )}
+                              </div>
+                              {idx === 0 && (
+                                <button
+                                  onClick={() => getAiSuggestions(tool)}
+                                  disabled={isGenerating}
+                                  className="text-[10px] font-bold bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700 transition-colors disabled:opacity-50"
+                                >
+                                  {isGenerating ? 'Generating...' : 'AI Suggestions'}
+                                </button>
+                              )}
+                            </div>
+                          </td>
                         <td className="px-6 py-4 text-right text-slate-600">{tool.resultsViewed.toLocaleString()}</td>
                         <td className="px-6 py-4 text-right text-slate-600 font-medium">{tool.leadsSubmitted.toLocaleString()}</td>
                         <td className={`px-6 py-4 text-right font-bold ${parseFloat(tool.conversionRate) < 5 ? 'text-rose-600' : 'text-emerald-600'}`}>
@@ -224,9 +282,52 @@ export function OODAClient() {
                 </p>
               </div>
             </div>
-        </section>
+          </section>
 
-        {/* 3 & 4. DECIDE & ACT */}
+          {suggestions.length > 0 && (
+            <section className="space-y-4 animate-in fade-in slide-in-from-top-4 duration-500">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white font-bold text-sm">✨</span>
+                  <h2 className="text-xl font-bold text-slate-900">AI Optimization Suggestions</h2>
+                </div>
+                <button 
+                  onClick={() => setSuggestions([])}
+                  className="text-xs text-slate-500 hover:text-slate-700"
+                >
+                  Dismiss
+                </button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {suggestions.map((suggestion, idx) => (
+                  <div key={idx} className="bg-white p-5 rounded-xl border-2 border-blue-100 shadow-md flex flex-col justify-between">
+                    <div>
+                      <h3 className="text-sm font-bold text-blue-800 mb-2">{suggestion.name}</h3>
+                      <div className="space-y-3 mb-4">
+                        <div>
+                          <p className="text-[10px] uppercase font-bold text-slate-400">Headline</p>
+                          <p className="text-sm text-slate-800 italic">"{suggestion.headline}"</p>
+                        </div>
+                        <div>
+                          <p className="text-[10px] uppercase font-bold text-slate-400">CTA Text</p>
+                          <p className="text-sm text-slate-800 font-semibold">{suggestion.cta_text}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => applySuggestion(suggestion)}
+                      className="w-full bg-blue-600 text-white py-2 rounded-lg text-xs font-bold hover:bg-blue-700 transition-colors shadow-sm"
+                    >
+                      Apply Variation
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* 3 & 4. DECIDE & ACT */}
+
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <section className="space-y-4">

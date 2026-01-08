@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { incrementABCounter, logAuditEvent } from '@/lib/supabase';
+import { incrementABCounter } from '@/lib/supabase';
 import { applyRateLimit } from '@/lib/rate-limit';
 import { sanitizeString } from '@/lib/validation';
 
@@ -9,19 +9,18 @@ export async function POST(request: NextRequest) {
   const rateLimitResponse = applyRateLimit(request);
   if (rateLimitResponse) return rateLimitResponse;
 
+  try {
+    // In Next.js 14, reading the body directly is generally safe 
+    // unless a middleware has already consumed it without cloning.
+    let body: any = {};
+    
     try {
-      // Safely handle body reading in case it's disturbed or not JSON
-      let body: any = {};
-      if (request.body && !request.bodyUsed) {
-        try {
-          body = await request.json();
-        } catch (e) {
-          console.warn('Body disturbed or invalid JSON, using empty body');
-        }
-      }
-      
-      const variation_id = sanitizeString(body.variation_id);
-
+      body = await request.json();
+    } catch (e) {
+      console.warn('Could not parse JSON body in /api/ab/impression');
+    }
+    
+    const variation_id = sanitizeString(body.variation_id);
 
     if (!variation_id) {
       return NextResponse.json(
@@ -31,7 +30,8 @@ export async function POST(request: NextRequest) {
     }
 
     const isTest = request.cookies.get('rls_test_mode')?.value === '1';
-    // Skip counting impressions when in test mode to avoid polluting metrics
+    
+    // Skip counting impressions when in test mode
     if (!isTest) {
       await incrementABCounter(variation_id, 'impressions');
     }
@@ -44,8 +44,6 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('A/B impression error:', error);
-    
-    // Don't log every impression failure to avoid log spam
     return NextResponse.json(
       { success: false, error: 'Failed to record impression' },
       { status: 500 }
