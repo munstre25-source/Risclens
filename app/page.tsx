@@ -6,20 +6,20 @@ import Footer from '@/components/Footer';
 import AboutSection from '@/components/AboutSection';
 
 export const metadata: Metadata = {
-  title: 'SOC 2 Audit Delay Cost Calculator | RiscLens',
+  title: 'SOC 2 Readiness Infrastructure & Audit Tools | RiscLens',
   description:
-    'SOC 2 audit delays quietly stall revenue — see what it may be costing you in under 60 seconds.',
+    'RiscLens provides deterministic SOC 2 readiness infrastructure, audit delay calculators, and security signal tools for early-stage companies.',
   openGraph: {
-    title: 'SOC 2 Audit Delay Cost Calculator | RiscLens',
+    title: 'SOC 2 Readiness Infrastructure & Audit Tools | RiscLens',
     description:
-      'SOC 2 audit delays quietly stall revenue — see what it may be costing you in under 60 seconds.',
+      'Deterministic SOC 2 readiness infrastructure, audit delay calculators, and security signal tools for early-stage companies.',
     images: [{ url: '/og.png', width: 1200, height: 630, alt: 'RiscLens' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'SOC 2 Audit Delay Cost Calculator | RiscLens',
+    title: 'SOC 2 Readiness Infrastructure & Audit Tools | RiscLens',
     description:
-      'SOC 2 audit delays quietly stall revenue — see what it may be costing you in under 60 seconds.',
+      'Deterministic SOC 2 readiness infrastructure, audit delay calculators, and security signal tools for early-stage companies.',
     images: ['/og.png'],
   },
   alternates: {
@@ -28,6 +28,11 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+    nocache: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
   },
 };
 

@@ -76,6 +76,18 @@ export const metadata: Metadata = {
   },
 };
 
+<p>
+  Many companies underestimate how delays impact overall SOC 2 cost.
+  You can see a full breakdown in our{' '}
+  <a
+    href="/soc-2-audit-delay-cost"
+    className="text-blue-600 underline"
+  >
+    SOC 2 audit delay cost analysis
+  </a>.
+</p>
+
+
 export default function Soc2CostPage() {
   return (
     <>
@@ -162,6 +174,10 @@ export default function Soc2CostPage() {
             </div>
           </div>
         </section>
+
+        <p>
+</p>
+
 
           <section className="py-16 lg:py-20 bg-white border-t border-slate-200">
             <div className="max-w-3xl mx-auto px-4 sm:px-6 space-y-10">

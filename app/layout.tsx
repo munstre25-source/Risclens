@@ -41,6 +41,11 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+    nocache: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
   },
     icons: {
       icon: [{ url: '/favicon.ico' }],
@@ -72,32 +77,31 @@ export const metadata: Metadata = {
   }) {
     return (
       <html lang="en">
-        <head>
-          <Script
-            src="https://www.googletagmanager.com/gtag/js?id=G-7BR1HET2Y2"
-            strategy="afterInteractive"
-          />
-          <Script id="ga-init" strategy="afterInteractive">
-            {`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-7BR1HET2Y2');
-            `}
-          </Script>
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-          />
-        </head>
-        <body>
-          <HashScrollFix />
-          {children}
-          <Analytics />
-          <SpeedInsights />
-        </body>
+          <head>
+            <Script
+              src="https://www.googletagmanager.com/gtag/js?id=G-7BR1HET2Y2"
+              strategy="afterInteractive"
+            />
+            <Script id="ga-init" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'G-7BR1HET2Y2');
+              `}
+            </Script>
+          </head>
+          <body>
+            <HashScrollFix />
+            <Script
+              id="organization-schema"
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
+            {children}
+            <Analytics />
+            <SpeedInsights />
+          </body>
       </html>
     );
   }
-
-

@@ -6,8 +6,8 @@ export const metadata: Metadata = {
   title: 'Set Up Vendor Risk Program | Risclens',
   description: 'Implement a lightweight scoring model, review cadence, and evidence flow that auditors accept.',
   robots: {
-    index: false,
-    follow: false,
+    index: true,
+    follow: true,
   },
 };
 

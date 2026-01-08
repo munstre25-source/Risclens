@@ -99,6 +99,7 @@ export default function Header() {
   const [mobileResourcesOpen, setMobileResourcesOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   const socRef = useRef<HTMLDivElement>(null);
   const pentestRef = useRef<HTMLDivElement>(null);
@@ -195,6 +196,10 @@ export default function Header() {
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    setMounted(true);
   }, []);
 
   useEffect(() => {
@@ -555,7 +560,7 @@ export default function Header() {
         </div>
       </div>
 
-      {showMobileMenu &&
+      {mounted && showMobileMenu &&
         createPortal(
           <>
             <button

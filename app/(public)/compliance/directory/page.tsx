@@ -24,6 +24,27 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
+function getSignalsSummary(signals: any) {
+  const parts = [];
+  if (signals.has_trust_page) parts.push("trust center");
+  if (signals.has_security_page) parts.push("security page");
+  if (signals.mentions_soc2) parts.push("SOC 2 mention (public)");
+  
+  if (parts.length === 0) return "Public security signals detected (public)";
+  
+  let text = "";
+  if (parts.length === 1) {
+    text = parts[0];
+  } else if (parts.length === 2) {
+    text = `${parts[0]} and ${parts[1]}`;
+  } else {
+    text = parts.join(", ");
+  }
+  
+  const capitalized = text.charAt(0).toUpperCase() + text.slice(1);
+  return capitalized.includes("(public)") ? capitalized : `${capitalized} detected (public)`;
+}
+
 export default async function DirectoryPage() {
   const supabase = getSupabaseAdmin();
   
@@ -38,28 +59,6 @@ export default async function DirectoryPage() {
   }
 
   const popularProfiles = companies?.slice(0, 12) || [];
-
-    const getSignalsSummary = (signals: any) => {
-      const parts = [];
-      if (signals.has_trust_page) parts.push("trust center");
-      if (signals.has_security_page) parts.push("security page");
-      if (signals.mentions_soc2) parts.push("SOC 2 mention (public)");
-      
-      if (parts.length === 0) return "Public security signals detected (public)";
-      
-      let text = "";
-      if (parts.length === 1) {
-        text = parts[0];
-      } else if (parts.length === 2) {
-        text = `${parts[0]} and ${parts[1]}`;
-      } else {
-        // Match user example for 3: "Trust center, security page, SOC 2 mention (public)"
-        text = parts.join(", ");
-      }
-      
-      const capitalized = text.charAt(0).toUpperCase() + text.slice(1);
-      return capitalized.includes("(public)") ? capitalized : `${capitalized} detected (public)`;
-    };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -159,16 +158,18 @@ export default async function DirectoryPage() {
           ))}
         </div>
 
-        {(!companies || companies.length === 0) && (
-          <div className="text-center py-20 bg-white rounded-xl border border-dashed border-gray-300">
-            <p className="text-gray-500">No indexable companies found in the directory yet.</p>
-          </div>
+        <section className="mt-12 space-y-12">
+          {(!companies || companies.length === 0) && (
+            <div className="text-center py-20 bg-white rounded-xl border border-dashed border-gray-300">
+              <p className="text-gray-500">No indexable companies found in the directory yet.</p>
+            </div>
           )}
 
           <RelatedProfiles mode="explore" limit={20} />
 
           <DirectoryUsageGuide />
-        </main>
+        </section>
+      </main>
 
 
       <Footer />

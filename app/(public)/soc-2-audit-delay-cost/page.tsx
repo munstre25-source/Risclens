@@ -3,14 +3,19 @@ import ReadinessNav from '@/components/ReadinessNav';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'SOC 2 Audit Delay Cost Calculator | RiscLens',
-  description: 'Calculate the revenue impact of SOC 2 audit delays on your enterprise sales pipeline.',
+  title: 'SOC 2 Audit Delay Cost Calculator | Estimate Pipeline Risk',
+  description: 'Calculate the specific revenue impact of SOC 2 audit delays on your enterprise sales pipeline. directional estimates based on market benchmarks.',
   alternates: {
     canonical: 'https://risclens.com/soc-2-audit-delay-cost',
   },
   robots: {
     index: true,
     follow: true,
+    nocache: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
   },
 };
 

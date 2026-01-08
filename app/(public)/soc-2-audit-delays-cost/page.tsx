@@ -6,7 +6,18 @@ import Footer from '@/components/Footer';
 export const metadata: Metadata = {
   title: 'SOC 2 Audit Delays: Why They Happen and How Much They Can Cost',
   description: 'SOC 2 audits often take longer than expected. Learn why delays happen, how they affect enterprise deals, and estimate the revenue impact of waiting.',
-  alternates: { canonical: '/soc-2-audit-delays-cost' },
+  alternates: { 
+    canonical: 'https://risclens.com/soc-2-audit-delays-cost' 
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
 };
 
 export default function Soc2DelayArticle() {
