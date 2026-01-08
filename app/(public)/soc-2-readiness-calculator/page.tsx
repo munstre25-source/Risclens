@@ -1,6 +1,8 @@
 import { Suspense } from 'react';
 import { Metadata } from 'next';
 import Link from 'next/link';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import CalculatorForm from '@/components/CalculatorForm';
 import ReadinessNav from '@/components/ReadinessNav';
 import { HowItWorksAccordion } from '@/components/HowItWorksAccordion';
@@ -50,7 +52,10 @@ function FormSkeleton() {
 
 export default function CalculatorPage() {
   return (
-      <main className="bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <Header />
+      
+      <main className="flex-grow">
         <SoftwareApplicationSchema
           name="SOC 2 Readiness Calculator"
           description="Get an instant SOC 2 readiness score and gap analysis."
@@ -204,5 +209,8 @@ export default function CalculatorPage() {
         </div>
       </section>
     </main>
-  );
+
+    <Footer />
+  </div>
+);
 }

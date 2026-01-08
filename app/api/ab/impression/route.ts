@@ -10,9 +10,18 @@ export async function POST(request: NextRequest) {
   if (rateLimitResponse) return rateLimitResponse;
 
     try {
-      // Use request.json() directly, but wrap in a way that handles the "disturbed" error gracefully in dev
-      const body = await request.json().catch(() => ({}));
+      // Safely handle body reading in case it's disturbed or not JSON
+      let body: any = {};
+      if (request.body && !request.bodyUsed) {
+        try {
+          body = await request.json();
+        } catch (e) {
+          console.warn('Body disturbed or invalid JSON, using empty body');
+        }
+      }
+      
       const variation_id = sanitizeString(body.variation_id);
+
 
     if (!variation_id) {
       return NextResponse.json(
