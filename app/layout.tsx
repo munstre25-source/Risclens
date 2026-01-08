@@ -5,6 +5,7 @@ import Script from "next/script";
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { HashScrollFix } from '@/components/HashScrollFix';
+import { Suspense } from 'react';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -97,9 +98,11 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className="font-sans antialiased">
-        <HashScrollFix />
-        <Script
+        <body className="font-sans antialiased">
+          <Suspense fallback={null}>
+            <HashScrollFix />
+          </Suspense>
+          <Script
           id="organization-schema"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
