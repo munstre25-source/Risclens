@@ -44,18 +44,29 @@ export default function TermsPage() {
             </p>
           </section>
 
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Service Description</h2>
-            <p className="text-gray-600 mb-4">
-              RiscLens provides a free SOC 2 Cost Calculator that offers:
-            </p>
-            <ul className="list-disc list-inside text-gray-600 space-y-2">
-              <li>Readiness score assessments based on your inputs</li>
-              <li>Estimated cost ranges for SOC 2 compliance</li>
-              <li>Personalized PDF reports with recommendations</li>
-              <li>Educational content about SOC 2 compliance</li>
-            </ul>
-          </section>
+            <section className="mb-8">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">Service Description</h2>
+              <p className="text-gray-600 mb-4">
+                RiscLens provides a free SOC 2 Cost Calculator that offers:
+              </p>
+              <ul className="list-disc list-inside text-gray-600 space-y-2">
+                <li>Readiness score assessments based on your inputs</li>
+                <li>Estimated cost ranges for SOC 2 compliance</li>
+                <li>Personalized PDF reports with recommendations</li>
+                <li>Educational content about SOC 2 compliance</li>
+                <li>Matching services with vetted compliance partners and auditors</li>
+              </ul>
+            </section>
+
+            <section className="mb-8">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">Lead Referral Disclosure</h2>
+              <p className="text-gray-600 mb-4">
+                By submitting your contact information, you authorize RiscLens to share your information with its network of vetted compliance partners, auditors, and service providers. 
+              </p>
+              <p className="text-gray-600">
+                You acknowledge that RiscLens may receive a referral fee or commission from these partners if you choose to engage their services. RiscLens does not endorse or guarantee the services of any specific partner.
+              </p>
+            </section>
 
           <section className="mb-8">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Disclaimer</h2>

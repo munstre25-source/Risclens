@@ -27,6 +27,10 @@ export interface CreateLeadInput {
     numEmployees?: number | null;
     dataTypes?: string[] | null;
     utmSource?: string | null;
+    utmMedium?: string | null;
+    utmCampaign?: string | null;
+    utmContent?: string | null;
+    utmTerm?: string | null;
     isTest?: boolean | null;
   };
   isPartial?: boolean | null;
@@ -74,8 +78,12 @@ export async function createLead(input: CreateLeadInput) {
     audit_date: derivedFields?.auditDate ?? null,
     num_employees: derivedFields?.numEmployees ?? null,
     data_types: derivedFields?.dataTypes ?? null,
-    utm_source: derivedFields?.utmSource ?? null,
-    is_test: derivedFields?.isTest ?? null,
+      utm_source: derivedFields?.utmSource ?? null,
+      utm_medium: derivedFields?.utmMedium ?? null,
+      utm_campaign: derivedFields?.utmCampaign ?? null,
+      utm_content: derivedFields?.utmContent ?? null,
+      utm_term: derivedFields?.utmTerm ?? null,
+      is_test: derivedFields?.isTest ?? null,
     is_partial: isPartial ?? false,
   } as Record<string, unknown>;
 

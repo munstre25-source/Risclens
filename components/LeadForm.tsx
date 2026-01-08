@@ -26,25 +26,36 @@ interface LeadFormProps {
     pdfTemplate?: string;
   }
   
-  export function LeadForm({
-    title,
-    description,
-    fields,
-    endpoint,
-    ctaLabel,
-    successMessage,
-    disclaimer,
-    analyticsEvent,
-    initialData = {},
-    postSubmitNode,
-    pdfTemplate,
-  }: LeadFormProps) {
-  const [formData, setFormData] = useState<Record<string, string>>(initialData);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+    export function LeadForm({
+      title,
+      description,
+      fields,
+      endpoint,
+      ctaLabel,
+      successMessage,
+      disclaimer,
+      analyticsEvent,
+      initialData = {},
+      postSubmitNode,
+      pdfTemplate,
+    }: LeadFormProps) {
+    const [formData, setFormData] = useState<Record<string, string>>(initialData);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [utmParams, setUtmParams] = useState<Record<string, string>>({});
 
-  const handleInputChange = (
+    useEffect(() => {
+      const params = new URLSearchParams(window.location.search);
+      const utm: Record<string, string> = {};
+      ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach(key => {
+        const val = params.get(key);
+        if (val) utm[key] = val;
+      });
+      setUtmParams(utm);
+    }, []);
+
+    const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
@@ -56,15 +67,16 @@ interface LeadFormProps {
     setIsSubmitting(true);
     setError(null);
 
-    try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          source_url: typeof window !== 'undefined' ? window.location.href : '',
-        }),
-      });
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...formData,
+            ...utmParams,
+            source_url: typeof window !== 'undefined' ? window.location.href : '',
+          }),
+        });
 
       if (!response.ok) {
         throw new Error('Something went wrong. Please try again.');

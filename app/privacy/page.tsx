@@ -51,16 +51,29 @@ export default function PrivacyPage() {
             </ul>
           </section>
 
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">How We Use Your Information</h2>
-            <p className="text-gray-600 mb-4">We use your information to:</p>
-            <ul className="list-disc list-inside text-gray-600 space-y-2">
-              <li>Calculate your SOC 2 readiness score and cost estimate</li>
-              <li>Generate and deliver your personalized PDF report</li>
-              <li>Send relevant compliance resources and tips (with your consent)</li>
-              <li>Improve our calculator and services</li>
-            </ul>
-          </section>
+            <section className="mb-8">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">How We Use Your Information</h2>
+              <p className="text-gray-600 mb-4">We use your information to:</p>
+              <ul className="list-disc list-inside text-gray-600 space-y-2">
+                <li>Calculate your SOC 2 readiness score and cost estimate</li>
+                <li>Generate and deliver your personalized PDF report</li>
+                <li>Connect you with vetted compliance partners and auditors (where applicable)</li>
+                <li>Send relevant compliance resources and tips (with your consent)</li>
+                <li>Improve our calculator and services</li>
+              </ul>
+            </section>
+
+            <section className="mb-8">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">Sharing Your Information</h2>
+              <p className="text-gray-600 mb-4">
+                By using our services and providing your contact information, you acknowledge and agree that:
+              </p>
+              <ul className="list-disc list-inside text-gray-600 space-y-2">
+                <li>We may share your lead data (including contact details and company profile) with vetted third-party compliance partners, auditors, and service providers who can assist you with your SOC 2 journey.</li>
+                <li>These partners may contact you directly to provide quotes, assessments, or further information related to your request.</li>
+                <li>We do not sell your data to generic data brokers or unrelated third parties.</li>
+              </ul>
+            </section>
 
           <section className="mb-8">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Data Protection</h2>

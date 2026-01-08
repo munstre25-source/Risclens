@@ -73,7 +73,7 @@ export default function CalculatorForm() {
 
   // Hidden fields for A/B testing and UTM tracking
   const [variationId, setVariationId] = useState<string>('default');
-  const [utmSource, setUtmSource] = useState<string>('');
+  const [utmParams, setUtmParams] = useState<Record<string, string>>({});
   const startedRef = useRef(false);
 
   const [formData, setFormData] = useState<FormData>({
@@ -91,7 +91,13 @@ export default function CalculatorForm() {
   // Track UTM parameters and variation on mount
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    setUtmSource(params.get('utm_source') || '');
+    const utm: Record<string, string> = {};
+    ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach(key => {
+      const val = params.get(key);
+      if (val) utm[key] = val;
+    });
+    setUtmParams(utm);
+    
     const variation = params.get('v') || 'default';
     setVariationId(variation);
 
@@ -159,7 +165,11 @@ export default function CalculatorForm() {
             industry: formData.industry,
             lead_type: 'soc2_readiness_partial',
             source_url: typeof window !== 'undefined' ? window.location.href : '',
-            utm_source: utmSource,
+            utm_source: utmParams.utm_source,
+            utm_medium: utmParams.utm_medium,
+            utm_campaign: utmParams.utm_campaign,
+            utm_content: utmParams.utm_content,
+            utm_term: utmParams.utm_term,
             variation_id: variationId,
           }),
         }).catch(console.error);
@@ -195,14 +205,18 @@ export default function CalculatorForm() {
         body: JSON.stringify({
           email: formData.email,
           company_name: formData.company_name,
-          industry: formData.industry,
-          num_employees: parseInt(formData.num_employees, 10),
-          data_types: formData.data_types,
-          audit_date: formData.planned_audit_date,
-          role: formData.role,
-          utm_source: utmSource || undefined,
-          variation_id: variationId,
-        }),
+            industry: formData.industry,
+            num_employees: parseInt(formData.num_employees, 10),
+            data_types: formData.data_types,
+            audit_date: formData.planned_audit_date,
+            role: formData.role,
+            utm_source: utmParams.utm_source,
+            utm_medium: utmParams.utm_medium,
+            utm_campaign: utmParams.utm_campaign,
+            utm_content: utmParams.utm_content,
+            utm_term: utmParams.utm_term,
+            variation_id: variationId,
+          }),
       });
 
       const data = await response.json();
@@ -465,7 +479,7 @@ export default function CalculatorForm() {
         )}
 
         {/* Hidden fields */}
-        <input type="hidden" name="utm_source" value={utmSource} />
+        <input type="hidden" name="utm_source" value={utmParams.utm_source || ''} />
         <input type="hidden" name="variation_id" value={variationId} />
 
         {/* Error message */}

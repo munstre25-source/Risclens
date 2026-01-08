@@ -3,6 +3,7 @@ import { createLead } from '@/lib/leads';
 import { logAuditEvent } from '@/lib/supabase';
 import { calculateLeadScore } from '@/lib/scoring';
 import { enrichLead } from '@/lib/enrichment';
+import { dispatchLeadToBuyers } from '@/lib/monetization';
 
 export async function POST(request: NextRequest) {
   try {
@@ -52,6 +53,11 @@ export async function POST(request: NextRequest) {
         readinessScore: scoringResult.readiness_score,
         estimatedCostLow: scoringResult.estimated_cost_low,
         estimatedCostHigh: scoringResult.estimated_cost_high,
+        utmSource: otherData.utm_source ?? null,
+        utmMedium: otherData.utm_medium ?? null,
+        utmCampaign: otherData.utm_campaign ?? null,
+        utmContent: otherData.utm_content ?? null,
+        utmTerm: otherData.utm_term ?? null,
         ...otherData
       },
     });
@@ -66,10 +72,11 @@ export async function POST(request: NextRequest) {
       // In a real app, send Slack/Discord webhook here
     }
 
-    // 3. Background Enrichment
-    // We don't await this to keep the response fast for the user
+    // 3. Background Enrichment and Monetization Dispatch
+    // We don't await these to keep the response fast for the user
     if (leadResult.id) {
       enrichLead(leadResult.id).catch(err => console.error('Background enrichment failed:', err));
+      dispatchLeadToBuyers(leadResult.id).catch(err => console.error('Monetization dispatch failed:', err));
     }
 
     await logAuditEvent('lead_submitted', {
