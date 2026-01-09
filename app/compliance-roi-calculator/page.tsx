@@ -121,7 +121,7 @@ export default function ComplianceROICalculator() {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            email,
+            email: email || null,
             company: companyName,
             industry,
             lead_type: 'roi_calculator',
@@ -263,26 +263,25 @@ export default function ComplianceROICalculator() {
                     <option value="other">Other</option>
                   </select>
                 </label>
-                <label className="block">
-                  <span className="text-sm font-medium text-slate-700">Work Email</span>
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="you@company.com"
-                      className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-brand-500 focus:ring-brand-500"
-                      required
-                    />
-                    <p className="text-[10px] text-slate-400 mt-1">We'll use this to send your ROI breakdown and occasional compliance strategy updates.</p>
-                  </label>
-              </div>
-              <button
-                onClick={handleNextStep}
-                disabled={!companyName || !industry || !email.includes('@')}
-                className="w-full bg-brand-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-brand-700 transition-colors disabled:opacity-50"
-              >
-                Next: Configuration
-              </button>
+                  <label className="block">
+                    <span className="text-sm font-medium text-slate-700">Work Email <span className="text-gray-400 text-xs font-normal">(optional)</span></span>
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="you@company.com"
+                        className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-brand-500 focus:ring-brand-500"
+                      />
+                      <p className="text-[10px] text-slate-400 mt-1">Skip this for a quick score. Enter it to get your full ROI roadmap PDF later.</p>
+                    </label>
+                </div>
+                <button
+                  onClick={handleNextStep}
+                  disabled={!companyName || !industry}
+                  className="w-full bg-brand-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-brand-700 transition-colors disabled:opacity-50"
+                >
+                  Next: Configuration
+                </button>
             </div>
           )}
 
@@ -451,61 +450,75 @@ export default function ComplianceROICalculator() {
                 ))}
               </div>
 
-              {/* THE SMART GATE */}
-                <div className="bg-brand-50 border-2 border-brand-200 rounded-2xl p-8 text-center space-y-6">
-                  <div className="max-w-xl mx-auto space-y-3">
-                    <h3 className="text-2xl font-bold text-slate-900">Get Your Detailed Procurement Roadmap</h3>
-                    <p className="text-slate-600">
-                      Download a full 12-page PDF breakdown including platform vendor comparisons, 
-                      auditor selection criteria, and a month-by-month compliance budget for 2026.
+                  {/* THE SMART GATE */}
+                  <div className="bg-brand-50 border-2 border-brand-200 rounded-2xl p-8 text-center space-y-6">
+                    <div className="max-w-xl mx-auto space-y-3">
+                      <h3 className="text-2xl font-bold text-slate-900">Get Your Detailed Procurement Roadmap</h3>
+                      <p className="text-slate-600">
+                        Download a full 12-page PDF breakdown including platform vendor comparisons, 
+                        auditor selection criteria, and a month-by-month compliance budget for 2026.
+                      </p>
+                    </div>
+                    
+                    {!pdfUrl ? (
+                      <div className="max-w-sm mx-auto space-y-4">
+                        {!email && (
+                          <div className="text-left space-y-2">
+                            <label className="text-sm font-medium text-slate-700">Work Email</label>
+                            <input
+                              type="email"
+                              value={email}
+                              onChange={(e) => setEmail(e.target.value)}
+                              placeholder="you@company.com"
+                              className="block w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-brand-500 focus:ring-brand-500"
+                            />
+                          </div>
+                        )}
+                        <button
+                          onClick={handleGeneratePdf}
+                          disabled={pdfGenerating || (!email && !pdfGenerating)}
+                          className="w-full inline-flex items-center justify-center gap-2 bg-slate-900 text-white py-4 px-10 rounded-xl font-bold text-lg hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl disabled:opacity-50"
+                        >
+                          {pdfGenerating ? (
+                            <>
+                              <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                              </svg>
+                              Generating PDF...
+                            </>
+                          ) : (
+                            <>
+                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                              </svg>
+                              Download PDF Roadmap
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        <p className="text-green-600 font-bold flex items-center justify-center gap-2">
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                          Your Roadmap is Ready!
+                        </p>
+                        <a
+                          href={pdfUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 bg-green-600 text-white py-4 px-10 rounded-xl font-bold text-lg hover:bg-green-700 transition-all shadow-lg"
+                        >
+                          Open PDF Report
+                        </a>
+                      </div>
+                    )}
+                    <p className="text-xs text-slate-400">
+                      Securely generated for {email || 'your organization'}. Includes confidential auditor fee benchmarks.
                     </p>
                   </div>
-                  
-                  {!pdfUrl ? (
-                    <button
-                      onClick={handleGeneratePdf}
-                      disabled={pdfGenerating}
-                      className="inline-flex items-center gap-2 bg-slate-900 text-white py-4 px-10 rounded-xl font-bold text-lg hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl disabled:opacity-50"
-                    >
-                      {pdfGenerating ? (
-                        <>
-                          <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                          </svg>
-                          Generating PDF...
-                        </>
-                      ) : (
-                        <>
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                          </svg>
-                          Download PDF Roadmap
-                        </>
-                      )}
-                    </button>
-                  ) : (
-                    <div className="space-y-4">
-                      <p className="text-green-600 font-bold flex items-center justify-center gap-2">
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        Your Roadmap is Ready!
-                      </p>
-                      <a
-                        href={pdfUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 bg-green-600 text-white py-4 px-10 rounded-xl font-bold text-lg hover:bg-green-700 transition-all shadow-lg"
-                      >
-                        Open PDF Report
-                      </a>
-                    </div>
-                  )}
-                  <p className="text-xs text-slate-400">
-                    Securely generated for {email}. Includes confidential auditor fee benchmarks.
-                  </p>
-                </div>
 
                 <div className="space-y-6">
                   <MonetizationCTA leadId={leadId} email={email} context="ROI Calculator" />

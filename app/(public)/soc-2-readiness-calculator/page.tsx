@@ -7,6 +7,7 @@ import CalculatorForm from '@/components/CalculatorForm';
 import ReadinessNav from '@/components/ReadinessNav';
 import { HowItWorksAccordion } from '@/components/HowItWorksAccordion';
 import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
+import { ContextualSignals } from '@/components/compliance/ContextualSignals';
 import { SoftwareApplicationSchema } from '@/components/SoftwareApplicationSchema';
 import { messaging } from '@/src/content/messaging';
 
@@ -194,16 +195,10 @@ export default function CalculatorPage() {
             {/* Sidebar / Quick Links */}
             <div className="space-y-6">
               <HowItWorksAccordion defaultExpandedOnDesktop={false} />
-                <RelatedGuidesRow
-                  links={[
-                    { href: '/soc-2-audit-delay-cost', label: 'Audit Delay Cost Calculator' },
-                    { href: '/soc-2-cost', label: 'SOC 2 Cost guide' },
-                    { href: '/soc-2-timeline', label: 'SOC 2 Timeline' },
-                    { href: '/penetration-testing/cost-estimator', label: 'Pentest Cost Estimator' },
-                  ]}
-                />
-
-
+              <ContextualSignals />
+              <RelatedGuidesRow
+                topics={['soc2-readiness', 'soc2-cost', 'soc2-timeline', 'pentest']}
+              />
             </div>
           </div>
         </div>

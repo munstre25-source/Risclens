@@ -1,44 +1,37 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import FreeResults from './FreeResults';
+import FreeResults from '../FreeResults';
 import { trackEvent } from '@/lib/analytics';
 
-// Industry options
 const INDUSTRIES = [
-  { value: 'saas', label: 'SaaS / Software' },
-  { value: 'fintech', label: 'Fintech / Financial Services' },
-  { value: 'healthcare', label: 'Healthcare / HealthTech' },
-  { value: 'ecommerce', label: 'E-commerce / Retail' },
-  { value: 'consulting', label: 'Consulting / Professional Services' },
-  { value: 'manufacturing', label: 'Manufacturing' },
+  { value: 'ai_saas', label: 'AI SaaS / Software' },
+  { value: 'fintech_ai', label: 'Fintech with AI' },
+  { value: 'healthcare_ai', label: 'Healthcare AI' },
+  { value: 'enterprise_ai', label: 'Enterprise AI Solutions' },
   { value: 'other', label: 'Other' },
 ];
 
-// Data types for multi-select
-const DATA_TYPES = [
-  { value: 'pii', label: 'Personal Identifiable Information (PII)' },
-  { value: 'financial', label: 'Financial Data' },
-  { value: 'health', label: 'Health / PHI Data' },
-  { value: 'intellectual_property', label: 'Intellectual Property' },
-  { value: 'customer_data', label: 'Customer Business Data' },
+const AI_MATURITY = [
+  { value: 'api', label: 'Using 3rd Party APIs (OpenAI, etc.)' },
+  { value: 'fine_tuning', label: 'Fine-tuning existing models' },
+  { value: 'custom', label: 'Building custom foundational models' },
+  { value: 'embedded', label: 'AI embedded in internal processes' },
 ];
 
-// SOC 2 requirement sources (optional)
-const SOC2_REQUIRERS = [
-  { value: 'enterprise', label: 'Enterprise customers' },
-  { value: 'midmarket', label: 'Mid-market customers' },
-  { value: 'investors', label: 'Investors' },
-  { value: 'exploratory', label: 'Not required yet / exploratory' },
+const AI_CONTROLS = [
+  { value: 'risk_assessment', label: 'AI Risk Assessment Process' },
+  { value: 'data_governance', label: 'AI Data Governance Policy' },
+  { value: 'human_oversight', label: 'Human-in-the-loop for outputs' },
+  { value: 'transparency', label: 'User disclosure of AI usage' },
+  { value: 'bias_testing', label: 'Bias and Fairness testing' },
 ];
 
-// Role options
 const ROLES = [
   { value: 'cto', label: 'CTO / VP Engineering' },
-  { value: 'ceo', label: 'CEO / Founder' },
+  { value: 'ai_lead', label: 'AI / ML Lead' },
   { value: 'security', label: 'Security / Compliance Lead' },
-  { value: 'engineering', label: 'Engineering Manager' },
-  { value: 'operations', label: 'Operations / IT' },
+  { value: 'ceo', label: 'CEO / Founder' },
   { value: 'other', label: 'Other' },
 ];
 
@@ -46,9 +39,8 @@ interface FormData {
   email: string;
   company_name: string;
   industry: string;
-  num_employees: string;
-  data_types: string[];
-  soc2_requirers: string[];
+  ai_maturity: string;
+  ai_controls: string[];
   planned_audit_date: string;
   role: string;
   specific_requests: string;
@@ -63,7 +55,7 @@ interface CalculatorResults {
 
 const TOTAL_STEPS = 3;
 
-export default function CalculatorForm() {
+export default function Iso42001CalculatorForm() {
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showResults, setShowResults] = useState(false);
@@ -71,43 +63,18 @@ export default function CalculatorForm() {
   const [leadId, setLeadId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // Hidden fields for A/B testing and UTM tracking
-  const [variationId, setVariationId] = useState<string>('default');
-  const [utmParams, setUtmParams] = useState<Record<string, string>>({});
   const startedRef = useRef(false);
 
   const [formData, setFormData] = useState<FormData>({
     email: '',
     company_name: '',
     industry: '',
-    num_employees: '',
-    data_types: [],
-    soc2_requirers: [],
+    ai_maturity: '',
+    ai_controls: [],
     planned_audit_date: '',
     role: '',
     specific_requests: '',
   });
-
-  // Track UTM parameters and variation on mount
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const utm: Record<string, string> = {};
-    ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach(key => {
-      const val = params.get(key);
-      if (val) utm[key] = val;
-    });
-    setUtmParams(utm);
-    
-    const variation = params.get('v') || 'default';
-    setVariationId(variation);
-
-    // Record A/B impression
-    fetch('/api/ab/impression', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ variation_id: variation }),
-    }).catch(console.error);
-  }, []);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -117,34 +84,25 @@ export default function CalculatorForm() {
 
     if (!startedRef.current) {
       startedRef.current = true;
-      trackEvent('calculator_started', { tool_id: 'soc2_readiness' });
+      trackEvent('calculator_started', { tool_id: 'iso42001_readiness' });
     }
   };
 
-  const handleDataTypeChange = (value: string) => {
+  const handleControlChange = (value: string) => {
     setFormData((prev) => ({
       ...prev,
-      data_types: prev.data_types.includes(value)
-        ? prev.data_types.filter((t) => t !== value)
-        : [...prev.data_types, value],
+      ai_controls: prev.ai_controls.includes(value)
+        ? prev.ai_controls.filter((t) => t !== value)
+        : [...prev.ai_controls, value],
     }));
   };
 
-  const handleRequirerChange = (value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      soc2_requirers: prev.soc2_requirers.includes(value)
-        ? prev.soc2_requirers.filter((r) => r !== value)
-        : [...prev.soc2_requirers, value],
-    }));
-  };
-
-  const validateStep = (currentStep: number): boolean => {
-    switch (currentStep) {
-      case 1:
-        return !!formData.company_name && !!formData.industry;
+    const validateStep = (currentStep: number): boolean => {
+      switch (currentStep) {
+        case 1:
+          return !!formData.company_name && !!formData.industry;
       case 2:
-        return !!formData.num_employees && formData.data_types.length > 0;
+        return !!formData.ai_maturity && formData.ai_controls.length > 0;
       case 3:
         return !!formData.planned_audit_date && !!formData.role;
       default:
@@ -155,7 +113,6 @@ export default function CalculatorForm() {
   const nextStep = () => {
     if (validateStep(step)) {
       if (step === 1) {
-        // Send partial lead info
         fetch('/api/lead/partial', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -163,14 +120,8 @@ export default function CalculatorForm() {
             email: formData.email,
             company: formData.company_name,
             industry: formData.industry,
-            lead_type: 'soc2_readiness_partial',
+            lead_type: 'iso42001_readiness_partial',
             source_url: typeof window !== 'undefined' ? window.location.href : '',
-            utm_source: utmParams.utm_source,
-            utm_medium: utmParams.utm_medium,
-            utm_campaign: utmParams.utm_campaign,
-            utm_content: utmParams.utm_content,
-            utm_term: utmParams.utm_term,
-            variation_id: variationId,
           }),
         }).catch(console.error);
       }
@@ -199,24 +150,13 @@ export default function CalculatorForm() {
     setError(null);
 
     try {
-      const response = await fetch('/api/soc2-lead', {
+      const response = await fetch('/api/lead/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          email: formData.email,
-          company_name: formData.company_name,
-            industry: formData.industry,
-            num_employees: parseInt(formData.num_employees, 10),
-            data_types: formData.data_types,
-            audit_date: formData.planned_audit_date,
-            role: formData.role,
-            utm_source: utmParams.utm_source,
-            utm_medium: utmParams.utm_medium,
-            utm_campaign: utmParams.utm_campaign,
-            utm_content: utmParams.utm_content,
-            utm_term: utmParams.utm_term,
-            variation_id: variationId,
-          }),
+          ...formData,
+          lead_type: 'iso42001_readiness',
+        }),
       });
 
       const data = await response.json();
@@ -225,22 +165,29 @@ export default function CalculatorForm() {
         throw new Error(data.error || 'Submission failed');
       }
 
-      // Record A/B submission if not default
-      if (variationId !== 'default') {
-        fetch('/api/ab/submit', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ variation_id: variationId }),
-        }).catch(console.error);
-      }
-
       setLeadId(data.lead_id);
-      setResults(data.results);
+      
+      // Calculate a mock score for now based on inputs
+      const baseScore = 20;
+      const controlScore = formData.ai_controls.length * 12;
+      const maturityPenalty = formData.ai_maturity === 'custom' ? -10 : 0;
+      const finalScore = Math.min(95, Math.max(10, baseScore + controlScore + maturityPenalty));
+
+      setResults({
+        readiness_score: finalScore,
+        estimated_cost_low: 15000,
+        estimated_cost_high: 45000,
+        recommendations: [
+          'Formalize your AI Risk Management framework',
+          'Implement Human-in-the-loop for high-risk AI outputs',
+          'Document data lineage for training datasets',
+          'Perform bias testing on production models',
+        ]
+      });
       setShowResults(true);
       trackEvent('calculator_completed', { 
-        tool_id: 'soc2_readiness',
-        score: data.results.readiness_score,
-        industry: formData.industry 
+        tool_id: 'iso42001_readiness',
+        score: finalScore
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
@@ -262,7 +209,6 @@ export default function CalculatorForm() {
 
   return (
     <div className="card">
-      {/* Progress Bar */}
       <div className="mb-8">
         <div className="flex justify-between text-sm text-gray-600 mb-2">
           <span>Step {step} of {TOTAL_STEPS}</span>
@@ -277,11 +223,10 @@ export default function CalculatorForm() {
       </div>
 
       <form onSubmit={handleSubmit}>
-        {/* Step 1: Company Info */}
         {step === 1 && (
           <div className="animate-fade-in">
             <h2 className="text-xl font-semibold text-gray-900 mb-6">
-              Get your readiness score
+              AI Governance Readiness
             </h2>
               <div className="space-y-4">
                 <div>
@@ -298,7 +243,7 @@ export default function CalculatorForm() {
                     placeholder="alex@company.com"
                   />
                   <p className="mt-1.5 text-xs text-gray-500">
-                    Skip this if you just want a quick score. Enter it to get your full roadmap PDF later.
+                    Skip this if you just want a quick score. Enter it to get your full AI roadmap PDF later.
                   </p>
                 </div>
               <div>
@@ -312,13 +257,13 @@ export default function CalculatorForm() {
                   value={formData.company_name}
                   onChange={handleInputChange}
                   className="form-input"
-                  placeholder="Acme Inc."
+                  placeholder="Acme AI Inc."
                   required
                 />
               </div>
               <div>
                 <label htmlFor="industry" className="form-label">
-                  Industry <span className="text-red-500">*</span>
+                  Industry / AI Use Case <span className="text-red-500">*</span>
                 </label>
                 <select
                   id="industry"
@@ -328,86 +273,61 @@ export default function CalculatorForm() {
                   className="form-input"
                   required
                 >
-                  <option value="">Select your industry</option>
+                  <option value="">Select your use case</option>
                   {INDUSTRIES.map((ind) => (
                     <option key={ind.value} value={ind.value}>
                       {ind.label}
                     </option>
                   ))}
                 </select>
-                <p className="mt-1.5 text-xs text-gray-500">
-                  Used to calibrate audit scope and control depth.
-                </p>
               </div>
             </div>
           </div>
         )}
 
-        {/* Step 2: Company Size & Data */}
         {step === 2 && (
           <div className="animate-fade-in">
             <h2 className="text-xl font-semibold text-gray-900 mb-6">
-              Size and data handling
+              AI Maturity & Controls
             </h2>
             <div className="space-y-4">
               <div>
-                <label htmlFor="num_employees" className="form-label">
-                  Number of Employees <span className="text-red-500">*</span>
+                <label htmlFor="ai_maturity" className="form-label">
+                  AI Development Level <span className="text-red-500">*</span>
                 </label>
                 <select
-                  id="num_employees"
-                  name="num_employees"
-                  value={formData.num_employees}
+                  id="ai_maturity"
+                  name="ai_maturity"
+                  value={formData.ai_maturity}
                   onChange={handleInputChange}
                   className="form-input"
                   required
                 >
-                  <option value="">Select range</option>
-                  <option value="3">1-5 employees</option>
-                  <option value="13">6-20 employees</option>
-                  <option value="35">21-50 employees</option>
-                  <option value="75">51-100 employees</option>
-                  <option value="150">100+ employees</option>
+                  <option value="">Select maturity level</option>
+                  {AI_MATURITY.map((m) => (
+                    <option key={m.value} value={m.value}>
+                      {m.label}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div>
                 <label className="form-label">
-                  What types of data do you handle? <span className="text-red-500">*</span>
+                  Existing AI Controls <span className="text-red-500">*</span>
                 </label>
                 <div className="space-y-2 mt-2">
-                  {DATA_TYPES.map((dt) => (
+                  {AI_CONTROLS.map((ctrl) => (
                     <label
-                      key={dt.value}
+                      key={ctrl.value}
                       className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
                     >
                       <input
                         type="checkbox"
-                        checked={formData.data_types.includes(dt.value)}
-                        onChange={() => handleDataTypeChange(dt.value)}
+                        checked={formData.ai_controls.includes(ctrl.value)}
+                        onChange={() => handleControlChange(ctrl.value)}
                         className="w-4 h-4 text-brand-600 rounded focus:ring-brand-500"
                       />
-                      <span className="ml-3 text-gray-700">{dt.label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <label className="form-label">
-                  Who requires SOC 2 from you? <span className="text-gray-400 text-xs font-normal">(optional)</span>
-                </label>
-                <div className="space-y-2 mt-2">
-                  {SOC2_REQUIRERS.map((req) => (
-                    <label
-                      key={req.value}
-                      className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={formData.soc2_requirers.includes(req.value)}
-                        onChange={() => handleRequirerChange(req.value)}
-                        className="w-4 h-4 text-brand-600 rounded focus:ring-brand-500"
-                      />
-                      <span className="ml-3 text-gray-700">{req.label}</span>
+                      <span className="ml-3 text-gray-700">{ctrl.label}</span>
                     </label>
                   ))}
                 </div>
@@ -416,16 +336,15 @@ export default function CalculatorForm() {
           </div>
         )}
 
-        {/* Step 3: Timeline & Role (NO email here - collected after results) */}
         {step === 3 && (
           <div className="animate-fade-in">
             <h2 className="text-xl font-semibold text-gray-900 mb-6">
-              Audit timing and responsibility
+              Audit Context
             </h2>
             <div className="space-y-4">
               <div>
                 <label htmlFor="planned_audit_date" className="form-label">
-                  Planned Audit Date <span className="text-red-500">*</span>
+                  Target Certification Date <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="date"
@@ -460,8 +379,7 @@ export default function CalculatorForm() {
               </div>
               <div>
                 <label htmlFor="specific_requests" className="form-label">
-                  Anything specific an auditor, customer, or investor has already asked for?{" "}
-                  <span className="text-gray-400 text-xs font-normal">(optional)</span>
+                  Specific AI compliance concerns? <span className="text-gray-400 text-xs font-normal">(optional)</span>
                 </label>
                 <textarea
                   id="specific_requests"
@@ -470,25 +388,19 @@ export default function CalculatorForm() {
                   onChange={handleInputChange}
                   className="form-input"
                   rows={3}
-                  placeholder="e.g. security questionnaire, enterprise deal requirement, due diligence request, tight deadline…"
+                  placeholder="e.g. EU AI Act alignment, custom model bias, customer training data usage..."
                 />
               </div>
             </div>
           </div>
         )}
 
-        {/* Hidden fields */}
-        <input type="hidden" name="utm_source" value={utmParams.utm_source || ''} />
-        <input type="hidden" name="variation_id" value={variationId} />
-
-        {/* Error message */}
         {error && (
           <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
             {error}
           </div>
         )}
 
-        {/* Navigation buttons */}
         <div className="flex justify-between mt-8">
           <button
             type="button"
@@ -513,33 +425,7 @@ export default function CalculatorForm() {
               className="btn-primary"
               disabled={isSubmitting || !validateStep(TOTAL_STEPS)}
             >
-              {isSubmitting ? (
-                <>
-                  <svg
-                    className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    />
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    />
-                  </svg>
-                  Calculating...
-                </>
-              ) : (
-                'Calculate My Score'
-              )}
+              {isSubmitting ? 'Calculating...' : 'Calculate AI Readiness'}
             </button>
           )}
         </div>

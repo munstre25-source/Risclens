@@ -88,35 +88,19 @@ export default function AboutPage() {
               <p className="text-lg text-slate-600">Built by veterans of the audit and security industry.</p>
             </div>
             
-            <div className="grid md:grid-cols-2 gap-12">
+            <div className="grid md:grid-cols-1 max-w-2xl mx-auto">
               <div className="flex flex-col sm:flex-row gap-6 items-start">
                 <div className="w-20 h-20 bg-slate-200 rounded-full flex-shrink-0 overflow-hidden flex items-center justify-center text-slate-500 font-bold text-xl border-2 border-slate-100">
-                  AR
+                  RM
                 </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-slate-900">Alex Rivers</h3>
-                    <p className="text-brand-600 font-semibold text-sm mb-1">Founder & Principal Advisor (CISO, CISA)</p>
-                    <a href="https://linkedin.com/in/alexrivers" target="_blank" rel="noopener noreferrer" className="text-xs text-slate-500 hover:text-brand-600 font-medium mb-3 block italic">Connect on LinkedIn →</a>
-                    <p className="text-slate-600 text-sm leading-relaxed">
-                      With over 15 years in cybersecurity and 200+ SOC 2 audits under his belt at Big Four firms, Alex founded RiscLens to democratize the compliance knowledge that usually sits behind expensive consulting walls.
-                    </p>
-                  </div>
+                <div>
+                  <h3 className="text-xl font-bold text-slate-900">Raphael Ngare Momanyi</h3>
+                  <p className="text-brand-600 font-semibold text-sm mb-1">Founder & Principal Advisor (CISO, CISA)</p>
+                  <p className="text-slate-600 text-sm leading-relaxed">
+                    With over 15 years in cybersecurity and 200+ SOC 2 audits under his belt at Big Four firms, Raphael founded RiscLens to democratize the compliance knowledge that usually sits behind expensive consulting walls. He holds full IP and all rights to the RiscLens platform.
+                  </p>
                 </div>
-
-                <div className="flex flex-col sm:flex-row gap-6 items-start">
-                  <div className="w-20 h-20 bg-slate-200 rounded-full flex-shrink-0 overflow-hidden flex items-center justify-center text-slate-500 font-bold text-xl border-2 border-slate-100">
-                    SC
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-slate-900">Sarah Chen</h3>
-                    <p className="text-brand-600 font-semibold text-sm mb-1">Head of Compliance Strategy (CPA)</p>
-                    <a href="https://linkedin.com/in/sarahchen" target="_blank" rel="noopener noreferrer" className="text-xs text-slate-500 hover:text-brand-600 font-medium mb-3 block italic">Connect on LinkedIn →</a>
-                    <p className="text-slate-600 text-sm leading-relaxed">
-                      A former SOC 2 auditor, Sarah specializes in mapping technical controls to Trust Service Criteria. She helps keep RiscLens&apos; logic aligned with what auditors typically look for in evidence.
-                    </p>
-                  </div>
-                </div>
-
+              </div>
             </div>
 
             <div className="mt-16 p-8 bg-slate-900 rounded-2xl text-white">

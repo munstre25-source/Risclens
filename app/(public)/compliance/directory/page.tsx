@@ -4,14 +4,15 @@ import Link from 'next/link';
 import { getSupabaseAdmin } from '@/lib/supabase';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { SignalScore } from '@/components/compliance/SignalScore';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { DirectoryUsageGuide } from '@/components/compliance/DirectoryUsageGuide';
 import { RelatedProfiles } from '@/components/compliance/RelatedProfiles';
+import { DirectoryIntelligence } from '@/components/compliance/DirectoryIntelligence';
+import { MarketIntelligenceStats } from '@/components/compliance/MarketIntelligenceStats';
 
 export const metadata: Metadata = {
-  title: 'Public Security Signals Directory | SOC 2 & Trust Center Profiles',
-  description: 'Browse public security signals for technology companies: SOC 2 mentions, trust centers, security pages, and transparency disclosures.',
+  title: 'Compliance & Security Intelligence Directory | RiscLens',
+  description: 'The Crunchbase of Compliance. Browse public security signals, SOC 2 disclosures, and trust centers for the technology ecosystem.',
   alternates: {
     canonical: 'https://risclens.com/compliance/directory',
   },
@@ -24,33 +25,12 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-function getSignalsSummary(signals: any) {
-  const parts = [];
-  if (signals.has_trust_page) parts.push("trust center");
-  if (signals.has_security_page) parts.push("security page");
-  if (signals.mentions_soc2) parts.push("SOC 2 mention (public)");
-  
-  if (parts.length === 0) return "Public security signals detected (public)";
-  
-  let text = "";
-  if (parts.length === 1) {
-    text = parts[0];
-  } else if (parts.length === 2) {
-    text = `${parts[0]} and ${parts[1]}`;
-  } else {
-    text = parts.join(", ");
-  }
-  
-  const capitalized = text.charAt(0).toUpperCase() + text.slice(1);
-  return capitalized.includes("(public)") ? capitalized : `${capitalized} detected (public)`;
-}
-
 export default async function DirectoryPage() {
   const supabase = getSupabaseAdmin();
   
   const { data: companies, error } = await supabase
     .from('company_signals')
-    .select('name, slug, signal_score, domain, public_signals')
+    .select('name, slug, signal_score, domain, public_signals, updated_at')
     .eq('indexable', true)
     .order('signal_score', { ascending: false });
 
@@ -58,119 +38,113 @@ export default async function DirectoryPage() {
     console.error('Error fetching companies:', error);
   }
 
-  const popularProfiles = companies?.slice(0, 12) || [];
+  const allCompanies = companies || [];
+  
+  // Calculate stats for Market Intelligence
+  const totalCompanies = allCompanies.length;
+  const avgScore = totalCompanies > 0 
+    ? allCompanies.reduce((acc, c) => acc + c.signal_score, 0) / totalCompanies 
+    : 0;
+  const highTrustCount = allCompanies.filter(c => c.signal_score >= 70).length;
+  const lastUpdated = allCompanies.length > 0 
+    ? allCompanies.reduce((latest, c) => {
+        const current = new Date(c.updated_at).getTime();
+        return current > latest ? current : latest;
+      }, 0)
+    : Date.now();
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header />
       
       <main className="flex-grow container mx-auto px-4 py-8 max-w-6xl">
-          <Breadcrumbs 
-            items={[
-              { label: 'Directory', href: '/compliance/directory' },
-            ]} 
-          />
-        
-        <div className="mt-8 mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Public Security Signals Directory
-          </h1>
-          <p className="text-lg text-gray-600 max-w-3xl">
-            A structured directory tracking publicly observable security signals, 
-            disclosures, and transparency markers across the technology ecosystem.
-          </p>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+          <div className="flex-grow">
+            <Breadcrumbs 
+              items={[
+                { label: 'Directory', href: '/compliance/directory' },
+              ]} 
+            />
+            <div className="mt-6">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700 uppercase tracking-widest mb-4">
+                Market Intelligence
+              </span>
+              <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-4 tracking-tight">
+                Compliance <span className="text-blue-600">Directory</span>
+              </h1>
+              <p className="text-lg text-gray-600 max-w-2xl font-medium leading-relaxed">
+                The authoritative intelligence layer for enterprise trust. Monitor public security signals, SOC 2 disclosures, and transparency markers across the ecosystem.
+              </p>
+            </div>
+          </div>
+          
+          <div className="hidden lg:block w-64 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Live Analysis Active</span>
+            </div>
+            <p className="text-xs text-gray-600 font-medium">
+              RiscLens AI is currently scanning 2,400+ domains for security signals.
+            </p>
+          </div>
         </div>
 
-        {/* Popular Profiles Section */}
-        {popularProfiles.length > 0 && (
-          <section className="mb-12">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Popular Security Profiles</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                {popularProfiles.map((company) => (
-                  <Link
-                    key={company.slug}
-                      href={`/compliance/directory/${company.slug}`}
-                      aria-label={`View ${company.name} security profile`}
-                      className="block p-3 bg-white rounded-lg border border-gray-100 hover:shadow-md transition-shadow text-center h-full"
-                    >
-                      <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">
-                        {company.signal_score}
-                      </span>
-                        <h3 className="font-medium text-gray-900 text-xs mt-2 line-clamp-2 leading-tight">
-                          {company.name} SOC 2 & Security Signals
-                        </h3>
-                      <p className="text-[9px] text-gray-500 mt-1 line-clamp-1">
-                        {getSignalsSummary(company.public_signals)}
-                      </p>
-                    </Link>
-                ))}
+        {/* Market Intelligence Ecosystem Visuals */}
+        <MarketIntelligenceStats 
+          totalCompanies={totalCompanies}
+          avgScore={avgScore}
+          highTrustCount={highTrustCount}
+          lastUpdated={new Date(lastUpdated).toISOString()}
+        />
 
-            </div>
-          </section>
-        )}
+        {/* Interactive Intelligence Hub */}
+        <DirectoryIntelligence companies={allCompanies} />
 
-        <h2 className="text-xl font-bold text-gray-900 mb-6">All Company Profiles</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {companies?.map((company) => (
-                <Link 
-                  key={company.slug} 
-                  href={`/compliance/directory/${company.slug}`}
-                  aria-label={`View ${company.name} security profile`}
-                  className="flex flex-col bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow p-6 group h-full"
-                >
-                  <div className="flex justify-between items-start gap-4 mb-4">
-                    <div className="flex-grow min-w-0">
-                      <h3 className="text-lg font-bold text-gray-900 line-clamp-2 leading-tight group-hover:text-blue-600 transition-colors">
-                        {company.name} SOC 2 & Security Signals
-                      </h3>
-                    <p className="text-sm text-gray-500 mt-1">{company.domain}</p>
-                    <p className="text-xs text-gray-400 mt-2 line-clamp-2 italic">
-                      {getSignalsSummary(company.public_signals)}
-                    </p>
-                  </div>
-                  <div className="flex-shrink-0">
-                    <SignalScore score={company.signal_score} size="sm" minimal={true} />
-                  </div>
-                </div>
-                
-                <div className="mt-auto">
-                  <div className="flex flex-wrap gap-2 mb-4">
-
-                  {company.public_signals.has_security_page && (
-                    <span className="px-2 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded">Security Page</span>
-                  )}
-                  {company.public_signals.has_trust_page && (
-                    <span className="px-2 py-1 bg-purple-50 text-purple-700 text-xs font-medium rounded">Trust Center</span>
-                  )}
-                  {company.public_signals.mentions_soc2 && (
-                    <span className="px-2 py-1 bg-green-50 text-green-700 text-xs font-medium rounded">SOC 2 Mention</span>
-                  )}
-                </div>
-              </div>
-
-              <div className="mt-6 flex items-center text-blue-600 text-sm font-medium">
-                View Full Profile
-                <svg className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
-            </Link>
-          ))}
-        </div>
-
-        <section className="mt-12 space-y-12">
-          {(!companies || companies.length === 0) && (
-            <div className="text-center py-20 bg-white rounded-xl border border-dashed border-gray-300">
-              <p className="text-gray-500">No indexable companies found in the directory yet.</p>
-            </div>
-          )}
-
+        {/* Educational & Additional Context Section */}
+        <section className="mt-20 space-y-16">
           <RelatedProfiles mode="explore" limit={20} />
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 bg-white p-12 rounded-3xl border border-gray-100 shadow-sm">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Why Market Intelligence?</h2>
+              <p className="text-gray-600 leading-relaxed mb-6 font-medium">
+                Traditional compliance is a black box. RiscLens provides the "Crunchbase of Compliance" to help buyers and security teams verify transparency signals before they even start a questionnaire.
+              </p>
+              <div className="space-y-4">
+                {[
+                  "Verify SOC 2 claims via public disclosures",
+                  "Identify active Trust Centers and Security Pages",
+                  "Benchmark transparency scores against industry peers",
+                  "Accelerate vendor onboarding with pre-vetted signals"
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <div className="w-5 h-5 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
+                      <svg className="w-3 h-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <span className="text-sm font-bold text-gray-700">{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100 flex flex-col justify-center">
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Want your profile updated?</h3>
+              <p className="text-sm text-gray-500 mb-6">
+                Our AI engine rescans profiles every 30 days. To request an immediate refresh or update your security signals, contact our intelligence team.
+              </p>
+              <Link 
+                href="/readiness-review"
+                className="w-full py-4 bg-gray-900 text-white text-center rounded-xl font-bold hover:bg-gray-800 transition-colors"
+              >
+                Request Readiness Review
+              </Link>
+            </div>
+          </div>
 
           <DirectoryUsageGuide />
         </section>
       </main>
-
 
       <Footer />
     </div>

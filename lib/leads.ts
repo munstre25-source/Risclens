@@ -2,7 +2,7 @@ import { getSupabaseAdmin } from './supabase';
 
 export interface CreateLeadInput {
   name?: string | null;
-  email: string;
+  email?: string | null;
   company?: string | null;
   website?: string | null;
   sourceUrl?: string | null;
@@ -88,14 +88,18 @@ export async function createLead(input: CreateLeadInput) {
   } as Record<string, unknown>;
 
   // Check if a partial lead with this email already exists
-  const { data: existingLead } = await supabase
-    .from('leads')
-    .select('id')
-    .eq('email', email)
-    .eq('is_partial', true)
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .single();
+  let existingLead = null;
+  if (email) {
+    const { data } = await supabase
+      .from('leads')
+      .select('id')
+      .eq('email', email)
+      .eq('is_partial', true)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    existingLead = data;
+  }
 
   let result;
   if (existingLead) {

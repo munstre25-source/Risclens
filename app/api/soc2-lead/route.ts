@@ -27,7 +27,9 @@ const leadSchema = z
       .trim()
       .toLowerCase()
       .email()
-      .max(254),
+      .max(254)
+      .optional()
+      .or(z.literal('')),
     company_name: z.string().trim().max(120).optional(),
     industry: z.string().trim().max(60).optional(),
     num_employees: z.number().int().min(1).max(100000).optional(),
@@ -171,7 +173,7 @@ export async function POST(request: NextRequest) {
     };
 
     const leadResult = await createLead({
-      email: payload.email,
+      email: payload.email || null,
       company: payload.company_name ?? null,
       leadType: 'soc2_readiness',
       payload: leadPayload,

@@ -8,6 +8,7 @@ import AboutSection from '@/components/AboutSection';
 import ExpertReview from '@/components/ExpertReview';
 import { costIndustries } from '@/lib/navConfig';
 import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
+import { ContextualSignals } from '@/components/compliance/ContextualSignals';
 
 const faqs = [
   {
@@ -182,7 +183,7 @@ export default function Soc2CostPage() {
           <section className="py-16 lg:py-20 bg-white border-t border-slate-200">
             <div className="max-w-3xl mx-auto px-4 sm:px-6 space-y-10">
               <ExpertReview 
-                authorName="Sarah Chen" 
+                authorName="Raphael Ngare Momanyi" 
                 authorTitle="Head of Compliance Strategy (CPA)" 
                 date="January 5, 2026" 
               />
@@ -252,18 +253,13 @@ export default function Soc2CostPage() {
               </div>
             </div>
 
-            <div className="pt-4">
-              <RelatedGuidesRow
-                links={[
-                  { href: '/soc-2-readiness-calculator', label: 'SOC 2 Readiness Assessment' },
-                  { href: '/soc-2-timeline', label: 'SOC 2 Timeline' },
-                  { href: '/soc-2-readiness-checklist', label: 'Readiness Checklist' },
-                  { href: '/soc-2-evidence/vault', label: 'Evidence Vault' },
-                  { href: '/soc-2/auditor-selection', label: 'Auditor Selection' },
-                  { href: '/penetration-testing/for-soc-2', label: 'Pentest for SOC 2' },
-                ]}
-              />
-            </div>
+              <div className="pt-4 space-y-8">
+                <ContextualSignals />
+                <RelatedGuidesRow
+                  topics={['soc2-cost', 'soc2-readiness', 'soc2-timeline', 'pentest']}
+                />
+              </div>
+
           </div>
         </section>
 

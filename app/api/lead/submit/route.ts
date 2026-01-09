@@ -23,24 +23,21 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ ok: true });
     }
 
-    if (!email || !email.includes('@')) {
-      return NextResponse.json({ ok: false, error: 'Valid email is required' }, { status: 400 });
-    }
-
-    // 1. Calculate Real-time Lead Score
+    // 1. Calculate lead score
     const scoringInput = {
-      num_employees: otherData.num_employees || 0,
+      num_employees: Number(otherData.num_employees || otherData.employees || 0),
       audit_date: otherData.audit_date || new Date().toISOString(),
-      data_types: otherData.data_types || [],
+      data_types: Array.isArray(otherData.data_types) ? otherData.data_types : [],
       role: otherData.role || 'unknown',
-      industry: otherData.industry,
+      industry: otherData.industry || 'other',
+      soc2_requirers: Array.isArray(otherData.soc2_requirers) ? otherData.soc2_requirers : [],
     };
-    
+
     const scoringResult = calculateLeadScore(scoringInput);
 
     const leadResult = await createLead({
       name: name ?? null,
-      email,
+      email: email || null,
       company: company ?? null,
       sourceUrl: source_url ?? null,
       leadType: lead_type || 'generic_lead',

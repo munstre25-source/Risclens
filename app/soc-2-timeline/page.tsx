@@ -7,6 +7,7 @@ import AssessmentCTA from '@/components/AssessmentCTA';
 import AboutSection from '@/components/AboutSection';
 import { timelineGuides } from '@/lib/soc2Guides';
 import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
+import { ContextualSignals } from '@/components/compliance/ContextualSignals';
 
 const faqs = [
   {
@@ -210,18 +211,13 @@ export default function Soc2TimelineGuidePage() {
                 </div>
               </div>
 
-              <div className="pt-4">
-                <RelatedGuidesRow
-                  links={[
-                    { href: '/soc-2-readiness-calculator', label: 'SOC 2 Readiness Index' },
-                    { href: '/soc-2-cost', label: 'SOC 2 Cost Guide' },
-                    { href: '/soc-2-readiness-checklist', label: 'Readiness Checklist' },
-                    { href: '/soc-2-evidence/vault', label: 'Evidence Vault' },
-                    { href: '/soc-2-type-i-vs-type-ii', label: 'Type I vs Type II' },
-                    { href: '/penetration-testing', label: 'Pentest Hub' },
-                  ]}
-                />
-              </div>
+                <div className="pt-4 space-y-8">
+                  <ContextualSignals />
+                  <RelatedGuidesRow
+                    topics={['soc2-timeline', 'soc2-readiness', 'soc2-cost', 'pentest']}
+                  />
+                </div>
+
             </div>
           </section>
 

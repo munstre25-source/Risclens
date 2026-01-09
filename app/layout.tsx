@@ -1,3 +1,7 @@
+/**
+ * Copyright © 2026 Raphael Ngare Momanyi. All rights reserved.
+ * Full IP and all rights belong to Raphael Ngare Momanyi.
+ */
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
@@ -6,6 +10,8 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { HashScrollFix } from '@/components/HashScrollFix';
 import { Suspense } from 'react';
+
+// import ComplianceCopilot from '@/components/ComplianceCopilot';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -107,8 +113,10 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        {children}
-        <Analytics />
+          {children}
+          {/* <ComplianceCopilot /> */}
+          <Analytics />
+
         <SpeedInsights />
       </body>
     </html>

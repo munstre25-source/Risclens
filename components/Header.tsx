@@ -11,7 +11,7 @@ import { useDropdownIntent } from './useDropdownIntent';
 
 const DROPDOWN_PANEL_CLASS =
   'absolute z-[9999] rounded-xl border border-slate-200 bg-white shadow-lg max-h-[70vh] overflow-auto focus:outline-none transition ease-out duration-150 transform';
-const DROPDOWN_WIDTH = 240;
+const DROPDOWN_WIDTH = 260;
 
 type DropdownPortalProps = {
   id: string;
@@ -87,66 +87,29 @@ export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
 
-  const socIntent = useDropdownIntent();
-  const pentestIntent = useDropdownIntent();
-  const vendorIntent = useDropdownIntent();
+  const frameworksIntent = useDropdownIntent();
+  const toolsIntent = useDropdownIntent();
   const resourcesIntent = useDropdownIntent();
 
   const [isMobileOpen, setMobileOpen] = useState(false);
-  const [mobileSocOpen, setMobileSocOpen] = useState(false);
-  const [mobilePentestOpen, setMobilePentestOpen] = useState(false);
-  const [mobileVendorOpen, setMobileVendorOpen] = useState(false);
+  const [mobileFrameworksOpen, setMobileFrameworksOpen] = useState(false);
+  const [mobileToolsOpen, setMobileToolsOpen] = useState(false);
   const [mobileResourcesOpen, setMobileResourcesOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  const socRef = useRef<HTMLDivElement>(null);
-  const pentestRef = useRef<HTMLDivElement>(null);
-  const vendorRef = useRef<HTMLDivElement>(null);
+  const frameworksRef = useRef<HTMLDivElement>(null);
+  const toolsRef = useRef<HTMLDivElement>(null);
   const resourcesRef = useRef<HTMLDivElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const mobileToggleRef = useRef<HTMLButtonElement>(null);
 
-  const socMenu = navConfig.soc;
-  const pentestMenu = navConfig.pentest;
-  const vendorMenu = navConfig.vendor;
-  const resourcesMenu = navConfig.resources;
-
-  const isSocActive =
-    pathname === '/' ||
-    pathname.startsWith('/soc-2') ||
-    pathname.startsWith('/soc-2-') ||
-    pathname.startsWith('/when-do-you-need-soc-2') ||
-    pathname.startsWith('/compliance-roi') ||
-    pathname === '/soc-2-readiness-calculator';
-  const isPentestActive = pathname.startsWith('/penetration-testing');
-  const isVendorActive = pathname.startsWith('/vendor-risk-assessment');
-
-  const primaryCtaHref = isPentestActive
-    ? '/penetration-testing/cost-estimator'
-    : isVendorActive
-    ? '/vendor-risk-assessment/roi-calculator'
-    : CTA.href;
-
-  const primaryCtaLabel = isPentestActive
-    ? 'Pentest Cost Estimator'
-    : isVendorActive
-    ? 'VRA ROI Calculator'
-    : CTA.label;
-
   const closeAllDropdowns = useCallback(() => {
-    socIntent.immediateClose();
-    pentestIntent.immediateClose();
-    vendorIntent.immediateClose();
+    frameworksIntent.immediateClose();
+    toolsIntent.immediateClose();
     resourcesIntent.immediateClose();
-  }, [socIntent, pentestIntent, vendorIntent, resourcesIntent]);
-
-  const handleMobilePrimaryCta = useCallback(() => {
-    setMobileOpen(false);
-    document.body.style.overflow = '';
-    router.push(primaryCtaHref);
-  }, [primaryCtaHref, router]);
+  }, [frameworksIntent, toolsIntent, resourcesIntent]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -157,9 +120,8 @@ export default function Header() {
       }
 
       const isInside = [
-        { anchor: socRef, menuId: 'soc-menu' },
-        { anchor: pentestRef, menuId: 'pentest-menu' },
-        { anchor: vendorRef, menuId: 'vendor-menu' },
+        { anchor: frameworksRef, menuId: 'frameworks-menu' },
+        { anchor: toolsRef, menuId: 'tools-menu' },
         { anchor: resourcesRef, menuId: 'resources-menu' },
       ].some(({ anchor, menuId }) => {
         const anchorMatch = anchor.current?.contains(target);
@@ -222,9 +184,8 @@ export default function Header() {
 
   useEffect(() => {
     if (!isMobileOpen) {
-      setMobileSocOpen(false);
-      setMobilePentestOpen(false);
-      setMobileVendorOpen(false);
+      setMobileFrameworksOpen(false);
+      setMobileToolsOpen(false);
       setMobileResourcesOpen(false);
     }
   }, [isMobileOpen]);
@@ -259,228 +220,139 @@ export default function Header() {
       }`}
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-20 lg:h-24 flex items-center justify-between">
-              <Link href="/" className="flex items-center gap-3 shrink-0">
-                <Image
-                  src="/logo/logo-wordmark.png"
-                  alt="RiscLens"
-                  width={280}
-                  height={84}
-                  priority
-                  className="h-16 lg:h-20 w-auto object-contain"
-                />
-              </Link>
+        <Link href="/" className="flex items-center gap-3 shrink-0">
+          <Image
+            src="/logo/logo-wordmark.png"
+            alt="RiscLens"
+            width={280}
+            height={84}
+            priority
+            className="h-16 lg:h-20 w-auto object-contain"
+          />
+        </Link>
 
         <nav className="hidden lg:flex items-center gap-1">
+          {/* Frameworks Dropdown */}
           <div
-            ref={socRef}
+            ref={frameworksRef}
             className="relative"
             onMouseEnter={() => {
-              pentestIntent.immediateClose();
-              vendorIntent.immediateClose();
+              toolsIntent.immediateClose();
               resourcesIntent.immediateClose();
-              socIntent.scheduleOpen();
+              frameworksIntent.scheduleOpen();
             }}
-            onMouseLeave={() => socIntent.scheduleClose()}
+            onMouseLeave={() => frameworksIntent.scheduleClose()}
           >
-            <Link
-              href="/soc-2"
+            <button
+              type="button"
               className={`flex items-center gap-1.5 px-3 py-2 text-base font-bold rounded-lg transition-colors ${
-                isSocActive ? 'text-brand-700 bg-brand-50' : 'text-slate-700 hover:text-brand-700 hover:bg-slate-50'
+                frameworksIntent.open ? 'text-brand-700 bg-brand-50' : 'text-slate-700 hover:text-brand-700 hover:bg-slate-50'
               }`}
             >
-              SOC 2
-              <svg className={`w-4 h-4 transition-transform ${socIntent.open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              Frameworks
+              <svg className={`w-4 h-4 transition-transform ${frameworksIntent.open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
-            </Link>
+            </button>
             <DropdownPortal
-              id="soc-menu"
-              isOpen={socIntent.open}
-              anchorRef={socRef}
-              onMouseEnter={() => socIntent.scheduleOpen()}
-              onMouseLeave={() => socIntent.scheduleClose()}
+              id="frameworks-menu"
+              isOpen={frameworksIntent.open}
+              anchorRef={frameworksRef}
+              onMouseEnter={() => frameworksIntent.scheduleOpen()}
+              onMouseLeave={() => frameworksIntent.scheduleClose()}
             >
-              <Link href={socMenu.overview.href} role="menuitem" className={`${menuItemClass} rounded-t-xl font-medium`}>
-                {socMenu.overview.label}
-              </Link>
-              <div className={sectionLabelClass}>Tools</div>
-                <Link href={socMenu.primary.href} role="menuitem" className={menuItemWithBadgeClass}>
-                  {socMenu.primary.label}
-                  <Badge label={socMenu.primary.badge} />
+              <div className={sectionLabelClass}>Compliance Hubs</div>
+              {navConfig.frameworks.items.map((item) => (
+                <Link key={item.href} href={item.href} role="menuitem" className={menuItemWithBadgeClass}>
+                  <div className="flex flex-col">
+                    <span className="font-medium text-slate-900">{item.label}</span>
+                    {item.description && <span className="text-[11px] text-slate-500 leading-tight">{item.description}</span>}
+                  </div>
+                  {item.badge && <Badge label={item.badge} />}
                 </Link>
-                {socMenu.tools.map((item) => (
-                  <Link key={item.href} href={item.href} role="menuitem" className={menuItemWithBadgeClass}>
-                    {item.label}
-                    <Badge label={item.badge} />
-                  </Link>
-                ))}
+              ))}
               <div className="my-1 border-t border-slate-100" />
-              <div className={sectionLabelClass}>Guides</div>
-              {socMenu.guides.map((item) => (
+              <div className={sectionLabelClass}>Popular Guides</div>
+              {navConfig.frameworks.guides.map((item) => (
                 <Link key={item.href} href={item.href} role="menuitem" className={menuItemClass}>
                   {item.label}
                 </Link>
               ))}
-              <div className="my-1 border-t border-slate-100" />
-              <div className={sectionLabelClass}>By Industry</div>
-              {socMenu.industries.map((item) => (
-                <Link key={item.href} href={item.href} role="menuitem" className={menuItemClass}>
-                  {item.label}
-                </Link>
-              ))}
-              <div className="my-1 border-t border-slate-100" />
-              <Link href={socMenu.viewAll.href} role="menuitem" className={`${viewAllClass} rounded-b-xl`}>
-                {socMenu.viewAll.label}
-              </Link>
             </DropdownPortal>
           </div>
 
+          {/* Tools Dropdown */}
           <div
-            ref={pentestRef}
+            ref={toolsRef}
             className="relative"
             onMouseEnter={() => {
-              socIntent.immediateClose();
-              vendorIntent.immediateClose();
+              frameworksIntent.immediateClose();
               resourcesIntent.immediateClose();
-              pentestIntent.scheduleOpen();
+              toolsIntent.scheduleOpen();
             }}
-            onMouseLeave={() => pentestIntent.scheduleClose()}
+            onMouseLeave={() => toolsIntent.scheduleClose()}
           >
-            <Link
-              href="/penetration-testing"
+            <button
+              type="button"
               className={`flex items-center gap-1.5 px-3 py-2 text-sm font-semibold rounded-lg transition-colors ${
-                isPentestActive ? 'text-brand-700 bg-brand-50' : 'text-slate-700 hover:text-brand-700 hover:bg-slate-50'
+                toolsIntent.open ? 'text-brand-700 bg-brand-50' : 'text-slate-700 hover:text-brand-700 hover:bg-slate-50'
               }`}
             >
-              Penetration Testing
-              <svg className={`w-4 h-4 transition-transform ${pentestIntent.open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              Tools
+              <svg className={`w-4 h-4 transition-transform ${toolsIntent.open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
-            </Link>
+            </button>
             <DropdownPortal
-              id="pentest-menu"
-              isOpen={pentestIntent.open}
-              anchorRef={pentestRef}
-              onMouseEnter={() => pentestIntent.scheduleOpen()}
-              onMouseLeave={() => pentestIntent.scheduleClose()}
+              id="tools-menu"
+              isOpen={toolsIntent.open}
+              anchorRef={toolsRef}
+              onMouseEnter={() => toolsIntent.scheduleOpen()}
+              onMouseLeave={() => toolsIntent.scheduleClose()}
             >
-              <Link href={pentestMenu.overview.href} role="menuitem" className={`${menuItemClass} rounded-t-xl font-medium`}>
-                {pentestMenu.overview.label}
+              <div className={sectionLabelClass}>Featured Tool</div>
+              <Link href={navConfig.tools.primary.href} role="menuitem" className={menuItemWithBadgeClass}>
+                <span className="font-medium text-slate-900">{navConfig.tools.primary.label}</span>
+                <Badge label={navConfig.tools.primary.badge} />
               </Link>
-              <div className={sectionLabelClass}>Tools</div>
-                <Link href={pentestMenu.primary.href} role="menuitem" className={menuItemWithBadgeClass}>
-                  {pentestMenu.primary.label}
-                  <Badge label={pentestMenu.primary.badge} />
-                </Link>
-                {pentestMenu.tools.map((item) => (
-                  <Link key={item.href} href={item.href} role="menuitem" className={menuItemWithBadgeClass}>
-                    {item.label}
-                    <Badge label={item.badge} />
-                  </Link>
-                ))}
               <div className="my-1 border-t border-slate-100" />
-              <div className={sectionLabelClass}>Guides</div>
-              {pentestMenu.guides.map((item) => (
-                <Link key={item.href} href={item.href} role="menuitem" className={menuItemClass}>
+              <div className={sectionLabelClass}>Analysis & ROI</div>
+              {navConfig.tools.items.map((item) => (
+                <Link key={item.href} href={item.href} role="menuitem" className={menuItemWithBadgeClass}>
                   {item.label}
+                  <Badge label={item.badge} />
                 </Link>
               ))}
-              <div className="my-1 border-t border-slate-100" />
-              <Link href={pentestMenu.viewAll.href} role="menuitem" className={`${viewAllClass} rounded-b-xl`}>
-                {pentestMenu.viewAll.label}
-              </Link>
             </DropdownPortal>
           </div>
 
-            <div
-              ref={vendorRef}
-              className="relative"
-              onMouseEnter={() => {
-                socIntent.immediateClose();
-                pentestIntent.immediateClose();
-                resourcesIntent.immediateClose();
-                vendorIntent.scheduleOpen();
-              }}
-              onMouseLeave={() => vendorIntent.scheduleClose()}
-            >
-              <Link
-                href="/vendor-risk-assessment"
-                className={`flex items-center gap-1.5 px-3 py-2 text-sm font-semibold rounded-lg transition-colors ${
-                  isVendorActive ? 'text-brand-700 bg-brand-50' : 'text-slate-700 hover:text-brand-700 hover:bg-slate-50'
-                }`}
-              >
-                Vendor Risk
-                <svg className={`w-4 h-4 transition-transform ${vendorIntent.open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </Link>
-              <DropdownPortal
-                id="vendor-menu"
-                isOpen={vendorIntent.open}
-                anchorRef={vendorRef}
-                onMouseEnter={() => vendorIntent.scheduleOpen()}
-                onMouseLeave={() => vendorIntent.scheduleClose()}
-              >
-                <Link href={vendorMenu.overview.href} role="menuitem" className={`${menuItemClass} rounded-t-xl font-medium`}>
-                  {vendorMenu.overview.label}
-                </Link>
-                <div className={sectionLabelClass}>Tools</div>
-                  <Link href={vendorMenu.primary.href} role="menuitem" className={menuItemWithBadgeClass}>
-                    {vendorMenu.primary.label}
-                    <Badge label={vendorMenu.primary.badge} />
-                  </Link>
-                  {vendorMenu.tools.map((item) => (
-                    <Link key={item.href} href={item.href} role="menuitem" className={menuItemWithBadgeClass}>
-                      {item.label}
-                      <Badge label={item.badge} />
-                    </Link>
-                  ))}
-                <div className="my-1 border-t border-slate-100" />
-                <div className={sectionLabelClass}>Guides</div>
-                {vendorMenu.guides.map((item) => (
-                  <Link key={item.href} href={item.href} role="menuitem" className={menuItemClass}>
-                    {item.label}
-                  </Link>
-                ))}
-                <div className="my-1 border-t border-slate-100" />
-                <div className={sectionLabelClass}>By Industry</div>
-                {vendorMenu.industries.map((item) => (
-                  <Link key={item.href} href={item.href} role="menuitem" className={menuItemClass}>
-                    {item.label}
-                  </Link>
-                ))}
-                <div className="my-1 border-t border-slate-100" />
-                <Link href={vendorMenu.viewAll.href} role="menuitem" className={`${viewAllClass} rounded-b-xl`}>
-                  {vendorMenu.viewAll.label}
-                </Link>
-              </DropdownPortal>
-            </div>
+          {/* Directory Link */}
+          <Link
+            href={navConfig.directory.href}
+            className={`flex items-center gap-1.5 px-3 py-2 text-sm font-semibold rounded-lg transition-colors ${
+              pathname.startsWith(navConfig.directory.href) ? 'text-brand-700 bg-brand-50' : 'text-slate-700 hover:text-brand-700 hover:bg-slate-50'
+            }`}
+          >
+            Directory
+            <span className="ml-1 px-1.5 py-0.5 text-[10px] font-bold text-white bg-brand-500 rounded uppercase tracking-wider">New</span>
+          </Link>
 
-            <Link
-              href="/compliance/directory"
-              className={`flex items-center gap-1.5 px-3 py-2 text-sm font-semibold rounded-lg transition-colors ${
-                pathname.startsWith('/compliance/directory') ? 'text-brand-700 bg-brand-50' : 'text-slate-700 hover:text-brand-700 hover:bg-slate-50'
-              }`}
-            >
-              Directory
-              <span className="ml-1 px-1.5 py-0.5 text-[10px] font-bold text-white bg-brand-500 rounded uppercase tracking-wider">New</span>
-            </Link>
-
-
+          {/* Resources Dropdown */}
           <div
             ref={resourcesRef}
             className="relative"
             onMouseEnter={() => {
-              socIntent.immediateClose();
-              pentestIntent.immediateClose();
-              vendorIntent.immediateClose();
+              frameworksIntent.immediateClose();
+              toolsIntent.immediateClose();
               resourcesIntent.scheduleOpen();
             }}
             onMouseLeave={() => resourcesIntent.scheduleClose()}
           >
             <button
               type="button"
-              className="flex items-center gap-1.5 px-3 py-2 text-sm font-semibold text-slate-700 hover:text-brand-700 hover:bg-slate-50 rounded-lg transition-colors"
+              className={`flex items-center gap-1.5 px-3 py-2 text-sm font-semibold rounded-lg transition-colors ${
+                resourcesIntent.open ? 'text-brand-700 bg-brand-50' : 'text-slate-700 hover:text-brand-700 hover:bg-slate-50'
+              }`}
             >
               Resources
               <svg className={`w-4 h-4 transition-transform ${resourcesIntent.open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -494,25 +366,26 @@ export default function Header() {
               onMouseEnter={() => resourcesIntent.scheduleOpen()}
               onMouseLeave={() => resourcesIntent.scheduleClose()}
             >
-              <Link href={resourcesMenu.about.href} role="menuitem" className={`${menuItemClass} rounded-t-xl font-medium`}>
-                {resourcesMenu.about.label}
+              <Link href={navConfig.resources.about.href} role="menuitem" className={`${menuItemClass} font-medium`}>
+                {navConfig.resources.about.label}
               </Link>
+              <div className="my-1 border-t border-slate-100" />
               <div className={sectionLabelClass}>Guides</div>
-              {resourcesMenu.guides.map((item) => (
+              {navConfig.resources.guides.map((item) => (
                 <Link key={item.href} href={item.href} role="menuitem" className={menuItemClass}>
                   {item.label}
                 </Link>
               ))}
               <div className="my-1 border-t border-slate-100" />
               <div className={sectionLabelClass}>Comparisons</div>
-              {resourcesMenu.comparisons.map((item) => (
+              {navConfig.resources.comparisons.map((item) => (
                 <Link key={item.href} href={item.href} role="menuitem" className={menuItemClass}>
                   {item.label}
                 </Link>
               ))}
               <div className="my-1 border-t border-slate-100" />
-              <Link href={resourcesMenu.viewAll.href} role="menuitem" className={`${viewAllClass} rounded-b-xl`}>
-                {resourcesMenu.viewAll.label}
+              <Link href={navConfig.resources.viewAll.href} role="menuitem" className={viewAllClass}>
+                {navConfig.resources.viewAll.label}
               </Link>
             </DropdownPortal>
           </div>
@@ -532,10 +405,10 @@ export default function Header() {
 
         <div className="flex items-center gap-3">
           <Link
-            href={primaryCtaHref}
+            href={CTA.href}
             className="hidden lg:inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm px-4 py-2.5 rounded-lg shadow-sm transition-all"
           >
-            {primaryCtaLabel}
+            {CTA.label}
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
@@ -580,17 +453,17 @@ export default function Header() {
               }`}
             >
               <div className="px-4 py-4 space-y-3 h-full overflow-y-auto overscroll-contain">
-                    <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                          <Link href="/" className="flex items-center gap-3 shrink-0" onClick={() => setMobileOpen(false)}>
-                              <Image
-                                src="/logo/logo-wordmark.png"
-                                alt="RiscLens"
-                                width={280}
-                                height={82}
-                                className="h-[100px] w-auto object-contain"
-                              />
-                          </Link>
-                    <button
+                <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                  <Link href="/" className="flex items-center gap-3 shrink-0" onClick={() => setMobileOpen(false)}>
+                    <Image
+                      src="/logo/logo-wordmark.png"
+                      alt="RiscLens"
+                      width={280}
+                      height={82}
+                      className="h-[100px] w-auto object-contain"
+                    />
+                  </Link>
+                  <button
                     type="button"
                     className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50"
                     aria-label="Close navigation menu"
@@ -602,150 +475,94 @@ export default function Header() {
                   </button>
                 </div>
 
+                {/* Frameworks Mobile */}
                 <div className="rounded-xl border border-slate-200 overflow-hidden">
-                    <button
-                      type="button"
-                      className="w-full flex items-center justify-between px-4 py-3 text-base font-bold text-slate-900 bg-white"
-                      onClick={() => {
-                        setMobileSocOpen(!mobileSocOpen);
-                      setMobilePentestOpen(false);
-                      setMobileVendorOpen(false);
+                  <button
+                    type="button"
+                    className="w-full flex items-center justify-between px-4 py-3 text-base font-bold text-slate-900 bg-white"
+                    onClick={() => {
+                      setMobileFrameworksOpen(!mobileFrameworksOpen);
+                      setMobileToolsOpen(false);
                       setMobileResourcesOpen(false);
                     }}
                   >
-                    <span className={isSocActive ? 'text-brand-700' : ''}>SOC 2</span>
-                    <svg className={`w-4 h-4 transition-transform ${mobileSocOpen ? 'rotate-180 text-brand-700' : 'text-slate-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <span>Frameworks</span>
+                    <svg className={`w-4 h-4 transition-transform ${mobileFrameworksOpen ? 'rotate-180 text-brand-700' : 'text-slate-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
-                  {mobileSocOpen && (
+                  {mobileFrameworksOpen && (
                     <div className="px-4 pb-4 pt-2 space-y-2 bg-slate-50 border-t border-slate-100">
-                      <Link href={socMenu.overview.href} className="block text-sm font-medium text-slate-700" onClick={() => setMobileOpen(false)}>
-                        {socMenu.overview.label}
-                      </Link>
-                      <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 pt-2">Tools</p>
-                        <Link href={socMenu.primary.href} className="flex items-center justify-between text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
-                          {socMenu.primary.label}
-                          <Badge label={socMenu.primary.badge} />
+                      {navConfig.frameworks.items.map((item) => (
+                        <Link key={item.href} href={item.href} className="flex items-center justify-between text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
+                          {item.label}
+                          {item.badge && <Badge label={item.badge} />}
                         </Link>
-                        {socMenu.tools.map((item) => (
-                          <Link key={item.href} href={item.href} className="flex items-center justify-between text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
-                            {item.label}
-                            <Badge label={item.badge} />
-                          </Link>
-                        ))}
+                      ))}
                       <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 pt-2">Guides</p>
-                      {socMenu.guides.map((item) => (
+                      {navConfig.frameworks.guides.map((item) => (
                         <Link key={item.href} href={item.href} className="block text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
                           {item.label}
                         </Link>
                       ))}
-                      <Link href={socMenu.viewAll.href} className="block text-sm font-semibold text-brand-700 pt-2" onClick={() => setMobileOpen(false)}>
-                        {socMenu.viewAll.label}
-                      </Link>
                     </div>
                   )}
                 </div>
 
+                {/* Tools Mobile */}
                 <div className="rounded-xl border border-slate-200 overflow-hidden">
                   <button
                     type="button"
                     className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-slate-900 bg-white"
                     onClick={() => {
-                      setMobilePentestOpen(!mobilePentestOpen);
-                      setMobileSocOpen(false);
-                      setMobileVendorOpen(false);
+                      setMobileToolsOpen(!mobileToolsOpen);
+                      setMobileFrameworksOpen(false);
                       setMobileResourcesOpen(false);
                     }}
                   >
-                    <span className={isPentestActive ? 'text-brand-700' : ''}>Penetration Testing</span>
-                    <svg className={`w-4 h-4 transition-transform ${mobilePentestOpen ? 'rotate-180 text-brand-700' : 'text-slate-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <span>Tools</span>
+                    <svg className={`w-4 h-4 transition-transform ${mobileToolsOpen ? 'rotate-180 text-brand-700' : 'text-slate-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
-                  {mobilePentestOpen && (
+                  {mobileToolsOpen && (
                     <div className="px-4 pb-4 pt-2 space-y-2 bg-slate-50 border-t border-slate-100">
-                      <Link href={pentestMenu.overview.href} className="block text-sm font-medium text-slate-700" onClick={() => setMobileOpen(false)}>
-                        {pentestMenu.overview.label}
+                      <Link href={navConfig.tools.primary.href} className="flex items-center justify-between text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
+                        {navConfig.tools.primary.label}
+                        <Badge label={navConfig.tools.primary.badge} />
                       </Link>
-                      <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 pt-2">Tools</p>
-                        <Link href={pentestMenu.primary.href} className="flex items-center justify-between text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
-                          {pentestMenu.primary.label}
-                          <Badge label={pentestMenu.primary.badge} />
-                        </Link>
-                        {pentestMenu.tools.map((item) => (
-                          <Link key={item.href} href={item.href} className="flex items-center justify-between text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
-                            {item.label}
-                            <Badge label={item.badge} />
-                          </Link>
-                        ))}
-                      <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 pt-2">Guides</p>
-                      {pentestMenu.guides.map((item) => (
-                        <Link key={item.href} href={item.href} className="block text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
+                      {navConfig.tools.items.map((item) => (
+                        <Link key={item.href} href={item.href} className="flex items-center justify-between text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
                           {item.label}
+                          <Badge label={item.badge} />
                         </Link>
                       ))}
-                      <Link href={pentestMenu.viewAll.href} className="block text-sm font-semibold text-brand-700 pt-2" onClick={() => setMobileOpen(false)}>
-                        {pentestMenu.viewAll.label}
-                      </Link>
                     </div>
                   )}
                 </div>
 
-                <div className="rounded-xl border border-slate-200 overflow-hidden">
-                  <button
-                    type="button"
-                    className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-slate-900 bg-white"
-                    onClick={() => {
-                      setMobileVendorOpen(!mobileVendorOpen);
-                      setMobileSocOpen(false);
-                      setMobilePentestOpen(false);
-                      setMobileResourcesOpen(false);
-                    }}
-                  >
-                    <span className={isVendorActive ? 'text-brand-700' : ''}>Vendor Risk</span>
-                    <svg className={`w-4 h-4 transition-transform ${mobileVendorOpen ? 'rotate-180 text-brand-700' : 'text-slate-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-                  {mobileVendorOpen && (
-                    <div className="px-4 pb-4 pt-2 space-y-2 bg-slate-50 border-t border-slate-100">
-                      <Link href={vendorMenu.overview.href} className="block text-sm font-medium text-slate-700" onClick={() => setMobileOpen(false)}>
-                        {vendorMenu.overview.label}
-                      </Link>
-                      <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 pt-2">Tools</p>
-                        <Link href={vendorMenu.primary.href} className="flex items-center justify-between text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
-                          {vendorMenu.primary.label}
-                          <Badge label={vendorMenu.primary.badge} />
-                        </Link>
-                        {vendorMenu.tools.map((item) => (
-                          <Link key={item.href} href={item.href} className="flex items-center justify-between text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
-                            {item.label}
-                            <Badge label={item.badge} />
-                          </Link>
-                        ))}
-                      <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 pt-2">Guides</p>
-                      {vendorMenu.guides.map((item) => (
-                        <Link key={item.href} href={item.href} className="block text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
-                          {item.label}
-                        </Link>
-                      ))}
-                      <Link href={vendorMenu.viewAll.href} className="block text-sm font-semibold text-brand-700 pt-2" onClick={() => setMobileOpen(false)}>
-                        {vendorMenu.viewAll.label}
-                      </Link>
-                    </div>
-                  )}
-                </div>
+                {/* Directory Mobile */}
+                <Link
+                  href={navConfig.directory.href}
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium text-slate-700"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <svg className="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                  </svg>
+                  Directory
+                  <span className="ml-auto px-1.5 py-0.5 text-[10px] font-bold text-white bg-brand-500 rounded uppercase tracking-wider">New</span>
+                </Link>
 
+                {/* Resources Mobile */}
                 <div className="rounded-xl border border-slate-200 overflow-hidden">
                   <button
                     type="button"
                     className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-slate-900 bg-white"
                     onClick={() => {
                       setMobileResourcesOpen(!mobileResourcesOpen);
-                      setMobileSocOpen(false);
-                      setMobilePentestOpen(false);
-                      setMobileVendorOpen(false);
+                      setMobileFrameworksOpen(false);
+                      setMobileToolsOpen(false);
                     }}
                   >
                     <span>Resources</span>
@@ -755,63 +572,46 @@ export default function Header() {
                   </button>
                   {mobileResourcesOpen && (
                     <div className="px-4 pb-4 pt-2 space-y-2 bg-slate-50 border-t border-slate-100">
-                      <Link href={resourcesMenu.about.href} className="block text-sm font-medium text-slate-700" onClick={() => setMobileOpen(false)}>
-                        {resourcesMenu.about.label}
+                      <Link href={navConfig.resources.about.href} className="block text-sm font-medium text-slate-700" onClick={() => setMobileOpen(false)}>
+                        {navConfig.resources.about.label}
                       </Link>
                       <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 pt-2">Guides</p>
-                      {resourcesMenu.guides.map((item) => (
+                      {navConfig.resources.guides.map((item) => (
                         <Link key={item.href} href={item.href} className="block text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
                           {item.label}
                         </Link>
                       ))}
                       <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 pt-2">Comparisons</p>
-                        {resourcesMenu.comparisons.map((item) => (
-                          <Link key={item.href} href={item.href} className="block text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
-                            {item.label}
-                          </Link>
-                        ))}
-                        <Link href={resourcesMenu.viewAll.href} className="block text-sm font-semibold text-brand-700 pt-2" onClick={() => setMobileOpen(false)}>
-                          {resourcesMenu.viewAll.label}
+                      {navConfig.resources.comparisons.map((item) => (
+                        <Link key={item.href} href={item.href} className="block text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
+                          {item.label}
                         </Link>
-                      </div>
-                    )}
-                  </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
 
-
-                  <Link
-                    href="/compliance/directory"
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium text-slate-700"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    <svg className="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                    </svg>
-                    Compliance Directory
-                    <span className="ml-auto px-1.5 py-0.5 text-[10px] font-bold text-white bg-brand-500 rounded uppercase tracking-wider">New</span>
-                  </Link>
-
-                  <Link
-                    href="/search"
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium text-slate-700"
-                    onClick={() => setMobileOpen(false)}
-                  >
-
+                <Link
+                  href="/search"
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium text-slate-700"
+                  onClick={() => setMobileOpen(false)}
+                >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
                   Search
                 </Link>
 
-                <button
-                  type="button"
+                <Link
+                  href={CTA.href}
                   className="w-full inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-4 py-3 rounded-xl shadow-sm transition-all"
-                  onClick={handleMobilePrimaryCta}
+                  onClick={() => setMobileOpen(false)}
                 >
-                  {primaryCtaLabel}
+                  {CTA.label}
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
-                </button>
+                </Link>
               </div>
             </div>
           </>,

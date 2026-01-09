@@ -12,7 +12,11 @@ export function GapCalculator() {
     companySize: 'small',
   });
   const [result, setResult] = useState<GapResult | null>(null);
+  const [email, setEmail] = useState('');
+  const [leadId, setLeadId] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [pdfGenerating, setPdfGenerating] = useState(false);
+  const [pdfSent, setPdfSent] = useState(false);
 
   const handleNext = () => setStep(step + 1);
   const handleBack = () => setStep(step - 1);
@@ -22,7 +26,75 @@ export function GapCalculator() {
     const res = calculateGap(inputs);
     setResult(res);
     setStep(4);
+
+    // Create anonymous lead
+    try {
+      const leadRes = await fetch('/api/lead/partial', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: email || null,
+          lead_type: 'gap_calculator',
+          source_url: window.location.href,
+          payload: {
+            inputs,
+            result: res
+          }
+        }),
+      });
+      const data = await leadRes.json();
+      if (data.ok) {
+        setLeadId(data.lead_id);
+      }
+    } catch (err) {
+      console.error('Lead capture failed:', err);
+    }
+
     setIsSubmitting(false);
+  };
+
+  const handleDownloadPdf = async () => {
+    if (!leadId) return;
+    
+    if (!email || !email.includes('@')) {
+      alert('Please enter a valid work email to receive the mapping guide.');
+      return;
+    }
+
+    setPdfGenerating(true);
+    try {
+      // 1. Update email
+      await fetch('/api/lead/set-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          lead_id: leadId,
+          email: email,
+          consent: true,
+        }),
+      });
+
+      // 2. Generate PDF
+      const res = await fetch('/api/generate-pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lead_id: leadId }),
+      });
+      
+      if (res.ok) {
+        // 3. Send Email
+        await fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ lead_id: leadId }),
+        });
+        setPdfSent(true);
+      }
+    } catch (err) {
+      console.error('PDF generation failed:', err);
+    } finally {
+      setPdfGenerating(false);
+    }
   };
 
   if (step === 4 && result) {
@@ -89,9 +161,29 @@ export function GapCalculator() {
             <div className="mt-10 bg-brand-600 rounded-2xl p-8 text-white text-center">
               <h3 className="text-xl font-bold mb-2">Want a full mapping document?</h3>
               <p className="text-brand-100 mb-6">Download our SOC 2 to ISO 27001 mapping spreadsheet (Excel/CSV).</p>
-              <button className="bg-white text-brand-600 px-8 py-3 rounded-lg font-bold hover:bg-brand-50 transition-colors">
-                Download Mapping Guide
-              </button>
+              
+              {pdfSent ? (
+                <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 text-white font-bold">
+                  ✓ Mapping Guide Sent to {email}!
+                </div>
+              ) : (
+                <div className="max-w-md mx-auto space-y-4">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Work email"
+                    className="w-full px-4 py-3 rounded-lg text-slate-900 focus:ring-2 focus:ring-brand-500 outline-none"
+                  />
+                  <button 
+                    onClick={handleDownloadPdf}
+                    disabled={pdfGenerating || !email.includes('@')}
+                    className="w-full bg-white text-brand-600 px-8 py-3 rounded-lg font-bold hover:bg-brand-50 transition-colors disabled:opacity-50"
+                  >
+                    {pdfGenerating ? 'Generating...' : 'Download Mapping Guide'}
+                  </button>
+                </div>
+              )}
             </div>
             <p className="mt-6 text-[10px] text-gray-400 text-center leading-relaxed italic">
               Estimates are for planning purposes only and do not constitute a legal audit opinion or guarantee of compliance.

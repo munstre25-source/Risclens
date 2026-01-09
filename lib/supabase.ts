@@ -1,3 +1,7 @@
+/**
+ * Copyright © 2026 Raphael Ngare Momanyi. All rights reserved.
+ * Full IP and all rights belong to Raphael Ngare Momanyi.
+ */
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 // =============================================================================

@@ -1,5 +1,10 @@
 # RiscLens SOC 2 Cost Calculator
 
+**Proprietary Software: All Rights Reserved**
+Copyright © 2026 Raphael Ngare Momanyi. Full IP and all rights belong exclusively to Raphael Ngare Momanyi. See [NOTICE.md](NOTICE.md) for details.
+
+---
+
 A production-ready SOC 2 compliance cost calculator built with Next.js (App Router), Supabase, and optimized for Vercel deployment.
 
 ## Features
@@ -381,7 +386,7 @@ The in-memory rate limiter resets on cold starts. For production with multiple i
 
 ## License
 
-Private - RiscLens
+Copyright © 2026 Raphael Ngare Momanyi. All rights reserved. IP and full rights belong to Raphael Ngare Momanyi.
 
 ## Support
 

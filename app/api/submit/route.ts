@@ -1,3 +1,7 @@
+/**
+ * Copyright © 2026 Raphael Ngare Momanyi. All rights reserved.
+ * Full IP and all rights belong to Raphael Ngare Momanyi.
+ */
 import { NextRequest, NextResponse } from 'next/server';
 import { validateCalculatorFormWithoutEmail } from '@/lib/validation';
 import { calculateLeadScore, generateRecommendations, ScoringInput } from '@/lib/scoring';

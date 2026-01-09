@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
+import { ContextualSignals } from '@/components/compliance/ContextualSignals';
 
 export const metadata: Metadata = {
   title: 'SOC 2 Audit Delay Cost Calculator | Estimate Pipeline Risk',
@@ -89,45 +91,33 @@ export default function Soc2AuditDelayPage() {
               Teams often treat SOC 2 as a checklist with a fixed end-date. In reality, timelines are fluid. Uncertainty in evidence collection and the compounding nature of small delays can push a 3-month project into a 6-month ordeal without clear visibility.
             </p>
 
-            <section className="mt-12 pt-8 border-t border-slate-200">
-              <h3 className="text-xl font-bold text-slate-900 mb-6">Frequently Asked Questions</h3>
-              <div className="space-y-6 text-base">
-                <div>
-                  <h4 className="font-bold text-slate-800">How long does SOC 2 usually take?</h4>
-                  <p>A Type I report typically takes 2–3 months of prep, while a Type II report requires an additional 3–12 month observation window.</p>
+              <section className="mt-12 pt-8 border-t border-slate-200">
+                <h3 className="text-xl font-bold text-slate-900 mb-6">Frequently Asked Questions</h3>
+                <div className="space-y-6 text-base">
+                  <div>
+                    <h4 className="font-bold text-slate-800">How long does SOC 2 usually take?</h4>
+                    <p>A Type I report typically takes 2–3 months of prep, while a Type II report requires an additional 3–12 month observation window.</p>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-slate-800">Do delays block enterprise deals?</h4>
+                    <p>Yes, many Fortune 500 companies have hard requirements for SOC 2 reports before moving past the procurement stage.</p>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-slate-800">Can SOC 2 timelines be accelerated?</h4>
+                    <p>Acceleration is possible through evidence automation and early engagement with auditors, but observation periods for Type II reports are fixed.</p>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="font-bold text-slate-800">Do delays block enterprise deals?</h4>
-                  <p>Yes, many Fortune 500 companies have hard requirements for SOC 2 reports before moving past the procurement stage.</p>
-                </div>
-                <div>
-                  <h4 className="font-bold text-slate-800">Can SOC 2 timelines be accelerated?</h4>
-                  <p>Acceleration is possible through evidence automation and early engagement with auditors, but observation periods for Type II reports are fixed.</p>
-                </div>
-              </div>
-            </section>
+              </section>
 
-            <div className="mt-12 pt-8 border-t border-slate-200">
-              <h3 className="text-xl font-bold text-slate-900 mb-4">Related Resources</h3>
-              <ul className="space-y-2">
-                <li>
-                  <Link href="/soc-2-timeline" className="text-brand-600 hover:text-brand-700 font-medium">
-                    SOC 2 Timeline Guide →
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/soc-2-cost" className="text-brand-600 hover:text-brand-700 font-medium">
-                    SOC 2 Cost guide →
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/soc-2-readiness-calculator" className="text-brand-600 hover:text-brand-700 font-medium">
-                    SOC 2 Readiness Assessment →
-                  </Link>
-                </li>
-              </ul>
+              <div className="mt-12 space-y-8">
+                <ContextualSignals />
+                <RelatedGuidesRow 
+                  topics={['soc2-cost', 'soc2-timeline', 'soc2-readiness']} 
+                  title="Continue your planning"
+                />
+              </div>
             </div>
-          </div>
+
         </article>
       </main>
 

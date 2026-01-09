@@ -8,6 +8,7 @@ import { SignalScore } from '@/components/compliance/SignalScore';
 import { SOC2ReadinessSignals } from '@/components/compliance/SOC2ReadinessSignals';
 import { RelatedProfiles } from '@/components/compliance/RelatedProfiles';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { CompanyActionButtons } from '@/components/compliance/CompanyActionButtons';
 import Link from 'next/link';
 
 interface Props {
@@ -193,14 +194,25 @@ export default async function Page({ params }: { params: { slug: string } }) {
               />
               
               <div className="mt-8 flex flex-col md:flex-row md:items-center justify-between gap-8">
-                <div>
-                  <h1 className="text-4xl font-bold text-gray-900 mb-2">
-                    {company.name} Public Security Profile
-                  </h1>
-                  <div className="mt-4 text-gray-600 text-lg max-w-2xl leading-relaxed">
-                    {company.ai_summary || `Analysis of publicly available security signals and disclosures for ${company.name}.`}
+                  <div>
+                    <div className="flex items-center gap-3 mb-2">
+                      <h1 className="text-4xl font-bold text-gray-900">
+                        {company.name} Public Security Profile
+                      </h1>
+                      {company.is_verified && (
+                        <div className="flex items-center gap-1.5 px-3 py-1 bg-blue-600 text-white rounded-full text-xs font-black shadow-sm" title="RiscLens Verified Profile">
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                          </svg>
+                          VERIFIED
+                        </div>
+                      )}
+                    </div>
+                    <div className="mt-4 text-gray-600 text-lg max-w-2xl leading-relaxed">
+                      {company.ai_summary || `Analysis of publicly available security signals and disclosures for ${company.name}.`}
+                    </div>
                   </div>
-                </div>
+
               
               <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex-shrink-0">
                 <SignalScore score={company.signal_score} size="md" />
@@ -273,9 +285,18 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
             </div>
 
-            {/* Sidebar / Meta info */}
-            <div className="space-y-8">
-              <div className="p-6 bg-gray-50 rounded-xl border border-gray-100">
+              {/* Sidebar / Meta info */}
+              <div className="space-y-8">
+                <div className="p-6 bg-white rounded-2xl shadow-sm border border-gray-100">
+                  <h4 className="font-bold text-gray-900 mb-6 uppercase text-xs tracking-wider">Intelligence Actions</h4>
+                  <CompanyActionButtons 
+                    companySlug={company.slug} 
+                    companyName={company.name} 
+                    isVerified={company.is_verified} 
+                  />
+                </div>
+
+                <div className="p-6 bg-gray-50 rounded-xl border border-gray-100">
                 <h4 className="font-bold text-gray-900 mb-4 uppercase text-xs tracking-wider">Company Details</h4>
                 <div className="space-y-4">
                   <div>

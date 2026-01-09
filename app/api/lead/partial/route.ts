@@ -13,12 +13,8 @@ export async function POST(request: NextRequest) {
       ...otherData
     } = body;
 
-    if (!email || !email.includes('@')) {
-      return NextResponse.json({ ok: false, error: 'Valid email is required' }, { status: 400 });
-    }
-
     const leadResult = await createLead({
-      email,
+      email: email || null,
       company: company ?? null,
       sourceUrl: source_url ?? null,
       leadType: lead_type || 'partial_lead',
