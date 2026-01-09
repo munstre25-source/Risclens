@@ -93,7 +93,11 @@ export default function Soc2TimelinePage({ params }: PageProps) {
 
   return (
     <>
-      <Script id={`timeline-faq-${page.slug}`} type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      <script
+        id={`timeline-faq-${page.slug}`}
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <main className="min-h-screen flex flex-col bg-slate-100">
         <Header />
         <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">

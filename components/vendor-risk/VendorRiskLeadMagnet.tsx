@@ -125,14 +125,14 @@ export default function VendorRiskLeadMagnet({
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Work Email</label>
-              <input
-                type="email"
-                required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="alex@company.com"
-                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-brand-500 outline-none transition"
-                />
+                <input
+                  type="email"
+                  required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="raphael@company.com"
+                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-brand-500 outline-none transition"
+                  />
                 <p className="text-[10px] text-slate-400 mt-1">We'll use this to send your resource and occasional security updates.</p>
               </div>
             <div className="space-y-2">

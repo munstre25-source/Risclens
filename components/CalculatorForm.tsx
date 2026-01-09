@@ -288,15 +288,15 @@ export default function CalculatorForm() {
                   <label htmlFor="email" className="form-label">
                     Work Email <span className="text-gray-400 text-xs font-normal">(optional)</span>
                   </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className="form-input"
-                    placeholder="alex@company.com"
-                  />
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      className="form-input"
+                      placeholder="raphael@company.com"
+                    />
                   <p className="mt-1.5 text-xs text-gray-500">
                     Skip this if you just want a quick score. Enter it to get your full roadmap PDF later.
                   </p>

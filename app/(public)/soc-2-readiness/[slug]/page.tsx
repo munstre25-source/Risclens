@@ -92,41 +92,49 @@ export default function Soc2ReadinessGuidePage({ params }: PageProps) {
     })),
   };
 
-    const related = relatedPages(page.slug);
-    const author = authors.alex;
+  const related = relatedPages(page.slug);
+  const author = authors.raphael;
 
-    const personSchema = {
-      '@context': 'https://schema.org',
-      '@type': 'Person',
-      name: author.name,
-      jobTitle: author.role,
-      url: `https://risclens.com/about`,
-      sameAs: [author.linkedIn],
-    };
+  const personSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: author.name,
+    jobTitle: author.role,
+    url: `https://risclens.com/about`,
+    sameAs: author.linkedIn ? [author.linkedIn] : [],
+  };
 
-    return (
-      <>
-        <Script id={`readiness-faq-${page.slug}`} type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-        <Script id={`author-schema-${page.slug}`} type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }} />
-          <main className="min-h-screen flex flex-col bg-slate-100">
-            <Header />
-            <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
-              <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8">
-                <Breadcrumb 
-                  items={[
-                    { label: 'Home', href: '/' },
-                    { label: 'SOC 2', href: '/soc-2' },
-                    { label: 'Readiness', href: '/soc-2-readiness-index' },
-                    { label: page.title }
-                  ]} 
-                />
-              </div>
-              <div className="max-w-4xl mx-auto px-4 sm:px-6 pb-14 lg:pb-20 pt-4 text-center">
-              <div className="flex justify-center mb-6">
-                <VerifiedBy authorId="alex" />
-              </div>
-              <p className="text-sm font-semibold uppercase tracking-wide text-brand-700 mb-3">SOC 2 Readiness</p>
-              <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-5 leading-tight">{page.title}</h1>
+  return (
+    <>
+      <script
+        id={`readiness-faq-${page.slug}`}
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        id={`author-schema-${page.slug}`}
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+      />
+      <main className="min-h-screen flex flex-col bg-slate-100">
+        <Header />
+        <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8">
+            <Breadcrumb
+              items={[
+                { label: 'Home', href: '/' },
+                { label: 'SOC 2', href: '/soc-2' },
+                { label: 'Readiness', href: '/soc-2-readiness-index' },
+                { label: page.title }
+              ]}
+            />
+          </div>
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 pb-14 lg:pb-20 pt-4 text-center">
+            <div className="flex justify-center mb-6">
+              <VerifiedBy authorId="raphael" />
+            </div>
+            <p className="text-sm font-semibold uppercase tracking-wide text-brand-700 mb-3">SOC 2 Readiness</p>
+            <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-5 leading-tight">{page.title}</h1>
 
             <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-8 leading-relaxed">{page.summary}</p>
             <div className="flex justify-center">
@@ -182,9 +190,9 @@ export default function Soc2ReadinessGuidePage({ params }: PageProps) {
                 <li>Assign owners and a cadence, then track reviews in one place.</li>
                 <li>Bundle pentest findings, access reviews, or logs that prove it works.</li>
               </ol>
-                <Link href="/penetration-testing/compliance-buyers" className="text-sm text-brand-700 underline underline-offset-4">
-                  Related: Penetration Testing for SOC 2
-                </Link>
+              <Link href="/penetration-testing/compliance-buyers" className="text-sm text-brand-700 underline underline-offset-4">
+                Related: Penetration Testing for SOC 2
+              </Link>
             </div>
 
             <div className="bg-white border border-slate-200 rounded-xl p-6">
@@ -195,14 +203,13 @@ export default function Soc2ReadinessGuidePage({ params }: PageProps) {
                     <p className="font-semibold text-slate-900">{faq.question}</p>
                     <p className="text-sm text-slate-700 leading-relaxed">{faq.answer}</p>
                   </div>
-                  ))}
-                </div>
+                ))}
               </div>
+            </div>
 
-              <AuthorBio authorId="alex" />
+            <AuthorBio authorId="raphael" />
 
-              <div className="border border-slate-200 rounded-xl p-6 bg-white">
-
+            <div className="border border-slate-200 rounded-xl p-6 bg-white">
               <h3 className="text-lg font-semibold text-slate-900 mb-3">Related</h3>
               <div className="flex flex-wrap gap-3 text-sm">
                 <Link href={page.parent} className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">

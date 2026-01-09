@@ -25,7 +25,7 @@ const DEFAULT_SAMPLE_RATE = 0.05;
  */
 function redact(value: any): any {
   if (typeof value === 'string') {
-    // Basic email regex redaction: alex@company.com -> a***@company.com
+    // Basic email regex redaction: user@company.com -> u***@company.com
     return value.replace(/([^@\s]{1})[^@\s]*(@.+)/g, '$1***$2');
   }
   

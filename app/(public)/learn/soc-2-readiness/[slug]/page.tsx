@@ -54,12 +54,17 @@ export default function ReadinessControlPage({ params }: { params: { slug: strin
     })),
   };
 
-  const relatedControls = controls.filter((c) => control.related.includes(c.slug)).slice(0, 4);
+    const relatedControls = controls.filter((c) => control.related.includes(c.slug)).slice(0, 4);
+  
+    return (
+      <main className="min-h-screen flex flex-col bg-slate-100">
+        <script
+          id={`faq-${control.slug}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+        <Header />
 
-  return (
-    <main className="min-h-screen flex flex-col bg-slate-100">
-      <Script id={`faq-${control.slug}`} type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <Header />
 
       <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 lg:py-20 text-center">

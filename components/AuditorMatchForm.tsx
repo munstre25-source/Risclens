@@ -123,11 +123,11 @@ export function AuditorMatchForm() {
               type="email"
               name="email"
               required
-              value={formData.email}
-              onChange={handleInputChange}
-              className="form-input"
-              placeholder="alex@company.com"
-            />
+                value={formData.email}
+                onChange={handleInputChange}
+                className="form-input"
+                placeholder="raphael@company.com"
+              />
           </div>
           <div>
             <label className="form-label">Company Name</label>

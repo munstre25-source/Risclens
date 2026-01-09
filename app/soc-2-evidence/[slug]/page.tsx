@@ -57,7 +57,11 @@ export default function EvidencePage({ params }: PageProps) {
 
   return (
     <main className="min-h-screen flex flex-col bg-slate-100">
-      <Script id={`faq-${guide.slug}`} type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      <script
+        id={`faq-${guide.slug}`}
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <Header />
       <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-8">
