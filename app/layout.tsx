@@ -6,6 +6,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import Script from "next/script";
+import { ThemeProvider } from '@/components/ThemeProvider';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { HashScrollFix } from '@/components/HashScrollFix';
@@ -89,7 +90,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
       <head>
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-7BR1HET2Y2"
@@ -105,19 +106,20 @@ export default function RootLayout({
         </Script>
       </head>
         <body className="font-sans antialiased">
-          <Suspense fallback={null}>
-            <HashScrollFix />
-          </Suspense>
-          <Script
-          id="organization-schema"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-          {children}
-          {/* <ComplianceCopilot /> */}
-          <Analytics />
-
-        <SpeedInsights />
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <Suspense fallback={null}>
+              <HashScrollFix />
+            </Suspense>
+            <Script
+            id="organization-schema"
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          />
+            {children}
+            {/* <ComplianceCopilot /> */}
+            <Analytics />
+            <SpeedInsights />
+          </ThemeProvider>
       </body>
     </html>
   );

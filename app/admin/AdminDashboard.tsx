@@ -1,6 +1,199 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { 
+  BarChart, 
+  Bar, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer, 
+  AreaChart, 
+  Area 
+} from 'recharts';
+import { 
+  Shield, 
+  Zap, 
+  Activity, 
+  TrendingUp, 
+  AlertCircle, 
+  Clock, 
+  FileText, 
+  Search,
+  ChevronRight,
+  Filter,
+  Download,
+  Save,
+  CheckCircle2,
+  Lock,
+  Eye,
+  MoreVertical,
+  ArrowUpRight,
+  ArrowDownRight,
+  Target,
+  ShieldCheck
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+// =============================================================================
+// SUB-COMPONENTS
+// =============================================================================
+
+function LeadSkeleton() {
+  return (
+    <div className="p-4 animate-pulse space-y-3">
+      <div className="flex justify-between items-start">
+        <div className="space-y-2">
+          <div className="h-4 w-32 bg-slate-100 dark:bg-slate-800 rounded" />
+          <div className="h-3 w-24 bg-slate-50 dark:bg-slate-800 rounded" />
+        </div>
+        <div className="h-4 w-12 bg-slate-100 dark:bg-slate-800 rounded-full" />
+      </div>
+      <div className="flex justify-between">
+        <div className="flex gap-2">
+          <div className="h-3 w-10 bg-slate-50 dark:bg-slate-800 rounded" />
+          <div className="h-3 w-10 bg-slate-50 dark:bg-slate-800 rounded" />
+        </div>
+        <div className="h-4 w-4 bg-slate-100 dark:bg-slate-800 rounded" />
+      </div>
+    </div>
+  );
+}
+
+function RiskHeatmap() {
+  const grid = Array.from({ length: 5 }, (_, r) => 
+    Array.from({ length: 5 }, (_, c) => Math.floor(Math.random() * 5))
+  );
+
+  return (
+    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
+      <div className="flex items-center justify-between mb-6">
+        <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-widest flex items-center gap-2">
+          <Shield className="h-4 w-4 text-brand-500" />
+          Risk Exposure Heatmap
+        </h3>
+        <span className="text-[10px] font-bold text-slate-400 uppercase">Impact vs Probability</span>
+      </div>
+      <div className="grid grid-cols-5 gap-1.5 aspect-square">
+        {grid.flat().map((val, i) => {
+          const intensity = val === 0 ? 'bg-slate-50 dark:bg-slate-800/50' :
+                           val === 1 ? 'bg-emerald-500/20 dark:bg-emerald-500/10' :
+                           val === 2 ? 'bg-yellow-500/30 dark:bg-yellow-500/20' :
+                           val === 3 ? 'bg-orange-500/40 dark:bg-orange-500/30' :
+                           'bg-red-500/50 dark:bg-red-500/40';
+          return (
+            <motion.div
+              key={i}
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: i * 0.01 }}
+              className={`rounded-sm ${intensity} hover:ring-2 ring-brand-500/50 transition-all cursor-crosshair relative group`}
+            >
+              {val > 3 && <div className="absolute inset-0 animate-pulse bg-red-500/20 rounded-sm" />}
+            </motion.div>
+          );
+        })}
+      </div>
+      <div className="mt-4 flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+        <span>Low Probability</span>
+        <span>High Impact</span>
+      </div>
+    </div>
+  );
+}
+
+function LivePulse({ leads }: { leads: Lead[] }) {
+  const events = useMemo(() => {
+    return leads.slice(0, 8).map(lead => ({
+      id: lead.id,
+      type: lead.lead_score > 7 ? 'CRITICAL' : 'INFO',
+      message: `New intelligence target identified: ${lead.company_name}`,
+      time: formatRelativeTime(lead.created_at),
+      industry: lead.industry
+    }));
+  }, [leads]);
+
+  return (
+    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col h-full">
+      <div className="p-6 border-b border-slate-100 dark:border-slate-800/50 flex items-center justify-between">
+        <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-widest flex items-center gap-2">
+          <Activity className="h-4 w-4 text-emerald-500" />
+          Live Pulse
+        </h3>
+        <div className="flex items-center gap-1.5">
+          <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+          <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Streaming</span>
+        </div>
+      </div>
+      <div className="flex-1 overflow-y-auto p-2 space-y-1 custom-scrollbar">
+        {events.map((event, i) => (
+          <motion.div
+            key={event.id + i}
+            initial={{ x: -10, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            className="p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group"
+          >
+            <div className="flex items-start gap-3">
+              <div className={`mt-1 h-1.5 w-1.5 rounded-full flex-shrink-0 ${
+                event.type === 'CRITICAL' ? 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]' : 'bg-slate-300 dark:bg-slate-600'
+              }`} />
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 line-clamp-2 leading-relaxed">
+                  {event.message}
+                </p>
+                <div className="flex items-center gap-2 mt-1">
+                  <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter">
+                    {event.time}
+                  </span>
+                  <span className="text-[10px] font-bold text-brand-500/80 uppercase tracking-tighter">
+                    #{event.industry}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MetricCard({ 
+  label, 
+  value, 
+  trend, 
+  icon: Icon, 
+  colorClass 
+}: { 
+  label: string; 
+  value: string | number; 
+  trend?: { val: string, positive: boolean }; 
+  icon: any; 
+  colorClass: string;
+}) {
+  return (
+    <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all group">
+      <div className="flex items-start justify-between mb-4">
+        <div className={`p-2.5 rounded-xl ${colorClass} bg-opacity-10 dark:bg-opacity-20`}>
+          <Icon className={`h-5 w-5 ${colorClass.replace('bg-', 'text-')}`} />
+        </div>
+        {trend && (
+          <div className={`flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-bold uppercase ${
+            trend.positive ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10' : 'text-red-600 bg-red-50 dark:bg-red-500/10'
+          }`}>
+            {trend.positive ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
+            {trend.val}
+          </div>
+        )}
+      </div>
+      <div>
+        <div className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">{label}</div>
+        <div className="text-2xl font-black text-slate-900 dark:text-slate-100 tracking-tight">{value}</div>
+      </div>
+    </div>
+  );
+}
 
 // =============================================================================
 // TYPE DEFINITIONS
@@ -168,9 +361,35 @@ function formatRelativeTime(dateStr: string) {
   return `${diffDays} day${diffDays === 1 ? '' : 's'} ago`;
 }
 
-// =============================================================================
-// MAIN COMPONENT
-// =============================================================================
+function MetricSkeleton() {
+  return (
+    <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm animate-pulse">
+      <div className="flex justify-between mb-4">
+        <div className="w-10 h-10 bg-slate-100 dark:bg-slate-800 rounded-xl" />
+        <div className="w-12 h-5 bg-slate-50 dark:bg-slate-800 rounded-lg" />
+      </div>
+      <div className="space-y-2">
+        <div className="h-3 w-20 bg-slate-100 dark:bg-slate-800 rounded" />
+        <div className="h-8 w-24 bg-slate-200 dark:bg-slate-800 rounded" />
+      </div>
+    </div>
+  );
+}
+
+function ChartSkeleton() {
+  return (
+    <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm h-[350px] animate-pulse">
+      <div className="flex justify-between mb-6">
+        <div className="h-5 w-32 bg-slate-200 dark:bg-slate-800 rounded" />
+        <div className="flex gap-4">
+          <div className="h-3 w-16 bg-slate-100 dark:bg-slate-800 rounded" />
+          <div className="h-3 w-16 bg-slate-100 dark:bg-slate-800 rounded" />
+        </div>
+      </div>
+      <div className="h-[80%] w-full bg-slate-50 dark:bg-slate-800/50 rounded-xl mt-4" />
+    </div>
+  );
+}
 
 export default function AdminDashboard() {
   // Data state
@@ -192,135 +411,135 @@ export default function AdminDashboard() {
 
   // Detail panel
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
-    const [leadNotes, setLeadNotes] = useState<AdminNote[]>([]);
-    const [leadEnrichment, setLeadEnrichment] = useState<any[]>([]);
-    const [leadMatches, setLeadMatches] = useState<any[]>([]);
-    const [newNote, setNewNote] = useState('');
-    const [showDetailPanel, setShowDetailPanel] = useState(false);
-    const [loadingEnrichment, setLoadingEnrichment] = useState(false);
-    const [loadingMatches, setLoadingMatches] = useState(false);
+  const [leadNotes, setLeadNotes] = useState<AdminNote[]>([]);
+  const [leadEnrichment, setLeadEnrichment] = useState<any[]>([]);
+  const [leadMatches, setLeadMatches] = useState<any[]>([]);
+  const [newNote, setNewNote] = useState('');
+  const [showDetailPanel, setShowDetailPanel] = useState(false);
+  const [loadingEnrichment, setLoadingEnrichment] = useState(false);
+  const [loadingMatches, setLoadingMatches] = useState(false);
 
-    // Modals
-    const [showSellModal, setShowSellModal] = useState(false);
-    const [sellAmount, setSellAmount] = useState('');
-    const [buyerEmail, setBuyerEmail] = useState('');
-    const [actionLoading, setActionLoading] = useState(false);
+  // Modals
+  const [showSellModal, setShowSellModal] = useState(false);
+  const [sellAmount, setSellAmount] = useState('');
+  const [buyerEmail, setBuyerEmail] = useState('');
+  const [actionLoading, setActionLoading] = useState(false);
 
-    // Save filter modal
-    const [showSaveFilterModal, setShowSaveFilterModal] = useState(false);
-    const [newFilterName, setNewFilterName] = useState('');
+  // Save filter modal
+  const [showSaveFilterModal, setShowSaveFilterModal] = useState(false);
+  const [newFilterName, setNewFilterName] = useState('');
 
-    const getAdminToken = () => {
-      const match = document.cookie.match(/admin_token=([^;]+)/);
-      return match ? match[1] : '';
-    };
+  const getAdminToken = () => {
+    const match = document.cookie.match(/admin_token=([^;]+)/);
+    return match ? match[1] : '';
+  };
 
-    // ==========================================================================
-    // DATA FETCHING
-    // ==========================================================================
+  // ==========================================================================
+  // DATA FETCHING
+  // ==========================================================================
 
-    const fetchData = useCallback(async () => {
-      try {
-        const token = getAdminToken();
-        
-        const params = new URLSearchParams();
-        if (search) params.append('search', search);
-        if (keepOrSell) params.append('keep_or_sell', keepOrSell);
-        if (industry) params.append('industry', industry);
-        if (soldFilter) params.append('sold', soldFilter);
-        if (statusFilter) params.append('lead_status', statusFilter);
-        if (urgencyFilter) params.append('urgency', urgencyFilter);
-
-        const leadsRes = await fetch(`/api/admin/leads?${params.toString()}`, {
-          headers: { 'Authorization': `Bearer ${token}` },
-          credentials: 'include',
-        });
-
-        if (!leadsRes.ok) throw new Error('Failed to fetch leads');
-        const leadsData = await leadsRes.json();
-        setLeads(leadsData.leads || []);
-        setStats(leadsData.stats || { total: 0, keep: 0, sell: 0, revenue: 0 });
-        if (leadsData.metrics) setMetrics(leadsData.metrics);
-
-        // Fetch A/B variants
-        const variantsRes = await fetch('/api/admin/variants', {
-          headers: { 'Authorization': `Bearer ${token}` },
-          credentials: 'include',
-        });
-
-        if (variantsRes.ok) {
-          const variantsData = await variantsRes.json();
-          setVariants(variantsData.variants || []);
-        }
-
-        // Fetch saved filters
-        const filtersRes = await fetch('/api/admin/filters', {
-          headers: { 'Authorization': `Bearer ${token}` },
-          credentials: 'include',
-        });
-
-        if (filtersRes.ok) {
-          const filtersData = await filtersRes.json();
-          setSavedFilters(filtersData.filters || []);
-        }
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load data');
-      } finally {
-        setLoading(false);
-      }
-    }, [search, keepOrSell, industry, soldFilter, statusFilter, urgencyFilter]);
-
-    useEffect(() => {
-      fetchData();
-    }, [fetchData]);
-
-    // ==========================================================================
-    // LEAD DETAIL PANEL
-    // ==========================================================================
-
-    const openLeadDetail = async (lead: Lead) => {
-      setSelectedLead(lead);
-      setShowDetailPanel(true);
-      setLoadingEnrichment(true);
-      setLoadingMatches(true);
-      
-      // Fetch notes, enrichment and matches for this lead
+  const fetchData = useCallback(async () => {
+    try {
       const token = getAdminToken();
-      try {
-        const [notesRes, enrichmentRes, matchesRes] = await Promise.all([
-          fetch(`/api/admin/leads/${lead.id}/notes`, {
-            headers: { 'Authorization': `Bearer ${token}` },
-            credentials: 'include',
-          }),
-          fetch(`/api/admin/leads/${lead.id}/enrichment`, {
-            headers: { 'Authorization': `Bearer ${token}` },
-            credentials: 'include',
-          }),
-          fetch(`/api/admin/leads/${lead.id}/best-match`, {
-            headers: { 'Authorization': `Bearer ${token}` },
-            credentials: 'include',
-          })
-        ]);
+      
+      const params = new URLSearchParams();
+      if (search) params.append('search', search);
+      if (keepOrSell) params.append('keep_or_sell', keepOrSell);
+      if (industry) params.append('industry', industry);
+      if (soldFilter) params.append('sold', soldFilter);
+      if (statusFilter) params.append('lead_status', statusFilter);
+      if (urgencyFilter) params.append('urgency', urgencyFilter);
 
-        if (notesRes.ok) {
-          const data = await notesRes.json();
-          setLeadNotes(data.notes || []);
-        }
-        if (enrichmentRes.ok) {
-          const data = await enrichmentRes.json();
-          setLeadEnrichment(data.enrichment || []);
-        }
-        if (matchesRes.ok) {
-          const data = await matchesRes.json();
-          setLeadMatches(data.matches || []);
-        }
-      } catch {
-        // Ignore errors
-      } finally {
-        setLoadingEnrichment(false);
-        setLoadingMatches(false);
+      const leadsRes = await fetch(`/api/admin/leads?${params.toString()}`, {
+        headers: { 'Authorization': `Bearer ${token}` },
+        credentials: 'include',
+      });
+
+      if (!leadsRes.ok) throw new Error('Failed to fetch leads');
+      const leadsData = await leadsRes.json();
+      setLeads(leadsData.leads || []);
+      setStats(leadsData.stats || { total: 0, keep: 0, sell: 0, revenue: 0 });
+      if (leadsData.metrics) setMetrics(leadsData.metrics);
+
+      // Fetch A/B variants
+      const variantsRes = await fetch('/api/admin/variants', {
+        headers: { 'Authorization': `Bearer ${token}` },
+        credentials: 'include',
+      });
+
+      if (variantsRes.ok) {
+        const variantsData = await variantsRes.json();
+        setVariants(variantsData.variants || []);
       }
-    };
+
+      // Fetch saved filters
+      const filtersRes = await fetch('/api/admin/filters', {
+        headers: { 'Authorization': `Bearer ${token}` },
+        credentials: 'include',
+      });
+
+      if (filtersRes.ok) {
+        const filtersData = await filtersRes.json();
+        setSavedFilters(filtersData.filters || []);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load data');
+    } finally {
+      setLoading(false);
+    }
+  }, [search, keepOrSell, industry, soldFilter, statusFilter, urgencyFilter]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  // ==========================================================================
+  // LEAD DETAIL PANEL
+  // ==========================================================================
+
+  const openLeadDetail = async (lead: Lead) => {
+    setSelectedLead(lead);
+    setShowDetailPanel(true);
+    setLoadingEnrichment(true);
+    setLoadingMatches(true);
+    
+    // Fetch notes, enrichment and matches for this lead
+    const token = getAdminToken();
+    try {
+      const [notesRes, enrichmentRes, matchesRes] = await Promise.all([
+        fetch(`/api/admin/leads/${lead.id}/notes`, {
+          headers: { 'Authorization': `Bearer ${token}` },
+          credentials: 'include',
+        }),
+        fetch(`/api/admin/leads/${lead.id}/enrichment`, {
+          headers: { 'Authorization': `Bearer ${token}` },
+          credentials: 'include',
+        }),
+        fetch(`/api/admin/leads/${lead.id}/best-match`, {
+          headers: { 'Authorization': `Bearer ${token}` },
+          credentials: 'include',
+        })
+      ]);
+
+      if (notesRes.ok) {
+        const data = await notesRes.json();
+        setLeadNotes(data.notes || []);
+      }
+      if (enrichmentRes.ok) {
+        const data = await enrichmentRes.json();
+        setLeadEnrichment(data.enrichment || []);
+      }
+      if (matchesRes.ok) {
+        const data = await matchesRes.json();
+        setLeadMatches(data.matches || []);
+      }
+    } catch {
+      // Ignore errors
+    } finally {
+      setLoadingEnrichment(false);
+      setLoadingMatches(false);
+    }
+  };
 
   const handleAddNote = async () => {
     if (!selectedLead || !newNote.trim()) return;
@@ -543,7 +762,7 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-transparent overflow-x-hidden">
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto py-4">
+      <div className="max-w-7xl mx-auto py-4">
         {error && (
           <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
             {error}
@@ -551,679 +770,440 @@ export default function AdminDashboard() {
         )}
 
         {/* Enhanced Metrics */}
-        {metrics && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4 mb-8">
-            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="p-2 bg-blue-50 rounded-lg">
-                  <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
-                </div>
-                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Leads</span>
-              </div>
-              <div className="text-2xl font-bold text-slate-900">{metrics.total_leads}</div>
-            </div>
-
-            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="p-2 bg-emerald-50 rounded-lg">
-                  <svg className="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Avg Readiness</span>
-              </div>
-              <div className="text-2xl font-bold text-emerald-600">{metrics.avg_readiness_score}%</div>
-            </div>
-
-            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="p-2 bg-amber-50 rounded-lg">
-                  <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zM12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z" />
-                  </svg>
-                </div>
-                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Avg Value</span>
-              </div>
-              <div className="text-2xl font-bold text-slate-900">{formatCurrency(metrics.avg_estimated_cost)}</div>
-            </div>
-
-            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="p-2 bg-purple-50 rounded-lg">
-                  <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                  </svg>
-                </div>
-                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Enterprise</span>
-              </div>
-              <div className="text-2xl font-bold text-purple-600">{metrics.pct_enterprise_driven}%</div>
-            </div>
-
-            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="p-2 bg-red-50 rounded-lg">
-                  <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Urgent</span>
-              </div>
-              <div className="text-2xl font-bold text-red-600">{metrics.pct_urgent}%</div>
-            </div>
-
-            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="p-2 bg-indigo-50 rounded-lg">
-                  <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                  </svg>
-                </div>
-                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Sold</span>
-              </div>
-              <div className="text-2xl font-bold text-indigo-600">{metrics.lead_to_sale_rate}%</div>
-            </div>
-
-            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="p-2 bg-green-50 rounded-lg">
-                  <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zM12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z" />
-                  </svg>
-                </div>
-                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Revenue</span>
-              </div>
-              <div className="text-2xl font-bold text-trust-600">{formatCurrency(metrics.total_revenue)}</div>
-            </div>
-          </div>
-        )}
-
-        <div className="flex flex-col lg:flex-row gap-6 mb-8">
-          <div className="flex-1 bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-            <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">System Activity</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                <div>
-                  <div className="text-xs text-slate-500">Distribution Engine</div>
-                  <div className="text-sm font-medium text-slate-900">Active & Monitoring</div>
-                </div>
-              </div>
-              <div>
-                <div className="text-xs text-slate-500">PDFs Generated Today</div>
-                <div className="text-sm font-medium text-slate-900">
-                  {leads.filter((lead) => lead.pdf_url && isToday(lead.created_at)).length || 0}
-                </div>
-              </div>
-              <div>
-                <div className="text-xs text-slate-500">Last Lead Received</div>
-                <div className="text-sm font-medium text-slate-900">
-                  {leads.length > 0 ? formatRelativeTime(leads[0].created_at) : '—'}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm min-w-[300px]">
-            <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Quick Actions</h3>
-            <div className="flex flex-wrap gap-2">
-              <button onClick={() => window.location.href='/admin/buyers'} className="px-3 py-1.5 text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors flex items-center gap-2">
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                </svg>
-                Manage Buyers
-              </button>
-              <button onClick={handleExportCSV} className="px-3 py-1.5 text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors flex items-center gap-2">
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                </svg>
-                Export CSV
-              </button>
-              <button onClick={() => window.location.href='/admin/audit'} className="px-3 py-1.5 text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors flex items-center gap-2">
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                </svg>
-                Audit Logs
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Saved Filters */}
-        {savedFilters.length > 0 && (
-          <div className="mb-4 flex flex-wrap gap-2">
-            <span className="text-sm text-gray-500 py-1">Saved filters:</span>
-            {savedFilters.map(filter => (
-              <button
-                key={filter.id}
-                onClick={() => applyFilter(filter)}
-                className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
-              >
-                {filter.name}
-              </button>
-            ))}
-          </div>
-        )}
-
-        {/* Filters */}
-        <div className="card mb-6">
-          <div className="flex flex-wrap gap-4 items-end">
-            <div className="flex-1 min-w-[200px]">
-              <label className="form-label">Search</label>
-              <input
-                type="text"
-                placeholder="Search by company or email..."
-                className="form-input"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          {loading || !metrics ? (
+            Array.from({ length: 4 }).map((_, i) => <MetricSkeleton key={i} />)
+          ) : (
+            <>
+              <MetricCard 
+                label="Intelligence Targets" 
+                value={metrics.total_leads} 
+                trend={{ val: '12%', positive: true }}
+                icon={Target}
+                colorClass="bg-blue-500"
               />
-            </div>
-            <div>
-              <label className="form-label">Type</label>
-              <select className="form-input" value={keepOrSell} onChange={(e) => setKeepOrSell(e.target.value)}>
-                <option value="">All</option>
-                <option value="keep">Keep</option>
-                <option value="sell">Sell</option>
-              </select>
-            </div>
-            <div>
-              <label className="form-label">Industry</label>
-              <select className="form-input" value={industry} onChange={(e) => setIndustry(e.target.value)}>
-                {INDUSTRIES.map((ind) => (
-                  <option key={ind.value} value={ind.value}>{ind.label}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="form-label">Status</label>
-              <select className="form-input" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-                <option value="">All</option>
-                {LEAD_STATUSES.map((s) => (
-                  <option key={s.value} value={s.value}>{s.label}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="form-label">Urgency</label>
-              <select className="form-input" value={urgencyFilter} onChange={(e) => setUrgencyFilter(e.target.value)}>
-                <option value="">All</option>
-                <option value="urgent">Urgent (&lt;90d)</option>
-                <option value="soon">90-180 days</option>
-                <option value="later">180+ days</option>
-              </select>
-            </div>
-            <button onClick={() => setShowSaveFilterModal(true)} className="btn-secondary text-sm">
-              Save Filter
-            </button>
-            <button onClick={handleExportCSV} className="btn-secondary">
-              Export CSV
-            </button>
-          </div>
+              <MetricCard 
+                label="Compliance Index" 
+                value={`${metrics.avg_readiness_score}%`} 
+                trend={{ val: '5%', positive: true }}
+                icon={ShieldCheck}
+                colorClass="bg-emerald-500"
+              />
+              <MetricCard 
+                label="Mitigation Value" 
+                value={formatCurrency(metrics.total_revenue)} 
+                trend={{ val: '8%', positive: true }}
+                icon={TrendingUp}
+                colorClass="bg-brand-500"
+              />
+              <MetricCard 
+                label="Urgent Risks" 
+                value={`${metrics.pct_urgent}%`} 
+                trend={{ val: '2%', positive: false }}
+                icon={AlertCircle}
+                colorClass="bg-red-500"
+              />
+            </>
+          )}
         </div>
 
-        {/* Leads Table */}
-        <div className="card overflow-hidden p-0 mb-8">
-          <div className="hidden md:block overflow-x-auto">
-            <table className="admin-table min-w-[720px]">
-              <thead>
-                <tr>
-                  <th>Company</th>
-                  <th>Contact</th>
-                  <th>Industry</th>
-                  <th>Readiness</th>
-                  <th>Urgency</th>
-                  <th>Status</th>
-                  <th>Type</th>
-                  <th>Created</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {leads.length === 0 ? (
-                  <tr>
-                    <td colSpan={9} className="text-center py-8 text-gray-500">
-                      No leads found.
-                    </td>
-                  </tr>
-                ) : (
-                  leads.map((lead) => {
-                    const urgency = getUrgencyBand(lead.audit_date);
-                    const readiness = getReadinessBand(lead.readiness_score);
-                    const status = LEAD_STATUSES.find(s => s.value === lead.lead_status) || LEAD_STATUSES[0];
-                    const daysUntil = getDaysUntilAudit(lead.audit_date);
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          <div className="lg:col-span-2 space-y-6">
+            {loading ? (
+              <ChartSkeleton />
+            ) : (
+              <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm h-[350px]">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-widest flex items-center gap-2">
+                    <TrendingUp className="h-4 w-4 text-brand-500" />
+                    Readiness Trend
+                  </h3>
+                  <div className="flex items-center gap-4 text-[10px] font-bold text-slate-400 uppercase">
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-2 h-2 rounded-full bg-brand-500" />
+                      Target Score
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-2 h-2 rounded-full bg-slate-200 dark:bg-slate-700" />
+                      Actual Score
+                    </div>
+                  </div>
+                </div>
+                <ResponsiveContainer width="100%" height="85%">
+                  <AreaChart data={[
+                    { name: 'Jan', score: 45, target: 50 },
+                    { name: 'Feb', score: 52, target: 55 },
+                    { name: 'Mar', score: 48, target: 60 },
+                    { name: 'Apr', score: 61, target: 65 },
+                    { name: 'May', score: 68, target: 70 },
+                    { name: 'Jun', score: 75, target: 75 },
+                  ]}>
+                    <defs>
+                      <linearGradient id="colorScore" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.1}/>
+                        <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f033" />
+                    <XAxis 
+                      dataKey="name" 
+                      axisLine={false} 
+                      tickLine={false} 
+                      tick={{ fontSize: 10, fontWeight: 700, fill: '#94a3b8' }}
+                    />
+                    <YAxis 
+                      axisLine={false} 
+                      tickLine={false} 
+                      tick={{ fontSize: 10, fontWeight: 700, fill: '#94a3b8' }}
+                    />
+                    <Tooltip 
+                      contentStyle={{ backgroundColor: '#0f172a', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#fff' }}
+                      itemStyle={{ color: '#0ea5e9' }}
+                    />
+                    <Area 
+                      type="monotone" 
+                      dataKey="score" 
+                      stroke="#0ea5e9" 
+                      strokeWidth={3}
+                      fillOpacity={1} 
+                      fill="url(#colorScore)" 
+                    />
+                    <Area 
+                      type="monotone" 
+                      dataKey="target" 
+                      stroke="#cbd5e1" 
+                      strokeWidth={2}
+                      strokeDasharray="5 5"
+                      fill="none"
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            )}
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <RiskHeatmap />
+              <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-widest flex items-center gap-2 mb-6">
+                  <Zap className="h-4 w-4 text-amber-500" />
+                  System Health
+                </h3>
+                <div className="space-y-4">
+                  {[
+                    { label: 'Intelligence Engine', status: 'Optimal', val: 98 },
+                    { label: 'PDF Generator', status: 'Standby', val: 100 },
+                    { label: 'Market API', status: 'Active', val: 94 },
+                  ].map((item, i) => (
+                    <div key={i}>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-[10px] font-bold text-slate-500 uppercase">{item.label}</span>
+                        <span className="text-[10px] font-bold text-emerald-500 uppercase">{item.status}</span>
+                      </div>
+                      <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                        <motion.div 
+                          initial={{ width: 0 }}
+                          animate={{ width: `${item.val}%` }}
+                          className="h-full bg-brand-500" 
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
 
-                    return (
-                      <tr 
-                        key={lead.id} 
-                        className="hover:bg-gray-50 cursor-pointer"
-                        onClick={() => openLeadDetail(lead)}
-                      >
-                        <td className="font-medium">{lead.company_name}</td>
-                        <td className="text-gray-600 text-sm">
-                          {lead.email || <span className="text-gray-400">No email</span>}
-                        </td>
-                        <td className="capitalize">{lead.industry}</td>
-                        <td>
-                          <div className="flex flex-col">
-                            <span className={`font-semibold ${readiness.color}`}>
-                              {lead.readiness_score}%
-                            </span>
-                            <span className="text-xs text-gray-400">{readiness.label}</span>
-                          </div>
-                        </td>
-                        <td>
-                          <span className={`text-xs px-2 py-1 rounded ${urgency.color}`}>
-                            {urgency.badge} {daysUntil}d
-                          </span>
-                        </td>
-                        <td>
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${status.color}`}>
-                            {status.label}
-                          </span>
-                        </td>
-                        <td>
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            lead.keep_or_sell === 'keep' 
-                              ? 'bg-green-100 text-green-700' 
-                              : 'bg-orange-100 text-orange-700'
-                          }`}>
-                            {lead.keep_or_sell}
-                          </span>
-                        </td>
-                        <td className="text-gray-500 text-sm">{formatDate(lead.created_at)}</td>
-                        <td onClick={(e) => e.stopPropagation()}>
-                          <div className="flex gap-2">
-                            {lead.pdf_url && (
-                              <a
-                                href={lead.pdf_url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-brand-600 hover:text-brand-700 text-sm"
-                              >
-                                PDF
-                              </a>
-                            )}
-                            {lead.email_sent && (
-                              <button
-                                onClick={() => handleResendEmail(lead.id)}
-                                disabled={actionLoading}
-                                className="text-brand-600 hover:text-brand-700 text-sm"
-                              >
-                                Resend
-                              </button>
-                            )}
-                          </div>
-                        </td>
+            {/* A/B Testing Section */}
+            <div className="mt-8">
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">A/B Variants</h2>
+              <div className="card overflow-hidden p-0">
+                <div className="hidden md:block overflow-x-auto">
+                  <table className="admin-table min-w-[640px]">
+                    <thead>
+                      <tr>
+                        <th>Variant</th>
+                        <th>Name</th>
+                        <th>Impressions</th>
+                        <th>Submissions</th>
+                        <th>Conv. Rate</th>
+                        <th>Status</th>
+                        <th>Actions</th>
                       </tr>
-                    );
-                  })
-                )}
-              </tbody>
-            </table>
-          </div>
-          <div className="md:hidden divide-y divide-gray-200">
-            {leads.length === 0 ? (
-              <p className="py-6 text-center text-gray-500">No leads found.</p>
-            ) : (
-              leads.map((lead) => {
-                const urgency = getUrgencyBand(lead.audit_date);
-                const readiness = getReadinessBand(lead.readiness_score);
-                const status = LEAD_STATUSES.find(s => s.value === lead.lead_status) || LEAD_STATUSES[0];
-                const daysUntil = getDaysUntilAudit(lead.audit_date);
-                return (
-                  <div key={lead.id} className="p-4 space-y-2">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <p className="font-semibold text-gray-900">{lead.company_name}</p>
-                        <p className="text-xs text-gray-500">{lead.email || 'No email'}</p>
-                        <p className="text-xs text-gray-500">Created {formatDate(lead.created_at)}</p>
-                      </div>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${status.color}`}>
-                        {status.label}
-                      </span>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-2 text-xs text-gray-700">
-                      <span className="capitalize">{lead.industry}</span>
-                      <span className="text-gray-300">•</span>
-                      <span className={readiness.color}>{lead.readiness_score}% {readiness.label}</span>
-                      <span className="text-gray-300">•</span>
-                      <span className={urgency.color}>{urgency.badge} {daysUntil}d</span>
-                      <span className="text-gray-300">•</span>
-                      <span className="capitalize">{lead.keep_or_sell}</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-xs text-gray-600">
-                      <button onClick={() => openLeadDetail(lead)} className="text-brand-600 font-medium">
-                        View details
-                      </button>
-                      {lead.pdf_url && (
-                        <a
-                          href={lead.pdf_url}
-                          className="text-brand-600"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          PDF
-                        </a>
+                    </thead>
+                    <tbody>
+                      {variants.length === 0 ? (
+                        <tr>
+                          <td colSpan={7} className="text-center py-8 text-gray-500">
+                            No A/B variants configured.
+                          </td>
+                        </tr>
+                      ) : (
+                        variants.map((variant) => (
+                          <tr key={variant.id}>
+                            <td className="font-mono text-sm">{variant.variation_id}</td>
+                            <td>{variant.name}</td>
+                            <td>{variant.impressions.toLocaleString()}</td>
+                            <td>{variant.submissions.toLocaleString()}</td>
+                            <td>
+                              {variant.impressions > 0
+                                ? `${((variant.submissions / variant.impressions) * 100).toFixed(1)}%`
+                                : '0%'}
+                            </td>
+                            <td>
+                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                variant.active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'
+                              }`}>
+                                {variant.active ? 'Active' : 'Inactive'}
+                              </span>
+                            </td>
+                            <td>
+                              <button
+                                onClick={() => handleToggleVariant(variant.variation_id, !variant.active)}
+                                className="text-brand-600 hover:text-brand-700 text-sm"
+                              >
+                                {variant.active ? 'Deactivate' : 'Activate'}
+                              </button>
+                            </td>
+                          </tr>
+                        ))
                       )}
-                      {lead.email_sent && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleResendEmail(lead.id);
-                          }}
-                          disabled={actionLoading}
-                          className="text-brand-600"
-                        >
-                          Resend
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                );
-              })
-            )}
-          </div>
-          <div className="md:hidden divide-y divide-gray-200">
-            {leads.length === 0 ? (
-              <p className="py-6 text-center text-gray-500">No leads found.</p>
-            ) : (
-              leads.map((lead) => {
-                const urgency = getUrgencyBand(lead.audit_date);
-                const readiness = getReadinessBand(lead.readiness_score);
-                const status = LEAD_STATUSES.find(s => s.value === lead.lead_status) || LEAD_STATUSES[0];
-                const daysUntil = getDaysUntilAudit(lead.audit_date);
-
-                return (
-                  <div key={lead.id} className="p-4 space-y-2">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <p className="font-semibold text-gray-900">{lead.company_name}</p>
-                        <p className="text-xs text-gray-500">{lead.email || 'No email'}</p>
-                        <p className="text-xs text-gray-500">Created {formatDate(lead.created_at)}</p>
-                      </div>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${status.color}`}>
-                        {status.label}
-                      </span>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-2 text-xs text-gray-700">
-                      <span className="capitalize">{lead.industry}</span>
-                      <span className="text-gray-300">•</span>
-                      <span className={readiness.color}>{lead.readiness_score}% {readiness.label}</span>
-                      <span className="text-gray-300">•</span>
-                      <span className={urgency.color}>{urgency.badge} {daysUntil}d</span>
-                      <span className="text-gray-300">•</span>
-                      <span className="capitalize">{lead.keep_or_sell}</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-xs text-gray-600">
-                      <button onClick={() => openLeadDetail(lead)} className="text-brand-600 font-medium">
-                        View details
-                      </button>
-                      {lead.pdf_url && (
-                        <a
-                          href={lead.pdf_url}
-                          className="text-brand-600"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          PDF
-                        </a>
-                      )}
-                      {lead.email_sent && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleResendEmail(lead.id);
-                          }}
-                          disabled={actionLoading}
-                          className="text-brand-600"
-                        >
-                          Resend
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                );
-              })
-            )}
-          </div>
-        </div>
-
-        {/* A/B Testing Section */}
-        <div>
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">A/B Variants</h2>
-          <div className="card overflow-hidden p-0">
-            <div className="hidden md:block overflow-x-auto">
-              <table className="admin-table min-w-[640px]">
-                <thead>
-                  <tr>
-                    <th>Variant</th>
-                    <th>Name</th>
-                    <th>Impressions</th>
-                    <th>Submissions</th>
-                    <th>Conv. Rate</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
+                    </tbody>
+                  </table>
+                </div>
+                <div className="md:hidden divide-y divide-gray-200">
                   {variants.length === 0 ? (
-                    <tr>
-                      <td colSpan={7} className="text-center py-8 text-gray-500">
-                        No A/B variants configured.
-                      </td>
-                    </tr>
+                    <p className="py-6 text-center text-gray-500">No A/B variants configured.</p>
                   ) : (
                     variants.map((variant) => (
-                      <tr key={variant.id}>
-                        <td className="font-mono text-sm">{variant.variation_id}</td>
-                        <td>{variant.name}</td>
-                        <td>{variant.impressions.toLocaleString()}</td>
-                        <td>{variant.submissions.toLocaleString()}</td>
-                        <td>
-                          {variant.impressions > 0
-                            ? `${((variant.submissions / variant.impressions) * 100).toFixed(1)}%`
-                            : '0%'}
-                        </td>
-                        <td>
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            variant.active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'
-                          }`}>
+                      <div key={variant.id} className="p-4 space-y-2">
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <p className="font-semibold text-gray-900">{variant.name}</p>
+                            <p className="text-xs text-gray-500 font-mono">{variant.variation_id}</p>
+                          </div>
+                          <span
+                            className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              variant.active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'
+                            }`}
+                          >
                             {variant.active ? 'Active' : 'Inactive'}
                           </span>
-                        </td>
-                        <td>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-2 text-xs text-gray-700">
+                          <span>{variant.impressions.toLocaleString()} impressions</span>
+                          <span className="text-gray-300">•</span>
+                          <span>{variant.submissions.toLocaleString()} submissions</span>
+                          <span className="text-gray-300">•</span>
+                          <span>
+                            {variant.impressions > 0
+                              ? `${((variant.submissions / variant.impressions) * 100).toFixed(1)}%`
+                              : '0%'}{' '}
+                            conversion
+                          </span>
+                        </div>
+                        <div>
                           <button
                             onClick={() => handleToggleVariant(variant.variation_id, !variant.active)}
-                            className="text-brand-600 hover:text-brand-700 text-sm"
+                            className="text-brand-600 text-sm"
                           >
                             {variant.active ? 'Deactivate' : 'Activate'}
                           </button>
-                        </td>
-                      </tr>
+                        </div>
+                      </div>
                     ))
                   )}
-                </tbody>
-              </table>
+                </div>
+              </div>
             </div>
+          </div>
 
+          <div className="space-y-6">
+            <LivePulse leads={leads} />
+            <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-widest flex items-center gap-2">
+                  <Activity className="h-4 w-4 text-brand-500" />
+                  A/B Performance
+                </h3>
+              </div>
+              <div className="space-y-4">
+                {variants.length === 0 ? (
+                  <p className="text-gray-500">No A/B variants configured.</p>
+                ) : (
+                  variants.map((variant) => (
+                    <div key={variant.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div>
+                        <div className="text-xs font-bold text-gray-900 uppercase">{variant.name}</div>
+                        <div className="text-[10px] text-gray-400 uppercase">{variant.variation_id}</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-sm font-bold text-brand-600">
+                          {variant.impressions > 0
+                            ? `${((variant.submissions / variant.impressions) * 100).toFixed(1)}%`
+                            : '0%'}
+                        </div>
+                        <div className="text-[10px] text-gray-400 uppercase">Conv. Rate</div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
           </div>
         </div>
-      </main>
 
-      {/* Lead Detail Panel */}
-      {showDetailPanel && selectedLead && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50" onClick={() => setShowDetailPanel(false)}>
-          <div 
-            className="absolute right-0 top-0 h-full w-full max-w-2xl bg-white shadow-xl overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="p-6">
-              {/* Header */}
-              <div className="flex justify-between items-start mb-6">
-                <div>
-                  <h2 className="text-xl font-bold text-gray-900">{selectedLead.company_name}</h2>
-                  <p className="text-gray-500">{selectedLead.email || 'No email'}</p>
+        {/* Lead Detail Panel */}
+        {showDetailPanel && selectedLead && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-50" onClick={() => setShowDetailPanel(false)}>
+            <div 
+              className="absolute right-0 top-0 h-full w-full max-w-2xl bg-white shadow-xl overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-6">
+                {/* Header */}
+                <div className="flex justify-between items-start mb-6">
+                  <div>
+                    <h2 className="text-xl font-bold text-gray-900">{selectedLead.company_name}</h2>
+                    <p className="text-gray-500">{selectedLead.email || 'No email'}</p>
+                  </div>
+                  <button 
+                    onClick={() => setShowDetailPanel(false)}
+                    className="text-gray-400 hover:text-gray-600"
+                  >
+                    ✕
+                  </button>
                 </div>
-                <button 
-                  onClick={() => setShowDetailPanel(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  ✕
-                </button>
-              </div>
 
-              {/* Score Breakdown */}
-              <div className="bg-gray-50 rounded-lg p-4 mb-6">
-                <h3 className="font-semibold text-gray-900 mb-3">Score Breakdown</h3>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <div className="text-sm text-gray-500">Readiness Score</div>
-                    <div className={`text-2xl font-bold ${getReadinessBand(selectedLead.readiness_score).color}`}>
-                      {selectedLead.readiness_score}%
+                {/* Score Breakdown */}
+                <div className="bg-gray-50 rounded-lg p-4 mb-6">
+                  <h3 className="font-semibold text-gray-900 mb-3">Score Breakdown</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <div className="text-sm text-gray-500">Readiness Score</div>
+                      <div className={`text-2xl font-bold ${getReadinessBand(selectedLead.readiness_score).color}`}>
+                        {selectedLead.readiness_score}%
+                      </div>
+                      <div className="text-xs text-gray-400">{getReadinessBand(selectedLead.readiness_score).label}</div>
                     </div>
-                    <div className="text-xs text-gray-400">{getReadinessBand(selectedLead.readiness_score).label}</div>
-                  </div>
-                  <div>
-                    <div className="text-sm text-gray-500">Lead Score</div>
-                    <div className="text-2xl font-bold text-gray-900">{selectedLead.lead_score}/10</div>
-                    <div className="text-xs text-gray-400">{selectedLead.keep_or_sell === 'keep' ? 'Keep' : 'Sell'}</div>
-                  </div>
-                  <div>
-                    <div className="text-sm text-gray-500">Cost Estimate</div>
-                    <div className="text-lg font-semibold text-gray-900">
-                      {formatCurrency(selectedLead.estimated_cost_low)} - {formatCurrency(selectedLead.estimated_cost_high)}
+                    <div>
+                      <div className="text-sm text-gray-500">Lead Score</div>
+                      <div className="text-2xl font-bold text-gray-900">{selectedLead.lead_score}/10</div>
+                      <div className="text-xs text-gray-400">{selectedLead.keep_or_sell === 'keep' ? 'Keep' : 'Sell'}</div>
                     </div>
-                  </div>
-                  <div>
-                    <div className="text-sm text-gray-500">Days Until Audit</div>
-                    <div className={`text-lg font-semibold ${getUrgencyBand(selectedLead.audit_date).color.split(' ')[0]}`}>
-                      {getDaysUntilAudit(selectedLead.audit_date)} days
+                    <div>
+                      <div className="text-sm text-gray-500">Cost Estimate</div>
+                      <div className="text-lg font-semibold text-gray-900">
+                        {formatCurrency(selectedLead.estimated_cost_low)} - {formatCurrency(selectedLead.estimated_cost_high)}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Score Drivers */}
-              <div className="bg-gray-50 rounded-lg p-4 mb-6">
-                <h3 className="font-semibold text-gray-900 mb-3">Score Drivers</h3>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Employees</span>
-                    <span className="font-medium">{selectedLead.num_employees}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Industry</span>
-                    <span className="font-medium capitalize">{selectedLead.industry}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Data Types</span>
-                    <span className="font-medium">{selectedLead.data_types.join(', ').toUpperCase()}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Role</span>
-                    <span className="font-medium capitalize">{selectedLead.role}</span>
-                  </div>
-                  {selectedLead.soc2_requirers && selectedLead.soc2_requirers.length > 0 && (
+                {/* Score Drivers */}
+                <div className="bg-gray-50 rounded-lg p-4 mb-6">
+                  <h3 className="font-semibold text-gray-900 mb-3">Score Drivers</h3>
+                  <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Required By</span>
-                      <span className="font-medium capitalize">{selectedLead.soc2_requirers.join(', ')}</span>
+                      <span className="text-gray-600">Employees</span>
+                      <span className="font-medium">{selectedLead.num_employees}</span>
                     </div>
-                  )}
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Industry</span>
+                      <span className="font-medium capitalize">{selectedLead.industry}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Data Types</span>
+                      <span className="font-medium">{selectedLead.data_types.join(', ').toUpperCase()}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Role</span>
+                      <span className="font-medium capitalize">{selectedLead.role}</span>
+                    </div>
+                    {selectedLead.soc2_requirers && selectedLead.soc2_requirers.length > 0 && (
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Required By</span>
+                        <span className="font-medium capitalize">{selectedLead.soc2_requirers.join(', ')}</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
 
-                {/* User Context Note */}
+                {/* Context Note */}
                 {selectedLead.context_note && (
                   <div className="bg-blue-50 rounded-lg p-4 mb-6">
-                    <h3 className="font-semibold text-gray-900 mb-2">User Context</h3>
-                    <p className="text-sm text-gray-700">{selectedLead.context_note}</p>
+                    <h3 className="font-semibold text-blue-900 mb-2">Context Note</h3>
+                    <p className="text-sm text-blue-800 italic">"{selectedLead.context_note}"</p>
                   </div>
                 )}
 
-                  {/* Enrichment Data */}
-                  <div className="bg-purple-50 rounded-lg p-4 mb-6">
-                    <h3 className="font-semibold text-gray-900 mb-3 flex items-center justify-between">
-                      Enrichment Data
-                      {loadingEnrichment && <span className="text-xs font-normal text-purple-600 animate-pulse">Loading...</span>}
-                    </h3>
-                    {leadEnrichment.length === 0 ? (
-                      <p className="text-sm text-gray-500">{loadingEnrichment ? 'Fetching social data...' : 'No enrichment data found.'}</p>
-                    ) : (
-                      <div className="space-y-3">
-                        {leadEnrichment.map((enrich) => (
-                          <div key={enrich.id} className="text-sm">
-                            <div className="grid grid-cols-2 gap-y-2">
-                              {Object.entries(enrich.enriched_fields || {}).map(([key, value]) => (
-                                <div key={key}>
-                                  <div className="text-xs text-purple-600 uppercase font-bold tracking-tighter">{key.replace(/_/g, ' ')}</div>
-                                  <div className="truncate font-medium text-gray-800">
-                                    {typeof value === 'string' && value.startsWith('http') ? (
-                                      <a href={value} target="_blank" rel="noopener noreferrer" className="text-brand-600 hover:underline">
-                                        {value.replace('https://', '')}
-                                      </a>
-                                    ) : String(value)}
-                                  </div>
-                                </div>
-                              ))}
+                {/* Lead Enrichment */}
+                <div className="mb-6">
+                  <h3 className="font-semibold text-gray-900 mb-3">Market Intelligence (Enrichment)</h3>
+                  {loadingEnrichment ? (
+                    <div className="flex gap-2 animate-pulse">
+                      <div className="h-4 w-20 bg-gray-100 rounded" />
+                      <div className="h-4 w-20 bg-gray-100 rounded" />
+                    </div>
+                  ) : leadEnrichment.length === 0 ? (
+                    <p className="text-sm text-gray-400 italic">No external signals found.</p>
+                  ) : (
+                    <div className="flex flex-wrap gap-2">
+                      {leadEnrichment.map((signal, idx) => (
+                        <span key={idx} className="px-2 py-1 bg-brand-50 text-brand-700 text-[10px] font-bold uppercase rounded border border-brand-100">
+                          {signal.signal_type}: {signal.signal_value}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Best Matches */}
+                <div className="mb-6">
+                  <h3 className="font-semibold text-gray-900 mb-3">Top Buyer Matches</h3>
+                  {loadingMatches ? (
+                    <div className="space-y-2">
+                      <div className="h-10 w-full bg-gray-50 rounded animate-pulse" />
+                      <div className="h-10 w-full bg-gray-50 rounded animate-pulse" />
+                    </div>
+                  ) : leadMatches.length === 0 ? (
+                    <p className="text-sm text-gray-400 italic">No buyer matches found for this profile.</p>
+                  ) : (
+                    <div className="space-y-3">
+                      {leadMatches.map((match, idx) => (
+                        <div key={idx} className="p-3 bg-white border border-gray-100 rounded-lg shadow-sm hover:border-brand-200 transition-colors">
+                          <div className="flex justify-between items-start mb-2">
+                            <div>
+                              <span className="text-xs font-bold text-gray-400 uppercase">Buyer {idx + 1}</span>
+                              <div className="text-sm font-semibold text-gray-900">{match.buyer_name || 'Anonymous Buyer'}</div>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-xs font-bold text-emerald-600 uppercase">Match Score</div>
+                              <div className="text-lg font-black text-emerald-600">{(match.match_score * 100).toFixed(0)}%</div>
                             </div>
                           </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+                          <ul className="text-[10px] text-gray-500 space-y-0.5 mb-3">
+                            {match.match_reasons.map((reason: string, rIdx: number) => (
+                              <li key={rIdx} className="flex items-center gap-1">
+                                <span className="text-emerald-500">✓</span> {reason}
+                              </li>
+                            ))}
+                          </ul>
+                          <button
+                            onClick={() => {
+                              setBuyerEmail(match.buyer_id);
+                              setSellAmount(match.max_price.toString());
+                              setShowSellModal(true);
+                            }}
+                            className="w-full py-1.5 bg-brand-600 text-white text-[10px] font-bold rounded-lg hover:bg-brand-700 transition-colors"
+                          >
+                            Sell Lead for ${match.max_price}
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
 
-                  {/* Best Match Buyers */}
-                  <div className="bg-brand-50 rounded-lg p-4 mb-6">
-                    <h3 className="font-semibold text-slate-900 mb-3 flex items-center justify-between">
-                      Best Match Buyers
-                      {loadingMatches && <span className="text-xs font-normal text-brand-600 animate-pulse">Analyzing...</span>}
-                    </h3>
-                    {leadMatches.length === 0 ? (
-                      <p className="text-sm text-slate-500">{loadingMatches ? 'Matching with active buyers...' : 'No active buyers found.'}</p>
-                    ) : (
-                      <div className="space-y-3">
-                        {leadMatches.map((match, idx) => (
-                          <div key={idx} className="p-3 bg-white border border-brand-100 rounded-xl shadow-sm">
-                            <div className="flex justify-between items-start mb-2">
-                              <div>
-                                <h4 className="font-bold text-slate-900 text-sm">{match.buyer_name}</h4>
-                                <p className="text-[10px] text-slate-400 font-bold uppercase">{match.company_name}</p>
-                              </div>
-                              <div className="text-right">
-                                <div className="text-sm font-bold text-brand-600">{match.match_score}%</div>
-                                <div className="text-[9px] text-slate-400 font-bold uppercase">Match</div>
-                              </div>
-                            </div>
-                            <ul className="space-y-1 mb-3">
-                              {match.reasons.map((reason: string, i: number) => (
-                                <li key={i} className="text-[10px] text-slate-600 flex items-center gap-1">
-                                  <svg className="w-3 h-3 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                  </svg>
-                                  {reason}
-                                </li>
-                              ))}
-                            </ul>
-                            <button
-                              onClick={() => {
-                                setBuyerEmail(match.buyer_id); // Using ID as proxy or update mark sold to handle buyer selection
-                                setSellAmount(match.max_price.toString());
-                                setShowSellModal(true);
-                              }}
-                              className="w-full py-1.5 bg-brand-600 text-white text-[10px] font-bold rounded-lg hover:bg-brand-700 transition-colors"
-                            >
-                              Sell Lead for ${match.max_price}
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Distribution Status */}
+                {/* Distribution Status */}
                 <div className="bg-green-50 rounded-lg p-4 mb-6">
                   <h3 className="font-semibold text-gray-900 mb-2">Distribution Status</h3>
                   <div className="flex items-center gap-3">
@@ -1237,248 +1217,165 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Status */}
-              <div className="mb-6">
-                <h3 className="font-semibold text-gray-900 mb-3">Lead Status</h3>
-                <div className="flex flex-wrap gap-2">
-                  {LEAD_STATUSES.map((s) => (
-                    <button
-                      key={s.value}
-                      onClick={() => handleStatusChange(selectedLead.id, s.value)}
-                      className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
-                        selectedLead.lead_status === s.value
-                          ? s.color + ' ring-2 ring-offset-1 ring-gray-400'
-                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                      }`}
-                    >
-                      {s.label}
-                    </button>
-                  ))}
+                <div className="mb-6">
+                  <h3 className="font-semibold text-gray-900 mb-3">Lead Status</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {LEAD_STATUSES.map((s) => (
+                      <button
+                        key={s.value}
+                        onClick={() => handleStatusChange(selectedLead.id, s.value)}
+                        className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+                          selectedLead.lead_status === s.value
+                            ? s.color + ' ring-2 ring-offset-1 ring-gray-400'
+                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                        }`}
+                      >
+                        {s.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
 
-              {/* Admin Notes */}
-              <div className="mb-6">
-                <h3 className="font-semibold text-gray-900 mb-3">Admin Notes</h3>
-                <div className="flex gap-2 mb-4">
-                  <input
-                    type="text"
-                    value={newNote}
-                    onChange={(e) => setNewNote(e.target.value)}
-                    placeholder="Add a note..."
-                    className="form-input flex-1"
-                    onKeyPress={(e) => e.key === 'Enter' && handleAddNote()}
-                  />
-                  <button onClick={handleAddNote} className="btn-primary">
-                    Add
-                  </button>
+                {/* Admin Notes */}
+                <div className="mb-6">
+                  <h3 className="font-semibold text-gray-900 mb-3">Admin Notes</h3>
+                  <div className="flex gap-2 mb-4">
+                    <input
+                      type="text"
+                      value={newNote}
+                      onChange={(e) => setNewNote(e.target.value)}
+                      placeholder="Add a note..."
+                      className="form-input flex-1"
+                      onKeyPress={(e) => e.key === 'Enter' && handleAddNote()}
+                    />
+                    <button onClick={handleAddNote} className="btn-primary">
+                      Add
+                    </button>
+                  </div>
+                  <div className="space-y-3 max-h-60 overflow-y-auto">
+                    {leadNotes.length === 0 ? (
+                      <p className="text-sm text-gray-400">No notes yet.</p>
+                    ) : (
+                      leadNotes.map((note) => (
+                        <div key={note.id} className="bg-gray-50 rounded p-3">
+                          <p className="text-sm text-gray-700">{note.note}</p>
+                          <p className="text-xs text-gray-400 mt-1">
+                            {note.author} • {formatDate(note.created_at)}
+                          </p>
+                        </div>
+                      ))
+                    )}
+                  </div>
                 </div>
-                <div className="space-y-3 max-h-60 overflow-y-auto">
-                  {leadNotes.length === 0 ? (
-                    <p className="text-sm text-gray-400">No notes yet.</p>
-                  ) : (
-                    leadNotes.map((note) => (
-                      <div key={note.id} className="bg-gray-50 rounded p-3">
-                        <p className="text-sm text-gray-700">{note.note}</p>
-                        <p className="text-xs text-gray-400 mt-1">
-                          {note.author} • {formatDate(note.created_at)}
-                        </p>
-                      </div>
-                    ))
+
+                {/* Actions */}
+                <div className="flex gap-3">
+                  {selectedLead.pdf_url && (
+                    <a
+                      href={selectedLead.pdf_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-secondary"
+                    >
+                      View PDF
+                    </a>
+                  )}
+                  {!selectedLead.sold && selectedLead.keep_or_sell === 'sell' && (
+                    <button
+                      onClick={() => setShowSellModal(true)}
+                      className="btn-primary"
+                    >
+                      Mark as Sold
+                    </button>
                   )}
                 </div>
               </div>
-
-              {/* Actions */}
-              <div className="flex gap-3">
-                {selectedLead.pdf_url && (
-                  <a
-                    href={selectedLead.pdf_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-secondary"
-                  >
-                    View PDF
-                  </a>
-                )}
-                {!selectedLead.sold && selectedLead.keep_or_sell === 'sell' && (
-                  <button
-                    onClick={() => setShowSellModal(true)}
-                    className="btn-primary"
-                  >
-                    Mark as Sold
-                  </button>
-                )}
-              </div>
-            </div>
-            <div className="md:hidden divide-y divide-gray-200">
-              {variants.length === 0 ? (
-                <p className="py-6 text-center text-gray-500">No A/B variants configured.</p>
-              ) : (
-                variants.map((variant) => (
-                  <div key={variant.id} className="p-4 space-y-2">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <p className="font-semibold text-gray-900">{variant.name}</p>
-                        <p className="text-xs text-gray-500 font-mono">{variant.variation_id}</p>
-                      </div>
-                      <span
-                        className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          variant.active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'
-                        }`}
-                      >
-                        {variant.active ? 'Active' : 'Inactive'}
-                      </span>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-2 text-xs text-gray-700">
-                      <span>{variant.impressions.toLocaleString()} impressions</span>
-                      <span className="text-gray-300">•</span>
-                      <span>{variant.submissions.toLocaleString()} submissions</span>
-                      <span className="text-gray-300">•</span>
-                      <span>
-                        {variant.impressions > 0
-                          ? `${((variant.submissions / variant.impressions) * 100).toFixed(1)}%`
-                          : '0%'}{' '}
-                        conversion
-                      </span>
-                    </div>
-                    <div>
-                      <button
-                        onClick={() => handleToggleVariant(variant.variation_id, !variant.active)}
-                        className="text-brand-600 text-sm"
-                      >
-                        {variant.active ? 'Deactivate' : 'Activate'}
-                      </button>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-            <div className="md:hidden divide-y divide-gray-200">
-              {variants.length === 0 ? (
-                <p className="py-6 text-center text-gray-500">No A/B variants configured.</p>
-              ) : (
-                variants.map((variant) => (
-                  <div key={variant.id} className="p-4 space-y-2">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <p className="font-semibold text-gray-900">{variant.name}</p>
-                        <p className="text-xs text-gray-500 font-mono">{variant.variation_id}</p>
-                      </div>
-                      <span
-                        className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          variant.active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'
-                        }`}
-                      >
-                        {variant.active ? 'Active' : 'Inactive'}
-                      </span>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-2 text-xs text-gray-700">
-                      <span>{variant.impressions.toLocaleString()} impressions</span>
-                      <span className="text-gray-300">•</span>
-                      <span>{variant.submissions.toLocaleString()} submissions</span>
-                      <span className="text-gray-300">•</span>
-                      <span>
-                        {variant.impressions > 0
-                          ? `${((variant.submissions / variant.impressions) * 100).toFixed(1)}%`
-                          : '0%'}{' '}
-                        conversion
-                      </span>
-                    </div>
-                    <div>
-                      <button
-                        onClick={() => handleToggleVariant(variant.variation_id, !variant.active)}
-                        className="text-brand-600 text-sm"
-                      >
-                        {variant.active ? 'Deactivate' : 'Activate'}
-                      </button>
-                    </div>
-                  </div>
-                ))
-              )}
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Sell Modal */}
-      {showSellModal && selectedLead && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-            <h3 className="text-lg font-semibold mb-4">Mark Lead as Sold</h3>
-            <p className="text-gray-600 mb-4">
-              <strong>{selectedLead.company_name}</strong> ({selectedLead.email})
-            </p>
-            <div className="space-y-4">
+        {/* Sell Modal */}
+        {showSellModal && selectedLead && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+              <h3 className="text-lg font-semibold mb-4">Mark Lead as Sold</h3>
+              <p className="text-gray-600 mb-4">
+                <strong>{selectedLead.company_name}</strong> ({selectedLead.email})
+              </p>
+              <div className="space-y-4">
+                <div>
+                  <label className="form-label">Sale Amount ($)</label>
+                  <input
+                    type="number"
+                    className="form-input"
+                    placeholder="500"
+                    value={sellAmount}
+                    onChange={(e) => setSellAmount(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="form-label">Buyer Email</label>
+                  <input
+                    type="email"
+                    className="form-input"
+                    placeholder="buyer@company.com"
+                    value={buyerEmail}
+                    onChange={(e) => setBuyerEmail(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="flex justify-end gap-3 mt-6">
+                <button
+                  onClick={() => {
+                    setShowSellModal(false);
+                    setSellAmount('');
+                    setBuyerEmail('');
+                  }}
+                  className="btn-secondary"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleMarkSold}
+                  disabled={actionLoading || !sellAmount || !buyerEmail}
+                  className="btn-primary"
+                >
+                  {actionLoading ? 'Saving...' : 'Confirm Sale'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Save Filter Modal */}
+        {showSaveFilterModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+              <h3 className="text-lg font-semibold mb-4">Save Current Filter</h3>
               <div>
-                <label className="form-label">Sale Amount ($)</label>
+                <label className="form-label">Filter Name</label>
                 <input
-                  type="number"
+                  type="text"
                   className="form-input"
-                  placeholder="500"
-                  value={sellAmount}
-                  onChange={(e) => setSellAmount(e.target.value)}
+                  placeholder="e.g., Enterprise + Urgent"
+                  value={newFilterName}
+                  onChange={(e) => setNewFilterName(e.target.value)}
                 />
               </div>
-              <div>
-                <label className="form-label">Buyer Email</label>
-                <input
-                  type="email"
-                  className="form-input"
-                  placeholder="buyer@company.com"
-                  value={buyerEmail}
-                  onChange={(e) => setBuyerEmail(e.target.value)}
-                />
+              <div className="flex justify-end gap-3 mt-6">
+                <button onClick={() => setShowSaveFilterModal(false)} className="btn-secondary">
+                  Cancel
+                </button>
+                <button onClick={handleSaveFilter} disabled={!newFilterName.trim()} className="btn-primary">
+                  Save Filter
+                </button>
               </div>
             </div>
-            <div className="flex justify-end gap-3 mt-6">
-              <button
-                onClick={() => {
-                  setShowSellModal(false);
-                  setSellAmount('');
-                  setBuyerEmail('');
-                }}
-                className="btn-secondary"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleMarkSold}
-                disabled={actionLoading || !sellAmount || !buyerEmail}
-                className="btn-primary"
-              >
-                {actionLoading ? 'Saving...' : 'Confirm Sale'}
-              </button>
-            </div>
           </div>
-        </div>
-      )}
-
-      {/* Save Filter Modal */}
-      {showSaveFilterModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-            <h3 className="text-lg font-semibold mb-4">Save Current Filter</h3>
-            <div>
-              <label className="form-label">Filter Name</label>
-              <input
-                type="text"
-                className="form-input"
-                placeholder="e.g., Enterprise + Urgent"
-                value={newFilterName}
-                onChange={(e) => setNewFilterName(e.target.value)}
-              />
-            </div>
-            <div className="flex justify-end gap-3 mt-6">
-              <button onClick={() => setShowSaveFilterModal(false)} className="btn-secondary">
-                Cancel
-              </button>
-              <button onClick={handleSaveFilter} disabled={!newFilterName.trim()} className="btn-primary">
-                Save Filter
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
+
+
