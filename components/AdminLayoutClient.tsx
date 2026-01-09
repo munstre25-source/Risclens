@@ -229,17 +229,17 @@ export function AdminLayoutClient({
           {/* Mobile top nav */}
           <header className="md:hidden sticky top-0 z-20 bg-white border-b border-slate-200 relative">
             <div className="px-4 py-3 flex items-center justify-between">
-                          <Link href="/admin" className="flex items-center gap-2">
-                              <Image
-                                src="/logo/logo-wordmark.png"
-                                alt="RiscLens"
-                                width={250}
-                                height={110}
-                                className="w-auto"
-                                style={{ height: '5rem' }}
-                              />
-                            <span className="text-sm font-semibold text-slate-900">Admin</span>
-                          </Link>
+                            <Link href="/admin" className="flex items-center gap-2">
+                                <Image
+                                  src="/logo/logo-wordmark.png"
+                                  alt="RiscLens"
+                                  width={250}
+                                  height={110}
+                                  className="w-auto"
+                                  style={{ height: '6.25rem' }}
+                                />
+                              <span className="text-sm font-semibold text-slate-900">Admin</span>
+                            </Link>
               <button
                 type="button"
                 className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600"

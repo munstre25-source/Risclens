@@ -335,11 +335,11 @@ export default function AdminLayoutClient({
 
         <div className="flex-1 flex flex-col">
           {/* Mobile Header */}
-          <header className="lg:hidden sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
-            <div className="px-4 h-14 flex items-center justify-between">
-              <Link href="/admin" className="flex items-center gap-2">
-                <Image src="/logo/logo-wordmark.png" alt="RiscLens" width={100} height={30} className="dark:invert h-6 w-auto" />
-              </Link>
+            <header className="lg:hidden sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+              <div className="px-4 h-14 flex items-center justify-between">
+                <Link href="/admin" className="flex items-center gap-2">
+                  <Image src="/logo/logo-wordmark.png" alt="RiscLens" width={100} height={30} className="dark:invert h-[30px] w-auto" />
+                </Link>
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setIsCommandPaletteOpen(true)}

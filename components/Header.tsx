@@ -212,14 +212,14 @@ export default function Header() {
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 lg:h-24 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3 shrink-0">
-          <Image
-            src="/logo/logo-wordmark.png"
-            alt="RiscLens"
-            width={280}
-            height={84}
-            priority
-            className="h-10 lg:h-20 w-auto object-contain"
-          />
+            <Image
+              src="/logo/logo-wordmark.png"
+              alt="RiscLens"
+              width={280}
+              height={84}
+              priority
+              className="h-[50px] lg:h-20 w-auto object-contain"
+            />
         </Link>
 
         <nav className="hidden lg:flex items-center gap-1">
@@ -435,15 +435,15 @@ export default function Header() {
             >
               <div className="px-4 py-4 space-y-2 h-full overflow-y-auto overscroll-contain">
                 <div className="flex items-center justify-between pb-2 border-b border-slate-100 mb-2">
-                  <Link href="/" className="flex items-center gap-3 shrink-0" onClick={() => setMobileOpen(false)}>
-                    <Image
-                      src="/logo/logo-wordmark.png"
-                      alt="RiscLens"
-                      width={280}
-                      height={82}
-                      className="h-10 w-auto object-contain"
-                    />
-                  </Link>
+                    <Link href="/" className="flex items-center gap-3 shrink-0" onClick={() => setMobileOpen(false)}>
+                      <Image
+                        src="/logo/logo-wordmark.png"
+                        alt="RiscLens"
+                        width={280}
+                        height={82}
+                        className="h-[50px] w-auto object-contain"
+                      />
+                    </Link>
                   <button
                     type="button"
                     className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50"
