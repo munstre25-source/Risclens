@@ -1,5 +1,5 @@
 # RiscLens Financial Analysis & Monetization Strategy
-**Proprietary & Confidential - Prepared for isclens**
+**Proprietary & Confidential - Prepared for Risclens**
 **Date: January 9, 2026**
 
 ## 1. Executive Summary

@@ -1,7 +1,7 @@
 # RiscLens SOC 2 Cost Calculator
 
 **Proprietary Software: All Rights Reserved**
-Copyright © 2026 isclens. Full IP and all rights belong exclusively to isclens. See [NOTICE.md](NOTICE.md) for details.
+Copyright © 2026 Risclens. Full IP and all rights belong exclusively to Risclens. See [NOTICE.md](NOTICE.md) for details.
 
 ---
 
@@ -47,7 +47,7 @@ A production-ready SOC 2 compliance cost calculator built with Next.js (App Rout
 ```bash
 # Clone the repository
 git clone <repo-url>
-cd risclens
+cd rRisclens
 
 # Install dependencies
 npm install
@@ -386,8 +386,8 @@ The in-memory rate limiter resets on cold starts. For production with multiple i
 
 ## License
 
-Copyright © 2026 isclens. All rights reserved. IP and full rights belong to isclens.
+Copyright © 2026 Risclens. All rights reserved. IP and full rights belong to Risclens.
 
 ## Support
 
-For issues, contact: support@risclens.com
+For issues, contact: support@rRisclens.com

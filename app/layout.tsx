@@ -1,6 +1,6 @@
 /**
- * Copyright © 2026 isclens. All rights reserved.
- * Full IP and all rights belong to isclens.
+ * Copyright © 2026 Risclens. All rights reserved.
+ * Full IP and all rights belong to Risclens.
  */
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
