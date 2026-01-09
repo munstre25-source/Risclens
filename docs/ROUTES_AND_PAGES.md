@@ -16,7 +16,14 @@ Route map with purpose, key components, and data dependencies. See [PRODUCT_OVER
 | `/when-do-you-need-soc-2` | Timing guidance. | Guide components | Static |
 | `/soc-2-readiness/[slug]` (+ startups/enterprise-sales/saas/fintech) | Industry/vertical readiness guides. | Guide components | Static |
 | `/soc-2-vs-iso-27001` (+ `[slug]`) | Framework comparison hub. | Guide components | Static |
+| `/compare` | Unified platform comparison hub (24+ pairings). | `CompareHub`, `PlatformMatchupCard` | Static |
+| `/compliance/compare/[slug]` | Programmatic platform vs platform showdowns (Comparison Factory). | `ComparisonLayout`, `FeatureGrid` | Static |
+| `/compliance/directory` | Compliance platform intelligence directory. | `DirectoryGrid`, `FilterSidebar` | Static |
+| `/compliance/directory/[slug]` | Detailed platform profiles with cross-links to comparisons. | `CompanyProfile`, `RelatedComparisons` | Static |
 | `/soc-2/industries` (+ `[slug]`) | Industries hub + detail pages. | `Header`, guide components | Static |
+| `/ai-compliance` | AI compliance roadmap and requirements. | Guide components | Static |
+| `/ai-governance-readiness-index` | Readiness assessment for AI governance. | Assessment form, results | Static |
+| `/iso-42001-calculator` | Cost and readiness estimator for AI security standard. | Calculator components | Static |
 | `/soc-2-evidence/[slug]` | Evidence library entries with links to readiness pages. | Evidence content modules | Static |
 | `/soc-2/guides`, `/learn/soc-2-readiness` (+ `[slug]`) | Guide hubs and learning content. | Guide list components, `LearnMoreLink` | Static |
 | `/soc-2-sales` (+ `[slug]`) | Enterprise sales enablement guides (bridge letters, qualified opinions, multi-framework mapping). | Guide components | Static |

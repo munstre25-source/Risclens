@@ -11,9 +11,9 @@ export async function GET(
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  try {
-    const { id } = await params;
-    const webhooks = await getBuyerWebhooks(id);
+    try {
+      const { id } = params;
+      const webhooks = await getBuyerWebhooks(id);
     return NextResponse.json({ webhooks });
   } catch (err) {
     console.error('Failed to fetch webhooks:', err);
@@ -30,9 +30,9 @@ export async function POST(
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  try {
-    const { id: buyerId } = await params;
-    const body = await req.json();
+    try {
+      const { id: buyerId } = params;
+      const body = await req.json();
     const webhook = await upsertBuyerWebhook({ ...body, buyer_id: buyerId });
     return NextResponse.json({ webhook });
   } catch (err) {

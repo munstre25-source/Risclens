@@ -11,9 +11,9 @@ export async function DELETE(
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  try {
-    const { id } = await params;
-    await deleteBuyer(id);
+    try {
+      const { id } = params;
+      await deleteBuyer(id);
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error('Failed to delete buyer:', err);

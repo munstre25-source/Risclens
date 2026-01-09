@@ -1,7 +1,7 @@
 # RiscLens SOC 2 Cost Calculator
 
 **Proprietary Software: All Rights Reserved**
-Copyright © 2026 Raphael Ngare Momanyi. Full IP and all rights belong exclusively to Raphael Ngare Momanyi. See [NOTICE.md](NOTICE.md) for details.
+Copyright © 2026 isclens. Full IP and all rights belong exclusively to isclens. See [NOTICE.md](NOTICE.md) for details.
 
 ---
 
@@ -386,7 +386,7 @@ The in-memory rate limiter resets on cold starts. For production with multiple i
 
 ## License
 
-Copyright © 2026 Raphael Ngare Momanyi. All rights reserved. IP and full rights belong to Raphael Ngare Momanyi.
+Copyright © 2026 isclens. All rights reserved. IP and full rights belong to isclens.
 
 ## Support
 

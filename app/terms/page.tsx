@@ -97,14 +97,14 @@ export default function TermsPage() {
             </ul>
           </section>
 
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Intellectual Property</h2>
-            <p className="text-gray-600">
-              All content, branding, algorithms, and materials on this site are the exclusive property of Raphael Ngare Momanyi. 
-              Raphael Ngare Momanyi holds full IP and all rights to the RiscLens platform and its derivatives.
-              You may not reproduce, distribute, or create derivative works without explicit written permission from Raphael Ngare Momanyi.
-            </p>
-          </section>
+            <section className="mb-8">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">Intellectual Property</h2>
+              <p className="text-gray-600">
+                All content, branding, algorithms, and materials on this site are the exclusive property of RiscLens. 
+                RiscLens holds full IP and all rights to the platform and its derivatives.
+                You may not reproduce, distribute, or create derivative works without explicit written permission.
+              </p>
+            </section>
 
           <section className="mb-8">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Limitation of Liability</h2>

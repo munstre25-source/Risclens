@@ -1,70 +1,80 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '@/lib/supabase';
-import { validateAdminAuth } from '@/lib/validation';
+import { requireAdmin } from '@/lib/supabase-auth';
 
 export async function POST(request: NextRequest) {
+  const authorized = await requireAdmin(request);
+  if (!authorized) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
-    const adminSecret = process.env.ADMIN_SECRET;
-    const authHeader = request.headers.get('authorization') || request.headers.get('x-admin-secret');
-    const cookieToken = request.cookies.get('admin_token')?.value;
-    
-    const isAuthed = 
-      (adminSecret && cookieToken === adminSecret) ||
-      (adminSecret && validateAdminAuth(authHeader, adminSecret));
-    
-    if (!isAuthed) {
-      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+    const { lead_id } = await request.json();
+    const supabase = getSupabaseAdmin();
+
+    // Fetch lead details
+    const { data: lead, error: leadError } = await supabase
+      .from('leads')
+      .select('*')
+      .eq('id', lead_id)
+      .single();
+
+    if (leadError || !lead) {
+      return NextResponse.json({ error: 'Lead not found' }, { status: 404 });
     }
 
-    const { targetPage, currentPerformance } = await request.json();
-    const openaiApiKey = process.env.OPENAI_API_KEY;
+    // OODA Logic: Observe, Orient, Decide, Act
+    let suggestions = [];
 
-    if (!openaiApiKey) {
-      return NextResponse.json({ success: false, error: 'OpenAI API key not configured' }, { status: 500 });
+    // Observe & Orient
+    if (lead.lead_score >= 8) {
+      suggestions.push({
+        priority: 'high',
+        action: 'Immediate Outreach',
+        reason: 'High-intent score detected. Enterprise readiness verified.',
+        logic: 'Observe: Lead score > 8. Orient: This is a whale. Act: Manual personal email.'
+      });
     }
 
-    const prompt = `
-      You are an expert conversion rate optimization (CRO) specialist. 
-      Analyze the performance of the following page and suggest 3 new A/B test variations (Headlines and CTA texts) to improve conversion.
+    if (lead.readiness_score < 40) {
+      suggestions.push({
+        priority: 'medium',
+        action: 'Send Readiness Checklist',
+        reason: 'Lead is in early stages of compliance.',
+        logic: 'Observe: Readiness < 40%. Orient: Educational gap. Act: Drip campaign step 1.'
+      });
+    }
 
-      Page: ${targetPage}
-      Current Performance: ${JSON.stringify(currentPerformance)}
+    if (lead.keep_or_sell === 'sell' && !lead.sold) {
+      suggestions.push({
+        priority: 'high',
+        action: 'Promote to Auction',
+        reason: 'Lead is designated for sale but has no active bids.',
+        logic: 'Observe: KeepOrSell=sell. Orient: Idle inventory. Act: Push to Auditor Portal top-tier.'
+      });
+    }
 
-      The goal is to increase the number of lead submissions from people viewing the results.
-      
-      Provide the suggestions in JSON format as an array of objects:
-      [
-        {
-          "name": "Benefit-Driven Variant",
-          "headline": "...",
-          "cta_text": "..."
-        },
-        ...
-      ]
-    `;
+    if (lead.industry === 'saas' && lead.num_employees > 50) {
+      suggestions.push({
+        priority: 'medium',
+        action: 'Pitch "Multi-Framework" Roadmap',
+        reason: 'Mid-sized SaaS firms often need ISO 27001 alongside SOC 2.',
+        logic: 'Observe: Industry=SaaS, Size>50. Orient: Complexity growth. Act: Upsell pitch.'
+      });
+    }
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${openaiApiKey}`
-      },
-      body: JSON.stringify({
-        model: 'gpt-4o',
-        messages: [{ role: 'system', content: 'You are a CRO expert.' }, { role: 'user', content: prompt }],
-        response_format: { type: 'json_object' }
-      })
-    });
+    if (suggestions.length === 0) {
+      suggestions.push({
+        priority: 'low',
+        action: 'Monitor for Signals',
+        reason: 'No immediate red/green flags.',
+        logic: 'Observe: Default state. Orient: Steady state. Act: Routine follow-up in 7 days.'
+      });
+    }
 
-    const result = await response.json();
-    const suggestions = JSON.parse(result.choices[0].message.content).suggestions || JSON.parse(result.choices[0].message.content);
-
-    return NextResponse.json({
-      success: true,
-      suggestions
-    });
+    return NextResponse.json({ success: true, suggestions });
   } catch (error) {
     console.error('OODA Suggest error:', error);
-    return NextResponse.json({ success: false, error: 'Failed to generate suggestions' }, { status: 500 });
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

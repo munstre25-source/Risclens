@@ -182,11 +182,11 @@ export default function Soc2CostPage() {
 
           <section className="py-16 lg:py-20 bg-white border-t border-slate-200">
             <div className="max-w-3xl mx-auto px-4 sm:px-6 space-y-10">
-              <ExpertReview 
-                authorName="Raphael Ngare Momanyi" 
-                authorTitle="Head of Compliance Strategy (CPA)" 
-                date="January 5, 2026" 
-              />
+                <ExpertReview 
+                  authorName="RiscLens" 
+                  authorTitle="Head of Compliance Strategy (CPA)" 
+                  date="January 5, 2026" 
+                />
               
               <div>
                 <h2 className="text-2xl font-bold text-slate-900 mb-4">What shapes SOC 2 pricing?</h2>

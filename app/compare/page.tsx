@@ -13,6 +13,28 @@ export const metadata: Metadata = {
 };
 
 export default function ComparisonsHubPage() {
+  const platforms = ['vanta', 'drata', 'secureframe', 'thoropass', 'laika', 'strike-graph'];
+  const programmaticComparisons = [];
+  
+  for (let i = 0; i < platforms.length; i++) {
+    for (let j = i + 1; j < platforms.length; j++) {
+      const toolA = platforms[i];
+      const toolB = platforms[j];
+      const slug = `${toolA}-vs-${toolB}`;
+      
+      // Check if it already exists in manual comparisons to avoid duplicates
+      if (!toolComparisons.find(c => c.slug === slug)) {
+        programmaticComparisons.push({
+          slug,
+          toolA: toolA.charAt(0).toUpperCase() + toolA.slice(1),
+          toolB: toolB.charAt(0).toUpperCase() + toolB.slice(1),
+          description: `The deterministic comparison for B2B startups. We analyze cost, speed-to-audit, and auditor flexibility for ${toolA.charAt(0).toUpperCase() + toolA.slice(1)} and ${toolB.charAt(0).toUpperCase() + toolB.slice(1)}.`,
+          isProgrammatic: true
+        });
+      }
+    }
+  }
+
   return (
     <main className="min-h-screen flex flex-col bg-slate-50">
       <Header />
@@ -50,7 +72,12 @@ export default function ComparisonsHubPage() {
       {/* Comparisons Grid */}
       <section className="py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="mb-12">
+            <h2 className="text-2xl font-bold text-slate-900 mb-2">Curated Matchups</h2>
+            <p className="text-slate-600">High-intent comparisons with deep pricing and feature analysis.</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
             {toolComparisons.map((comparison) => (
               <Link 
                 key={comparison.slug}
@@ -87,8 +114,35 @@ export default function ComparisonsHubPage() {
             ))}
           </div>
 
+          <div className="mb-12">
+            <h2 className="text-2xl font-bold text-slate-900 mb-2">Platform Comparisons</h2>
+            <p className="text-slate-600">Programmatic intelligence across the top 6 compliance automation tools.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {programmaticComparisons.map((comparison) => (
+              <Link 
+                key={comparison.slug}
+                href={`/compliance/compare/${comparison.slug}`}
+                className="group flex items-center justify-between bg-white border border-slate-200 rounded-xl p-5 transition-all hover:border-brand-200 hover:shadow-md"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center justify-center w-8 h-8 rounded bg-brand-50 text-brand-600 font-bold text-xs uppercase">
+                    vs
+                  </div>
+                  <span className="font-bold text-slate-800 group-hover:text-brand-700 transition-colors">
+                    {comparison.toolA} vs {comparison.toolB}
+                  </span>
+                </div>
+                <svg className="w-4 h-4 text-slate-300 group-hover:text-brand-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+            ))}
+          </div>
+
           {/* Need help? card */}
-          <div className="mt-16 bg-brand-600 rounded-3xl p-8 lg:p-12 text-center text-white overflow-hidden relative">
+          <div className="mt-20 bg-brand-600 rounded-3xl p-8 lg:p-12 text-center text-white overflow-hidden relative">
             <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
             <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/4 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
             

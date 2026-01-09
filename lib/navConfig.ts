@@ -38,21 +38,22 @@ export const navConfig = {
       { label: 'Security Signals', href: '/compliance/directory' },
     ]
   },
-  resources: {
-    label: 'Resources',
-    about: { label: 'About RiscLens', href: '/about' },
-    guides: [
-      { label: 'Sales & Operations', href: '/soc-2-sales' },
-      { label: 'Type I vs Type II', href: '/soc-2-type-i-vs-type-ii' },
-      { label: 'All SOC 2 Guides', href: '/soc-2/guides' },
-    ],
-    comparisons: [
-      { label: 'Vanta vs Drata', href: '/compare/vanta-vs-drata' },
-      { label: 'Drata vs Secureframe', href: '/compare/drata-vs-secureframe' },
-      { label: 'Thoropass vs Vanta', href: '/compare/thoropass-vs-vanta' },
-    ],
-    viewAll: { label: 'View all comparisons →', href: '/compare' },
-  },
+    resources: {
+      label: 'Resources',
+      about: { label: 'About RiscLens', href: '/about' },
+      guides: [
+        { label: 'Sales & Operations', href: '/soc-2-sales' },
+        { label: 'Type I vs Type II', href: '/soc-2-type-i-vs-type-ii' },
+        { label: 'All SOC 2 Guides', href: '/soc-2/guides' },
+      ],
+      comparisons: [
+        { label: 'Vanta vs Drata', href: '/compare/vanta-vs-drata' },
+        { label: 'Drata vs Secureframe', href: '/compare/drata-vs-secureframe' },
+        { label: 'Thoropass vs Vanta', href: '/compare/thoropass-vs-vanta' },
+      ],
+      viewAll: { label: 'View 24+ Comparisons →', href: '/compare' },
+    },
+
 };
 
 export const industriesNav = industryCostLinks.map(({ label, hubHref }) => ({

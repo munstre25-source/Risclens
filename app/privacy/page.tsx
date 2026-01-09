@@ -39,8 +39,8 @@ export default function PrivacyPage() {
           <section className="mb-8">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Ownership</h2>
             <p className="text-gray-600">
-              RiscLens is a platform owned and operated by Raphael Ngare Momanyi. 
-              Raphael Ngare Momanyi is the sole owner of all IP and rights associated with the RiscLens platform.
+              RiscLens is a platform owned and operated by its founders. 
+              RiscLens holds all IP and rights associated with the platform.
             </p>
           </section>
 

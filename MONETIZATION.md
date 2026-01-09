@@ -1,5 +1,5 @@
 # RiscLens Financial Analysis & Monetization Strategy
-**Proprietary & Confidential - Prepared for Raphael Ngare Momanyi**
+**Proprietary & Confidential - Prepared for isclens**
 **Date: January 9, 2026**
 
 ## 1. Executive Summary

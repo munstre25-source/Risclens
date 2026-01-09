@@ -42,6 +42,9 @@ export const HUB_ROUTES = [
   '/soc-2-evidence/vault',
   '/learn/soc-2-readiness',
   '/compliance/directory',
+  '/ai-compliance',
+  '/ai-governance-readiness-index',
+  '/iso-42001-calculator',
 ];
 
 export const LEGAL_ROUTES = [
@@ -68,8 +71,13 @@ export const COMMERCIAL_ROUTES = [
   ...industryGuides.map(g => `/soc-2/industries/${g.slug}`),
   ...pentestPages.map(p => `/penetration-testing/${p.slug}`),
   ...comparisonPages.map(c => `/compare/${c.slug}`),
-  ...evidenceGuides.map(e => `/soc-2-evidence/${e.slug}`),
-  // Static subpages from file system not in libs
+    ...evidenceGuides.map(e => `/soc-2-evidence/${e.slug}`),
+    // Comparison Factory (15 pairings)
+    ...['vanta', 'drata', 'secureframe', 'thoropass', 'laika', 'strike-graph'].flatMap((p1, i, arr) => 
+      arr.slice(i + 1).map(p2 => `/compliance/compare/${p1}-vs-${p2}`)
+    ),
+    // Static subpages from file system not in libs
+
   '/penetration-testing/pricing',
   '/penetration-testing/sow',
   '/penetration-testing/retesting-remediation',

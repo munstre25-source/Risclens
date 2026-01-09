@@ -116,16 +116,10 @@ export default function Footer() {
               </p>
             </div>
               <div className="flex flex-col justify-end lg:items-end space-y-2">
-                <p className="text-xs text-slate-500">
-                  © {currentYear} Raphael Ngare Momanyi. All rights reserved.
-                </p>
-                <p className="text-[10px] text-slate-600 uppercase tracking-tight">
-                  Full IP and rights belong to Raphael Ngare Momanyi.
-                </p>
-                <p className="text-[10px] text-slate-600 uppercase tracking-tight">
-                  Data is encrypted at rest and never sold to third parties.
-                </p>
-              </div>
+                  <p className="text-xs text-slate-500">
+                    © {currentYear} RiscLens. All rights reserved.
+                  </p>
+                </div>
           </div>
         </div>
       </div>

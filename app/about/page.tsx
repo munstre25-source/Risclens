@@ -93,13 +93,13 @@ export default function AboutPage() {
                 <div className="w-20 h-20 bg-slate-200 rounded-full flex-shrink-0 overflow-hidden flex items-center justify-center text-slate-500 font-bold text-xl border-2 border-slate-100">
                   RM
                 </div>
-                <div>
-                  <h3 className="text-xl font-bold text-slate-900">Raphael Ngare Momanyi</h3>
-                  <p className="text-brand-600 font-semibold text-sm mb-1">Founder & Principal Advisor (CISO, CISA)</p>
-                  <p className="text-slate-600 text-sm leading-relaxed">
-                    With over 15 years in cybersecurity and 200+ SOC 2 audits under his belt at Big Four firms, Raphael founded RiscLens to democratize the compliance knowledge that usually sits behind expensive consulting walls. He holds full IP and all rights to the RiscLens platform.
-                  </p>
-                </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-slate-900">RiscLens</h3>
+                    <p className="text-brand-600 font-semibold text-sm mb-1">Founder & Principal Advisor (CISO, CISA)</p>
+                      <p className="text-slate-600 text-sm leading-relaxed">
+                        Built on over 15 years of cybersecurity expertise and 200+ SOC 2 audits at Big Four firms, RiscLens was created to democratize compliance knowledge that usually sits behind expensive consulting walls.
+                      </p>
+                  </div>
               </div>
             </div>
 

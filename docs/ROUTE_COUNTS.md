@@ -2,7 +2,7 @@
 
 Source: `app/sitemap.ts` and `src/seo/routes.ts`.
 
-## Core Architectural Routes — 151 URLs
+## Core Architectural Routes — 186 URLs
 These are the static and programmatic routes that form the structural core of RiscLens.
 
 ### 1. SOC 2 & Compliance Cost — 45 URLs
@@ -33,18 +33,24 @@ These are the static and programmatic routes that form the structural core of Ri
 - **Main Hub**: `/soc-2-sales`
 - **Topic Pages**: `/soc-2-sales/{bridge-letters,security-questionnaires,trust-centers,subservice-organizations,qualified-opinions,multi-framework-mapping}`
 
-### 6. Evidence & Comparisons — 11 URLs
+### 6. Evidence & Frameworks — 11 URLs
 - **Evidence Vault**: `/soc-2-evidence/vault`
 - **Evidence Guides**: `/soc-2-evidence/{access-control,change-management,logging-monitoring,incident-response,vendor-management,business-continuity}`
-- **Comparisons**: `/soc-2-vs-iso-27001`, `/soc-2-type-i-vs-type-ii`
+- **Framework Basics**: `/soc-2-vs-iso-27001`, `/soc-2-type-i-vs-type-ii`, `/when-do-you-need-soc-2`
+
+### 7. AI & Market Intelligence — 35 URLs
+- **AI Suite**: `/ai-compliance`, `/ai-governance-readiness-index`, `/iso-42001-calculator` (3)
+- **Comparison Hub**: `/compare` + 24 curated and programmatic matchups (25)
+- **Intelligence Hub**: `/compliance/directory` (1)
+- **Utility & Methodology**: `/auditor-match`, `/auditor-directory`, `/glossary`, `/security`, `/methodology`, `/iso-27001-checklist` (6)
 
 ## Dynamic Profiles — 101+ URLs
 - **Company Directory**: `/compliance/directory/[slug]`
 - These pages are generated dynamically from the `company_signals` table in Supabase. They are included in the sitemap for SEO but are not counted as "Core Routes".
 
 ## Totals (Summary)
-- **Core Routes**: 151
+- **Core Routes**: 186
 - **Dynamic Profiles**: 101
-- **Total Indexable URLs**: 252
+- **Total Indexable URLs**: 287
 
-> **Note**: The architectural core has grown from 145 to 151 with the addition of ISO 42001 and enhanced VRA tools.
+> **Note**: The architectural core has grown from 151 to 186 with the addition of the Comparison Factory (24 pairings), AI Intelligence Suite, and enhanced market directory tools.

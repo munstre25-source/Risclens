@@ -165,17 +165,21 @@ export default async function Page({ params }: { params: { slug: string } }) {
   const signals = company.public_signals || {};
   const jsonLd = generateJsonLd(company as CompanySignals);
 
-  const signalItems = [
-    { label: 'Security page detected', value: signals.has_security_page },
-    { label: 'Trust / compliance page detected', value: signals.has_trust_page },
-    { label: 'SOC 2 publicly mentioned (claim only)', value: signals.mentions_soc2 },
-    { label: 'Compliance tooling mentioned (Vanta, Drata, Secureframe)', value: signals.mentions_compliance_tool },
-    { label: 'Responsible disclosure / bug bounty', value: signals.has_responsible_disclosure },
-    { label: 'Security contact email or page', value: signals.has_security_contact },
-  ];
+    const signalItems = [
+      { label: 'Security page detected', value: signals.has_security_page },
+      { label: 'Trust / compliance page detected', value: signals.has_trust_page },
+      { label: 'SOC 2 publicly mentioned (claim only)', value: signals.mentions_soc2 },
+      { label: 'Compliance tooling mentioned (Vanta, Drata, Secureframe)', value: signals.mentions_compliance_tool },
+      { label: 'Responsible disclosure / bug bounty', value: signals.has_responsible_disclosure },
+      { label: 'Security contact email or page', value: signals.has_security_contact },
+    ];
+  
+    const TOP_PLATFORMS = ['vanta', 'drata', 'secureframe', 'thoropass', 'laika', 'strike-graph'];
+    const isComparisonPlatform = TOP_PLATFORMS.includes(params.slug);
+  
+    return (
+      <div className="min-h-screen bg-white flex flex-col">
 
-  return (
-    <div className="min-h-screen bg-white flex flex-col">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -285,9 +289,51 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
             </div>
 
-              {/* Sidebar / Meta info */}
-              <div className="space-y-8">
-                <div className="p-6 bg-white rounded-2xl shadow-sm border border-gray-100">
+                {/* Sidebar / Meta info */}
+                <div className="space-y-8">
+                  {/* Platform Comparison Sidebar Section */}
+                  {isComparisonPlatform && (
+                    <div className="p-6 bg-brand-50 rounded-2xl border border-brand-100 shadow-sm">
+                      <h4 className="font-bold text-brand-900 mb-4 uppercase text-xs tracking-wider flex items-center gap-2">
+                        <svg className="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                        Platform Comparisons
+                      </h4>
+                      <p className="text-xs text-brand-800 mb-4">
+                        Compare {company.name} against other leading compliance automation platforms.
+                      </p>
+                      <div className="space-y-2">
+                        {TOP_PLATFORMS.filter(p => p !== params.slug).slice(0, 4).map((other) => {
+                          const toolA = params.slug < other ? params.slug : other;
+                          const toolB = params.slug < other ? other : params.slug;
+                          const slug = `${toolA}-vs-${toolB}`;
+                          const otherName = other.charAt(0).toUpperCase() + other.slice(1);
+                          return (
+                            <Link 
+                              key={slug}
+                              href={`/compliance/compare/${slug}`}
+                              className="flex items-center justify-between p-3 bg-white rounded-xl border border-brand-100 hover:border-brand-300 transition-all group"
+                            >
+                              <span className="text-sm font-bold text-slate-700 group-hover:text-brand-700">vs {otherName}</span>
+                              <svg className="w-4 h-4 text-brand-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                              </svg>
+                            </Link>
+                          );
+                        })}
+                        <Link 
+                          href="/compare"
+                          className="block text-center text-xs font-bold text-brand-600 hover:text-brand-700 pt-2"
+                        >
+                          View all 24+ comparisons →
+                        </Link>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="p-6 bg-white rounded-2xl shadow-sm border border-gray-100">
+
                   <h4 className="font-bold text-gray-900 mb-6 uppercase text-xs tracking-wider">Intelligence Actions</h4>
                   <CompanyActionButtons 
                     companySlug={company.slug} 

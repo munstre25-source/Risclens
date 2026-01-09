@@ -1,6 +1,6 @@
 /**
- * Copyright © 2026 Raphael Ngare Momanyi. All rights reserved.
- * Full IP and all rights belong to Raphael Ngare Momanyi.
+ * Copyright © 2026 isclens. All rights reserved.
+ * Full IP and all rights belong to isclens.
  */
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';

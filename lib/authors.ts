@@ -11,10 +11,10 @@ export interface Author {
 export const authors: Record<string, Author> = {
   raphael: {
     id: 'raphael',
-    name: 'Raphael Ngare Momanyi',
-    role: 'Founder & Principal Advisor',
-    credentials: ['CISO', 'CISA'],
-    bio: 'With over 15 years in cybersecurity and 200+ SOC 2 audits under his belt at Big Four firms, Raphael founded RiscLens to democratize compliance knowledge.',
-    avatar: 'RM',
+    name: 'RiscLens',
+    role: 'Compliance Infrastructure Platform',
+    credentials: ['SOC 2', 'ISO 27001'],
+    bio: 'Built on over 15 years of cybersecurity expertise and 200+ SOC 2 audits, RiscLens provides deterministic guidance to help startups navigate complex compliance requirements.',
+    avatar: 'RL',
   },
 };

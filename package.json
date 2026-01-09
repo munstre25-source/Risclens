@@ -2,8 +2,8 @@
   "name": "risclens-soc2-calculator",
   "version": "1.0.0",
   "private": true,
-  "author": "Raphael Ngare Momanyi",
-  "copyright": "Copyright © 2026 Raphael Ngare Momanyi. All rights reserved.",
+  "author": "isclens",
+  "copyright": "Copyright © 2026 isclens. All rights reserved.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

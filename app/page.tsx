@@ -4,7 +4,7 @@ import Script from 'next/script';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AboutSection from '@/components/AboutSection';
-import { Search, BarChart3, Cpu, Cloud, CreditCard, Activity, Rocket } from 'lucide-react';
+import { Search, BarChart3, Cpu, Cloud, CreditCard, Activity, Rocket, ChevronRight, ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'The Intelligence Layer for Enterprise Trust | RiscLens',
@@ -44,32 +44,34 @@ export default function HomePage() {
                 <span className="text-xs font-bold text-brand-700 uppercase tracking-wider">The Source of Truth for 100+ B2B Security Stacks</span>
               </div>
 
-              <h1 className="text-3xl sm:text-6xl lg:text-7xl font-bold text-slate-900 leading-[1.1] tracking-tight mb-4 sm:mb-8">
-                The Intelligence Layer for <br className="hidden lg:block" />
-                <span className="text-brand-600">Enterprise Trust.</span>
-              </h1>
-              
-              <p className="text-lg sm:text-xl text-slate-600 leading-relaxed max-w-3xl mx-auto mb-8 sm:mb-12">
-                Stop guessing your compliance costs. Clear procurement 2x faster with deterministic calculators, auditor directories, and the world's first ISO 42001 (AI) roadmap.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Link
-                  href="/soc-2-readiness-index"
-                  className="w-full sm:w-auto bg-slate-900 text-white text-lg font-bold px-8 py-4 sm:px-10 sm:py-5 rounded-xl shadow-xl hover:bg-slate-800 transition-all flex flex-col items-center group"
-                >
-                  <span>I need SOC 2</span>
-                  <span className="text-[10px] font-medium text-slate-400 uppercase tracking-widest mt-1 group-hover:text-slate-300">Readiness Index →</span>
-                </Link>
+                <h1 className="text-3xl sm:text-6xl lg:text-7xl font-bold text-slate-900 leading-[1.1] tracking-tight mb-4 sm:mb-8">
+                  The Intelligence Layer for <br className="hidden lg:block" />
+                  <span className="text-brand-600">AI Trust & Compliance.</span>
+                </h1>
                 
-                <Link
-                  href="/iso-42001-calculator"
-                  className="w-full sm:w-auto bg-brand-600 text-white text-lg font-bold px-8 py-4 sm:px-10 sm:py-5 rounded-xl shadow-xl hover:bg-brand-700 transition-all flex flex-col items-center group"
-                >
-                  <span>I need ISO 42001</span>
-                  <span className="text-[10px] font-medium text-white/70 uppercase tracking-widest mt-1 group-hover:text-white">AI Compliance Roadmap →</span>
-                </Link>
-              </div>
+                <p className="text-lg sm:text-xl text-slate-600 leading-relaxed max-w-3xl mx-auto mb-8 sm:mb-12">
+                  The definitive source for ISO 42001 (AI) and SOC 2 readiness. Stop guessing costs. Clear procurement 2x faster with deterministic intelligence and auditor directories.
+                </p>
+                
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <Link
+                      href="/ai-governance-readiness-index"
+                      className="w-full sm:w-auto bg-brand-600 text-white text-lg font-bold px-8 py-4 sm:px-10 sm:py-5 rounded-xl shadow-xl hover:bg-brand-700 transition-all flex flex-col items-center group relative overflow-hidden"
+                    >
+                      <div className="absolute top-0 right-0 bg-white/20 text-[10px] px-2 py-0.5 rounded-bl-lg font-bold uppercase tracking-tighter animate-pulse">Trending</div>
+                      <span>Get ISO 42001 Index</span>
+
+                    <span className="text-[10px] font-medium text-white/70 uppercase tracking-widest mt-1 group-hover:text-white">AI Governance Roadmap →</span>
+                  </Link>
+
+                  <Link
+                    href="/soc-2-readiness-index"
+                    className="w-full sm:w-auto bg-slate-900 text-white text-lg font-bold px-8 py-4 sm:px-10 sm:py-5 rounded-xl shadow-xl hover:bg-slate-800 transition-all flex flex-col items-center group"
+                  >
+                    <span>Get SOC 2 Index</span>
+                    <span className="text-[10px] font-medium text-slate-400 uppercase tracking-widest mt-1 group-hover:text-slate-300">Readiness & Cost →</span>
+                  </Link>
+                </div>
 
               <div className="mt-8 sm:mt-16 flex flex-wrap justify-center gap-x-12 gap-y-6 opacity-40 grayscale pointer-events-none">
               <span className="text-xl font-bold">VANTA</span>
@@ -174,25 +176,75 @@ export default function HomePage() {
               <p className="text-lg text-slate-600">Tailored readiness guides and cost benchmarks for your specific vertical.</p>
             </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {[
+                    { label: 'SaaS', href: '/soc-2/industries/saas', icon: <Cloud className="w-8 h-8 text-brand-600" /> },
+                    { label: 'Fintech', href: '/soc-2-cost/fintech', icon: <CreditCard className="w-8 h-8 text-brand-600" /> },
+                    { label: 'Healthcare', href: '/soc-2-cost/healthcare', icon: <Activity className="w-8 h-8 text-brand-600" /> },
+                    { label: 'Startups', href: '/soc-2-cost/startups', icon: <Rocket className="w-8 h-8 text-brand-600" /> },
+                  ].map((industry) => (
+                    <Link
+                      key={industry.label}
+                      href={industry.href}
+                      className="flex flex-col items-center p-8 bg-slate-50 rounded-2xl border border-slate-100 hover:border-brand-200 hover:bg-white hover:shadow-lg transition-all text-center group"
+                    >
+                      <div className="mb-4 group-hover:scale-110 transition-transform">{industry.icon}</div>
+                      <span className="font-bold text-slate-900 text-lg">{industry.label}</span>
+                    </Link>
+                  ))}
+                </div>
+            </div>
+          </section>
+
+          {/* Comparison Factory Section */}
+          <section className="py-24 bg-slate-50 border-t border-slate-200">
+            <div className="max-w-6xl mx-auto px-4">
+              <div className="flex flex-col md:flex-row items-end justify-between mb-12 gap-6">
+                <div className="max-w-2xl">
+                  <span className="text-brand-600 font-bold uppercase tracking-widest text-sm mb-4 block">Compare the Market</span>
+                  <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 leading-tight">
+                    Unbiased Platform <span className="text-brand-600">Intelligence.</span>
+                  </h2>
+                  <p className="text-lg text-slate-600 mt-4">
+                    Stop relying on biased sales decks. We compare 24+ platform pairings based on cost, speed-to-audit, and auditor flexibility.
+                  </p>
+                </div>
+                <Link 
+                  href="/compare" 
+                  className="group flex items-center gap-2 text-brand-600 font-bold hover:text-brand-700 transition-colors"
+                >
+                  View All Comparisons
+                  <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </div>
+
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[
-                  { label: 'SaaS', href: '/soc-2/industries/saas', icon: <Cloud className="w-8 h-8 text-brand-600" /> },
-                  { label: 'Fintech', href: '/soc-2-cost/fintech', icon: <CreditCard className="w-8 h-8 text-brand-600" /> },
-                  { label: 'Healthcare', href: '/soc-2-cost/healthcare', icon: <Activity className="w-8 h-8 text-brand-600" /> },
-                  { label: 'Startups', href: '/soc-2-cost/startups', icon: <Rocket className="w-8 h-8 text-brand-600" /> },
-                ].map((industry) => (
-                  <Link
-                    key={industry.label}
-                    href={industry.href}
-                    className="flex flex-col items-center p-8 bg-slate-50 rounded-2xl border border-slate-100 hover:border-brand-200 hover:bg-white hover:shadow-lg transition-all text-center group"
+                  { slug: 'vanta-vs-drata', a: 'Vanta', b: 'Drata' },
+                  { slug: 'drata-vs-secureframe', a: 'Drata', b: 'Secureframe' },
+                  { slug: 'vanta-vs-secureframe', a: 'Vanta', b: 'Secureframe' },
+                  { slug: 'thoropass-vs-vanta', a: 'Thoropass', b: 'Vanta' },
+                  { slug: 'vanta-vs-auditboard', a: 'Vanta', b: 'AuditBoard' },
+                  { slug: 'sprinto-vs-vanta', a: 'Sprinto', b: 'Vanta' },
+                ].map((pair) => (
+                  <Link 
+                    key={pair.slug}
+                    href={pair.slug === 'vanta-vs-auditboard' || pair.slug === 'sprinto-vs-vanta' || pair.slug === 'thoropass-vs-vanta' || pair.slug === 'drata-vs-secureframe' || pair.slug === 'vanta-vs-drata' ? `/compare/${pair.slug}` : `/compliance/compare/${pair.slug}`}
+                    className="flex items-center justify-between p-6 bg-white rounded-2xl border border-slate-200 hover:border-brand-300 hover:shadow-md transition-all group"
                   >
-                    <div className="mb-4 group-hover:scale-110 transition-transform">{industry.icon}</div>
-                    <span className="font-bold text-slate-900 text-lg">{industry.label}</span>
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-50 text-slate-400 font-bold text-xs group-hover:bg-brand-50 group-hover:text-brand-600 transition-colors">
+                        VS
+                      </div>
+                      <span className="font-bold text-slate-900">{pair.a} vs {pair.b}</span>
+                    </div>
+                    <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-brand-600 group-hover:translate-x-1 transition-all" />
                   </Link>
                 ))}
               </div>
-          </div>
-        </section>
+            </div>
+          </section>
+
 
         <AboutSection />
         <Footer />
