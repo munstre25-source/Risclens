@@ -150,31 +150,54 @@ export function DirectoryIntelligence({ companies }: DirectoryIntelligenceProps)
         </div>
       </div>
 
-        {/* Results Density Header */}
-        <div className="flex justify-between items-center px-2">
-          <p className="text-sm text-gray-500">
-            Showing <span className="font-bold text-gray-900">{filteredCompanies.length}</span> companies
-          </p>
+          {/* Results Density Header */}
+          <div className="flex justify-between items-center px-2">
+            <p className="text-sm text-gray-500">
+              Showing <span className="font-bold text-gray-900">{filteredCompanies.length}</span> companies
+            </p>
+            {selectedCompanies.length > 0 && (
+              <div className="hidden md:flex items-center gap-4 bg-blue-50 px-4 py-2 rounded-xl border border-blue-100 animate-in fade-in slide-in-from-top-4">
+                <span className="text-xs font-bold text-blue-700">{selectedCompanies.length} selected</span>
+                <div className="flex gap-2">
+                  <button 
+                    onClick={() => setSelectedCompanies([])}
+                    className="text-[10px] font-bold text-blue-400 hover:text-blue-600 uppercase"
+                  >
+                    Clear
+                  </button>
+                  <Link 
+                    href={`/compliance/compare?slugs=${selectedCompanies.join(',')}`}
+                    className="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-blue-700 transition-colors shadow-sm"
+                  >
+                    Compare Now →
+                  </Link>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Mobile Floating Compare Bar */}
           {selectedCompanies.length > 0 && (
-            <div className="flex items-center gap-4 bg-blue-50 px-4 py-2 rounded-xl border border-blue-100 animate-in fade-in slide-in-from-top-4">
-              <span className="text-xs font-bold text-blue-700">{selectedCompanies.length} companies selected</span>
-              <div className="flex gap-2">
-                <button 
-                  onClick={() => setSelectedCompanies([])}
-                  className="text-[10px] font-bold text-blue-400 hover:text-blue-600 uppercase"
-                >
-                  Clear
-                </button>
+            <div className="fixed bottom-6 left-4 right-4 z-50 md:hidden animate-in slide-in-from-bottom-8">
+              <div className="bg-gray-900 text-white p-4 rounded-2xl shadow-2xl flex items-center justify-between border border-white/10 backdrop-blur-xl bg-gray-900/90">
+                <div>
+                  <p className="text-sm font-bold">{selectedCompanies.length} companies selected</p>
+                  <button 
+                    onClick={() => setSelectedCompanies([])}
+                    className="text-xs text-gray-400 font-bold uppercase hover:text-white transition-colors"
+                  >
+                    Clear All
+                  </button>
+                </div>
                 <Link 
                   href={`/compliance/compare?slugs=${selectedCompanies.join(',')}`}
-                  className="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-blue-700 transition-colors shadow-sm"
+                  className="bg-blue-600 text-white px-6 py-3 rounded-xl text-sm font-bold shadow-lg active:scale-95 transition-transform"
                 >
-                  Compare Now →
+                  Compare Now
                 </Link>
               </div>
             </div>
           )}
-        </div>
 
         {/* Enhanced Crunchbase-style Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -187,20 +210,22 @@ export function DirectoryIntelligence({ companies }: DirectoryIntelligenceProps)
               {/* Selection Checkbox for Compare */}
               <div 
                 onClick={(e) => toggleCompare(e, company.slug)}
-                className={`absolute top-4 left-4 z-10 w-5 h-5 rounded border transition-all flex items-center justify-center cursor-pointer ${
+                className={`absolute top-3 left-3 z-20 w-6 h-6 rounded-lg border-2 transition-all duration-200 flex items-center justify-center cursor-pointer ${
                   selectedCompanies.includes(company.slug) 
-                    ? 'bg-blue-600 border-blue-600 shadow-sm' 
-                    : 'bg-white border-gray-200 opacity-0 group-hover:opacity-100 hover:border-blue-400'
+                    ? 'bg-blue-600 border-blue-600 shadow-lg scale-110' 
+                    : 'bg-white/60 border-gray-200/80 md:opacity-40 md:group-hover:opacity-100 hover:border-blue-400 hover:bg-white shadow-sm'
                 }`}
               >
-                {selectedCompanies.includes(company.slug) && (
+                {selectedCompanies.includes(company.slug) ? (
                   <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M5 13l4 4L19 7" />
                   </svg>
+                ) : (
+                  <div className="w-1.5 h-1.5 rounded-full bg-gray-200 group-hover:bg-blue-200 transition-colors" />
                 )}
               </div>
 
-              <div className="flex justify-between items-start gap-4 mb-4 pl-6">
+              <div className="flex justify-between items-start gap-4 mb-4 pl-8">
                 <div className="flex-grow min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="text-lg font-bold text-gray-900 line-clamp-1 group-hover:text-blue-600 transition-colors">
