@@ -12,6 +12,7 @@ The `MonetizationCTA` component is integrated into all calculator result views:
 - **SOC 2 Cost (ROI)**: `app/compliance-roi-calculator/page.tsx`
 - **Pentest Estimator**: `components/pentest/PentestEstimatorResults.tsx`
 - **Vendor Risk (VRA)**: `components/vendor-risk/VendorRiskResults.tsx`
+- **PPC Chat (Copilot)**: `app/api/copilot/chat` (AI-driven lead capture).
 
 ## Phase 2: Realization (Sale)
 The path is completed when a lead is marked as "Sold" in the Admin dashboard.

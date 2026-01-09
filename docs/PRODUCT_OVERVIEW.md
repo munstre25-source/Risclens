@@ -20,6 +20,7 @@ What users experience across risclens.com. See [PRODUCT.md](PRODUCT.md) for posi
 - **Pentest**: overview `/penetration-testing`, estimator `/penetration-testing/cost-estimator`, **SOW Builder** `/penetration-testing/sow`, **Scoping Worksheet** `/penetration-testing/scoping`, and industry-specific high-intent guides (`/saas`, `/fintech`).
 - **Vendor Risk**: hub `/vendor-risk-assessment`, triage tool `/vendor-risk-assessment/triage`, **Questionnaire Builder** `/vendor-risk-assessment/questionnaire`, and **ROI Calculator** `/vendor-risk-assessment/roi-calculator`.
 - **Match & Methodology**: **Auditor Match** `/auditor-match` (CPA connections) and **Methodology** `/methodology` (deterministic scoring explainers).
+- **PPC Chat (Compliance Copilot)**: Interactive AI chat widget that converts high-intent traffic into leads by suggesting calculators and the "15-page readiness report" after 3 turns.
 - **Learning**: `/soc-2/guides`, `/learn/soc-2-readiness` (+ `[slug]`), evidence library `/soc-2-evidence/[slug]`.
 - **Policies**: `/privacy`, `/terms`. Admin: `/admin` (leads, filters, audit logs, variants, CSV export, test-mode toggles, **OODA Analytics**).
 

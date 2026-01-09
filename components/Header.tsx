@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { CTA, navConfig } from '@/lib/navConfig';
 import { useDropdownIntent } from './useDropdownIntent';
+import { SearchNav } from './SearchNav';
 
 const DROPDOWN_PANEL_CLASS =
   'absolute z-[9999] rounded-xl border border-slate-200 bg-white shadow-lg max-h-[70vh] overflow-auto focus:outline-none transition ease-out duration-150 transform';
@@ -190,16 +191,6 @@ export default function Header() {
     }
   }, [isMobileOpen]);
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault();
-        router.push('/search');
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [router]);
 
   const menuItemClass =
     'block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors';
@@ -390,17 +381,7 @@ export default function Header() {
             </DropdownPortal>
           </div>
 
-          <Link
-            href="/search"
-            className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-600 hover:text-brand-700 transition-colors"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            <span className="hidden xl:inline text-xs text-slate-400 border border-slate-200 rounded px-1.5 py-0.5 bg-slate-50">
-              ⌘K
-            </span>
-          </Link>
+          <SearchNav />
         </nav>
 
         <div className="flex items-center gap-3">

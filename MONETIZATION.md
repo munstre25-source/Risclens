@@ -3,79 +3,54 @@
 **Date: January 9, 2026**
 
 ## 1. Executive Summary
-RiscLens is a high-intent lead generation engine for the $15B+ cybersecurity compliance market. Unlike generic content sites, RiscLens captures users at the peak of their "buy cycle" using interactive calculators (SOC 2, ISO 27001, Pentest). 
+RiscLens is a high-intent lead generation engine for the $15B+ cybersecurity compliance market. Unlike generic content sites, RiscLens captures users at the peak of their "buy cycle" using interactive calculators (SOC 2, ISO 27001, Pentest) and the **PPC Chat (Pay-Per-Conversation)** engine.
 
-The primary monetization vehicle is **Lead Arbitrage**: capturing a high-intent user for a cost (CAC) and selling the qualified intent (Lead) to a CPA firm or Security Vendor for a premium.
+The primary monetization vehicle is **Lead Arbitrage**: capturing high-intent users and selling the qualified intent to CPA firms or Security Vendors for a premium.
 
 ---
 
-## 2. Revenue Streams (Via What Means)
+## 2. Revenue Streams
 
 ### A. Lead Sales (Primary)
-*   **Mechanism**: Selling "High Score" leads (Score 5-10) to vetted CPA firms and security auditors.
-*   **Unit Price**: $250 – $1,200 per lead (depending on company size and audit urgency).
-*   **Target Margin**: 70-85% (assuming organic/low-cost acquisition).
+*   **Mechanism**: Selling "High Intent" leads to vetted CPA firms and auditors.
+*   **Unit Price**: $250 – $1,200 per lead (depending on company size and urgency).
+*   **PPC Chat Boost**: The Copilot increases conversion rates by 2-3x compared to static forms, significantly lowering the effective Cost Per Acquisition (CAC).
 
 ### B. Auditor Introductions (Referral Fees)
-*   **Mechanism**: Direct referral to a partner firm where RiscLens takes a success fee (10-15% of the contract value).
+*   **Mechanism**: Direct referral to a partner firm for a success fee (10-15% of the contract value).
 *   **Value**: Average SOC 2 Audit contract is $15k–$40k. Referral fee: $1,500 – $6,000 per closed deal.
 
 ### C. Pentest Scoping & Referral
-*   **Mechanism**: Selling leads specifically for Penetration Testing (often a prerequisite for SOC 2).
+*   **Mechanism**: Selling leads specifically for Penetration Testing (mandatory for SOC 2 Type II).
 *   **Unit Price**: $150 – $400 per lead or $1,000+ referral fee.
 
-### D. Verified Directory Listings (Recurring)
-*   **Mechanism**: Auditors and Pentest firms pay a monthly "SaaS" fee ($500/mo) for prioritized placement in the RiscLens Auditor Directory.
+### D. Verified Directory Listings
+*   **Mechanism**: Firms pay a monthly "SaaS" fee ($500/mo) for prioritized placement in the RiscLens Directory.
 
 ---
 
-## 3. Financial Projections (How Much & Realistic Growth)
-
-### Phase 1: Infrastructure & Alpha (Months 0-3)
-*   **Focus**: SEO indexation, PPC testing, and establishing the first 3-5 buyer partnerships.
-*   **Traffic Target**: 500 - 1,500 monthly unique visitors.
-*   **Lead Volume**: 15 - 45 leads/month.
-*   **Estimated Monthly Revenue**: **$3,000 – $7,500** (mostly via direct lead sales).
-
-### Phase 2: Optimization & Scaling (Months 3-9)
-*   **Focus**: A/B testing conversion rates, scaling high-intent keywords (`soc 2 audit cost`, `iso 27001 vs soc 2`).
-*   **Traffic Target**: 5,000 - 10,000 monthly unique visitors.
-*   **Lead Volume**: 100 - 250 leads/month.
-*   **Estimated Monthly Revenue**: **$20,000 – $50,000**.
-
-### Phase 3: Market Leadership (Year 1+)
-*   **Focus**: Dominating long-tail compliance search, expanding into AI Compliance (ISO 42001).
-*   **Traffic Target**: 25,000+ monthly unique visitors.
-*   **Lead Volume**: 500+ leads/month.
-*   **Estimated Monthly Revenue**: **$100,000+**.
+## 3. The PPC Chat Engine (Pay-Per-Conversation)
+RiscLens uses a unique "Pay-Per-Conversation" model to maximize the value of expensive B2B traffic.
+- **Micro-Qualification**: AI extracts industry, employee count, and timeline during chat.
+- **Pattern Interrupt**: At Turn 3, the AI offers the "15-Page Readiness Report" as the ultimate lead magnet.
+- **Lead Enrichment**: Chat history is appended to the lead record, providing auditors with "Conversation Intelligence" that justifies a 20-30% higher lead price.
 
 ---
 
-## 4. Realistic Timeline & Milestones (After How Long)
+## 4. Financial Projections
 
-| Milestone | Timing | Key Dependency |
-|-----------|--------|----------------|
-| **First Revenue Event** | Month 1 | Closing 1st Auditor Partnership |
-| **Break-Even ($2k/mo)** | Month 2-3 | 1,000+ Monthly Visitors |
-| **Profitability ($10k/mo)** | Month 6 | SEO "Honeymoon" Phase Maturity |
-| **Scalable Exit Value** | Month 18+ | Consistency in Lead Quality |
+| Phase | Traffic Target | Lead Volume | Est. Monthly Revenue |
+|-------|----------------|-------------|----------------------|
+| **Alpha (0-3 mo)** | 500 - 1.5k | 15 - 45 | $3,000 – $7,500 |
+| **Scaling (3-9 mo)** | 5k - 10k | 100 - 250 | $20,000 – $50,000 |
+| **Market Leader (1yr+)**| 25k+ | 500+ | $100,000+ |
 
 ---
 
-## 5. Risk Analysis & Unit Economics (Comprehensive & No-Hype)
-
-### The "Realistic" Math:
-*   **Conversion Rate**: 2.5% (Site Visitor -> Calculator Completion).
-*   **Qualification Rate**: 40% (Calculator Completion -> High-Score Lead).
-*   **Yield**: 10 High-Score Leads per 1,000 visitors.
-*   **Revenue per 1k Visitors**: 10 leads * $500/avg = **$5,000 RPM (Revenue per Mille)**.
-
-### Potential Blockers:
-1.  **Traffic Volatility**: Reliance on Google Search is high risk. **Mitigation**: Build the LinkedIn OODA loop (active in codebase) to drive direct intent.
-2.  **Lead Quality**: If leads are "tire kickers," buyers will churn. **Mitigation**: The built-in Scoring logic (+ enrichment) filters low-value leads automatically.
-3.  **Partner Churn**: CPA firms are slow to respond. **Mitigation**: Automate lead delivery via the `new-lead` webhook to ensure instant follow-up.
+## 5. Risk Analysis & Mitigation
+1.  **Traffic Volatility**: Reliance on Google Search is mitigated by a LinkedIn-driven OODA loop.
+2.  **Lead Quality**: AI-driven scoring and "Intent Gating" in the PPC chat ensure high-quality data.
+3.  **Partner Churn**: Automation of lead delivery via webhooks ensures instant auditor follow-up.
 
 ## 6. Strategic Conclusion
-RiscLens is not a "get rich quick" site. It is a **B2B Intelligence Asset**. By owning the "Cost Calculator" and "Readiness Index" for SOC 2, you own the top of the sales funnel for a multi-billion dollar industry. 
-
-**Maximum Value**: The platform is most valuable when it operates as an "Auditor Matching Service," where the trust established by the RiscLens brand allows for premium referral fees that far exceed simple "pay-per-lead" models.
+RiscLens is a **B2B Intelligence Asset**. By owning the "Cost Calculator" and "Readiness Index," you own the entry point for the entire compliance ecosystem. The goal is to evolve from a lead provider to the definitive "Trust Matching" platform for the mid-market.

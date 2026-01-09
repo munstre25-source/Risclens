@@ -8,22 +8,30 @@ The workflow begins when a user interacts with one of our flagship calculators o
 *   **Entry Points**:
     *   **SOC 2 Readiness Calculator**: Determines readiness and gap analysis.
     *   **SOC 2 Cost Calculator**: Estimates audit and implementation costs.
+    *   **PPC Chat (Copilot)**: High-intent conversation tool that steers users to calculators and the "15-Page Report."
     *   **Pentest Estimator**: Scoping for mandatory penetration tests.
     *   **Vendor Risk Assessment**: Managing third-party compliance.
 *   **Data Captured**: Company size, tech stack, data sensitivity, and contact info (email).
 *   **Storage**: Data is saved to the `leads` table in Supabase.
 
-## Phase 2: Engagement & Intent Signal
-After receiving their result, users are presented with a **Monetization CTA**.
+## Phase 2: Engagement & Intent Signal (PPC Gating)
+The **PPC Chat** acts as a dynamic "gatekeeper." 
+- **The Turn Rule**: After 3-4 interactions, the AI offers the "15-Page Readiness Report" as a premium lead magnet.
+- **Micro-Conversions**: The AI tracks "Intent Clicks" (e.g., clicking a link to the Cost Calculator suggested in-chat).
+- **Outcome**: A user who provides an email via the chat is tagged with `source: ppc_chat`.
+
+## Phase 3: Engagement & Intent Signal (Post-Calculator)
+After receiving their result from a calculator, users are presented with a **Monetization CTA**.
 *   **Action**: "Request Strategic Auditor Introduction" or "Request Expert Review."
 *   **Outcome**: If clicked, the lead's status is updated to `REVIEW_REQUESTED`.
 
-## Phase 3: Admin Enrichment (The OODA Loop)
+## Phase 4: Admin Enrichment (The OODA Loop)
 The Admin team uses the `/admin/leads` dashboard to analyze and enrich the incoming leads.
 *   **Intelligence Extraction**: Using AI (OpenAI) to extract recent company news and LinkedIn posts from the lead's domain.
 *   **Contextual Analysis**: Admin reviews the enriched data to determine the urgency of the compliance requirement (e.g., "Recently raised Series A" or "Expanding into Healthcare").
+*   **Chat Review**: For PPC leads, the Admin reviews the chat history to understand specific pain points mentioned by the user.
 
-## Phase 4: Conversion (Lead to Buyer)
+## Phase 5: Conversion (Lead to Buyer)
 When a lead is successfully referred to a partner (Auditor or Pen-tester) and a deal is closed, the Admin manually records the conversion.
 *   **Mechanism**: The "Mark as Sold" action in the Admin UI.
 *   **API**: `/api/admin/mark-sold`.
@@ -33,13 +41,14 @@ When a lead is successfully referred to a partner (Auditor or Pen-tester) and a 
     *   `leads.buyer_email` linked.
     *   **Revenue Event**: A new record is added to `REVENUE_EVENTS` for financial tracking and attribution.
 
-## Phase 5: Buyer Management & Attribution
+## Phase 6: Buyer Management & Attribution
 Sold leads are promoted to the **Buyers** list.
 *   **Buyer Portal**: Admin reviews active buyers at `/admin/buyers`.
-*   **Attribution**: Revenue events are linked back to the original `keyword_id` and `calculator_page` to determine which marketing channels are most profitable.
+*   **Attribution**: Revenue events are linked back to the original `keyword_id` and `calculator_page` to determine which marketing channels (or chat interactions) are most profitable.
 
 ## Summary of Data Flow
 1.  **Public Site** (Next.js) -> `leads` (Supabase)
-2.  **Admin UI** (Enrichment) -> `lead_notes` & AI Insights
-3.  **Admin UI** (Conversion) -> `leads` (sold=true) + `REVENUE_EVENTS`
-4.  **Analytics** -> Attribution and ROI calculation in `/admin/analytics`
+2.  **PPC Chat** -> Interactive qualification -> `leads` (with chat context)
+3.  **Admin UI** (Enrichment) -> `lead_notes` & AI Insights
+4.  **Admin UI** (Conversion) -> `leads` (sold=true) + `REVENUE_EVENTS`
+5.  **Analytics** -> Attribution and ROI calculation in `/admin/analytics`

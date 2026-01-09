@@ -4,6 +4,7 @@ import Script from 'next/script';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AboutSection from '@/components/AboutSection';
+import { Search, BarChart3, Cpu, Cloud, CreditCard, Activity, Rocket } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'The Intelligence Layer for Enterprise Trust | RiscLens',
@@ -88,33 +89,33 @@ export default function HomePage() {
             </div>
 
             <div className="grid md:grid-cols-3 gap-8">
-              {[
-                {
-                  title: "Auditor Matching",
-                  description: "Don't pick an auditor blindly. Access our directory of verified firms specializing in AI and B2B SaaS.",
-                  icon: "🔍",
-                  link: "/auditor-directory"
-                },
-                {
-                  title: "Deterministic ROI",
-                  description: "Calculate the exact impact of compliance on your sales velocity and enterprise deal value.",
-                  icon: "📊",
-                  link: "/compliance-roi-calculator"
-                },
-                {
-                  title: "AI Governance",
-                  description: "The world's first ISO 42001 (AI Management) calculator for teams building with LLMs.",
-                  icon: "🤖",
-                  link: "/iso-42001-calculator"
-                }
-              ].map((feature) => (
-                <Link 
-                  key={feature.title}
-                  href={feature.link}
-                  className="p-8 rounded-2xl bg-slate-50 border border-slate-100 hover:border-brand-200 hover:bg-white hover:shadow-xl transition-all group"
-                >
-                  <div className="text-4xl mb-6">{feature.icon}</div>
-                  <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-brand-600 transition-colors">{feature.title}</h3>
+                {[
+                  {
+                    title: "Auditor Matching",
+                    description: "Don't pick an auditor blindly. Access our directory of verified firms specializing in AI and B2B SaaS.",
+                    icon: <Search className="w-8 h-8 text-brand-600" />,
+                    link: "/auditor-directory"
+                  },
+                  {
+                    title: "Deterministic ROI",
+                    description: "Calculate the exact impact of compliance on your sales velocity and enterprise deal value.",
+                    icon: <BarChart3 className="w-8 h-8 text-brand-600" />,
+                    link: "/compliance-roi-calculator"
+                  },
+                  {
+                    title: "AI Governance",
+                    description: "The world's first ISO 42001 (AI Management) calculator for teams building with LLMs.",
+                    icon: <Cpu className="w-8 h-8 text-brand-600" />,
+                    link: "/iso-42001-calculator"
+                  }
+                ].map((feature) => (
+                  <Link 
+                    key={feature.title}
+                    href={feature.link}
+                    className="p-8 rounded-2xl bg-slate-50 border border-slate-100 hover:border-brand-200 hover:bg-white hover:shadow-xl transition-all group"
+                  >
+                    <div className="mb-6">{feature.icon}</div>
+                    <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-brand-600 transition-colors">{feature.title}</h3>
                   <p className="text-slate-600 leading-relaxed mb-4">{feature.description}</p>
                   <span className="text-sm font-bold text-brand-600 group-hover:translate-x-1 inline-block transition-transform">Explore →</span>
                 </Link>
@@ -173,23 +174,23 @@ export default function HomePage() {
               <p className="text-lg text-slate-600">Tailored readiness guides and cost benchmarks for your specific vertical.</p>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[
-                { label: 'SaaS', href: '/soc-2/industries/saas', icon: '☁️' },
-                { label: 'Fintech', href: '/soc-2-cost/fintech', icon: '💰' },
-                { label: 'Healthcare', href: '/soc-2-cost/healthcare', icon: '🏥' },
-                { label: 'Startups', href: '/soc-2-cost/startups', icon: '🚀' },
-              ].map((industry) => (
-                <Link
-                  key={industry.label}
-                  href={industry.href}
-                  className="flex flex-col items-center p-8 bg-slate-50 rounded-2xl border border-slate-100 hover:border-brand-200 hover:bg-white hover:shadow-lg transition-all text-center"
-                >
-                  <span className="text-4xl mb-4">{industry.icon}</span>
-                  <span className="font-bold text-slate-900 text-lg">{industry.label}</span>
-                </Link>
-              ))}
-            </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {[
+                  { label: 'SaaS', href: '/soc-2/industries/saas', icon: <Cloud className="w-8 h-8 text-brand-600" /> },
+                  { label: 'Fintech', href: '/soc-2-cost/fintech', icon: <CreditCard className="w-8 h-8 text-brand-600" /> },
+                  { label: 'Healthcare', href: '/soc-2-cost/healthcare', icon: <Activity className="w-8 h-8 text-brand-600" /> },
+                  { label: 'Startups', href: '/soc-2-cost/startups', icon: <Rocket className="w-8 h-8 text-brand-600" /> },
+                ].map((industry) => (
+                  <Link
+                    key={industry.label}
+                    href={industry.href}
+                    className="flex flex-col items-center p-8 bg-slate-50 rounded-2xl border border-slate-100 hover:border-brand-200 hover:bg-white hover:shadow-lg transition-all text-center group"
+                  >
+                    <div className="mb-4 group-hover:scale-110 transition-transform">{industry.icon}</div>
+                    <span className="font-bold text-slate-900 text-lg">{industry.label}</span>
+                  </Link>
+                ))}
+              </div>
           </div>
         </section>
 

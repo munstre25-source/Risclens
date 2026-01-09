@@ -9,6 +9,7 @@ All routes live under `app/api/*`. JSON only unless noted. Validation uses zod; 
 - **POST `/api/vendor-risk-assessment`** — Vendor risk triage submission. Body: vendor type/tier inputs, optional email. Returns scoring/prioritized fixes from `lib/vendorRisk.ts`.
 - **POST `/api/lead/set-email`** — Attach email + consent to an existing lead (used when user adds email after seeing results).
 - **POST `/api/lead/request-review`** — Signal user wants human follow-up; adds admin note/audit entry.
+- **POST `/api/copilot/chat`** — Compliance Copilot interactive chat. Body: `{ messages: Array<{ role, content }> }`. Uses GPT-4o-mini to answer questions and steer users toward calculators/lead magnets.
 
 ## Output & Notifications
 - **POST `/api/generate-pdf`** — Input `{ lead_id }`. Renders PDF from stored lead data, uploads to Supabase Storage, updates lead with `pdf_path`/`pdf_url`.
