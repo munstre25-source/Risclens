@@ -5,6 +5,7 @@ import Footer from '@/components/Footer';
 import AssessmentCTA from '@/components/AssessmentCTA';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
+import { StickyCTA } from '@/components/StickyCTA';
 
 export const metadata: Metadata = {
   title: 'SOC 2 Type I vs Type II: Which is right for you? | RiscLens',
@@ -95,22 +96,24 @@ export default function Soc2TypeComparisonPage() {
                 <p className="mt-3 text-sm text-slate-500">Uses the existing readiness assessment—no new inputs required.</p>
               </div>
 
-              <RelatedGuidesRow
-                links={[
-                  { href: '/soc-2-readiness-checklist', label: 'SOC 2 Checklist' },
-                  { href: '/soc-2-evidence', label: 'Evidence Vault' },
-                  { href: '/soc-2-cost', label: 'SOC 2 Cost' },
-                  { href: '/soc-2-timeline', label: 'SOC 2 Timeline' },
-                  { href: '/vendor-risk-assessment', label: 'Vendor Risk Hub' },
-                ]}
-                className="mt-12"
-              />
-            </div>
-          </section>
-        </main>
+<RelatedGuidesRow
+                  links={[
+                    { href: '/soc-2-readiness-checklist', label: 'SOC 2 Checklist' },
+                    { href: '/soc-2-evidence', label: 'Evidence Vault' },
+                    { href: '/soc-2-cost', label: 'SOC 2 Cost' },
+                    { href: '/soc-2-cost/type-1-vs-type-2-cost', label: 'Type I vs II Cost' },
+                    { href: '/soc-2-timeline', label: 'SOC 2 Timeline' },
+                    { href: '/vendor-risk-assessment', label: 'Vendor Risk Hub' },
+                  ]}
+                  className="mt-12"
+                />
+              </div>
+            </section>
+          </main>
 
-      <AssessmentCTA />
-      <Footer />
+        <AssessmentCTA />
+        <StickyCTA />
+        <Footer />
     </>
   );
 }

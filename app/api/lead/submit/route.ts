@@ -55,7 +55,11 @@ export async function POST(request: NextRequest) {
         utmCampaign: otherData.utm_campaign ?? null,
         utmContent: otherData.utm_content ?? null,
         utmTerm: otherData.utm_term ?? null,
-        ...otherData
+          phone: otherData.phone ?? null,
+          budgetRange: otherData.budget_range ?? otherData.budget_comfort ?? null,
+          budgetComfort: otherData.budget_comfort ?? null,
+          ...otherData
+
       },
     });
 

@@ -44,69 +44,27 @@ const leadSchema = z
       ),
     role: z.string().trim().max(60).optional(),
     utm_source: z.string().trim().max(80).optional(),
-    variation_id: z.string().trim().max(40).optional().default('default'),
-    website: z.string().trim().optional(),
-  })
-  .strict();
+      variation_id: z.string().trim().max(40).optional().default('default'),
+      website: z.string().trim().optional(),
+      phone: z.string().trim().max(30).optional(),
+      budget_range: z.string().trim().max(50).optional(),
+      consent: z.boolean().optional().default(true),
+    })
+    .strict();
 
-function getClientIp(request: NextRequest) {
-  const forwardedFor = request.headers.get('x-forwarded-for');
-  if (forwardedFor) return forwardedFor.split(',')[0]?.trim() || 'unknown';
-  return (
-    request.headers.get('cf-connecting-ip') ||
-    request.headers.get('x-real-ip') ||
-    request.ip ||
-    'unknown'
-  );
-}
 
-async function checkRateLimit(ip: string) {
-  if (!redis) {
-    const now = Date.now();
-    const entry = inMemoryRate.get(ip);
-    if (!entry || entry.reset < now) {
-      inMemoryRate.set(ip, { count: 1, reset: now + RATE_WINDOW_SECONDS * 1000 });
-      return { allowed: true, retryAfter: 0 };
-    }
-
-    entry.count += 1;
-    inMemoryRate.set(ip, entry);
-
-    if (entry.count > RATE_LIMIT) {
-      const retryAfterMs = entry.reset - now;
-      return { allowed: false, retryAfter: Math.max(1, Math.ceil(retryAfterMs / 1000)) };
-    }
-
-    return { allowed: true, retryAfter: 0 };
-  }
-
-  const key = `rate:soc2-lead:${ip}`;
-  const current = await redis.incr(key);
-  if (current === 1) {
-    await redis.expire(key, RATE_WINDOW_SECONDS);
-  }
-
-  if (current > RATE_LIMIT) {
-    const ttl = await redis.ttl(key);
-    return { allowed: false, retryAfter: ttl > 0 ? ttl : RATE_WINDOW_SECONDS };
-  }
-
-  return { allowed: true, retryAfter: 0 };
-}
+import { applyRateLimit } from '@/lib/rate-limit';
 
 export async function POST(request: NextRequest) {
-  const ip = getClientIp(request);
+  const rateLimitResponse = await applyRateLimit(request);
+  if (rateLimitResponse) return rateLimitResponse;
 
-  const { allowed, retryAfter } = await checkRateLimit(ip);
-  if (!allowed) {
-    return NextResponse.json(
-      { ok: false, error: 'rate_limited' },
-      {
-        status: 429,
-        headers: { 'Retry-After': `${retryAfter}` },
-      }
-    );
-  }
+  const forwardedFor = request.headers.get('x-forwarded-for');
+  const ip =
+    forwardedFor?.split(',')[0]?.trim() ||
+    request.headers.get('cf-connecting-ip') ||
+    request.headers.get('x-real-ip') ||
+    'unknown';
 
   const rawBody = await request.text();
   if (rawBody.length > MAX_PAYLOAD_BYTES) {
@@ -185,6 +143,9 @@ export async function POST(request: NextRequest) {
         role: payload.role ?? null,
         utmSource: payload.utm_source ?? null,
         variationId: payload.variation_id ?? 'default',
+        phone: payload.phone ?? null,
+        budgetRange: payload.budget_range ?? null,
+        isTest: payload.email?.includes('test') || false,
         readinessScore: scoringResult.readiness_score,
         estimatedCostLow: scoringResult.estimated_cost_low,
         estimatedCostHigh: scoringResult.estimated_cost_high,

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { StickyCTA } from '@/components/StickyCTA';
 
 type Scenario = { title: string; detail: string };
 type RelatedLink = { href: string; label: string };
@@ -175,17 +176,30 @@ export function CostIndustryPage({
           <div className="border-t border-slate-200 pt-6">
             <h3 className="text-lg font-semibold text-slate-900 mb-3">Related resources</h3>
             <div className="flex flex-wrap gap-3 text-sm">
-              <Link href={readinessHref} className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">
+              <Link
+                href={readinessHref}
+                className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200"
+              >
                 SOC 2 readiness for {industry}
               </Link>
-              <Link href={timelineHref} className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">
+              <Link
+                href={timelineHref}
+                className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200"
+              >
                 SOC 2 timeline for {industry}
               </Link>
-              <Link href="/soc-2-cost" className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">
+              <Link
+                href="/soc-2-cost"
+                className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200"
+              >
                 SOC 2 cost (overview)
               </Link>
               {relatedLinks.map((link) => (
-                <Link key={link.href} href={link.href} className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200"
+                >
                   {link.label}
                 </Link>
               ))}
@@ -194,7 +208,11 @@ export function CostIndustryPage({
         </div>
       </section>
 
-      <Footer />
-    </main>
-  );
-}
+        <StickyCTA />
+
+        <Footer />
+      </main>
+    );
+  }
+
+

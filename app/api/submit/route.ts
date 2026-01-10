@@ -12,7 +12,7 @@ import { applyRateLimit } from '@/lib/rate-limit';
 // Email is OPTIONAL - can be added later via /api/lead/set-email
 export async function POST(request: NextRequest) {
   // Apply rate limiting
-  const rateLimitResponse = applyRateLimit(request);
+  const rateLimitResponse = await applyRateLimit(request);
   if (rateLimitResponse) return rateLimitResponse;
 
   try {

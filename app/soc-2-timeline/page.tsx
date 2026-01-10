@@ -8,6 +8,7 @@ import AboutSection from '@/components/AboutSection';
 import { timelineGuides } from '@/lib/soc2Guides';
 import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
 import { ContextualSignals } from '@/components/compliance/ContextualSignals';
+import { StickyCTA } from '@/components/StickyCTA';
 
 const faqs = [
   {
@@ -224,6 +225,7 @@ export default function Soc2TimelineGuidePage() {
         <AboutSection />
 
         <AssessmentCTA />
+        <StickyCTA label="Estimate Your Timeline" href="/soc-2-timeline/estimator" />
       </main>
       <Footer />
     </>

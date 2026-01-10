@@ -32,7 +32,11 @@ export interface CreateLeadInput {
     utmContent?: string | null;
     utmTerm?: string | null;
     isTest?: boolean | null;
-  };
+      phone?: string | null;
+      budgetRange?: string | null;
+      budgetComfort?: string | null;
+    };
+
   isPartial?: boolean | null;
 }
 
@@ -84,8 +88,13 @@ export async function createLead(input: CreateLeadInput) {
       utm_content: derivedFields?.utmContent ?? null,
       utm_term: derivedFields?.utmTerm ?? null,
       is_test: derivedFields?.isTest ?? null,
-    is_partial: isPartial ?? false,
-  } as Record<string, unknown>;
+        phone: derivedFields?.phone ?? null,
+        budget_range: derivedFields?.budgetRange ?? null,
+        budget_comfort: derivedFields?.budgetComfort ?? null,
+        is_partial: isPartial ?? false,
+
+    } as Record<string, unknown>;
+
 
   // Check if a partial lead with this email already exists
   let existingLead = null;

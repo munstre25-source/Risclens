@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSupabaseAdmin, getEnhancedMetrics } from '@/lib/supabase';
 import { validateAdminAuth, sanitizeString } from '@/lib/validation';
 
+export const dynamic = 'force-dynamic';
+
+
 // GET /api/admin/leads - Get leads with filters and enhanced metrics
 export async function GET(request: NextRequest) {
   try {
@@ -122,4 +125,3 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-

@@ -4,6 +4,10 @@ import { useState, useEffect } from 'react';
 import { trackEvent } from '@/lib/analytics';
 import { useSearchParams } from 'next/navigation';
 
+interface AuditorMatchFormProps {
+  source?: string;
+}
+
 const FRAMEWORKS = [
   { value: 'soc2_type1', label: 'SOC 2 Type I' },
   { value: 'soc2_type2', label: 'SOC 2 Type II' },
@@ -33,7 +37,7 @@ const TIMELINES = [
   { value: 'planning', label: 'Planning (6+ months)' },
 ];
 
-export function AuditorMatchForm() {
+export function AuditorMatchForm({ source }: AuditorMatchFormProps) {
   const searchParams = useSearchParams();
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -75,6 +79,7 @@ export function AuditorMatchForm() {
         body: JSON.stringify({
           ...formData,
           lead_type: 'auditor_match_rfp',
+          source,
           source_url: window.location.href,
         }),
       });
@@ -278,3 +283,5 @@ export function AuditorMatchForm() {
     </form>
   );
 }
+
+export default AuditorMatchForm;

@@ -6,15 +6,28 @@ export interface Author {
   bio: string;
   avatar: string;
   linkedIn?: string;
+  reddit?: string;
 }
 
 export const authors: Record<string, Author> = {
   raphael: {
     id: 'raphael',
-    name: 'RiscLens',
-    role: 'Compliance Infrastructure Platform',
-    credentials: ['SOC 2', 'ISO 27001'],
-    bio: 'Built on over 15 years of cybersecurity expertise and 200+ SOC 2 audits, RiscLens provides deterministic guidance to help startups navigate complex compliance requirements.',
-    avatar: 'RL',
+    name: 'Raphael N',
+    role: 'Head of Compliance Strategy',
+    credentials: ['CPA', 'CISA', 'ISO Lead Auditor'],
+    bio: 'Raphael leads go-to-market compliance strategy and audits for SaaS and AI teams, with a focus on automation-friendly evidence and sales-ready reports.',
+    avatar: 'RN',
+    linkedIn: 'https://linkedin.com/in/raphael-ngare',
+    reddit: 'https://www.reddit.com/user/raphael-risclens',
+  },
+  kevin: {
+    id: 'kevin',
+    name: 'Kevin A',
+    role: 'Principal Security & GRC Engineer',
+    credentials: ['CISSP', 'CISM', 'CCSP'],
+    bio: 'Kevin builds and reviews controls for cloud-native stacks, mapping security engineering practices to SOC 2 and ISO requirements.',
+    avatar: 'KA',
+    linkedIn: 'https://linkedin.com/in/kevin-risclens',
+    reddit: 'https://www.reddit.com/user/kevin-risclens',
   },
 };

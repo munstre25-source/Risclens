@@ -23,8 +23,10 @@ export default function AuditorPortal() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
   const [bidAmount, setBidAmount] = useState<Record<string, string>>({});
-  const [auditorEmail, setAuditorEmail] = useState('');
-  const [showBidModal, setShowBidModal] = useState<string | null>(null);
+    const [auditorEmail, setAuditorEmail] = useState('');
+    const [showBidModal, setShowBidModal] = useState<string | null>(null);
+    const [responseTime, setResponseTime] = useState(42); // Mock response time in minutes
+
 
   useEffect(() => {
     async function fetchLeads() {
@@ -80,14 +82,65 @@ export default function AuditorPortal() {
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 border border-brand-100 mb-6">
             <span className="flex h-2 w-2 rounded-full bg-brand-600 animate-pulse" />
             <span className="text-xs font-bold text-brand-700 uppercase tracking-wider">Auditor Portal Beta</span>
+            </div>
+              <h1 className="text-4xl font-bold text-slate-900 mb-4 tracking-tight">
+                Exclusive <span className="text-brand-600">Lead Auction</span> & <span className="text-emerald-600">SLA Portal</span>
+              </h1>
+              <p className="text-xl text-slate-600 max-w-2xl">
+                Bid on pre-qualified, high-intent compliance leads. Auditors with <span className="text-emerald-600 font-bold">Preferred Status</span> (under 1-hour response time) get first access to high-intent leads.
+              </p>
+            </div>
+
+          {/* SLA Status Dashboard */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+              <div className="flex items-center justify-between mb-4">
+                <div className="p-2 bg-emerald-50 rounded-lg">
+                  <Zap className="w-5 h-5 text-emerald-600" />
+                </div>
+                <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold uppercase">
+                  Active
+                </span>
+              </div>
+              <p className="text-sm font-medium text-slate-500 mb-1">Your Avg. Response Time</p>
+              <h3 className="text-3xl font-bold text-slate-900">{responseTime}m</h3>
+              <p className="text-xs text-emerald-600 font-medium mt-2 flex items-center gap-1">
+                <TrendingUp className="w-3 h-3" />
+                12% faster than last week
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+              <div className="flex items-center justify-between mb-4">
+                <div className="p-2 bg-brand-50 rounded-lg">
+                  <Shield className="w-5 h-5 text-brand-600" />
+                </div>
+                <span className="px-2.5 py-0.5 rounded-full bg-brand-100 text-brand-700 text-xs font-bold uppercase">
+                  Preferred
+                </span>
+              </div>
+              <p className="text-sm font-medium text-slate-500 mb-1">Current Status</p>
+              <h3 className="text-3xl font-bold text-slate-900">Preferred</h3>
+              <p className="text-xs text-slate-500 font-medium mt-2">
+                Eligible for <strong>Early Access</strong> leads.
+              </p>
+            </div>
+
+            <div className="bg-brand-600 p-6 rounded-2xl border border-brand-700 shadow-lg text-white">
+              <div className="flex items-center justify-between mb-4">
+                <div className="p-2 bg-white/10 rounded-lg">
+                  <AlertCircle className="w-5 h-5 text-white" />
+                </div>
+              </div>
+              <p className="text-sm font-medium text-white/80 mb-1">SLA Compliance</p>
+              <h3 className="text-3xl font-bold text-white">100%</h3>
+              <p className="text-xs text-white/90 font-medium mt-2 leading-relaxed">
+                Respond within <strong>60 minutes</strong> to maintain your Preferred Status.
+              </p>
+            </div>
           </div>
-          <h1 className="text-4xl font-bold text-slate-900 mb-4 tracking-tight">
-            Exclusive <span className="text-brand-600">Lead Auction</span>
-          </h1>
-          <p className="text-xl text-slate-600 max-w-2xl">
-            Bid on pre-qualified, high-intent compliance leads. Anonymized data provided. Unlock contact info by winning the auction.
-          </p>
-        </div>
+
+
 
         <div className="grid gap-6">
           {loading ? (

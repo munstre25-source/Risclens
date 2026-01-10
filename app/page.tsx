@@ -4,6 +4,7 @@ import Script from 'next/script';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AboutSection from '@/components/AboutSection';
+import ComplianceHub from '@/components/ComplianceHub';
 import { Search, BarChart3, Cpu, Cloud, CreditCard, Activity, Rocket, ChevronRight, ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -246,7 +247,9 @@ export default function HomePage() {
           </section>
 
 
-        <AboutSection />
+          <ComplianceHub />
+          <AboutSection />
+
         <Footer />
       </main>
     </>

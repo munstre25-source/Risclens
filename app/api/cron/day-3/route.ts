@@ -27,7 +27,7 @@ function validateCronAuth(request: NextRequest): boolean {
 // POST /api/cron/day-3 - Day 3 follow-up email batch job
 export async function POST(request: NextRequest) {
   // Apply rate limiting
-  const rateLimitResponse = applyRateLimit(request);
+  const rateLimitResponse = await applyRateLimit(request);
   if (rateLimitResponse) return rateLimitResponse;
 
   // Verify authorization

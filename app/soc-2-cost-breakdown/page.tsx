@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { StickyCTA } from '@/components/StickyCTA';
 
 export const metadata: Metadata = {
   title: 'SOC 2 Cost Breakdown (2026) | RiscLens',
@@ -123,30 +124,34 @@ export default function Soc2CostBreakdownPage() {
               </ul>
             </div>
 
-            <div className="space-y-2">
-              <p className="text-sm font-semibold text-slate-800">Related guides</p>
-              <div className="flex flex-wrap gap-3 text-sm text-brand-700">
-                <Link href="/soc-2-cost" className="underline underline-offset-2 hover:text-brand-800">
-                  SOC 2 Cost
-                </Link>
-                <Link href="/soc-2-timeline" className="underline underline-offset-2 hover:text-brand-800">
-                  SOC 2 Timeline
-                </Link>
-                <Link href="/soc-2-type-i-vs-type-ii" className="underline underline-offset-2 hover:text-brand-800">
-                  Type I vs Type II
-                </Link>
-                <Link href="/soc-2-readiness/saas" className="underline underline-offset-2 hover:text-brand-800">
-                  SOC 2 for SaaS
-                </Link>
-                <Link href="/soc-2-readiness/fintech" className="underline underline-offset-2 hover:text-brand-800">
-                  SOC 2 for Fintech
-                </Link>
+<div className="space-y-2">
+                <p className="text-sm font-semibold text-slate-800">Related guides</p>
+                <div className="flex flex-wrap gap-3 text-sm text-brand-700">
+                  <Link href="/soc-2-cost" className="underline underline-offset-2 hover:text-brand-800">
+                    SOC 2 Cost
+                  </Link>
+                  <Link href="/soc-2-cost/first-year-vs-renewal" className="underline underline-offset-2 hover:text-brand-800">
+                    First Year vs Renewal
+                  </Link>
+                  <Link href="/soc-2-cost/by-team-size" className="underline underline-offset-2 hover:text-brand-800">
+                    Cost by Team Size
+                  </Link>
+                  <Link href="/soc-2-cost/type-1-vs-type-2-cost" className="underline underline-offset-2 hover:text-brand-800">
+                    Type I vs Type II Cost
+                  </Link>
+                  <Link href="/soc-2-timeline" className="underline underline-offset-2 hover:text-brand-800">
+                    SOC 2 Timeline
+                  </Link>
+                  <Link href="/soc-2-type-i-vs-type-ii" className="underline underline-offset-2 hover:text-brand-800">
+                    Type I vs Type II
+                  </Link>
+                </div>
               </div>
-            </div>
           </div>
-        </section>
-      </main>
-      <Footer />
+</section>
+        </main>
+        <StickyCTA />
+        <Footer />
     </>
   );
 }

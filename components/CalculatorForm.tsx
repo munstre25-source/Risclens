@@ -52,6 +52,9 @@ interface FormData {
   planned_audit_date: string;
   role: string;
   specific_requests: string;
+  phone: string;
+  budget_range: string;
+  consent: boolean;
 }
 
 interface CalculatorResults {
@@ -86,6 +89,9 @@ export default function CalculatorForm() {
     planned_audit_date: '',
     role: '',
     specific_requests: '',
+    phone: '',
+    budget_range: '',
+    consent: true,
   });
 
   // Track UTM parameters and variation on mount
@@ -159,19 +165,21 @@ export default function CalculatorForm() {
         fetch('/api/lead/partial', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email: formData.email,
-            company: formData.company_name,
-            industry: formData.industry,
-            lead_type: 'soc2_readiness_partial',
-            source_url: typeof window !== 'undefined' ? window.location.href : '',
-            utm_source: utmParams.utm_source,
-            utm_medium: utmParams.utm_medium,
-            utm_campaign: utmParams.utm_campaign,
-            utm_content: utmParams.utm_content,
-            utm_term: utmParams.utm_term,
-            variation_id: variationId,
-          }),
+            body: JSON.stringify({
+              email: formData.email,
+              phone: formData.phone,
+              company: formData.company_name,
+              industry: formData.industry,
+              lead_type: 'soc2_readiness_partial',
+              source_url: typeof window !== 'undefined' ? window.location.href : '',
+              utm_source: utmParams.utm_source,
+              utm_medium: utmParams.utm_medium,
+              utm_campaign: utmParams.utm_campaign,
+              utm_content: utmParams.utm_content,
+              utm_term: utmParams.utm_term,
+              variation_id: variationId,
+            }),
+
         }).catch(console.error);
       }
       
@@ -203,13 +211,18 @@ export default function CalculatorForm() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          email: formData.email,
-          company_name: formData.company_name,
+            email: formData.email,
+            phone: formData.phone,
+            company_name: formData.company_name,
             industry: formData.industry,
             num_employees: parseInt(formData.num_employees, 10),
             data_types: formData.data_types,
+            budget_range: formData.budget_range,
+            budget_comfort: formData.budget_range,
             audit_date: formData.planned_audit_date,
             role: formData.role,
+            consent: formData.consent,
+            specific_requests: formData.specific_requests,
             utm_source: utmParams.utm_source,
             utm_medium: utmParams.utm_medium,
             utm_campaign: utmParams.utm_campaign,
@@ -217,6 +230,7 @@ export default function CalculatorForm() {
             utm_term: utmParams.utm_term,
             variation_id: variationId,
           }),
+
       });
 
       const data = await response.json();
@@ -299,6 +313,24 @@ export default function CalculatorForm() {
                     />
                   <p className="mt-1.5 text-xs text-gray-500">
                     Skip this if you just want a quick score. Enter it to get your full roadmap PDF later.
+                  </p>
+                </div>
+                <div>
+                  <label htmlFor="phone" className="form-label font-bold text-brand-900">
+                    Phone Number <span className="text-brand-600 text-xs font-bold">(required for 1-hour shortlist)</span>
+                  </label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    className="form-input border-brand-200 focus:border-brand-500 focus:ring-brand-500"
+                    placeholder="+1 (555) 000-0000"
+                    required
+                  />
+                  <p className="mt-1.5 text-xs text-brand-700 font-medium bg-brand-50 p-2 rounded border border-brand-100">
+                    ⚡ <strong>The "1-Hour" Promise:</strong> We'll text/email you a vetted auditor shortlist within 60 minutes of submission.
                   </p>
                 </div>
               <div>
@@ -391,10 +423,29 @@ export default function CalculatorForm() {
                   ))}
                 </div>
               </div>
-              <div>
-                <label className="form-label">
-                  Who requires SOC 2 from you? <span className="text-gray-400 text-xs font-normal">(optional)</span>
-                </label>
+                <div>
+                  <label htmlFor="budget_range" className="form-label">
+                    What is your approximate budget for SOC 2? <span className="text-gray-400 text-xs font-normal">(optional)</span>
+                  </label>
+                  <select
+                    id="budget_range"
+                    name="budget_range"
+                    value={formData.budget_range}
+                    onChange={handleInputChange}
+                    className="form-input"
+                  >
+                    <option value="">Select budget comfort</option>
+                    <option value="under_10k">Under $10k (Very tight)</option>
+                    <option value="10k_20k">$10k - $20k (Standard startup)</option>
+                    <option value="20k_50k">$20k - $50k (Mid-market)</option>
+                    <option value="over_50k">$50k+ (Enterprise/Complex)</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="form-label">
+                    Who requires SOC 2 from you? <span className="text-gray-400 text-xs font-normal">(optional)</span>
+                  </label>
+
                 <div className="space-y-2 mt-2">
                   {SOC2_REQUIRERS.map((req) => (
                     <label
@@ -471,11 +522,26 @@ export default function CalculatorForm() {
                   className="form-input"
                   rows={3}
                   placeholder="e.g. security questionnaire, enterprise deal requirement, due diligence request, tight deadline…"
-                />
+                  />
+                </div>
+                <div className="pt-4 border-t border-gray-100">
+                  <label className="flex items-start cursor-pointer group">
+                    <input
+                      type="checkbox"
+                      checked={formData.consent}
+                      onChange={(e) => setFormData(prev => ({ ...prev, consent: e.target.checked }))}
+                      className="mt-1 w-4 h-4 text-brand-600 rounded border-gray-300 focus:ring-brand-500"
+                    />
+                    <span className="ml-3 text-xs text-gray-500 leading-relaxed group-hover:text-gray-700 transition-colors">
+                      By calculating my score, I agree to receive a SOC 2 roadmap PDF and 1-hour auditor shortlist. 
+                      I consent to Risclens sharing my requirements with verified auditors to facilitate my search.
+                    </span>
+                  </label>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+
 
         {/* Hidden fields */}
         <input type="hidden" name="utm_source" value={utmParams.utm_source || ''} />

@@ -3,7 +3,11 @@
 import { useState } from 'react';
 import { trackEvent } from '@/lib/analytics';
 
-export default function ChecklistDownloadForm() {
+interface ChecklistDownloadFormProps {
+  industry?: string;
+}
+
+export default function ChecklistDownloadForm({ industry }: ChecklistDownloadFormProps = {}) {
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,7 +37,7 @@ export default function ChecklistDownloadForm() {
       }
 
         setIsSuccess(true);
-        trackEvent('checklist_download_submitted', { email, company });
+        trackEvent('checklist_download_submitted', { email, company, industry });
         
         // NEW: Trigger automatic PDF generation and email for the checklist
         if (data.lead_id) {

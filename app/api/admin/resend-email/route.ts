@@ -7,7 +7,7 @@ import { applyRateLimit } from '@/lib/rate-limit';
 // POST /api/admin/resend-email - Admin endpoint to resend PDF email
 export async function POST(request: NextRequest) {
   // Apply rate limiting
-  const rateLimitResponse = applyRateLimit(request);
+  const rateLimitResponse = await applyRateLimit(request);
   if (rateLimitResponse) return rateLimitResponse;
 
   try {

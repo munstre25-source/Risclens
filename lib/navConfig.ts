@@ -31,11 +31,10 @@ export const navConfig = {
   },
   directory: {
     label: 'Directory',
-    href: '/compliance/directory',
+    href: '/auditor-directory',
     items: [
       { label: 'Auditor Directory', href: '/auditor-directory' },
-      { label: 'Trust Centers', href: '/compliance/directory' },
-      { label: 'Security Signals', href: '/compliance/directory' },
+      { label: 'Compliance Directory', href: '/compliance/directory' },
     ]
   },
     resources: {

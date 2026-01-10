@@ -22,12 +22,14 @@
 import {
   READINESS_BANDS,
   SCORING_WEIGHTS,
-  COST_PARAMETERS,
-  SCORE_BOUNDS,
-  type ReadinessBand,
-  type ScoreExplanation,
-  type DetailedScoringResult,
-} from './scoring-config';
+    COST_PARAMETERS,
+    SCORE_BOUNDS,
+    CONVERSION_ADJUSTMENTS,
+    type ReadinessBand,
+    type ScoreExplanation,
+    type DetailedScoringResult,
+  } from './scoring-config';
+
 
 import {
   selectRecommendations,
@@ -355,7 +357,19 @@ export function calculateLeadScore(input: ScoringInput, config?: ScoringConfig):
   const detailed = calculateDetailedScore(input, config);
   
   // Convert to legacy 1-10 scale
-  const leadScore = Math.max(1, Math.min(10, Math.round(detailed.normalizedScore / 10)));
+  let leadScore = Math.max(1, Math.min(10, Math.round(detailed.normalizedScore / 10)));
+  
+  // Apply Conversion Adjustments (Intelligence Feedback Loop)
+  const industry = (input.industry || 'other') as keyof typeof CONVERSION_ADJUSTMENTS.industry;
+  const industryMultiplier = CONVERSION_ADJUSTMENTS.industry[industry] || 1.0;
+  
+  if (industryMultiplier !== 1.0) {
+    const oldScore = leadScore;
+    leadScore = Math.max(1, Math.min(10, Math.round(leadScore * industryMultiplier)));
+    if (oldScore !== leadScore) {
+      console.log(`[SCORING] Adjusted lead score from ${oldScore} to ${leadScore} based on industry conversion data (${industry})`);
+    }
+  }
   
   // Calculate legacy breakdown
   const monthsUntilAudit = calculateMonthsUntilAudit(input.audit_date);

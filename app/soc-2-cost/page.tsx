@@ -9,6 +9,7 @@ import ExpertReview from '@/components/ExpertReview';
 import { costIndustries } from '@/lib/navConfig';
 import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
 import { ContextualSignals } from '@/components/compliance/ContextualSignals';
+import { StickyCTA } from '@/components/StickyCTA';
 
 const faqs = [
   {
@@ -144,12 +145,64 @@ export default function Soc2CostPage() {
               <li>Founders who need a SOC 2 reality check before engaging auditors</li>
             </ul>
           </div>
-        </section>
+</section>
 
-        <section className="bg-white border-t border-slate-200">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 space-y-4">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-              <h2 className="text-lg font-semibold text-slate-900">Cost by industry</h2>
+          <section className="bg-white border-t border-slate-200">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 space-y-4">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                <h2 className="text-lg font-semibold text-slate-900">Cost by scenario</h2>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <Link
+                  href="/soc-2-cost/first-year-vs-renewal"
+                  className="group block rounded-xl border border-slate-200 bg-white hover:border-brand-200 hover:shadow-sm transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600"
+                >
+                  <div className="p-4 space-y-1">
+                    <div className="flex items-center justify-between">
+                      <p className="text-base font-semibold text-slate-900">First Year vs Renewal</p>
+                      <svg className="w-4 h-4 text-brand-600 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
+                    <p className="text-sm text-slate-600">Compare initial vs ongoing compliance costs</p>
+                  </div>
+                </Link>
+                <Link
+                  href="/soc-2-cost/by-team-size"
+                  className="group block rounded-xl border border-slate-200 bg-white hover:border-brand-200 hover:shadow-sm transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600"
+                >
+                  <div className="p-4 space-y-1">
+                    <div className="flex items-center justify-between">
+                      <p className="text-base font-semibold text-slate-900">Cost by Team Size</p>
+                      <svg className="w-4 h-4 text-brand-600 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
+                    <p className="text-sm text-slate-600">Budget guidance for 10, 50, 100, 250+ employees</p>
+                  </div>
+                </Link>
+                <Link
+                  href="/soc-2-cost/type-1-vs-type-2-cost"
+                  className="group block rounded-xl border border-slate-200 bg-white hover:border-brand-200 hover:shadow-sm transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600"
+                >
+                  <div className="p-4 space-y-1">
+                    <div className="flex items-center justify-between">
+                      <p className="text-base font-semibold text-slate-900">Type I vs Type II Cost</p>
+                      <svg className="w-4 h-4 text-brand-600 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
+                    <p className="text-sm text-slate-600">Audit type comparison and pricing breakdown</p>
+                  </div>
+                </Link>
+              </div>
+            </div>
+          </section>
+
+          <section className="bg-white border-t border-slate-200">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 space-y-4">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                <h2 className="text-lg font-semibold text-slate-900">Cost by industry</h2>
               <Link href="/soc-2-cost/industries" className="text-sm text-brand-700 underline underline-offset-4 hover:text-brand-800">
                 View all industries →
               </Link>
@@ -176,20 +229,12 @@ export default function Soc2CostPage() {
           </div>
         </section>
 
-        <p>
-</p>
-
-
-          <section className="py-16 lg:py-20 bg-white border-t border-slate-200">
-            <div className="max-w-3xl mx-auto px-4 sm:px-6 space-y-10">
-                <ExpertReview 
-                  authorName="RiscLens" 
-                  authorTitle="Head of Compliance Strategy (CPA)" 
-                  date="January 5, 2026" 
-                />
-              
-              <div>
-                <h2 className="text-2xl font-bold text-slate-900 mb-4">What shapes SOC 2 pricing?</h2>
+        <section className="py-16 lg:py-20 bg-white border-t border-slate-200">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 space-y-10">
+            <ExpertReview authorId="raphael" date="January 5, 2026" />
+            
+            <div>
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">What shapes SOC 2 pricing?</h2>
 
               <p className="text-slate-600 leading-relaxed mb-4">
                 A realistic SOC 2 budget blends external fees and internal effort. CPA firms price based on the controls they need to test, the number of systems in scope, and how quickly you want the report. Tooling helps reduce lift, but it adds subscription spend you should plan for up front.
@@ -311,6 +356,7 @@ export default function Soc2CostPage() {
         </section>
 
         <AssessmentCTA />
+        <StickyCTA />
       </main>
       <Footer />
     </>

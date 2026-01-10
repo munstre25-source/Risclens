@@ -179,6 +179,25 @@ export const COST_PARAMETERS = {
 } as const;
 
 // =============================================================================
+// CONVERSION-BASED MULTIPLIERS (FEEDBACK LOOP)
+// These are adjusted based on historical data from lead_outcomes table.
+// =============================================================================
+
+export const CONVERSION_ADJUSTMENTS = {
+  // Higher = more likely to close based on historical auditor feedback
+  industry: {
+    fintech: 1.2, // Fintechs have 20% higher close rate
+    healthcare: 0.8, // Healthcare has 20% lower close rate
+    saas: 1.0,
+    ecommerce: 1.0,
+    consulting: 0.7,
+    manufacturing: 0.7,
+    other: 0.5,
+  },
+  // Scale of 1.0 = no change. Adjusted dynamically via Intelligence scripts.
+} as const;
+
+// =============================================================================
 // SCORE CALCULATION BOUNDS
 // =============================================================================
 

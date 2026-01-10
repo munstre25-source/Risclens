@@ -11,7 +11,7 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // POST /api/lead/set-email - Set email and consent on an existing lead
 export async function POST(request: NextRequest) {
   // Apply rate limiting
-  const rateLimitResponse = applyRateLimit(request);
+  const rateLimitResponse = await applyRateLimit(request);
   if (rateLimitResponse) return rateLimitResponse;
 
   const body = await request.json().catch(() => ({}));
@@ -120,4 +120,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-

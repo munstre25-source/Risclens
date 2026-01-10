@@ -74,7 +74,7 @@ export default function GlossaryPage() {
           <section className="py-16">
             <div className="max-w-4xl mx-auto px-4 sm:px-6">
               <div className="mb-8 flex justify-end">
-                <VerifiedBy authorId="sarah" />
+                <VerifiedBy authorId="kevin" />
               </div>
 
               <div className="grid gap-8">
@@ -90,7 +90,7 @@ export default function GlossaryPage() {
                 ))}
               </div>
               
-              <AuthorBio authorId="sarah" />
+              <AuthorBio authorId="kevin" />
 
                 <div className="mt-16 grid md:grid-cols-2 gap-8">
                   <div className="p-8 bg-brand-50 rounded-2xl border border-brand-100 text-center flex flex-col">

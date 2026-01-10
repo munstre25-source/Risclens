@@ -5,7 +5,7 @@ import { sendEmail, isUnsubscribed } from '@/lib/email';
 import { applyRateLimit } from '@/lib/rate-limit';
 
 export async function POST(request: NextRequest) {
-  const rateLimitResponse = applyRateLimit(request);
+  const rateLimitResponse = await applyRateLimit(request);
   if (rateLimitResponse) return rateLimitResponse;
 
   try {

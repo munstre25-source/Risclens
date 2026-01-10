@@ -90,11 +90,13 @@ export default function Header() {
 
   const frameworksIntent = useDropdownIntent();
   const toolsIntent = useDropdownIntent();
+  const directoryIntent = useDropdownIntent();
   const resourcesIntent = useDropdownIntent();
 
   const [isMobileOpen, setMobileOpen] = useState(false);
   const [mobileFrameworksOpen, setMobileFrameworksOpen] = useState(false);
   const [mobileToolsOpen, setMobileToolsOpen] = useState(false);
+  const [mobileDirectoryOpen, setMobileDirectoryOpen] = useState(false);
   const [mobileResourcesOpen, setMobileResourcesOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -102,6 +104,7 @@ export default function Header() {
 
   const frameworksRef = useRef<HTMLDivElement>(null);
   const toolsRef = useRef<HTMLDivElement>(null);
+  const directoryRef = useRef<HTMLDivElement>(null);
   const resourcesRef = useRef<HTMLDivElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const mobileToggleRef = useRef<HTMLButtonElement>(null);
@@ -109,8 +112,9 @@ export default function Header() {
   const closeAllDropdowns = useCallback(() => {
     frameworksIntent.immediateClose();
     toolsIntent.immediateClose();
+    directoryIntent.immediateClose();
     resourcesIntent.immediateClose();
-  }, [frameworksIntent, toolsIntent, resourcesIntent]);
+  }, [frameworksIntent, toolsIntent, directoryIntent, resourcesIntent]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -120,12 +124,13 @@ export default function Header() {
         return;
       }
 
-      const isInside = [
-        { anchor: frameworksRef, menuId: 'frameworks-menu' },
-        { anchor: toolsRef, menuId: 'tools-menu' },
-        { anchor: resourcesRef, menuId: 'resources-menu' },
-      ].some(({ anchor, menuId }) => {
-        const anchorMatch = anchor.current?.contains(target);
+    const isInside = [
+      { anchor: frameworksRef, menuId: 'frameworks-menu' },
+      { anchor: toolsRef, menuId: 'tools-menu' },
+      { anchor: directoryRef, menuId: 'directory-menu' },
+      { anchor: resourcesRef, menuId: 'resources-menu' },
+    ].some(({ anchor, menuId }) => {
+      const anchorMatch = anchor.current?.contains(target);
         const panel = document.getElementById(menuId);
         const panelMatch = panel?.contains(target);
         return anchorMatch || panelMatch;
@@ -187,6 +192,7 @@ export default function Header() {
     if (!isMobileOpen) {
       setMobileFrameworksOpen(false);
       setMobileToolsOpen(false);
+      setMobileDirectoryOpen(false);
       setMobileResourcesOpen(false);
     }
   }, [isMobileOpen]);
@@ -317,16 +323,54 @@ export default function Header() {
             </DropdownPortal>
           </div>
 
-          {/* Directory Link */}
-          <Link
-            href={navConfig.directory.href}
-            className={`flex items-center gap-1.5 px-3 py-2 text-sm font-semibold rounded-lg transition-colors ${
-              pathname.startsWith(navConfig.directory.href) ? 'text-brand-700 bg-brand-50' : 'text-slate-700 hover:text-brand-700 hover:bg-slate-50'
-            }`}
+          {/* Directory Dropdown */}
+          <div
+            ref={directoryRef}
+            className="relative"
+            onMouseEnter={() => {
+              frameworksIntent.immediateClose();
+              toolsIntent.immediateClose();
+              resourcesIntent.immediateClose();
+              directoryIntent.scheduleOpen();
+            }}
+            onMouseLeave={() => directoryIntent.scheduleClose()}
           >
-            Directory
-            <span className="ml-1 px-1.5 py-0.5 text-[10px] font-bold text-white bg-brand-500 rounded uppercase tracking-wider">New</span>
-          </Link>
+            <button
+              type="button"
+              className={`flex items-center gap-1.5 px-3 py-2 text-sm font-semibold rounded-lg transition-colors ${
+                directoryIntent.open ? 'text-brand-700 bg-brand-50' : 'text-slate-700 hover:text-brand-700 hover:bg-slate-50'
+              }`}
+            >
+              Directory
+              <svg className={`w-4 h-4 transition-transform ${directoryIntent.open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <DropdownPortal
+              id="directory-menu"
+              isOpen={directoryIntent.open}
+              anchorRef={directoryRef}
+              ariaLabel="Directory"
+              onMouseEnter={() => directoryIntent.scheduleOpen()}
+              onMouseLeave={() => directoryIntent.scheduleClose()}
+            >
+              {navConfig.directory.items.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  role="menuitem"
+                  className="flex items-center justify-between px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
+                >
+                  <span className="font-medium text-slate-900">{item.label}</span>
+                  {item.label.toLowerCase().includes('auditor') && (
+                    <span className="ml-2 px-1.5 py-0.5 text-[10px] font-bold text-white bg-brand-500 rounded uppercase tracking-wider">
+                      New
+                    </span>
+                  )}
+                </Link>
+              ))}
+            </DropdownPortal>
+          </div>
 
           {/* Resources Dropdown */}
           <div
@@ -523,17 +567,37 @@ export default function Header() {
                 </div>
 
                 {/* Directory Mobile */}
-                <Link
-                  href={navConfig.directory.href}
-                  className="flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium text-slate-700"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  <svg className="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                  </svg>
-                  Directory
-                  <span className="ml-auto px-1.5 py-0.5 text-[10px] font-bold text-white bg-brand-500 rounded uppercase tracking-wider">New</span>
-                </Link>
+                <div className="rounded-xl border border-slate-200 overflow-hidden">
+                  <button
+                    type="button"
+                    className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-slate-900 bg-white"
+                    onClick={() => {
+                      setMobileDirectoryOpen(!mobileDirectoryOpen);
+                      setMobileFrameworksOpen(false);
+                      setMobileToolsOpen(false);
+                      setMobileResourcesOpen(false);
+                    }}
+                  >
+                    <span>Directory</span>
+                    <svg className={`w-4 h-4 transition-transform ${mobileDirectoryOpen ? 'rotate-180 text-brand-700' : 'text-slate-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  {mobileDirectoryOpen && (
+                    <div className="px-4 pb-4 pt-2 space-y-2 bg-slate-50 border-t border-slate-100">
+                      {navConfig.directory.items.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className="flex items-center justify-between text-sm text-slate-700"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          <span>{item.label}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
 
                 {/* Resources Mobile */}
                 <div className="rounded-xl border border-slate-200 overflow-hidden">

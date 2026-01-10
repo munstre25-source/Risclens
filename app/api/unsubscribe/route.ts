@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSupabaseAdmin, logAuditEvent } from '@/lib/supabase';
 
+export const dynamic = 'force-dynamic';
+
 // GET /api/unsubscribe - Handle email unsubscribe requests
 export async function GET(request: NextRequest) {
   try {

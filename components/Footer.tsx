@@ -42,6 +42,19 @@ export default function Footer() {
 
             {/* Compliance Hubs Column */}
             <div className="space-y-4">
+              <h4 className="text-sm font-bold text-white uppercase tracking-wider">Intelligence</h4>
+              <ul className="space-y-2 text-sm">
+                <li><Link href="/pricing/vanta" className="hover:text-white transition-colors">Tool Pricing Guides</Link></li>
+                <li><Link href="/compare/vanta-alternatives" className="hover:text-white transition-colors">Tool Alternatives</Link></li>
+                <li><Link href="/soc-2/for/cto" className="hover:text-white transition-colors">Role-Based Guides</Link></li>
+                <li><Link href="/soc-2/stack/aws" className="hover:text-white transition-colors">Stack-Specific SOC 2</Link></li>
+                <li><Link href="/soc-2-evidence/access-reviews" className="hover:text-white transition-colors">Evidence Vault</Link></li>
+                <li><Link href="/compliance/migrate/soc2-to-iso27001" className="hover:text-white transition-colors">Framework Migrations</Link></li>
+              </ul>
+            </div>
+
+            {/* Compliance Hubs Column */}
+            <div className="space-y-4">
               <h4 className="text-sm font-bold text-white uppercase tracking-wider">Compliance Hubs</h4>
               <ul className="space-y-2 text-sm">
                 <li><Link href="/soc-2" className="hover:text-white transition-colors">SOC 2 Hub</Link></li>

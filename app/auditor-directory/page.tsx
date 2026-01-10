@@ -74,10 +74,36 @@ export default function AuditorDirectoryPage() {
               Find and connect with vetted auditors who specialize in B2B SaaS, AI, and Fintech. RiscLens partners with firms that understand early-stage constraints.
             </p>
           </div>
+          </section>
+  
+          {/* City Silos Section */}
+          <section className="py-12 bg-slate-100 border-y border-slate-200">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6">
+              <h3 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-8 text-center">Browse by Tech Hub</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[
+                { name: 'New York City', href: '/auditor-directory/new-york' },
+                { name: 'San Francisco', href: '/auditor-directory/san-francisco' },
+                { name: 'Los Angeles', href: '/auditor-directory/los-angeles' },
+                { name: 'Seattle', href: '/auditor-directory/seattle' },
+                { name: 'Austin', href: '/auditor-directory/austin' },
+                { name: 'Chicago', href: '/auditor-directory/chicago' },
+              ].map((city) => (
+                <Link 
+                  key={city.name}
+                  href={city.href}
+                  className="bg-white border border-slate-200 p-4 rounded-xl text-center hover:border-brand-300 hover:text-brand-600 transition-all font-bold text-slate-700 shadow-sm"
+                >
+                  {city.name}
+                </Link>
+              ))}
+            </div>
+          </div>
         </section>
+  
+          {/* Directory List */}
+          <section className="py-20">
 
-        {/* Directory List */}
-        <section className="py-20">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="grid gap-6">
               {auditors.map((auditor, index) => (
