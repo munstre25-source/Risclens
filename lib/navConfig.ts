@@ -26,7 +26,7 @@ export const navConfig = {
       {
         title: 'SOC 2 Tools',
         items: [
-          { label: 'Cost Calculator', href: '/soc-2-cost', badge: 'Hub' },
+            { label: 'SOC 2 Cost Calculator', href: '/compliance-roi-calculator', badge: 'Hub' },
           { label: 'Readiness Index', href: '/soc-2-readiness-index', badge: 'Tool' },
           { label: 'Audit Delay Cost', href: '/soc-2-audit-delay-cost', badge: 'Tool' },
           { label: 'Timeline Estimator', href: '/soc-2-timeline/estimator', badge: 'Tool' },

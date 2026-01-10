@@ -33,7 +33,7 @@ export default function Footer() {
               <ul className="space-y-2 text-sm">
                 <li><Link href="/soc-2-readiness-calculator" className="hover:text-white transition-colors">SOC 2 Readiness</Link></li>
                 <li><Link href="/iso-42001-calculator" className="hover:text-white transition-colors font-semibold text-brand-400">ISO 42001 (AI) Readiness</Link></li>
-                <li><Link href="/soc-2-cost-calculator" className="hover:text-white transition-colors">SOC 2 Cost</Link></li>
+                  <li><Link href="/compliance-roi-calculator" className="hover:text-white transition-colors">SOC 2 Cost Calculator</Link></li>
                 <li><Link href="/soc-2-timeline/estimator" className="hover:text-white transition-colors">Timeline Estimator</Link></li>
                 <li><Link href="/penetration-testing/cost-estimator" className="hover:text-white transition-colors">Pentest Cost</Link></li>
                 <li><Link href="/compliance-roi-calculator" className="hover:text-white transition-colors">Compliance ROI</Link></li>

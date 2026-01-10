@@ -27,6 +27,9 @@ export default function NYCAuditorPage() {
       ]}
       onsitePolicy="NYC firms default to remote, but financial institutions sometimes expect onsite control walkthroughs; plan for a one-day visit if you have a physical office." 
       industries={['Fintech', 'Marketplace', 'Enterprise SaaS', 'E-commerce', 'Healthcare']}
+      remoteVsOnsiteText="While the majority of New York City audit firms operate remotely, the local concentration of high-security financial services often necessitates periodic on-site visits. If your firm manages physical infrastructure or requires high-touch walkthroughs for NYDFS compliance, choose a local partner who can commute to your Manhattan or Brooklyn office."
+      firmReputationText="In the competitive NYC startup ecosystem, your SOC 2 report is more than a compliance box—it's a critical sales asset. A report from a premier CPA firm recognized by major Wall Street banks and enterprise buyers can dramatically accelerate your procurement cycles."
+      automationText="The fastest-moving NYC fintechs leverage automation to maintain continuous compliance. Ensure your auditor is fluent in Vanta, Drata, or similar platforms to ensure that evidence collection doesn't stall your engineering team's output."
       faqs={[
         {
           question: 'Do NYC auditors require onsite visits?',

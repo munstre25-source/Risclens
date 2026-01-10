@@ -20,7 +20,7 @@ const TOPIC_LINKS: Record<ContextualTopic, ContextualLink[]> = {
     { href: '/learn/soc-2-readiness', label: 'SOC 2 Readiness Hub' },
   ],
   'soc2-cost': [
-    { href: '/soc-2-cost-calculator', label: 'SOC 2 Cost Calculator' },
+    { href: '/compliance-roi-calculator', label: 'SOC 2 Cost Calculator' },
     { href: '/soc-2-cost-breakdown', label: 'SOC 2 Cost Breakdown' },
     { href: '/soc-2-audit-delay-cost', label: 'Cost of Audit Delays' },
   ],

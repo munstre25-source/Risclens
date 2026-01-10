@@ -27,6 +27,9 @@ export default function SFAuditorPage() {
       ]}
       onsitePolicy="Most SF auditors work fully remote but will do one-day onsite for physical security walkthroughs in shared offices—book early if you need in-person." 
       industries={['AI/ML', 'SaaS', 'Fintech', 'Healthcare', 'DevTools']}
+      remoteVsOnsiteText="In the birthplace of cloud computing, San Francisco auditors are global leaders in remote auditing. Most SF-based firms have perfected the virtual walkthrough, making it ideal for distributed SaaS teams. Only those with critical physical infrastructure or specific edge-computing hardware should prioritize a local on-site visit."
+      firmReputationText="Silicon Valley VCs and enterprise buyers look for familiar names on a SOC 2 report. In the Bay Area, your auditor's reputation is a signal of your security maturity; choosing a firm that specializes in venture-backed tech startups can help you close enterprise deals faster."
+      automationText="For SF startups, compliance automation is the standard, not the exception. Most local auditors are power users of platforms like Vanta and Drata, allowing you to bypass manual evidence collection and achieve a much shorter audit window."
       faqs={[
         {
           question: 'Do SF auditors charge more for AI or data-heavy products?',

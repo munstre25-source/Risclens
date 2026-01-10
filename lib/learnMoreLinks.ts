@@ -7,7 +7,7 @@ export const learnMoreLinks = {
   readinessReview: '/readiness-review',
   pentestIntro: '/pentest-intro',
   vendorRiskProgram: '/vendor-risk-program',
-  soc2Cost: '/soc-2-cost-calculator',
+    soc2Cost: '/compliance-roi-calculator',
   complianceROI: '/compliance-roi-calculator',
 } as const;
 

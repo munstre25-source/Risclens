@@ -27,6 +27,9 @@ export default function ChicagoAuditorPage() {
       ]}
       onsitePolicy="Chicago firms often offer hybrid audits. Onsite walkthroughs are common for warehousing/logistics facilities; pure SaaS teams can stay fully remote." 
       industries={['Logistics', 'Manufacturing', 'Enterprise SaaS', 'Healthcare', 'Fintech']}
+      remoteVsOnsiteText="Chicago's audit landscape often mirrors its industrial and logistics roots. While SaaS teams can remain 100% remote, companies with physical manufacturing or warehousing footprints in the Chicagoland area should expect at least one day of on-site observations to verify physical environmental controls."
+      firmReputationText="Chicago-based enterprises and regional banks value 'Midwestern' stability. Securing a report from a recognized regional or national firm with a strong local presence ensures that your compliance posture is respected by stakeholders across the Great Lakes region and beyond."
+      automationText="Don't let legacy audit methods slow down your Chicago startup. Seek out auditors who are integrated with modern compliance platforms, allowing for real-time evidence syncing and reducing the 'compliance tax' on your internal ops and engineering teams."
       faqs={[
         {
           question: 'Do Chicago auditors insist on onsite visits?',

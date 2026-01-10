@@ -27,6 +27,9 @@ export default function AustinAuditorPage() {
       ]}
       onsitePolicy="Most Austin firms operate remote-first, but many offer hybrid audits. Onsite walkthroughs are common for teams with physical facilities; pure SaaS can stay remote."
       industries={['SaaS', 'Cybersecurity', 'Healthtech', 'E-commerce', 'AI/ML']}
+      remoteVsOnsiteText="Austin's 'Silicon Hills' are home to both cloud-native startups and major hardware manufacturing. While 95% of local audits are remote, firms with heavy IoT or physical server footprints in Central Texas should consider a local auditor capable of a quick on-site inspection of physical security boundaries."
+      firmReputationText="The Austin tech scene moves fast. A SOC 2 report from a firm well-regarded by local VC firms and Austin-based tech giants can significantly smooth your path into enterprise procurement cycles across Texas and beyond."
+      automationText="Austin engineers value efficiency. Choosing an auditor who embraces automation platforms ensures that your compliance process feels like a modern CI/CD pipeline rather than a manual roadblock."
       faqs={[
         {
           question: 'Do Austin auditors work fully remote?',

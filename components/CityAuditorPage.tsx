@@ -19,6 +19,9 @@ interface CityAuditorPageProps {
   pricingNotes?: string[];
   industries?: string[];
   onsitePolicy?: string;
+  remoteVsOnsiteText?: string;
+  firmReputationText?: string;
+  automationText?: string;
   faqs?: { question: string; answer: string }[];
   nearbyCities?: { name: string; href: string }[];
 }
@@ -31,6 +34,9 @@ export default function CityAuditorPage({
   pricingNotes,
   industries,
   onsitePolicy,
+  remoteVsOnsiteText,
+  firmReputationText,
+  automationText,
   faqs,
   nearbyCities,
 }: CityAuditorPageProps) {
@@ -159,17 +165,17 @@ export default function CityAuditorPage({
 
             <h3 className="text-xl font-bold text-slate-900 mt-10 mb-4">1. Remote vs. On-site</h3>
             <p className="mb-6">
-              Modern SOC 2 audits are 95% remote. However, some {cityName} firms still offer on-site walk-throughs which can be helpful for the "physical security" component of the audit if you maintain a physical office.
+              {remoteVsOnsiteText || `Modern SOC 2 audits are 95% remote. However, some ${cityName} firms still offer on-site walk-throughs which can be helpful for the "physical security" component of the audit if you maintain a physical office.`}
             </p>
 
             <h3 className="text-xl font-bold text-slate-900 mt-10 mb-4">2. Firm Reputation</h3>
             <p className="mb-6">
-              Your SOC 2 report is a sales tool. In {cityName}, where competition is high, having a report from a recognized CPA firm can significantly reduce friction with enterprise procurement teams.
+              {firmReputationText || `Your SOC 2 report is a sales tool. In ${cityName}, where competition is high, having a report from a recognized CPA firm can significantly reduce friction with enterprise procurement teams.`}
             </p>
 
             <h3 className="text-xl font-bold text-slate-900 mt-10 mb-4">3. Automation Compatibility</h3>
             <p className="mb-6">
-              Ensure your {cityName} auditor is comfortable working with modern compliance automation platforms. A "tech-forward" auditor can shave weeks off the audit timeline by accepting automated evidence exports.
+              {automationText || `Ensure your ${cityName} auditor is comfortable working with modern compliance automation platforms. A "tech-forward" auditor can shave weeks off the audit timeline by accepting automated evidence exports.`}
             </p>
           </div>
 
