@@ -83,7 +83,7 @@ export default function ComparisonLeadMagnet({ toolA, toolB }: ComparisonLeadMag
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@company.com"
-                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all outline-none"
+                    className="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-slate-900 placeholder:text-slate-500 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all outline-none"
                     required
                   />
                   <p className="text-[10px] text-slate-400 mt-1">We'll use this to send your comparison guide and occasional market insights.</p>

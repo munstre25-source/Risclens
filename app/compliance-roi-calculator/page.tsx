@@ -243,7 +243,7 @@ export default function ComplianceROICalculator() {
                     value={companyName}
                     onChange={(e) => setCompanyName(e.target.value)}
                     placeholder="e.g. Acme Corp"
-                    className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-brand-500 focus:ring-brand-500"
+                    className="mt-1 block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 placeholder:text-slate-400 focus:border-brand-500 focus:ring-brand-500"
                     required
                   />
                 </label>
@@ -252,7 +252,7 @@ export default function ComplianceROICalculator() {
                   <select
                     value={industry}
                     onChange={(e) => setIndustry(e.target.value)}
-                    className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-brand-500 focus:ring-brand-500"
+                    className="mt-1 block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 placeholder:text-slate-400 focus:border-brand-500 focus:ring-brand-500"
                     required
                   >
                     <option value="">Select Industry</option>
@@ -266,12 +266,12 @@ export default function ComplianceROICalculator() {
                   <label className="block">
                     <span className="text-sm font-medium text-slate-700">Work Email <span className="text-gray-400 text-xs font-normal">(optional)</span></span>
                       <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="you@company.com"
-                        className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-brand-500 focus:ring-brand-500"
-                      />
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@company.com"
+                    className="mt-1 block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 placeholder:text-slate-400 focus:border-brand-500 focus:ring-brand-500"
+                  />
                       <p className="text-[10px] text-slate-400 mt-1">Skip this for a quick score. Enter it to get your full ROI roadmap PDF later.</p>
                     </label>
                 </div>
@@ -298,7 +298,7 @@ export default function ComplianceROICalculator() {
                     <select
                       value={employees}
                       onChange={(e) => setEmployees(Number(e.target.value))}
-                      className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-brand-500 focus:ring-brand-500"
+                      className="mt-1 block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-brand-500 focus:ring-brand-500"
                     >
                       <option value={25}>1-25 employees</option>
                       <option value={50}>26-50 employees</option>
@@ -314,7 +314,7 @@ export default function ComplianceROICalculator() {
                     <select
                       value={techStack}
                       onChange={(e) => setTechStack(e.target.value)}
-                      className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-brand-500 focus:ring-brand-500"
+                      className="mt-1 block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-brand-500 focus:ring-brand-500"
                     >
                       <option value="simple">Simple (Single cloud, few integrations)</option>
                       <option value="moderate">Moderate (Multi-service, standard SaaS stack)</option>
@@ -467,10 +467,10 @@ export default function ComplianceROICalculator() {
                             <label className="text-sm font-medium text-slate-700">Work Email</label>
                             <input
                               type="email"
-                              value={email}
-                              onChange={(e) => setEmail(e.target.value)}
-                              placeholder="you@company.com"
-                              className="block w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-brand-500 focus:ring-brand-500"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="you@company.com"
+                              className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 placeholder:text-slate-400 focus:border-brand-500 focus:ring-brand-500"
                             />
                           </div>
                         )}

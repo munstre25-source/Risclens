@@ -131,7 +131,7 @@ export default function VendorRiskLeadMagnet({
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="raphael@company.com"
-                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-brand-500 outline-none transition"
+                    className="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-slate-900 placeholder:text-slate-500 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition"
                   />
                 <p className="text-[10px] text-slate-400 mt-1">We'll use this to send your resource and occasional security updates.</p>
               </div>
@@ -143,7 +143,7 @@ export default function VendorRiskLeadMagnet({
                 value={company}
                 onChange={(e) => setCompany(e.target.value)}
                 placeholder="Acme Inc."
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-brand-500 outline-none transition"
+                className="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-slate-900 placeholder:text-slate-500 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition"
               />
             </div>
             {error && <p className="text-xs text-red-400">{error}</p>}

@@ -81,7 +81,7 @@ export function MonetizationCTA({ leadId, email: initialEmail, context }: Moneti
               placeholder="Work email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 rounded-lg bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm outline-none transition-all"
+              className="w-full px-4 py-3 rounded-lg bg-white border border-slate-300 text-slate-900 placeholder:text-slate-500 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm outline-none transition-all"
               required
             />
           </div>
