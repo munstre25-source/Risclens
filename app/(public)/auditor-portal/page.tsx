@@ -83,13 +83,24 @@ export default function AuditorPortal() {
             <span className="flex h-2 w-2 rounded-full bg-brand-600 animate-pulse" />
             <span className="text-xs font-bold text-brand-700 uppercase tracking-wider">Auditor Portal Beta</span>
             </div>
-              <h1 className="text-4xl font-bold text-slate-900 mb-4 tracking-tight">
-                Exclusive <span className="text-brand-600">Lead Auction</span> & <span className="text-emerald-600">SLA Portal</span>
-              </h1>
-              <p className="text-xl text-slate-600 max-w-2xl">
-                Bid on pre-qualified, high-intent compliance leads. Auditors with <span className="text-emerald-600 font-bold">Preferred Status</span> (under 1-hour response time) get first access to high-intent leads.
-              </p>
-            </div>
+                <h1 className="text-4xl font-bold text-slate-900 mb-4 tracking-tight">
+                  Exclusive <span className="text-brand-600">Lead Auction</span> & <span className="text-emerald-600">SLA Portal</span>
+                </h1>
+                <p className="text-sm font-medium text-brand-600 mb-6 italic">
+                  Currently onboarding a limited number of SOC 2 & ISO 27001 auditors.
+                </p>
+                <p className="text-xl text-slate-600 max-w-2xl mb-8">
+                  Bid on pre-qualified, high-intent compliance leads. Auditors with <span className="text-emerald-600 font-bold">Preferred Status</span> (under 1-hour response time) get first access to high-intent leads.
+                </p>
+
+                <div className="flex items-center gap-2 text-slate-500 mb-12">
+                  <span className="text-sm">Interested in early access?</span>
+                  <a href="mailto:support@risclens.com" className="text-sm font-bold text-brand-600 hover:underline">
+                    Contact us.
+                  </a>
+                </div>
+              </div>
+
 
           {/* SLA Status Dashboard */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
