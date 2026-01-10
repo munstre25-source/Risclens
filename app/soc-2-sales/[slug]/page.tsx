@@ -7,6 +7,7 @@ import Footer from '@/components/Footer';
 import AssessmentCTA from '@/components/AssessmentCTA';
 import { CopyButton } from '@/components/CopyButton';
 import { salesGuides, salesGuideBySlug, Soc2GuidePage } from '@/lib/soc2Guides';
+import { Check, AlertTriangle } from 'lucide-react';
 
 interface PageProps {
   params: { slug: string };
@@ -172,16 +173,20 @@ export default function Soc2SalesDetailPage({ params }: PageProps) {
                         <th className="p-3 border-b text-center">HIPAA</th>
                       </tr>
                     </thead>
-                    <tbody className="text-slate-700">
-                      <tr><td className="p-3 border-b">Access Control</td><td className="p-3 border-b text-center">✅</td><td className="p-3 border-b text-center">✅</td><td className="p-3 border-b text-center">✅</td></tr>
-                      <tr><td className="p-3 border-b">Encryption</td><td className="p-3 border-b text-center">✅</td><td className="p-3 border-b text-center">✅</td><td className="p-3 border-b text-center">✅</td></tr>
-                      <tr><td className="p-3 border-b">Risk Assessment</td><td className="p-3 border-b text-center">✅</td><td className="p-3 border-b text-center">✅</td><td className="p-3 border-b text-center">⚠️</td></tr>
-                      <tr><td className="p-3 border-b">Incident Response</td><td className="p-3 border-b text-center">✅</td><td className="p-3 border-b text-center">✅</td><td className="p-3 border-b text-center">✅</td></tr>
-                      <tr><td className="p-3 border-b">Physical Security</td><td className="p-3 border-b text-center">⚠️</td><td className="p-3 border-b text-center">✅</td><td className="p-3 border-b text-center">✅</td></tr>
-                    </tbody>
+                      <tbody className="text-slate-700">
+                        <tr><td className="p-3 border-b">Access Control</td><td className="p-3 border-b text-center"><Check className="w-4 h-4 text-green-600 mx-auto" /></td><td className="p-3 border-b text-center"><Check className="w-4 h-4 text-green-600 mx-auto" /></td><td className="p-3 border-b text-center"><Check className="w-4 h-4 text-green-600 mx-auto" /></td></tr>
+                        <tr><td className="p-3 border-b">Encryption</td><td className="p-3 border-b text-center"><Check className="w-4 h-4 text-green-600 mx-auto" /></td><td className="p-3 border-b text-center"><Check className="w-4 h-4 text-green-600 mx-auto" /></td><td className="p-3 border-b text-center"><Check className="w-4 h-4 text-green-600 mx-auto" /></td></tr>
+                        <tr><td className="p-3 border-b">Risk Assessment</td><td className="p-3 border-b text-center"><Check className="w-4 h-4 text-green-600 mx-auto" /></td><td className="p-3 border-b text-center"><Check className="w-4 h-4 text-green-600 mx-auto" /></td><td className="p-3 border-b text-center"><AlertTriangle className="w-4 h-4 text-amber-600 mx-auto" /></td></tr>
+                        <tr><td className="p-3 border-b">Incident Response</td><td className="p-3 border-b text-center"><Check className="w-4 h-4 text-green-600 mx-auto" /></td><td className="p-3 border-b text-center"><Check className="w-4 h-4 text-green-600 mx-auto" /></td><td className="p-3 border-b text-center"><Check className="w-4 h-4 text-green-600 mx-auto" /></td></tr>
+                        <tr><td className="p-3 border-b">Physical Security</td><td className="p-3 border-b text-center"><AlertTriangle className="w-4 h-4 text-amber-600 mx-auto" /></td><td className="p-3 border-b text-center"><Check className="w-4 h-4 text-green-600 mx-auto" /></td><td className="p-3 border-b text-center"><Check className="w-4 h-4 text-green-600 mx-auto" /></td></tr>
+                      </tbody>
+
                   </table>
                 </div>
-                <p className="text-xs text-slate-500 mt-3">* ⚠️ Indicates partial overlap or specific additional requirements.</p>
+                <p className="text-xs text-slate-500 mt-3 flex items-center gap-1">
+                  <AlertTriangle className="w-3 h-3 text-amber-600" />
+                  Indicates partial overlap or specific additional requirements.
+                </p>
               </div>
             )}
 

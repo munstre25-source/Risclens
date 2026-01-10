@@ -32,7 +32,8 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   Target,
-  ShieldCheck
+  ShieldCheck,
+  X
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -45,17 +46,17 @@ function LeadSkeleton() {
     <div className="p-4 animate-pulse space-y-3">
       <div className="flex justify-between items-start">
         <div className="space-y-2">
-          <div className="h-4 w-32 bg-slate-100 dark:bg-slate-800 rounded" />
-          <div className="h-3 w-24 bg-slate-50 dark:bg-slate-800 rounded" />
+          <div className="h-4 w-32 bg-slate-100 rounded" />
+          <div className="h-3 w-24 bg-slate-50 rounded" />
         </div>
-        <div className="h-4 w-12 bg-slate-100 dark:bg-slate-800 rounded-full" />
+        <div className="h-4 w-12 bg-slate-100 rounded-full" />
       </div>
       <div className="flex justify-between">
         <div className="flex gap-2">
-          <div className="h-3 w-10 bg-slate-50 dark:bg-slate-800 rounded" />
-          <div className="h-3 w-10 bg-slate-50 dark:bg-slate-800 rounded" />
+          <div className="h-3 w-10 bg-slate-50 rounded" />
+          <div className="h-3 w-10 bg-slate-50 rounded" />
         </div>
-        <div className="h-4 w-4 bg-slate-100 dark:bg-slate-800 rounded" />
+        <div className="h-4 w-4 bg-slate-100 rounded" />
       </div>
     </div>
   );
@@ -67,9 +68,9 @@ function RiskHeatmap() {
   );
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
+    <div className="bg-white rounded-2xl border border-slate-200 p-6">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-widest flex items-center gap-2">
+        <h3 className="text-sm font-bold text-slate-900 uppercase tracking-widest flex items-center gap-2">
           <Shield className="h-4 w-4 text-brand-500" />
           Risk Exposure Heatmap
         </h3>
@@ -77,11 +78,11 @@ function RiskHeatmap() {
       </div>
       <div className="grid grid-cols-5 gap-1.5 aspect-square">
         {grid.flat().map((val, i) => {
-          const intensity = val === 0 ? 'bg-slate-50 dark:bg-slate-800/50' :
-                           val === 1 ? 'bg-emerald-500/20 dark:bg-emerald-500/10' :
-                           val === 2 ? 'bg-yellow-500/30 dark:bg-yellow-500/20' :
-                           val === 3 ? 'bg-orange-500/40 dark:bg-orange-500/30' :
-                           'bg-red-500/50 dark:bg-red-500/40';
+          const intensity = val === 0 ? 'bg-slate-50' :
+                           val === 1 ? 'bg-emerald-500/20' :
+                           val === 2 ? 'bg-yellow-500/30' :
+                           val === 3 ? 'bg-orange-500/40' :
+                           'bg-red-500/50';
           return (
             <motion.div
               key={i}
@@ -115,9 +116,9 @@ function LivePulse({ leads }: { leads: Lead[] }) {
   }, [leads]);
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col h-full">
-      <div className="p-6 border-b border-slate-100 dark:border-slate-800/50 flex items-center justify-between">
-        <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-widest flex items-center gap-2">
+    <div className="bg-white rounded-2xl border border-slate-200 flex flex-col h-full">
+      <div className="p-6 border-b border-slate-100 flex items-center justify-between">
+        <h3 className="text-sm font-bold text-slate-900 uppercase tracking-widest flex items-center gap-2">
           <Activity className="h-4 w-4 text-emerald-500" />
           Live Pulse
         </h3>
@@ -132,18 +133,18 @@ function LivePulse({ leads }: { leads: Lead[] }) {
             key={event.id + i}
             initial={{ x: -10, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
-            className="p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group"
+            className="p-3 rounded-xl hover:bg-slate-50 transition-colors group"
           >
             <div className="flex items-start gap-3">
               <div className={`mt-1 h-1.5 w-1.5 rounded-full flex-shrink-0 ${
-                event.type === 'CRITICAL' ? 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]' : 'bg-slate-300 dark:bg-slate-600'
+                event.type === 'CRITICAL' ? 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]' : 'bg-slate-300'
               }`} />
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 line-clamp-2 leading-relaxed">
+                <p className="text-xs font-semibold text-slate-700 line-clamp-2 leading-relaxed">
                   {event.message}
                 </p>
                 <div className="flex items-center gap-2 mt-1">
-                  <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
                     {event.time}
                   </span>
                   <span className="text-[10px] font-bold text-brand-500/80 uppercase tracking-tighter">
@@ -173,14 +174,14 @@ function MetricCard({
   colorClass: string;
 }) {
   return (
-    <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all group">
+    <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all group">
       <div className="flex items-start justify-between mb-4">
-        <div className={`p-2.5 rounded-xl ${colorClass} bg-opacity-10 dark:bg-opacity-20`}>
+        <div className={`p-2.5 rounded-xl ${colorClass} bg-opacity-10`}>
           <Icon className={`h-5 w-5 ${colorClass.replace('bg-', 'text-')}`} />
         </div>
         {trend && (
           <div className={`flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-bold uppercase ${
-            trend.positive ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10' : 'text-red-600 bg-red-50 dark:bg-red-500/10'
+            trend.positive ? 'text-emerald-600 bg-emerald-50' : 'text-red-600 bg-red-50'
           }`}>
             {trend.positive ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
             {trend.val}
@@ -188,8 +189,8 @@ function MetricCard({
         )}
       </div>
       <div>
-        <div className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">{label}</div>
-        <div className="text-2xl font-black text-slate-900 dark:text-slate-100 tracking-tight">{value}</div>
+        <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">{label}</div>
+        <div className="text-2xl font-black text-slate-900 tracking-tight">{value}</div>
       </div>
     </div>
   );
@@ -363,14 +364,14 @@ function formatRelativeTime(dateStr: string) {
 
 function MetricSkeleton() {
   return (
-    <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm animate-pulse">
+    <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm animate-pulse">
       <div className="flex justify-between mb-4">
-        <div className="w-10 h-10 bg-slate-100 dark:bg-slate-800 rounded-xl" />
-        <div className="w-12 h-5 bg-slate-50 dark:bg-slate-800 rounded-lg" />
+        <div className="w-10 h-10 bg-slate-100 rounded-xl" />
+        <div className="w-12 h-5 bg-slate-50 rounded-lg" />
       </div>
       <div className="space-y-2">
-        <div className="h-3 w-20 bg-slate-100 dark:bg-slate-800 rounded" />
-        <div className="h-8 w-24 bg-slate-200 dark:bg-slate-800 rounded" />
+        <div className="h-3 w-20 bg-slate-100 rounded" />
+        <div className="h-8 w-24 bg-slate-200 rounded" />
       </div>
     </div>
   );
@@ -378,15 +379,15 @@ function MetricSkeleton() {
 
 function ChartSkeleton() {
   return (
-    <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm h-[350px] animate-pulse">
+    <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm h-[350px] animate-pulse">
       <div className="flex justify-between mb-6">
-        <div className="h-5 w-32 bg-slate-200 dark:bg-slate-800 rounded" />
+        <div className="h-5 w-32 bg-slate-200 rounded" />
         <div className="flex gap-4">
-          <div className="h-3 w-16 bg-slate-100 dark:bg-slate-800 rounded" />
-          <div className="h-3 w-16 bg-slate-100 dark:bg-slate-800 rounded" />
+          <div className="h-3 w-16 bg-slate-100 rounded" />
+          <div className="h-3 w-16 bg-slate-100 rounded" />
         </div>
       </div>
-      <div className="h-[80%] w-full bg-slate-50 dark:bg-slate-800/50 rounded-xl mt-4" />
+      <div className="h-[80%] w-full bg-slate-50 rounded-xl mt-4" />
     </div>
   );
 }
@@ -762,7 +763,7 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-transparent overflow-x-hidden">
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto py-4">
+      <div className="w-full">
         {error && (
           <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
             {error}
@@ -812,9 +813,9 @@ export default function AdminDashboard() {
             {loading ? (
               <ChartSkeleton />
             ) : (
-              <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm h-[350px]">
+              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm h-[350px]">
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-widest flex items-center gap-2">
+                  <h3 className="text-sm font-bold text-slate-900 uppercase tracking-widest flex items-center gap-2">
                     <TrendingUp className="h-4 w-4 text-brand-500" />
                     Readiness Trend
                   </h3>
@@ -824,7 +825,7 @@ export default function AdminDashboard() {
                       Target Score
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <div className="w-2 h-2 rounded-full bg-slate-200 dark:bg-slate-700" />
+                      <div className="w-2 h-2 rounded-full bg-slate-200" />
                       Actual Score
                     </div>
                   </div>
@@ -883,8 +884,8 @@ export default function AdminDashboard() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <RiskHeatmap />
-              <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-widest flex items-center gap-2 mb-6">
+              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-widest flex items-center gap-2 mb-6">
                   <Zap className="h-4 w-4 text-amber-500" />
                   System Health
                 </h3>
@@ -899,7 +900,7 @@ export default function AdminDashboard() {
                         <span className="text-[10px] font-bold text-slate-500 uppercase">{item.label}</span>
                         <span className="text-[10px] font-bold text-emerald-500 uppercase">{item.status}</span>
                       </div>
-                      <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                      <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
                         <motion.div 
                           initial={{ width: 0 }}
                           animate={{ width: `${item.val}%` }}
@@ -1018,9 +1019,9 @@ export default function AdminDashboard() {
 
           <div className="space-y-6">
             <LivePulse leads={leads} />
-            <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-widest flex items-center gap-2">
+                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-widest flex items-center gap-2">
                   <Activity className="h-4 w-4 text-brand-500" />
                   A/B Performance
                 </h3>
@@ -1051,331 +1052,301 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Lead Detail Panel */}
-        {showDetailPanel && selectedLead && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 z-50" onClick={() => setShowDetailPanel(false)}>
-            <div 
-              className="absolute right-0 top-0 h-full w-full max-w-2xl bg-white shadow-xl overflow-y-auto"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="p-6">
-                {/* Header */}
-                <div className="flex justify-between items-start mb-6">
-                  <div>
-                    <h2 className="text-xl font-bold text-gray-900">{selectedLead.company_name}</h2>
-                    <p className="text-gray-500">{selectedLead.email || 'No email'}</p>
+          {showDetailPanel && selectedLead && (
+            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex justify-end" onClick={() => setShowDetailPanel(false)}>
+              <div 
+                className="h-full w-full max-w-2xl bg-white shadow-2xl overflow-y-auto animate-in slide-in-from-right duration-300"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="p-4 sm:p-8 pb-32">
+                  {/* Header */}
+                  <div className="flex justify-between items-start mb-8">
+                    <div>
+                      <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">{selectedLead.company_name}</h2>
+                      <p className="text-slate-500 text-sm font-medium">{selectedLead.email || 'No intelligence contact'}</p>
+                    </div>
+                    <button 
+                      onClick={() => setShowDetailPanel(false)}
+                      className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-400"
+                    >
+                      <X size={24} />
+                    </button>
                   </div>
-                  <button 
-                    onClick={() => setShowDetailPanel(false)}
-                    className="text-gray-400 hover:text-gray-600"
+
+                  <div className="space-y-6">
+                    {/* Score Breakdown */}
+                    <div className="bg-slate-50 rounded-2xl p-5 border border-slate-100">
+                      <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Risk Profile</h3>
+                      <div className="grid grid-cols-2 gap-6">
+                        <div>
+                          <div className="text-[10px] font-bold text-slate-400 uppercase mb-1">Readiness</div>
+                          <div className={`text-3xl font-black tracking-tighter ${getReadinessBand(selectedLead.readiness_score).color}`}>
+                            {selectedLead.readiness_score}%
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-[10px] font-bold text-slate-400 uppercase mb-1">Priority</div>
+                          <div className="text-3xl font-black tracking-tighter text-slate-900">{selectedLead.lead_score}/10</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Score Drivers */}
+                    <div className="bg-white rounded-2xl p-5 border border-slate-200">
+                      <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Target Parameters</h3>
+                      <div className="space-y-3">
+                        {[
+                          { label: 'Scale', val: `${selectedLead.num_employees} Employees` },
+                          { label: 'Sector', val: selectedLead.industry, capitalize: true },
+                          { label: 'Data', val: selectedLead.data_types.join(', ').toUpperCase() },
+                          { label: 'Contact Role', val: selectedLead.role, capitalize: true },
+                        ].map((item, i) => (
+                          <div key={i} className="flex justify-between items-center text-sm py-2 border-b border-slate-50 last:border-0">
+                            <span className="text-slate-400 font-medium">{item.label}</span>
+                            <span className={`font-bold text-slate-900 ${item.capitalize ? 'capitalize' : ''}`}>{item.val}</span>
+                          </div>
+                        ))}
+                        {selectedLead.soc2_requirers && selectedLead.soc2_requirers.length > 0 && (
+                          <div className="flex justify-between items-center text-sm py-2">
+                            <span className="text-slate-400 font-medium">Required By</span>
+                            <span className="font-bold text-slate-900 capitalize">{selectedLead.soc2_requirers.join(', ')}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Context Note */}
+                    {selectedLead.context_note && (
+                      <div className="bg-blue-50/50 rounded-2xl p-5 border border-blue-100">
+                        <h3 className="text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-2">Intelligence Context</h3>
+                        <p className="text-sm text-blue-900 italic font-medium leading-relaxed">"{selectedLead.context_note}"</p>
+                      </div>
+                    )}
+
+                    {/* Lead Enrichment */}
+                    <div>
+                      <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">External Signals</h3>
+                      {loadingEnrichment ? (
+                        <div className="flex gap-2 animate-pulse">
+                          <div className="h-8 w-24 bg-slate-50 rounded-lg" />
+                          <div className="h-8 w-24 bg-slate-50 rounded-lg" />
+                        </div>
+                      ) : leadEnrichment.length === 0 ? (
+                        <p className="text-xs text-slate-400 italic">No external signals identified.</p>
+                      ) : (
+                        <div className="flex flex-wrap gap-2">
+                          {leadEnrichment.map((signal, idx) => (
+                            <span key={idx} className="px-3 py-1.5 bg-slate-900 text-white text-[10px] font-bold uppercase rounded-lg">
+                              {signal.signal_type}: {signal.signal_value}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Best Matches */}
+                    <div>
+                      <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Strategic Partners</h3>
+                      {loadingMatches ? (
+                        <div className="space-y-3">
+                          <div className="h-24 w-full bg-slate-50 rounded-2xl animate-pulse" />
+                        </div>
+                      ) : leadMatches.length === 0 ? (
+                        <p className="text-xs text-slate-400 italic">No strategic matches found.</p>
+                      ) : (
+                        <div className="space-y-3">
+                          {leadMatches.map((match, idx) => (
+                            <div key={idx} className="p-4 bg-white border border-slate-200 rounded-2xl shadow-sm">
+                              <div className="flex justify-between items-start mb-3">
+                                <div>
+                                  <div className="text-sm font-bold text-slate-900">{match.buyer_name || 'Anonymous Buyer'}</div>
+                                  <div className="text-[10px] font-bold text-slate-400 uppercase">Match Score</div>
+                                </div>
+                                <div className="text-xl font-black text-emerald-600">{(match.match_score * 100).toFixed(0)}%</div>
+                              </div>
+                              <button
+                                onClick={() => {
+                                  setBuyerEmail(match.buyer_id);
+                                  setSellAmount(match.max_price.toString());
+                                  setShowSellModal(true);
+                                }}
+                                className="w-full py-2 bg-slate-900 text-white text-[10px] font-bold rounded-xl hover:opacity-90 transition-all"
+                              >
+                                Route Lead (${match.max_price})
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Status Update */}
+                    <div>
+                      <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Pipeline Status</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {LEAD_STATUSES.map((s) => (
+                          <button
+                            key={s.value}
+                            onClick={() => handleStatusChange(selectedLead.id, s.value)}
+                            className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase transition-all ${
+                              selectedLead.lead_status === s.value
+                                ? 'bg-slate-900 text-white'
+                                : 'bg-slate-50 text-slate-500 hover:bg-slate-100'
+                            }`}
+                          >
+                            {s.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Admin Notes */}
+                    <div>
+                      <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Observation Logs</h3>
+                      <div className="flex gap-2 mb-4">
+                        <input
+                          type="text"
+                          value={newNote}
+                          onChange={(e) => setNewNote(e.target.value)}
+                          placeholder="Log observation..."
+                          className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                          onKeyPress={(e) => e.key === 'Enter' && handleAddNote()}
+                        />
+                        <button onClick={handleAddNote} className="px-4 py-2 bg-slate-900 text-white text-[10px] font-bold rounded-xl">
+                          LOG
+                        </button>
+                      </div>
+                      <div className="space-y-3 max-h-60 overflow-y-auto custom-scrollbar">
+                        {leadNotes.length === 0 ? (
+                          <p className="text-xs text-slate-400 italic">No observations logged.</p>
+                        ) : (
+                          leadNotes.map((note) => (
+                            <div key={note.id} className="bg-slate-50 rounded-xl p-3 border border-slate-100">
+                              <p className="text-sm text-slate-700 leading-relaxed">{note.note}</p>
+                              <div className="text-[10px] font-bold text-slate-400 uppercase mt-2">
+                                {note.author} • {formatDate(note.created_at)}
+                              </div>
+                            </div>
+                          ))
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Final Actions */}
+                    <div className="flex gap-3 pt-6 border-t border-slate-100">
+                      {selectedLead.pdf_url && (
+                        <a
+                          href={selectedLead.pdf_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-1 flex items-center justify-center gap-2 py-3 border border-slate-200 rounded-2xl text-[10px] font-bold uppercase hover:bg-slate-50 transition-all"
+                        >
+                          <FileText size={16} />
+                          Intelligence Report
+                        </a>
+                      )}
+                      {!selectedLead.sold && selectedLead.keep_or_sell === 'sell' && (
+                        <button
+                          onClick={() => setShowSellModal(true)}
+                          className="flex-1 py-3 bg-brand-500 text-white rounded-2xl text-[10px] font-bold uppercase hover:opacity-90 shadow-lg shadow-brand-500/20 transition-all"
+                        >
+                          Establish Partnership
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Sell Modal */}
+          {showSellModal && selectedLead && (
+            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[60] p-4">
+              <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl animate-in zoom-in-95 duration-200">
+                <h3 className="text-lg font-bold text-slate-900 mb-2">Establish Strategic Partnership</h3>
+                <p className="text-slate-500 text-sm mb-6">
+                  Finalizing routing for <strong className="text-slate-900">{selectedLead.company_name}</strong>.
+                </p>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Partnership Value ($)</label>
+                    <input
+                      type="number"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                      placeholder="500"
+                      value={sellAmount}
+                      onChange={(e) => setSellAmount(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Partner Identifier</label>
+                    <input
+                      type="email"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                      placeholder="partner@risclens.com"
+                      value={buyerEmail}
+                      onChange={(e) => setBuyerEmail(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="flex gap-3 mt-8">
+                  <button
+                    onClick={() => {
+                      setShowSellModal(false);
+                      setSellAmount('');
+                      setBuyerEmail('');
+                    }}
+                    className="flex-1 py-2 text-[10px] font-bold uppercase text-slate-500 hover:bg-slate-50 rounded-xl transition-all"
                   >
-                    ✕
+                    Abort
+                  </button>
+                  <button
+                    onClick={handleMarkSold}
+                    disabled={actionLoading || !sellAmount || !buyerEmail}
+                    className="flex-1 py-2 bg-slate-900 text-white text-[10px] font-bold uppercase rounded-xl disabled:opacity-50 transition-all"
+                  >
+                    {actionLoading ? 'Processing...' : 'Execute Routing'}
                   </button>
                 </div>
-
-                {/* Score Breakdown */}
-                <div className="bg-gray-50 rounded-lg p-4 mb-6">
-                  <h3 className="font-semibold text-gray-900 mb-3">Score Breakdown</h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <div className="text-sm text-gray-500">Readiness Score</div>
-                      <div className={`text-2xl font-bold ${getReadinessBand(selectedLead.readiness_score).color}`}>
-                        {selectedLead.readiness_score}%
-                      </div>
-                      <div className="text-xs text-gray-400">{getReadinessBand(selectedLead.readiness_score).label}</div>
-                    </div>
-                    <div>
-                      <div className="text-sm text-gray-500">Lead Score</div>
-                      <div className="text-2xl font-bold text-gray-900">{selectedLead.lead_score}/10</div>
-                      <div className="text-xs text-gray-400">{selectedLead.keep_or_sell === 'keep' ? 'Keep' : 'Sell'}</div>
-                    </div>
-                    <div>
-                      <div className="text-sm text-gray-500">Cost Estimate</div>
-                      <div className="text-lg font-semibold text-gray-900">
-                        {formatCurrency(selectedLead.estimated_cost_low)} - {formatCurrency(selectedLead.estimated_cost_high)}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Score Drivers */}
-                <div className="bg-gray-50 rounded-lg p-4 mb-6">
-                  <h3 className="font-semibold text-gray-900 mb-3">Score Drivers</h3>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Employees</span>
-                      <span className="font-medium">{selectedLead.num_employees}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Industry</span>
-                      <span className="font-medium capitalize">{selectedLead.industry}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Data Types</span>
-                      <span className="font-medium">{selectedLead.data_types.join(', ').toUpperCase()}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Role</span>
-                      <span className="font-medium capitalize">{selectedLead.role}</span>
-                    </div>
-                    {selectedLead.soc2_requirers && selectedLead.soc2_requirers.length > 0 && (
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Required By</span>
-                        <span className="font-medium capitalize">{selectedLead.soc2_requirers.join(', ')}</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Context Note */}
-                {selectedLead.context_note && (
-                  <div className="bg-blue-50 rounded-lg p-4 mb-6">
-                    <h3 className="font-semibold text-blue-900 mb-2">Context Note</h3>
-                    <p className="text-sm text-blue-800 italic">"{selectedLead.context_note}"</p>
-                  </div>
-                )}
-
-                {/* Lead Enrichment */}
-                <div className="mb-6">
-                  <h3 className="font-semibold text-gray-900 mb-3">Market Intelligence (Enrichment)</h3>
-                  {loadingEnrichment ? (
-                    <div className="flex gap-2 animate-pulse">
-                      <div className="h-4 w-20 bg-gray-100 rounded" />
-                      <div className="h-4 w-20 bg-gray-100 rounded" />
-                    </div>
-                  ) : leadEnrichment.length === 0 ? (
-                    <p className="text-sm text-gray-400 italic">No external signals found.</p>
-                  ) : (
-                    <div className="flex flex-wrap gap-2">
-                      {leadEnrichment.map((signal, idx) => (
-                        <span key={idx} className="px-2 py-1 bg-brand-50 text-brand-700 text-[10px] font-bold uppercase rounded border border-brand-100">
-                          {signal.signal_type}: {signal.signal_value}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* Best Matches */}
-                <div className="mb-6">
-                  <h3 className="font-semibold text-gray-900 mb-3">Top Buyer Matches</h3>
-                  {loadingMatches ? (
-                    <div className="space-y-2">
-                      <div className="h-10 w-full bg-gray-50 rounded animate-pulse" />
-                      <div className="h-10 w-full bg-gray-50 rounded animate-pulse" />
-                    </div>
-                  ) : leadMatches.length === 0 ? (
-                    <p className="text-sm text-gray-400 italic">No buyer matches found for this profile.</p>
-                  ) : (
-                    <div className="space-y-3">
-                      {leadMatches.map((match, idx) => (
-                        <div key={idx} className="p-3 bg-white border border-gray-100 rounded-lg shadow-sm hover:border-brand-200 transition-colors">
-                          <div className="flex justify-between items-start mb-2">
-                            <div>
-                              <span className="text-xs font-bold text-gray-400 uppercase">Buyer {idx + 1}</span>
-                              <div className="text-sm font-semibold text-gray-900">{match.buyer_name || 'Anonymous Buyer'}</div>
-                            </div>
-                            <div className="text-right">
-                              <div className="text-xs font-bold text-emerald-600 uppercase">Match Score</div>
-                              <div className="text-lg font-black text-emerald-600">{(match.match_score * 100).toFixed(0)}%</div>
-                            </div>
-                          </div>
-                          <ul className="text-[10px] text-gray-500 space-y-0.5 mb-3">
-                            {match.match_reasons.map((reason: string, rIdx: number) => (
-                              <li key={rIdx} className="flex items-center gap-1">
-                                <span className="text-emerald-500">✓</span> {reason}
-                              </li>
-                            ))}
-                          </ul>
-                          <button
-                            onClick={() => {
-                              setBuyerEmail(match.buyer_id);
-                              setSellAmount(match.max_price.toString());
-                              setShowSellModal(true);
-                            }}
-                            className="w-full py-1.5 bg-brand-600 text-white text-[10px] font-bold rounded-lg hover:bg-brand-700 transition-colors"
-                          >
-                            Sell Lead for ${match.max_price}
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* Distribution Status */}
-                <div className="bg-green-50 rounded-lg p-4 mb-6">
-                  <h3 className="font-semibold text-gray-900 mb-2">Distribution Status</h3>
-                  <div className="flex items-center gap-3">
-                    <div className={`w-3 h-3 rounded-full ${selectedLead.sold ? 'bg-green-500' : 'bg-gray-300'}`} />
-                    <span className="text-sm font-medium">
-                      {selectedLead.sold 
-                        ? `Sold to ${selectedLead.buyer_email || 'Buyer'} for ${formatCurrency(selectedLead.sale_amount || 0)}` 
-                        : selectedLead.keep_or_sell === 'sell' ? 'Waiting for buyer' : 'Internal Lead (Keep)'}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Status */}
-                <div className="mb-6">
-                  <h3 className="font-semibold text-gray-900 mb-3">Lead Status</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {LEAD_STATUSES.map((s) => (
-                      <button
-                        key={s.value}
-                        onClick={() => handleStatusChange(selectedLead.id, s.value)}
-                        className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
-                          selectedLead.lead_status === s.value
-                            ? s.color + ' ring-2 ring-offset-1 ring-gray-400'
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                        }`}
-                      >
-                        {s.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Admin Notes */}
-                <div className="mb-6">
-                  <h3 className="font-semibold text-gray-900 mb-3">Admin Notes</h3>
-                  <div className="flex gap-2 mb-4">
-                    <input
-                      type="text"
-                      value={newNote}
-                      onChange={(e) => setNewNote(e.target.value)}
-                      placeholder="Add a note..."
-                      className="form-input flex-1"
-                      onKeyPress={(e) => e.key === 'Enter' && handleAddNote()}
-                    />
-                    <button onClick={handleAddNote} className="btn-primary">
-                      Add
-                    </button>
-                  </div>
-                  <div className="space-y-3 max-h-60 overflow-y-auto">
-                    {leadNotes.length === 0 ? (
-                      <p className="text-sm text-gray-400">No notes yet.</p>
-                    ) : (
-                      leadNotes.map((note) => (
-                        <div key={note.id} className="bg-gray-50 rounded p-3">
-                          <p className="text-sm text-gray-700">{note.note}</p>
-                          <p className="text-xs text-gray-400 mt-1">
-                            {note.author} • {formatDate(note.created_at)}
-                          </p>
-                        </div>
-                      ))
-                    )}
-                  </div>
-                </div>
-
-                {/* Actions */}
-                <div className="flex gap-3">
-                  {selectedLead.pdf_url && (
-                    <a
-                      href={selectedLead.pdf_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn-secondary"
-                    >
-                      View PDF
-                    </a>
-                  )}
-                  {!selectedLead.sold && selectedLead.keep_or_sell === 'sell' && (
-                    <button
-                      onClick={() => setShowSellModal(true)}
-                      className="btn-primary"
-                    >
-                      Mark as Sold
-                    </button>
-                  )}
-                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Sell Modal */}
-        {showSellModal && selectedLead && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-              <h3 className="text-lg font-semibold mb-4">Mark Lead as Sold</h3>
-              <p className="text-gray-600 mb-4">
-                <strong>{selectedLead.company_name}</strong> ({selectedLead.email})
-              </p>
-              <div className="space-y-4">
-                <div>
-                  <label className="form-label">Sale Amount ($)</label>
+          {/* Save Filter Modal */}
+          {showSaveFilterModal && (
+            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[60] p-4">
+              <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl animate-in zoom-in-95 duration-200">
+                <h3 className="text-lg font-bold text-slate-900 mb-2">Save Search Parameter</h3>
+                <div className="mt-4">
+                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Parameter Name</label>
                   <input
-                    type="number"
-                    className="form-input"
-                    placeholder="500"
-                    value={sellAmount}
-                    onChange={(e) => setSellAmount(e.target.value)}
+                    type="text"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                    placeholder="e.g., High-Priority Fintech"
+                    value={newFilterName}
+                    onChange={(e) => setNewFilterName(e.target.value)}
                   />
                 </div>
-                <div>
-                  <label className="form-label">Buyer Email</label>
-                  <input
-                    type="email"
-                    className="form-input"
-                    placeholder="buyer@company.com"
-                    value={buyerEmail}
-                    onChange={(e) => setBuyerEmail(e.target.value)}
-                  />
+                <div className="flex gap-3 mt-8">
+                  <button 
+                    onClick={() => setShowSaveFilterModal(false)} 
+                    className="flex-1 py-2 text-[10px] font-bold uppercase text-slate-500 hover:bg-slate-50 rounded-xl transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    onClick={handleSaveFilter} 
+                    disabled={!newFilterName.trim()} 
+                    className="flex-1 py-2 bg-brand-500 text-white text-[10px] font-bold uppercase rounded-xl disabled:opacity-50 transition-all"
+                  >
+                    Save Parameter
+                  </button>
                 </div>
               </div>
-              <div className="flex justify-end gap-3 mt-6">
-                <button
-                  onClick={() => {
-                    setShowSellModal(false);
-                    setSellAmount('');
-                    setBuyerEmail('');
-                  }}
-                  className="btn-secondary"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleMarkSold}
-                  disabled={actionLoading || !sellAmount || !buyerEmail}
-                  className="btn-primary"
-                >
-                  {actionLoading ? 'Saving...' : 'Confirm Sale'}
-                </button>
-              </div>
             </div>
-          </div>
-        )}
-
-        {/* Save Filter Modal */}
-        {showSaveFilterModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-              <h3 className="text-lg font-semibold mb-4">Save Current Filter</h3>
-              <div>
-                <label className="form-label">Filter Name</label>
-                <input
-                  type="text"
-                  className="form-input"
-                  placeholder="e.g., Enterprise + Urgent"
-                  value={newFilterName}
-                  onChange={(e) => setNewFilterName(e.target.value)}
-                />
-              </div>
-              <div className="flex justify-end gap-3 mt-6">
-                <button onClick={() => setShowSaveFilterModal(false)} className="btn-secondary">
-                  Cancel
-                </button>
-                <button onClick={handleSaveFilter} disabled={!newFilterName.trim()} className="btn-primary">
-                  Save Filter
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
-    </div>
-  );
-}
-
-
+    );
+  }

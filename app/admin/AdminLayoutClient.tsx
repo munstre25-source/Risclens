@@ -4,7 +4,6 @@ import { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
-import { ThemeToggle } from '@/components/ThemeToggle';
 import { 
   LayoutDashboard, 
   Target, 
@@ -41,9 +40,9 @@ const SECONDARY_NAV = [
   { href: '/admin/kgr/explorer', label: 'Signal Explorer', icon: Search },
   { href: '/admin/analytics', label: 'Metrics', icon: ShieldCheck },
   { href: '/admin/buyers', label: 'Partners', icon: Users },
-    { href: '/admin/audit', label: 'Audit Logs', icon: History },
-    { href: '/admin/audit/content', label: 'Content Audit', icon: Database },
-    { href: '/admin/intelligence/directory', label: 'Repository', icon: Library },
+  { href: '/admin/audit', label: 'Audit Logs', icon: History },
+  { href: '/admin/audit/content', label: 'Content Audit', icon: Database },
+  { href: '/admin/intelligence/directory', label: 'Repository', icon: Library },
   { href: '/admin/test-mode', label: 'Dev Console', icon: Terminal },
   { href: '/admin/experiments', label: 'A/B Labs', icon: FlaskConical },
   { href: '/admin/settings', label: 'Config', icon: Settings },
@@ -66,12 +65,12 @@ function CommandPalette({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
   return (
     <div className="fixed inset-0 z-[100] flex items-start justify-center pt-[10vh] px-4 sm:px-6">
       <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" onClick={onClose} />
-      <div className="relative w-full max-w-lg overflow-hidden rounded-xl bg-white dark:bg-slate-900 shadow-2xl border border-slate-200 dark:border-slate-800 ring-1 ring-black/5">
-        <div className="flex items-center px-4 py-3 border-b border-slate-200 dark:border-slate-800">
+      <div className="relative w-full max-w-lg overflow-hidden rounded-xl bg-white shadow-2xl border border-slate-200 ring-1 ring-black/5">
+        <div className="flex items-center px-4 py-3 border-b border-slate-200">
           <SearchIcon className="h-5 w-5 text-slate-400" />
           <input
             autoFocus
-            className="flex-1 ml-3 bg-transparent text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none"
+            className="flex-1 ml-3 bg-transparent text-sm text-slate-900 placeholder-slate-400 focus:outline-none"
             placeholder="Search commands... (Esc to close)"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -84,7 +83,7 @@ function CommandPalette({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
               key={item.href}
               href={item.href}
               onClick={onClose}
-              className="flex items-center gap-3 px-3 py-2 text-sm rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition-colors"
+              className="flex items-center gap-3 px-3 py-2 text-sm rounded-lg hover:bg-slate-100 text-slate-700 transition-colors"
             >
               <item.icon className="h-4 w-4" />
               <span>{item.label}</span>
@@ -193,10 +192,10 @@ export default function AdminLayoutClient({
 
   if (authState === 'loading') {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
           <div className="w-10 h-10 border-4 border-brand-500 border-t-transparent rounded-full animate-spin" />
-          <div className="text-slate-500 dark:text-slate-400 font-medium">Initializing Command Center...</div>
+          <div className="text-slate-500 font-medium">Initializing Command Center...</div>
         </div>
       </div>
     );
@@ -204,19 +203,19 @@ export default function AdminLayoutClient({
 
   if (authState === 'unauthenticated') {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
         <div className="max-w-md w-full">
-          <div className="bg-white dark:bg-slate-900 p-8 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800">
+          <div className="bg-white p-8 rounded-2xl shadow-xl border border-slate-200">
             <div className="flex flex-col items-center mb-8">
-              <Image src="/logo/logo-wordmark.png" alt="RiscLens" width={180} height={60} className="dark:invert mb-4" />
-              <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+              <Image src="/logo/logo-wordmark.png" alt="RiscLens" width={180} height={60} className="mb-4" />
+              <h1 className="text-xl font-bold text-slate-900">
                 Risk Intelligence Access
               </h1>
-              <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Authorized Operators Only</p>
+              <p className="text-slate-500 text-sm mt-1">Authorized Operators Only</p>
             </div>
             <form onSubmit={handleLogin} className="space-y-6">
               <div>
-                <label htmlFor="secret" className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+                <label htmlFor="secret" className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
                   Security Secret
                 </label>
                 <input
@@ -225,14 +224,14 @@ export default function AdminLayoutClient({
                   value={secret}
                   onChange={(e) => setSecret(e.target.value)}
                   required
-                  className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
                   placeholder="Enter access code"
                   autoComplete="off"
                   disabled={isLoggingIn}
                 />
               </div>
               {error && (
-                <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/50 rounded-lg text-red-700 dark:text-red-400 text-sm flex items-center gap-2">
+                <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm flex items-center gap-2">
                   <ShieldCheck size={16} />
                   {error}
                 </div>
@@ -240,7 +239,7 @@ export default function AdminLayoutClient({
               <button
                 type="submit"
                 disabled={isLoggingIn || !secret}
-                className="w-full bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 py-3 rounded-xl font-semibold hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100"
+                className="w-full bg-slate-900 text-white py-3 rounded-xl font-semibold hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100"
               >
                 {isLoggingIn ? 'Verifying...' : 'Establish Session'}
               </button>
@@ -252,25 +251,25 @@ export default function AdminLayoutClient({
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 selection:bg-brand-500/30">
+    <div className="min-h-screen bg-slate-50 text-slate-900 selection:bg-brand-500/30">
       <CommandPalette isOpen={isCommandPaletteOpen} onClose={() => setIsCommandPaletteOpen(false)} />
       
       <div className="flex min-h-screen">
         {/* Desktop Sidebar */}
-        <aside className="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 hidden lg:flex flex-col sticky top-0 h-screen">
-          <div className="px-6 py-6 border-b border-slate-100 dark:border-slate-800/50">
+        <aside className="w-64 bg-white border-r border-slate-200 hidden lg:flex flex-col sticky top-0 h-screen">
+          <div className="px-6 py-6 border-b border-slate-100">
             <Link href="/admin" className="block">
-              <Image src="/logo/logo-wordmark.png" alt="RiscLens" width={140} height={40} className="dark:invert" />
+              <Image src="/logo/logo-wordmark.png" alt="RiscLens" width={140} height={40} />
               <div className="flex items-center gap-1.5 mt-2">
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Operator Console</span>
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Operator Console</span>
               </div>
             </Link>
           </div>
           
           <nav className="flex-1 px-4 py-6 overflow-y-auto space-y-8 custom-scrollbar">
             <div>
-              <div className="px-3 mb-2 text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Primary Systems</div>
+              <div className="px-3 mb-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Primary Systems</div>
               <ul className="space-y-1">
                 {PRIMARY_NAV.map((item) => {
                   const active = pathname === item.href;
@@ -280,8 +279,8 @@ export default function AdminLayoutClient({
                         href={item.href}
                         className={`flex items-center gap-3 px-3 py-2 text-sm rounded-xl transition-all ${
                           active
-                            ? 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-semibold shadow-lg shadow-slate-900/10 dark:shadow-slate-100/10'
-                            : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100'
+                            ? 'bg-slate-900 text-white font-semibold shadow-lg shadow-slate-900/10'
+                            : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                         }`}
                       >
                         <item.icon size={18} strokeWidth={active ? 2.5 : 2} />
@@ -294,7 +293,7 @@ export default function AdminLayoutClient({
             </div>
 
             <div>
-              <div className="px-3 mb-2 text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Support Modules</div>
+              <div className="px-3 mb-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Support Modules</div>
               <ul className="space-y-1">
                 {SECONDARY_NAV.slice(0, 6).map((item) => {
                   const active = pathname === item.href;
@@ -304,8 +303,8 @@ export default function AdminLayoutClient({
                         href={item.href}
                         className={`flex items-center gap-3 px-3 py-2 text-sm rounded-xl transition-all ${
                           active
-                            ? 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-semibold shadow-lg shadow-slate-900/10 dark:shadow-slate-100/10'
-                            : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100'
+                            ? 'bg-slate-900 text-white font-semibold shadow-lg shadow-slate-900/10'
+                            : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                         }`}
                       >
                         <item.icon size={18} strokeWidth={active ? 2.5 : 2} />
@@ -318,16 +317,13 @@ export default function AdminLayoutClient({
             </div>
           </nav>
 
-          <div className="p-4 space-y-4 border-t border-slate-100 dark:border-slate-800/50">
-            <div className="px-3">
-              <ThemeToggle />
-            </div>
+          <div className="p-4 space-y-4 border-t border-slate-100">
             <button
               onClick={async () => {
                 await fetch('/api/admin/logout', { method: 'POST', credentials: 'include' });
                 window.location.href = '/admin';
               }}
-              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-xl transition-all group"
+              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all group"
             >
               <LogOut size={18} className="group-hover:translate-x-0.5 transition-transform" />
               Sign Out
@@ -337,21 +333,21 @@ export default function AdminLayoutClient({
 
         <div className="flex-1 flex flex-col">
           {/* Mobile Header */}
-            <header className="lg:hidden sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
-              <div className="px-4 h-14 flex items-center justify-between">
-                <Link href="/admin" className="flex items-center gap-2">
-                  <Image src="/logo/logo-wordmark.png" alt="RiscLens" width={100} height={30} className="dark:invert h-[30px] w-auto" />
-                </Link>
+          <header className="lg:hidden sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-200">
+            <div className="px-4 h-14 flex items-center justify-between">
+              <Link href="/admin" className="flex items-center gap-2">
+                <Image src="/logo/logo-wordmark.png" alt="RiscLens" width={100} height={30} className="h-[30px] w-auto" />
+              </Link>
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setIsCommandPaletteOpen(true)}
-                  className="p-2 text-slate-500 dark:text-slate-400"
+                  className="p-2 text-slate-500"
                 >
                   <SearchIcon size={20} />
                 </button>
                 <button
                   onClick={() => setIsMoreDrawerOpen(true)}
-                  className="p-2 text-slate-500 dark:text-slate-400"
+                  className="p-2 text-slate-500"
                 >
                   <Menu size={20} />
                 </button>
@@ -359,19 +355,19 @@ export default function AdminLayoutClient({
             </div>
           </header>
 
-          <main className="flex-1 p-4 md:p-8 pb-24 lg:pb-8">
+          <main className="flex-1 px-4 py-6 md:p-8 pb-24 lg:pb-8">
             <div className="max-w-6xl mx-auto space-y-6">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                  <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+                  <h2 className="text-xl md:text-2xl font-bold tracking-tight text-slate-900">
                     {ALL_NAV_ITEMS.find(i => i.href === pathname)?.label || 'Intelligence Center'}
                   </h2>
-                  <p className="text-slate-500 dark:text-slate-400 text-sm">
+                  <p className="text-slate-500 text-xs md:text-sm">
                     {pathname === '/admin' ? 'Monitoring real-time risk landscape' : 'Operator Mode Activated'}
                   </p>
                 </div>
                 {testMode && (
-                  <div className="flex items-center gap-2 rounded-full bg-amber-500/10 px-3 py-1.5 text-[10px] font-bold text-amber-600 dark:text-amber-500 border border-amber-500/20 uppercase tracking-widest">
+                  <div className="flex self-start sm:self-auto items-center gap-2 rounded-full bg-amber-500/10 px-3 py-1.5 text-[10px] font-bold text-amber-600 border border-amber-500/20 uppercase tracking-widest">
                     <div className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
                     Simulated Environment
                   </div>
@@ -382,7 +378,7 @@ export default function AdminLayoutClient({
           </main>
 
           {/* Mobile Bottom Nav */}
-          <nav className="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-4 pb-safe pt-2 shadow-[0_-1px_10px_rgba(0,0,0,0.05)]">
+          <nav className="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-white border-t border-slate-200 px-4 pb-safe pt-2 shadow-[0_-1px_10px_rgba(0,0,0,0.05)]">
             <div className="flex items-center justify-around">
               {PRIMARY_NAV.map((item) => {
                 const active = pathname === item.href;
@@ -392,8 +388,8 @@ export default function AdminLayoutClient({
                     href={item.href}
                     className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all ${
                       active
-                        ? 'text-slate-900 dark:text-white'
-                        : 'text-slate-400 dark:text-slate-500'
+                        ? 'text-slate-900'
+                        : 'text-slate-400'
                     }`}
                   >
                     <item.icon size={20} strokeWidth={active ? 2.5 : 2} />
@@ -403,7 +399,7 @@ export default function AdminLayoutClient({
               })}
               <button
                 onClick={() => setIsMoreDrawerOpen(true)}
-                className="flex flex-col items-center gap-1 p-2 text-slate-400 dark:text-slate-500"
+                className="flex flex-col items-center gap-1 p-2 text-slate-400"
               >
                 <MoreHorizontal size={20} />
                 <span className="text-[10px] font-bold uppercase tracking-wider">More</span>
@@ -415,31 +411,27 @@ export default function AdminLayoutClient({
           {isMoreDrawerOpen && (
             <>
               <div className="fixed inset-0 z-[60] bg-slate-900/40 backdrop-blur-sm" onClick={() => setIsMoreDrawerOpen(false)} />
-              <div className="fixed inset-x-0 bottom-0 z-[70] bg-white dark:bg-slate-900 rounded-t-3xl border-t border-slate-200 dark:border-slate-800 p-6 animate-in slide-in-from-bottom duration-300">
-                <div className="w-12 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mb-6" />
+              <div className="fixed inset-x-0 bottom-0 z-[70] bg-white rounded-t-3xl border-t border-slate-200 p-6 animate-in slide-in-from-bottom duration-300">
+                <div className="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-6" />
                 <div className="grid grid-cols-3 gap-4 mb-8">
                   {SECONDARY_NAV.map((item) => (
                     <Link
                       key={item.href}
                       href={item.href}
                       onClick={() => setIsMoreDrawerOpen(false)}
-                      className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700"
+                      className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-slate-50 border border-slate-100"
                     >
-                      <item.icon size={20} className="text-slate-600 dark:text-slate-400" />
-                      <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300 uppercase text-center">{item.label}</span>
+                      <item.icon size={20} className="text-slate-600" />
+                      <span className="text-[10px] font-bold text-slate-700 uppercase text-center">{item.label}</span>
                     </Link>
                   ))}
-                </div>
-                <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700">
-                  <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">System Theme</span>
-                  <ThemeToggle />
                 </div>
                 <button
                   onClick={async () => {
                     await fetch('/api/admin/logout', { method: 'POST', credentials: 'include' });
                     window.location.href = '/admin';
                   }}
-                  className="w-full mt-6 flex items-center justify-center gap-2 p-4 text-red-600 font-bold bg-red-50 dark:bg-red-900/10 rounded-2xl"
+                  className="w-full mt-6 flex items-center justify-center gap-2 p-4 text-red-600 font-bold bg-red-50 rounded-2xl"
                 >
                   <LogOut size={20} />
                   Terminate Session

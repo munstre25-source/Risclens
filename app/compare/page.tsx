@@ -42,15 +42,31 @@ export default function ComparisonsHubPage() {
       {/* Hero Section */}
       <section className="bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 lg:py-24 grid lg:grid-cols-2 gap-12 items-center">
-          <div className="text-left space-y-6">
-            <p className="text-sm font-semibold uppercase tracking-wide text-brand-600">Comparison Hub</p>
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
-              Compliance Automation <span className="text-brand-600">Showdown</span>
-            </h1>
-            <p className="text-lg text-slate-600 leading-relaxed">
-              We've done the heavy lifting. Compare features, pricing, and audit support across the most popular GRC and compliance tools in the market today.
-            </p>
-            <div className="flex flex-wrap gap-4 pt-4">
+            <div className="text-left space-y-6">
+              <p className="text-sm font-semibold uppercase tracking-wide text-brand-600">Comparison Hub</p>
+              <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
+                Compliance Automation <span className="text-brand-600">Showdown</span>
+              </h1>
+              <p className="text-lg text-slate-600 leading-relaxed">
+                We&apos;ve done the heavy lifting. Compare features, pricing, and audit support across the most popular GRC and compliance tools in the market today.
+              </p>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 border-t border-slate-100 pt-8">
+                <div>
+                  <p className="text-2xl font-bold text-slate-900">15+</p>
+                  <p className="text-xs text-slate-500 font-medium uppercase tracking-wider">Head-to-Head Reviews</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-slate-900">2026</p>
+                  <p className="text-xs text-slate-500 font-medium uppercase tracking-wider">Market Intelligence</p>
+                </div>
+                <div className="hidden sm:block">
+                  <p className="text-2xl font-bold text-slate-900">100%</p>
+                  <p className="text-xs text-slate-500 font-medium uppercase tracking-wider">Independent Data</p>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-4 pt-4">
               <Link 
                 href="/compliance-roi-calculator"
                 className="bg-slate-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-slate-800 transition-all flex items-center gap-2"
@@ -119,27 +135,27 @@ export default function ComparisonsHubPage() {
             <p className="text-slate-600">Programmatic intelligence across the top 6 compliance automation tools.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {programmaticComparisons.map((comparison) => (
-              <Link 
-                key={comparison.slug}
-                href={`/compliance/compare/${comparison.slug}`}
-                className="group flex items-center justify-between bg-white border border-slate-200 rounded-xl p-5 transition-all hover:border-brand-200 hover:shadow-md"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center justify-center w-8 h-8 rounded bg-brand-50 text-brand-600 font-bold text-xs uppercase">
-                    vs
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {programmaticComparisons.map((comparison) => (
+                <Link 
+                  key={comparison.slug}
+                  href={`/compare/${comparison.slug}`}
+                  className="group flex items-center justify-between bg-white border border-slate-200 rounded-xl p-5 transition-all hover:border-brand-200 hover:shadow-md"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center justify-center w-8 h-8 rounded bg-brand-50 text-brand-600 font-bold text-xs uppercase">
+                      vs
+                    </div>
+                    <span className="font-bold text-slate-800 group-hover:text-brand-700 transition-colors">
+                      {comparison.toolA} vs {comparison.toolB}
+                    </span>
                   </div>
-                  <span className="font-bold text-slate-800 group-hover:text-brand-700 transition-colors">
-                    {comparison.toolA} vs {comparison.toolB}
-                  </span>
-                </div>
-                <svg className="w-4 h-4 text-slate-300 group-hover:text-brand-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-            ))}
-          </div>
+                  <svg className="w-4 h-4 text-slate-300 group-hover:text-brand-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              ))}
+            </div>
 
           {/* Need help? card */}
           <div className="mt-20 bg-brand-600 rounded-3xl p-8 lg:p-12 text-center text-white overflow-hidden relative">

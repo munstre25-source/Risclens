@@ -1,13 +1,56 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { createLead } from '@/lib/leads';
 import { logAuditEvent } from '@/lib/supabase';
 import { calculateLeadScore } from '@/lib/scoring';
 import { enrichLead } from '@/lib/enrichment';
 import { dispatchLeadToBuyers } from '@/lib/monetization';
+import { applyRateLimit } from '@/lib/rate-limit';
+
+// Strict validation schema for lead submission
+const LeadSubmitSchema = z.object({
+  name: z.string().min(1, 'Name is required').max(100).nullable().optional(),
+  email: z.string().email('Invalid email address').max(254),
+  company: z.string().max(200).nullable().optional(),
+  lead_type: z.string().max(50).default('generic_lead'),
+  source_url: z.string().url().max(500).nullable().optional(),
+  website: z.string().max(200).nullable().optional(), // Honeypot
+  num_employees: z.union([z.number(), z.string()]).optional(),
+  employees: z.union([z.number(), z.string()]).optional(),
+  audit_date: z.string().optional(),
+  data_types: z.array(z.string()).optional(),
+  role: z.string().optional(),
+  industry: z.string().optional(),
+  soc2_requirers: z.array(z.string()).optional(),
+  notes: z.string().max(1000).optional(),
+  utm_source: z.string().max(100).nullable().optional(),
+  utm_medium: z.string().max(100).nullable().optional(),
+  utm_campaign: z.string().max(100).nullable().optional(),
+  utm_content: z.string().max(100).nullable().optional(),
+  utm_term: z.string().max(100).nullable().optional(),
+  phone: z.string().max(30).nullable().optional(),
+  budget_range: z.string().max(100).nullable().optional(),
+  budget_comfort: z.string().max(100).nullable().optional(),
+}).passthrough(); // Allow extra fields but validate the core ones
 
 export async function POST(request: NextRequest) {
   try {
+    // 1. Rate Limiting
+    const rateLimitResponse = await applyRateLimit(request);
+    if (rateLimitResponse) return rateLimitResponse;
+
     const body = await request.json();
+
+    // 2. Input Validation
+    const validation = LeadSubmitSchema.safeParse(body);
+    if (!validation.success) {
+      return NextResponse.json({ 
+        ok: false, 
+        error: 'Validation failed', 
+        details: validation.error.flatten().fieldErrors 
+      }, { status: 400 });
+    }
+
     const { 
       name, 
       email, 
@@ -16,14 +59,14 @@ export async function POST(request: NextRequest) {
       source_url,
       website, // Honeypot
       ...otherData 
-    } = body;
+    } = validation.data;
 
     // Honeypot check
     if (website && website.trim().length > 0) {
       return NextResponse.json({ ok: true });
     }
 
-    // 1. Calculate lead score
+    // 3. Calculate lead score
     const scoringInput = {
       num_employees: Number(otherData.num_employees || otherData.employees || 0),
       audit_date: otherData.audit_date || new Date().toISOString(),
@@ -55,11 +98,10 @@ export async function POST(request: NextRequest) {
         utmCampaign: otherData.utm_campaign ?? null,
         utmContent: otherData.utm_content ?? null,
         utmTerm: otherData.utm_term ?? null,
-          phone: otherData.phone ?? null,
-          budgetRange: otherData.budget_range ?? otherData.budget_comfort ?? null,
-          budgetComfort: otherData.budget_comfort ?? null,
-          ...otherData
-
+        phone: otherData.phone ?? null,
+        budgetRange: otherData.budget_range ?? otherData.budget_comfort ?? null,
+        budgetComfort: otherData.budget_comfort ?? null,
+        ...otherData
       },
     });
 
@@ -67,14 +109,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ ok: false, error: 'Failed to create lead' }, { status: 500 });
     }
 
-    // 2. Routing Logic: If high value lead, trigger immediate enrichment and alert
+    // 4. Routing Logic: If high value lead, trigger immediate enrichment and alert
     if (scoringResult.keep_or_sell === 'keep' || scoringResult.lead_score >= 8) {
       console.log(`[ALERT] High-value lead detected: ${email} (Score: ${scoringResult.lead_score})`);
-      // In a real app, send Slack/Discord webhook here
     }
 
-    // 3. Background Enrichment and Monetization Dispatch
-    // We don't await these to keep the response fast for the user
+    // 5. Background Enrichment and Monetization Dispatch
     if (leadResult.id) {
       enrichLead(leadResult.id).catch(err => console.error('Background enrichment failed:', err));
       dispatchLeadToBuyers(leadResult.id).catch(err => console.error('Monetization dispatch failed:', err));
@@ -98,3 +138,4 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: false, error: 'Internal server error' }, { status: 500 });
   }
 }
+

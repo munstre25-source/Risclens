@@ -61,19 +61,38 @@ export default function AuditorDirectoryPage() {
       <Header />
       
       <div className="flex-grow">
-        {/* Hero */}
-        <section className="py-20 bg-white border-b border-slate-200">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-sm font-medium mb-6 mx-auto">
-              Vetted Partner Network
+          {/* Hero */}
+          <section className="py-20 bg-white border-b border-slate-200">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-sm font-medium mb-6 mx-auto">
+                Vetted Partner Network
+              </div>
+              <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-6">
+                Verified Auditor Directory
+              </h1>
+              <p className="text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed mb-10">
+                Find and connect with vetted auditors who specialize in B2B SaaS, AI, and Fintech. RiscLens partners with firms that understand early-stage constraints.
+              </p>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto border-t border-slate-100 pt-10">
+                <div className="text-center">
+                  <p className="text-3xl font-bold text-brand-600">6+</p>
+                  <p className="text-sm text-slate-500 font-medium uppercase tracking-wider">Vetted Partners</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-3xl font-bold text-brand-600">11+</p>
+                  <p className="text-sm text-slate-500 font-medium uppercase tracking-wider">Tech Hubs</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-3xl font-bold text-brand-600">500+</p>
+                  <p className="text-sm text-slate-500 font-medium uppercase tracking-wider">Audits Benchmarked</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-3xl font-bold text-brand-600">98%</p>
+                  <p className="text-sm text-slate-500 font-medium uppercase tracking-wider">Startup Approval</p>
+                </div>
+              </div>
             </div>
-            <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-6">
-              Verified Auditor Directory
-            </h1>
-            <p className="text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
-              Find and connect with vetted auditors who specialize in B2B SaaS, AI, and Fintech. RiscLens partners with firms that understand early-stage constraints.
-            </p>
-          </div>
           </section>
   
           {/* City Silos Section */}

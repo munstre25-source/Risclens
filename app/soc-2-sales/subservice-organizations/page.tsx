@@ -5,6 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AssessmentCTA from '@/components/AssessmentCTA';
 import { salesGuides, salesGuideBySlug } from '@/lib/soc2Guides';
+import { Check, ShieldCheck } from 'lucide-react';
 
 const slug = 'subservice-organizations';
 const page = salesGuideBySlug[slug];
@@ -63,21 +64,22 @@ export default function SubserviceOrganizationsPage() {
             <div className="grid md:grid-cols-2 gap-8">
               <div className="bg-blue-50 p-6 rounded-xl border border-blue-100">
                 <h3 className="font-bold text-blue-900 mb-3 text-lg">What AWS Covers</h3>
-                <ul className="space-y-2 text-sm text-blue-800">
-                  <li className="flex gap-2">✅ Physical Data Center Security</li>
-                  <li className="flex gap-2">✅ Server Hardware Maintenance</li>
-                  <li className="flex gap-2">✅ Infrastructure Network Isolation</li>
-                  <li className="flex gap-2">✅ Environmental Controls (Power/Cooling)</li>
-                </ul>
-              </div>
-              <div className="bg-brand-50 p-6 rounded-xl border border-brand-100">
-                <h3 className="font-bold text-brand-900 mb-3 text-lg">What YOU Must Cover</h3>
-                <ul className="space-y-2 text-sm text-brand-800">
-                  <li className="flex gap-2">🚀 IAM & Access Control (Who logs in?)</li>
-                  <li className="flex gap-2">🚀 SDLC & Code Security (Is your code safe?)</li>
-                  <li className="flex gap-2">🚀 Database Encryption (Is data at rest safe?)</li>
-                  <li className="flex gap-2">🚀 Incident Response (What if you get hacked?)</li>
-                </ul>
+                  <ul className="space-y-2 text-sm text-blue-800">
+                    <li className="flex gap-2"><Check className="w-4 h-4 text-blue-600 flex-shrink-0" /> Physical Data Center Security</li>
+                    <li className="flex gap-2"><Check className="w-4 h-4 text-blue-600 flex-shrink-0" /> Server Hardware Maintenance</li>
+                    <li className="flex gap-2"><Check className="w-4 h-4 text-blue-600 flex-shrink-0" /> Infrastructure Network Isolation</li>
+                    <li className="flex gap-2"><Check className="w-4 h-4 text-blue-600 flex-shrink-0" /> Environmental Controls (Power/Cooling)</li>
+                  </ul>
+                </div>
+                <div className="bg-brand-50 p-6 rounded-xl border border-brand-100">
+                  <h3 className="font-bold text-brand-900 mb-3 text-lg">What YOU Must Cover</h3>
+                  <ul className="space-y-2 text-sm text-brand-800">
+                    <li className="flex gap-2"><ShieldCheck className="w-4 h-4 text-brand-600 flex-shrink-0" /> IAM & Access Control (Who logs in?)</li>
+                    <li className="flex gap-2"><ShieldCheck className="w-4 h-4 text-brand-600 flex-shrink-0" /> SDLC & Code Security (Is your code safe?)</li>
+                    <li className="flex gap-2"><ShieldCheck className="w-4 h-4 text-brand-600 flex-shrink-0" /> Database Encryption (Is data at rest safe?)</li>
+                    <li className="flex gap-2"><ShieldCheck className="w-4 h-4 text-brand-600 flex-shrink-0" /> Incident Response (What if you get hacked?)</li>
+                  </ul>
+
               </div>
             </div>
 

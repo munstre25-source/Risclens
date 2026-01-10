@@ -12,7 +12,7 @@ import { SearchNav } from './SearchNav';
 
 const DROPDOWN_PANEL_CLASS =
   'absolute z-[9999] rounded-xl border border-slate-200 bg-white shadow-lg max-h-[70vh] overflow-auto focus:outline-none transition ease-out duration-150 transform';
-const DROPDOWN_WIDTH = 260;
+const DROPDOWN_WIDTH = 280;
 
 type DropdownPortalProps = {
   id: string;
@@ -207,7 +207,9 @@ export default function Header() {
   const sectionLabelClass = 'px-4 pt-3 pb-1 text-[11px] font-semibold uppercase tracking-wider text-slate-400';
 
   const Badge = ({ label }: { label?: string }) => (
-    <span className="text-[10px] font-bold text-brand-700 bg-brand-50 px-1.5 py-0.5 rounded">{label || 'Tool'}</span>
+    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${label === 'Flagship' || label === 'Hub' ? 'text-blue-700 bg-blue-50' : 'text-brand-700 bg-brand-50'}`}>
+      {label || 'Tool'}
+    </span>
   );
 
   return (
@@ -291,7 +293,7 @@ export default function Header() {
           >
             <button
               type="button"
-              className={`flex items-center gap-1.5 px-3 py-2 text-sm font-semibold rounded-lg transition-colors ${
+              className={`flex items-center gap-1.5 px-3 py-2 text-base font-bold rounded-lg transition-colors ${
                 toolsIntent.open ? 'text-brand-700 bg-brand-50' : 'text-slate-700 hover:text-brand-700 hover:bg-slate-50'
               }`}
             >
@@ -307,18 +309,17 @@ export default function Header() {
               onMouseEnter={() => toolsIntent.scheduleOpen()}
               onMouseLeave={() => toolsIntent.scheduleClose()}
             >
-              <div className={sectionLabelClass}>Featured Tool</div>
-              <Link href={navConfig.tools.primary.href} role="menuitem" className={menuItemWithBadgeClass}>
-                <span className="font-medium text-slate-900">{navConfig.tools.primary.label}</span>
-                <Badge label={navConfig.tools.primary.badge} />
-              </Link>
-              <div className="my-1 border-t border-slate-100" />
-              <div className={sectionLabelClass}>Analysis & ROI</div>
-              {navConfig.tools.items.map((item) => (
-                <Link key={item.href} href={item.href} role="menuitem" className={menuItemWithBadgeClass}>
-                  {item.label}
-                  <Badge label={item.badge} />
-                </Link>
+              {navConfig.tools.sections.map((section, idx) => (
+                <div key={section.title}>
+                  {idx > 0 && <div className="my-1 border-t border-slate-100" />}
+                  <div className={sectionLabelClass}>{section.title}</div>
+                  {section.items.map((item) => (
+                    <Link key={item.href} href={item.href} role="menuitem" className={menuItemWithBadgeClass}>
+                      <span className="font-medium text-slate-900">{item.label}</span>
+                      {item.badge && <Badge label={item.badge} />}
+                    </Link>
+                  ))}
+                </div>
               ))}
             </DropdownPortal>
           </div>
@@ -337,7 +338,7 @@ export default function Header() {
           >
             <button
               type="button"
-              className={`flex items-center gap-1.5 px-3 py-2 text-sm font-semibold rounded-lg transition-colors ${
+              className={`flex items-center gap-1.5 px-3 py-2 text-base font-bold rounded-lg transition-colors ${
                 directoryIntent.open ? 'text-brand-700 bg-brand-50' : 'text-slate-700 hover:text-brand-700 hover:bg-slate-50'
               }`}
             >
@@ -380,7 +381,7 @@ export default function Header() {
           >
             <button
               type="button"
-              className={`flex items-center gap-1.5 px-3 py-2 text-sm font-semibold rounded-lg transition-colors ${
+              className={`flex items-center gap-1.5 px-3 py-2 text-base font-bold rounded-lg transition-colors ${
                 resourcesIntent.open ? 'text-brand-700 bg-brand-50' : 'text-slate-700 hover:text-brand-700 hover:bg-slate-50'
               }`}
             >
@@ -400,7 +401,15 @@ export default function Header() {
                 {navConfig.resources.about.label}
               </Link>
               <div className="my-1 border-t border-slate-100" />
-              <div className={sectionLabelClass}>Guides</div>
+              <div className={sectionLabelClass}>Authority Hubs</div>
+              {navConfig.resources.hubs.map((item) => (
+                <Link key={item.href} href={item.href} role="menuitem" className={menuItemWithBadgeClass}>
+                  <span className="font-medium text-slate-900">{item.label}</span>
+                  <Badge label={item.badge} />
+                </Link>
+              ))}
+              <div className="my-1 border-t border-slate-100" />
+              <div className={sectionLabelClass}>Knowledge Base</div>
               {navConfig.resources.guides.map((item) => (
                 <Link key={item.href} href={item.href} role="menuitem" className={menuItemClass}>
                   {item.label}
@@ -504,6 +513,7 @@ export default function Header() {
                       setMobileFrameworksOpen(!mobileFrameworksOpen);
                       setMobileToolsOpen(false);
                       setMobileResourcesOpen(false);
+                      setMobileDirectoryOpen(false);
                     }}
                   >
                     <span>Frameworks</span>
@@ -533,11 +543,12 @@ export default function Header() {
                 <div className="rounded-xl border border-slate-200 overflow-hidden">
                   <button
                     type="button"
-                    className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-slate-900 bg-white"
+                    className="w-full flex items-center justify-between px-4 py-3 text-base font-bold text-slate-900 bg-white"
                     onClick={() => {
                       setMobileToolsOpen(!mobileToolsOpen);
                       setMobileFrameworksOpen(false);
                       setMobileResourcesOpen(false);
+                      setMobileDirectoryOpen(false);
                     }}
                   >
                     <span>Tools</span>
@@ -546,16 +557,17 @@ export default function Header() {
                     </svg>
                   </button>
                   {mobileToolsOpen && (
-                    <div className="px-4 pb-4 pt-2 space-y-2 bg-slate-50 border-t border-slate-100">
-                      <Link href={navConfig.tools.primary.href} className="flex items-center justify-between text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
-                        {navConfig.tools.primary.label}
-                        <Badge label={navConfig.tools.primary.badge} />
-                      </Link>
-                      {navConfig.tools.items.map((item) => (
-                        <Link key={item.href} href={item.href} className="flex items-center justify-between text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
-                          {item.label}
-                          <Badge label={item.badge} />
-                        </Link>
+                    <div className="px-4 pb-4 pt-2 space-y-4 bg-slate-50 border-t border-slate-100">
+                      {navConfig.tools.sections.map((section) => (
+                        <div key={section.title} className="space-y-2">
+                          <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">{section.title}</p>
+                          {section.items.map((item) => (
+                            <Link key={item.href} href={item.href} className="flex items-center justify-between text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
+                              {item.label}
+                              {item.badge && <Badge label={item.badge} />}
+                            </Link>
+                          ))}
+                        </div>
                       ))}
                     </div>
                   )}
@@ -565,7 +577,7 @@ export default function Header() {
                 <div className="rounded-xl border border-slate-200 overflow-hidden">
                   <button
                     type="button"
-                    className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-slate-900 bg-white"
+                    className="w-full flex items-center justify-between px-4 py-3 text-base font-bold text-slate-900 bg-white"
                     onClick={() => {
                       setMobileDirectoryOpen(!mobileDirectoryOpen);
                       setMobileFrameworksOpen(false);
@@ -598,11 +610,12 @@ export default function Header() {
                 <div className="rounded-xl border border-slate-200 overflow-hidden">
                   <button
                     type="button"
-                    className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-slate-900 bg-white"
+                    className="w-full flex items-center justify-between px-4 py-3 text-base font-bold text-slate-900 bg-white"
                     onClick={() => {
                       setMobileResourcesOpen(!mobileResourcesOpen);
                       setMobileFrameworksOpen(false);
                       setMobileToolsOpen(false);
+                      setMobileDirectoryOpen(false);
                     }}
                   >
                     <span>Resources</span>
@@ -611,29 +624,45 @@ export default function Header() {
                     </svg>
                   </button>
                   {mobileResourcesOpen && (
-                    <div className="px-4 pb-4 pt-2 space-y-2 bg-slate-50 border-t border-slate-100">
+                    <div className="px-4 pb-4 pt-2 space-y-4 bg-slate-50 border-t border-slate-100">
                       <Link href={navConfig.resources.about.href} className="block text-sm font-medium text-slate-700" onClick={() => setMobileOpen(false)}>
                         {navConfig.resources.about.label}
                       </Link>
-                      <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 pt-2">Guides</p>
-                      {navConfig.resources.guides.map((item) => (
-                        <Link key={item.href} href={item.href} className="block text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
-                          {item.label}
-                        </Link>
-                      ))}
-                      <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 pt-2">Comparisons</p>
-                      {navConfig.resources.comparisons.map((item) => (
-                        <Link key={item.href} href={item.href} className="block text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
-                          {item.label}
-                        </Link>
-                      ))}
+                      
+                      <div className="space-y-2">
+                        <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Authority Hubs</p>
+                        {navConfig.resources.hubs.map((item) => (
+                          <Link key={item.href} href={item.href} className="flex items-center justify-between text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
+                            {item.label}
+                            {item.badge && <Badge label={item.badge} />}
+                          </Link>
+                        ))}
+                      </div>
+
+                      <div className="space-y-2">
+                        <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Knowledge Base</p>
+                        {navConfig.resources.guides.map((item) => (
+                          <Link key={item.href} href={item.href} className="block text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
+                            {item.label}
+                          </Link>
+                        ))}
+                      </div>
+
+                      <div className="space-y-2">
+                        <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Comparisons</p>
+                        {navConfig.resources.comparisons.map((item) => (
+                          <Link key={item.href} href={item.href} className="block text-sm text-slate-700" onClick={() => setMobileOpen(false)}>
+                            {item.label}
+                          </Link>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
 
                 <Link
                   href="/search"
-                  className="flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium text-slate-700"
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-200 text-base font-bold text-slate-900"
                   onClick={() => setMobileOpen(false)}
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

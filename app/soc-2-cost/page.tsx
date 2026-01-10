@@ -10,6 +10,28 @@ import { costIndustries } from '@/lib/navConfig';
 import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
 import { ContextualSignals } from '@/components/compliance/ContextualSignals';
 import { StickyCTA } from '@/components/StickyCTA';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
+
+const costTiers = [
+  {
+    tier: 'Startup (1-15 staff)',
+    typeI: '$15,000 – $25,000',
+    typeII: '$25,000 – $40,000',
+    bestFor: 'Seed/Series A, proof of concept',
+  },
+  {
+    tier: 'Growth (15-75 staff)',
+    typeI: '$25,000 – $40,000',
+    typeII: '$40,000 – $65,000',
+    bestFor: 'Scaling startups, vendor diligence',
+  },
+  {
+    tier: 'Enterprise (100+ staff)',
+    typeI: '$45,000 – $75,000',
+    typeII: '$75,000 – $150,000+',
+    bestFor: 'Public/regulated entities, complex tech stacks',
+  },
+];
 
 const faqs = [
   {
@@ -100,52 +122,96 @@ export default function Soc2CostPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      <main className="min-h-screen flex flex-col bg-slate-100">
-        <Header />
+        <main className="min-h-screen flex flex-col bg-slate-100">
+          <Header />
 
-        <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-20 lg:py-28 text-center">
-            <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-6 leading-tight tracking-tight">
-              <span className="block">SOC 2 Cost (2026)</span>
-              <span className="block text-brand-600">Budget Estimate</span>
-            </h1>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-8 leading-relaxed">
-              SOC 2 pricing isn&apos;t one-size-fits-all. Auditor selection, scope, timeline, tooling, and your starting readiness all influence the final number. Use this guide to anchor your budget, then run the readiness assessment to get tailored ranges.
-            </p>
-            <p className="text-sm text-slate-500 mb-6">
-              Ready to see your score? Start the SOC 2 Readiness Assessment.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3">
-              <Link
-                href="/soc-2-readiness-calculator"
-                className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
-              >
-                Get Your Readiness Score
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
-              <p className="text-sm text-slate-500">Free • No sales calls • Instant results</p>
-                <Link href="/soc-2-timeline/estimator" className="text-sm text-brand-700 underline underline-offset-2 hover:text-brand-800">
-                  Want timelines? See the SOC 2 Timeline Calculator
-                </Link>
-              <Link href="/penetration-testing/for-soc-2" className="text-sm text-brand-700 underline underline-offset-2 hover:text-brand-800">
-                Related: Penetration Testing for SOC 2
-              </Link>
-              <Link href="/vendor-risk-assessment" className="text-sm text-brand-700 underline underline-offset-2 hover:text-brand-800">
-                Related: Vendor Risk Assessment
-              </Link>
+          <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-10 pb-20 lg:pt-16 lg:pb-28 text-center">
+              <Breadcrumbs 
+                items={[
+                  { label: 'SOC 2', href: '/soc-2' },
+                  { label: 'Cost Guide', href: '/soc-2-cost' }
+                ]} 
+                className="justify-center"
+              />
+              <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-6 leading-tight tracking-tight">
+                <span className="block">SOC 2 Cost (2026)</span>
+                <span className="block text-brand-600">Budget Estimate</span>
+              </h1>
+              <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-8 leading-relaxed">
+                SOC 2 pricing isn&apos;t one-size-fits-all. Auditor selection, scope, timeline, tooling, and your starting readiness all influence the final number. Use this guide to anchor your budget, then run the readiness assessment to get tailored ranges.
+              </p>
+              <p className="text-sm text-slate-500 mb-6">
+                Ready to see your score? Start the SOC 2 Readiness Assessment.
+              </p>
+                <div className="flex flex-col items-center justify-center gap-6">
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <Link
+                      href="/soc-2-readiness-calculator"
+                      className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
+                    >
+                      Get Your Readiness Score
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </Link>
+                    <p className="text-sm text-slate-500">Free • No sales calls • Instant results</p>
+                  </div>
+                  
+                  <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm">
+                    <span className="font-medium text-slate-500">Related Tools:</span>
+                    <Link href="/soc-2-timeline/estimator" className="text-brand-700 hover:text-brand-800 underline underline-offset-4 decoration-slate-200 hover:decoration-brand-300">
+                      Timeline Calculator
+                    </Link>
+                    <Link href="/penetration-testing/for-soc-2" className="text-brand-700 hover:text-brand-800 underline underline-offset-4 decoration-slate-200 hover:decoration-brand-300">
+                      Pentesting Guide
+                    </Link>
+                    <Link href="/vendor-risk-assessment" className="text-brand-700 hover:text-brand-800 underline underline-offset-4 decoration-slate-200 hover:decoration-brand-300">
+                      Vendor Risk Assessment
+                    </Link>
+                  </div>
+                </div>
             </div>
-          </div>
-          <div className="max-w-2xl mx-auto text-left mt-8">
-            <p className="text-sm font-medium text-slate-700 mb-2">Who this is for</p>
-            <ul className="list-disc list-inside text-slate-600 space-y-1 text-sm leading-relaxed">
-              <li>SaaS, fintech, and data-driven startups</li>
-              <li>Teams preparing for enterprise customers or investor due diligence</li>
-              <li>Founders who need a SOC 2 reality check before engaging auditors</li>
-            </ul>
-          </div>
-</section>
+            <div className="max-w-2xl mx-auto text-left mt-8 pb-12">
+              <p className="text-sm font-medium text-slate-700 mb-2">Who this is for</p>
+              <ul className="list-disc list-inside text-slate-600 space-y-1 text-sm leading-relaxed">
+                <li>SaaS, fintech, and data-driven startups</li>
+                <li>Teams preparing for enterprise customers or investor due diligence</li>
+                <li>Founders who need a SOC 2 reality check before engaging auditors</li>
+              </ul>
+            </div>
+          </section>
+
+          <section className="bg-white border-t border-slate-200">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16">
+              <h2 className="text-2xl font-bold text-slate-900 mb-8 text-center">Typical SOC 2 Audit Fees (2026)</h2>
+              <div className="overflow-x-auto rounded-xl border border-slate-200 shadow-sm">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-slate-50 border-bottom border-slate-200">
+                      <th className="px-6 py-4 text-sm font-semibold text-slate-900">Tier / Company Size</th>
+                      <th className="px-6 py-4 text-sm font-semibold text-slate-900">Type I (Design)</th>
+                      <th className="px-6 py-4 text-sm font-semibold text-slate-900">Type II (Operating)</th>
+                      <th className="px-6 py-4 text-sm font-semibold text-slate-900 hidden md:table-cell">Best For</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200">
+                    {costTiers.map((tier) => (
+                      <tr key={tier.tier} className="hover:bg-slate-50/50 transition-colors">
+                        <td className="px-6 py-4 text-sm font-medium text-slate-900">{tier.tier}</td>
+                        <td className="px-6 py-4 text-sm text-slate-600">{tier.typeI}</td>
+                        <td className="px-6 py-4 text-sm text-slate-600">{tier.typeII}</td>
+                        <td className="px-6 py-4 text-sm text-slate-500 hidden md:table-cell">{tier.bestFor}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className="mt-4 text-xs text-slate-500 text-center italic">
+                *Prices represent auditor fees only. Tooling and internal effort are additional.
+              </p>
+            </div>
+          </section>
 
           <section className="bg-white border-t border-slate-200">
             <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 space-y-4">
@@ -229,23 +295,48 @@ export default function Soc2CostPage() {
           </div>
         </section>
 
-        <section className="py-16 lg:py-20 bg-white border-t border-slate-200">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 space-y-10">
-            <ExpertReview authorId="raphael" date="January 5, 2026" />
-            
-            <div>
-              <h2 className="text-2xl font-bold text-slate-900 mb-4">What shapes SOC 2 pricing?</h2>
+          <section className="py-16 lg:py-20 bg-white border-t border-slate-200">
+            <div className="max-w-3xl mx-auto px-4 sm:px-6 space-y-10">
+              <ExpertReview authorId="raphael" date="January 10, 2026" />
+              
+              <div>
+                <h2 className="text-2xl font-bold text-slate-900 mb-4">What shapes SOC 2 pricing?</h2>
 
-              <p className="text-slate-600 leading-relaxed mb-4">
-                A realistic SOC 2 budget blends external fees and internal effort. CPA firms price based on the controls they need to test, the number of systems in scope, and how quickly you want the report. Tooling helps reduce lift, but it adds subscription spend you should plan for up front.
-              </p>
-              <p className="text-slate-600 leading-relaxed">
-                Early clarity prevents mid-engagement surprises. Teams that map out scope, ownership, and evidence expectations ahead of time usually avoid rush fees and rework.
-              </p>
-            </div>
+                <p className="text-slate-600 leading-relaxed mb-4">
+                  A realistic SOC 2 budget blends external fees and internal effort. CPA firms price based on the controls they need to test, the number of systems in scope, and how quickly you want the report. Tooling helps reduce lift, but it adds subscription spend you should plan for up front.
+                </p>
+                <p className="text-slate-600 leading-relaxed">
+                  Early clarity prevents mid-engagement surprises. Teams that map out scope, ownership, and evidence expectations ahead of time usually avoid rush fees and rework.
+                </p>
+              </div>
 
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-6">
-              <h3 className="text-lg font-semibold text-slate-800 mb-4">Top SOC 2 cost drivers</h3>
+              <div className="bg-brand-50 border border-brand-100 rounded-xl p-6">
+                <h3 className="text-lg font-semibold text-brand-900 mb-4">The "Hidden Costs" Reality Check</h3>
+                <p className="text-sm text-brand-800 mb-4">
+                  Most cost guides only show the auditor fee. To get a true Total Cost of Compliance (TCC), you must factor in:
+                </p>
+                <ul className="space-y-3 text-brand-900/80 text-sm">
+                  <li className="flex gap-3">
+                    <span className="text-brand-600 font-bold">01</span>
+                    <span><strong>Internal Engineering Time</strong> — Mapping controls to your specific infra and gathering manual evidence can take 40-100+ hours.</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="text-brand-600 font-bold">02</span>
+                    <span><strong>Background Check Fees</strong> — SOC 2 requires background checks for all employees/contractors. At $50-100/head, this adds up.</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="text-brand-600 font-bold">03</span>
+                    <span><strong>Vulnerability Scanning & Pentesting</strong> — While some tools include scanners, a high-quality manual pentest (often required for enterprise) costs $5k–$15k.</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="text-brand-600 font-bold">04</span>
+                    <span><strong>Re-testing Fees</strong> — If an auditor finds an exception, you may be charged "re-testing" fees to validate the fix.</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="bg-slate-50 border border-slate-200 rounded-xl p-6">
+                <h3 className="text-lg font-semibold text-slate-800 mb-4">Top SOC 2 cost drivers</h3>
               <ul className="space-y-3 text-slate-600">
                 <li className="flex gap-3">
                   <span className="text-brand-600 font-medium">•</span>

@@ -9,6 +9,7 @@ import { ContentFeedback } from '@/components/ContentFeedback';
 import { costGuides, costGuideBySlug, Soc2GuidePage } from '@/lib/soc2Guides';
 import { getContentPage } from '@/lib/content';
 import { LastVerifiedBadge, AccuracyDisclaimer } from '@/components/AccuracyGuards';
+import { Breadcrumb } from '@/components/ui/Breadcrumb';
 
 interface PageProps {
   params: { slug: string };
@@ -136,7 +137,10 @@ export default async function Soc2CostDetailPage({ params }: PageProps) {
       <main className="min-h-screen flex flex-col bg-slate-100">
         <Header />
         <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 lg:py-20 text-center">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8">
+            <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'SOC 2 Cost', href: '/soc-2-cost' }, { label: page.title }]} />
+          </div>
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 lg:py-16 text-center">
             <LastVerifiedBadge date={page.last_reviewed_at} framework={page.framework_version} />
             <p className="text-sm font-semibold uppercase tracking-wide text-brand-700 mb-3">SOC 2 Cost Guide</p>
             <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-5 leading-tight">{page.title}</h1>

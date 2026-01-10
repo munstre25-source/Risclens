@@ -157,18 +157,23 @@ export default function CostByTeamSizePage() {
             <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-8 leading-relaxed">
               How much does SOC 2 cost for a 10-person startup vs. a 250-person company? See realistic budgets for every growth stage.
             </p>
-            <Link
-              href="/soc-2-readiness-calculator"
-              className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
-            >
-              Get Your Custom Estimate
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </Link>
-            <p className="mt-4 text-sm text-slate-500">Free • Tailored to your headcount • Instant results</p>
-          </div>
-        </section>
+              <Link
+                href="/soc-2-readiness-calculator"
+                className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
+              >
+                Get Your Custom Estimate
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+              <p className="mt-4 text-sm text-slate-500">Free • Tailored to your headcount • Instant results</p>
+            </div>
+            <div className="flex justify-center mb-8">
+              <Link href="/soc-2-cost" className="px-4 py-2 rounded-full border border-slate-200 bg-white text-brand-700 hover:border-brand-200 font-bold shadow-sm transition-all">
+                ← Back to SOC 2 Cost Hub
+              </Link>
+            </div>
+          </section>
 
         <section className="py-14 bg-white border-t border-slate-200">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-12">

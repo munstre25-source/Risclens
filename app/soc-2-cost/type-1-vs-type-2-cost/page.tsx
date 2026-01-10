@@ -352,15 +352,20 @@ export default function TypeIVsTypeIICostPage() {
               </Link>
             </div>
 
-            <RelatedGuidesRow
-              links={[
-                { href: '/soc-2-cost', label: 'SOC 2 Cost Overview' },
-                { href: '/soc-2-cost/first-year-vs-renewal', label: 'First Year vs Renewal' },
-                { href: '/soc-2-cost/by-team-size', label: 'Cost by Team Size' },
-                { href: '/soc-2-type-i-vs-type-ii', label: 'Type I vs II Readiness' },
-                { href: '/soc-2-timeline', label: 'SOC 2 Timeline' },
-              ]}
-            />
+            <div className="flex flex-wrap gap-3 text-sm justify-center">
+              <Link href="/soc-2-cost" className="px-4 py-2 rounded-full border border-slate-200 bg-white text-brand-700 hover:border-brand-200 font-bold shadow-sm transition-all">
+                ← Back to SOC 2 Cost Hub
+              </Link>
+              {['first-year-vs-renewal', 'by-team-size', 'industries', 'startups'].map((slug) => (
+                <Link
+                  key={slug}
+                  href={`/soc-2-cost/${slug}`}
+                  className="px-4 py-2 rounded-full border border-slate-200 bg-white text-slate-600 hover:border-brand-200 hover:text-brand-700 transition-all"
+                >
+                  {slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
+                </Link>
+              ))}
+            </div>
           </div>
         </section>
 

@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
 import { StickyCTA } from '@/components/StickyCTA';
+import { Rocket, RotateCw } from 'lucide-react';
 
 const faqs = [
   {
@@ -107,11 +108,12 @@ export default function FirstYearVsRenewalPage() {
         <section className="py-14 bg-white border-t border-slate-200">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-12">
             <div className="grid md:grid-cols-2 gap-8">
-              <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 space-y-4">
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl">🚀</span>
-                  <h2 className="text-xl font-bold text-slate-900">First Year Costs</h2>
-                </div>
+                <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 space-y-4">
+                  <div className="flex items-center gap-2">
+                    <Rocket className="w-6 h-6 text-amber-600" />
+                    <h2 className="text-xl font-bold text-slate-900">First Year Costs</h2>
+                  </div>
+
                 <p className="text-slate-700 text-sm leading-relaxed">
                   The first year includes one-time setup costs that don&apos;t repeat.
                 </p>
@@ -143,11 +145,12 @@ export default function FirstYearVsRenewalPage() {
                 </div>
               </div>
 
-              <div className="bg-green-50 border border-green-200 rounded-xl p-6 space-y-4">
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl">🔄</span>
-                  <h2 className="text-xl font-bold text-slate-900">Renewal Year Costs</h2>
-                </div>
+                <div className="bg-green-50 border border-green-200 rounded-xl p-6 space-y-4">
+                  <div className="flex items-center gap-2">
+                    <RotateCw className="w-6 h-6 text-green-600" />
+                    <h2 className="text-xl font-bold text-slate-900">Renewal Year Costs</h2>
+                  </div>
+
                 <p className="text-slate-700 text-sm leading-relaxed">
                   Renewal years benefit from existing controls, policies, and auditor familiarity.
                 </p>

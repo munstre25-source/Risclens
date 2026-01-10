@@ -5,6 +5,7 @@ import Script from 'next/script';
 import { Shield, Zap, Target, Lock, TrendingUp, AlertCircle, ChevronRight, Check, X, ArrowRight } from 'lucide-react';
 import { getContentPage } from '@/lib/content';
 import { LastVerifiedBadge, AccuracyDisclaimer } from '@/components/AccuracyGuards';
+import { Breadcrumb } from '@/components/ui/Breadcrumb';
 
 export function generateStaticParams() {
   const platforms = ['vanta', 'drata', 'secureframe', 'thoropass', 'laika', 'strike-graph'];
@@ -47,23 +48,33 @@ export default async function ComparisonPage({ params }: { params: { slug: strin
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
         />
       )}
-      <main className="min-h-screen bg-slate-50">
-        <Header />
-        
-        <div className="max-w-4xl mx-auto px-4 py-16 sm:py-24">
-          <div className="text-center mb-16">
-            {dbPage && <LastVerifiedBadge date={dbPage.last_reviewed_at} framework={dbPage.framework_version || 'Market Analysis 2026'} />}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 border border-brand-100 mb-6">
-              <span className="flex h-2 w-2 rounded-full bg-brand-600 animate-pulse" />
-              <span className="text-xs font-bold text-brand-700 uppercase tracking-wider">Unbiased Intelligence</span>
-            </div>
-            <h1 className="text-4xl sm:text-6xl font-bold text-slate-900 mb-6 tracking-tight">
-              {platformA} vs {platformB}
-            </h1>
-            <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-              {dbPage?.description || `The deterministic comparison for B2B startups. We analyze cost, speed-to-audit, and auditor flexibility.`}
-            </p>
+        <main className="min-h-screen bg-slate-50">
+          <Header />
+          
+          <div className="max-w-4xl mx-auto px-4 pt-8">
+            <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'Comparisons Hub', href: '/compare' }, { label: `${platformA} vs ${platformB}` }]} />
           </div>
+
+          <div className="max-w-4xl mx-auto px-4 py-12 sm:py-16">
+            <div className="text-center mb-16">
+              {dbPage && <LastVerifiedBadge date={dbPage.last_reviewed_at} framework={dbPage.framework_version || 'Market Analysis 2026'} />}
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 border border-brand-100 mb-6">
+                <span className="flex h-2 w-2 rounded-full bg-brand-600 animate-pulse" />
+                <span className="text-xs font-bold text-brand-700 uppercase tracking-wider">Unbiased Intelligence</span>
+              </div>
+              <h1 className="text-4xl sm:text-6xl font-bold text-slate-900 mb-6 tracking-tight">
+                {platformA} vs {platformB}
+              </h1>
+              <p className="text-xl text-slate-600 max-w-2xl mx-auto mb-8">
+                {dbPage?.description || `The deterministic comparison for B2B startups. We analyze cost, speed-to-audit, and auditor flexibility.`}
+              </p>
+              <div className="flex justify-center">
+                <Link href="/compare" className="inline-flex items-center text-sm font-bold text-brand-600 hover:text-brand-700">
+                  <ArrowRight className="w-4 h-4 mr-2 rotate-180" />
+                  Back to Comparison Hub
+                </Link>
+              </div>
+            </div>
 
           {dbPage?.author_note && (
             <div className="mb-12 p-6 rounded-2xl bg-brand-50 border border-brand-100 text-brand-900 italic shadow-sm">

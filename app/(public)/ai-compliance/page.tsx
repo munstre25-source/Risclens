@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { Bot, BarChart3, Handshake } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'AI Compliance & ISO 42001 Hub | RiscLens',
@@ -84,33 +85,34 @@ export default function AiComplianceHub() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                title: "ISO 42001 Calculator",
-                desc: "Map your AI infrastructure to the 38 controls of ISO 42001 in minutes.",
-                href: "/iso-42001-calculator",
-                icon: "🤖"
-              },
-              {
-                title: "AI Risk Directory",
-                desc: "See how other AI companies are handling transparency and data governance.",
-                href: "/compliance/directory",
-                icon: "📊"
-              },
-              {
-                title: "Auditor Match",
-                desc: "Find specialized auditors who actually understand LLMs and RAG architectures.",
-                href: "/auditor-directory",
-                icon: "🤝"
-              }
-            ].map((tool) => (
-              <Link 
-                key={tool.title}
-                href={tool.href}
-                className="p-8 bg-white rounded-2xl border border-slate-200 hover:border-brand-200 hover:shadow-xl transition-all group"
-              >
-                <div className="text-4xl mb-4">{tool.icon}</div>
-                <h3 className="text-xl font-bold text-slate-900 mb-2">{tool.title}</h3>
+              {[
+                {
+                  title: "ISO 42001 Calculator",
+                  desc: "Map your AI infrastructure to the 38 controls of ISO 42001 in minutes.",
+                  href: "/iso-42001-calculator",
+                  icon: <Bot className="w-10 h-10 text-brand-600" />
+                },
+                {
+                  title: "AI Risk Directory",
+                  desc: "See how other AI companies are handling transparency and data governance.",
+                  href: "/compliance/directory",
+                  icon: <BarChart3 className="w-10 h-10 text-brand-600" />
+                },
+                {
+                  title: "Auditor Match",
+                  desc: "Find specialized auditors who actually understand LLMs and RAG architectures.",
+                  href: "/auditor-directory",
+                  icon: <Handshake className="w-10 h-10 text-brand-600" />
+                }
+              ].map((tool) => (
+                <Link 
+                  key={tool.title}
+                  href={tool.href}
+                  className="p-8 bg-white rounded-2xl border border-slate-200 hover:border-brand-200 hover:shadow-xl transition-all group"
+                >
+                  <div className="mb-4">{tool.icon}</div>
+                  <h3 className="text-xl font-bold text-slate-900 mb-2">{tool.title}</h3>
+
                 <p className="text-slate-600 mb-4">{tool.desc}</p>
                 <span className="text-sm font-bold text-brand-600">Open Tool →</span>
               </Link>

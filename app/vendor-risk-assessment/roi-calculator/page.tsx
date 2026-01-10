@@ -5,6 +5,7 @@ import VendorRiskRoiCalculator from '@/components/vendor-risk/VendorRiskRoiCalcu
 import Link from 'next/link';
 import { SoftwareApplicationSchema } from '@/components/SoftwareApplicationSchema';
 import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
+import { Breadcrumb } from '@/components/ui/Breadcrumb';
 
 export const metadata: Metadata = {
   title: 'Vendor Risk Management ROI Calculator | RiscLens',
@@ -31,19 +32,30 @@ export default function VendorRiskRoiPage() {
         url="https://risclens.com/vendor-risk-assessment/roi-calculator"
         category="BusinessApplication"
       />
-      <Header />
-      
-      <section className="bg-white border-b border-slate-200">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-16 lg:py-24 text-center">
-          <p className="text-sm font-semibold uppercase tracking-wide text-brand-700 mb-3">Efficiency Calculator</p>
-          <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-6 leading-tight">
-            Vendor Risk Management <br className="hidden sm:block" /> ROI Calculator
-          </h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            Stop wasting engineering and security hours on manual questionnaire reviews. See how much you could save by standardizing your VRM program.
-          </p>
-        </div>
-      </section>
+        <Header />
+        
+        <section className="bg-white border-b border-slate-200">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8 text-left">
+            <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'Vendor Risk Hub', href: '/vendor-risk-assessment' }, { label: 'ROI Calculator' }]} />
+          </div>
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 lg:py-16 text-center">
+            <p className="text-sm font-semibold uppercase tracking-wide text-brand-700 mb-3">Efficiency Calculator</p>
+            <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-6 leading-tight">
+              Vendor Risk Management <br className="hidden sm:block" /> ROI Calculator
+            </h1>
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed mb-8">
+              Stop wasting engineering and security hours on manual questionnaire reviews. See how much you could save by standardizing your VRM program.
+            </p>
+            <div className="flex justify-center">
+              <Link href="/vendor-risk-assessment" className="inline-flex items-center text-sm font-bold text-brand-600 hover:text-brand-700">
+                <svg className="w-4 h-4 mr-2 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+                Back to Vendor Risk Hub
+              </Link>
+            </div>
+          </div>
+        </section>
 
       <section className="flex-grow py-12 lg:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">

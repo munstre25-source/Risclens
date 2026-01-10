@@ -10,6 +10,7 @@ export const navConfig = {
     label: 'Frameworks',
     items: [
       { label: 'SOC 2 Suite', href: '/soc-2', description: 'Readiness, costs, and timelines' },
+      { label: 'Penetration Testing', href: '/penetration-testing', badge: 'Hub', description: 'Scoping, estimators, and SOWs' },
       { label: 'ISO 27001', href: '/soc-2-vs-iso-27001', description: 'Gap analysis and roadmap' },
       { label: 'ISO 42001 (AI)', href: '/ai-compliance', badge: 'New', description: 'AI Governance & Compliance' },
     ],
@@ -21,12 +22,30 @@ export const navConfig = {
   },
   tools: {
     label: 'Tools',
-    primary: { label: 'Audit Delay Cost', href: '/soc-2-audit-delay-cost', badge: 'Tool' },
-    items: [
-      { label: 'Readiness Index', href: '/soc-2-readiness-index', badge: 'Tool' },
-      { label: 'Compliance ROI', href: '/compliance-roi-calculator', badge: 'Tool' },
-      { label: 'Timeline Estimator', href: '/soc-2-timeline/estimator', badge: 'Tool' },
-      { label: 'VRA ROI Calculator', href: '/vendor-risk-assessment/roi-calculator', badge: 'Tool' },
+    sections: [
+      {
+        title: 'SOC 2 Tools',
+        items: [
+          { label: 'Cost Calculator', href: '/soc-2-cost', badge: 'Hub' },
+          { label: 'Readiness Index', href: '/soc-2-readiness-index', badge: 'Tool' },
+          { label: 'Audit Delay Cost', href: '/soc-2-audit-delay-cost', badge: 'Tool' },
+          { label: 'Timeline Estimator', href: '/soc-2-timeline/estimator', badge: 'Tool' },
+        ]
+      },
+      {
+        title: 'Vendor Risk Tools',
+        items: [
+          { label: 'VRA ROI Calculator', href: '/vendor-risk-assessment/roi-calculator', badge: 'Tool' },
+          { label: 'Vendor Tiering Tool', href: '/vendor-risk-assessment/tiering', badge: 'Tool' },
+        ]
+      },
+      {
+        title: 'PenTest Tools',
+        items: [
+          { label: 'PenTest Cost Estimator', href: '/penetration-testing/cost-estimator', badge: 'Tool' },
+          { label: 'Scoping Worksheet', href: '/penetration-testing/scoping', badge: 'Tool' },
+        ]
+      }
     ]
   },
     directory: {
@@ -42,6 +61,10 @@ export const navConfig = {
     resources: {
       label: 'Resources',
       about: { label: 'About RiscLens', href: '/about' },
+      hubs: [
+        { label: 'Education Hub', href: '/learn', badge: 'Flagship' },
+        { label: 'Comparison Hub', href: '/compare', badge: 'Flagship' },
+      ],
       guides: [
         { label: 'Sales & Operations', href: '/soc-2-sales' },
         { label: 'Type I vs Type II', href: '/soc-2-type-i-vs-type-ii' },

@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import { AuthorBio, VerifiedBy } from '@/components/AuthorBio';
 import ExpertReview from '@/components/ExpertReview';
 import { GeneralPageSchema } from '@/components/GeneralPageSchema';
+import { Breadcrumb } from '@/components/ui/Breadcrumb';
 
 const AuditorMatchForm = dynamic(() => import('@/components/AuditorMatchForm'), { ssr: false });
 const StickyCTA = dynamic(() => import('@/components/StickyCTA'), { ssr: false });
@@ -54,7 +55,10 @@ export default function CityAuditorPage({
 
       {/* Hero Section */}
       <section className="bg-white border-b border-slate-200">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16 lg:py-24">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-8">
+          <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'Auditor Directory', href: '/auditor-directory' }, { label: cityName }]} />
+        </div>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 lg:py-16">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <div className="flex flex-col items-start mb-6">
@@ -82,8 +86,11 @@ export default function CityAuditorPage({
               </div>
 
               <div className="flex flex-wrap gap-4 text-sm">
-                <Link href="/auditor-directory" className="text-brand-600 hover:text-brand-700 font-medium flex items-center gap-1">
-                  ← Back to full directory
+                <Link href="/auditor-directory" className="px-4 py-2 rounded-full border border-slate-200 bg-white text-brand-700 hover:border-brand-200 font-bold shadow-sm transition-all flex items-center gap-2">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  </svg>
+                  Back to Auditor Directory
                 </Link>
               </div>
             </div>

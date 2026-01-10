@@ -96,15 +96,20 @@ export default function ReadinessIndustryPage({
             </Link>
             .
           </p>
-          {relatedLinks && relatedLinks.length > 0 && (
-            <div className="mt-4 text-sm text-brand-700 flex flex-col sm:flex-row gap-2 justify-center">
-              {relatedLinks.map((link, idx) => (
-                <Link key={idx} href={link.href} className="underline underline-offset-4 hover:text-brand-800">
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          )}
+            {relatedLinks && relatedLinks.length > 0 && (
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm">
+                <span className="font-medium text-slate-500">Related Tools:</span>
+                {relatedLinks.map((link, idx) => (
+                  <Link 
+                    key={idx} 
+                    href={link.href} 
+                    className="text-brand-700 hover:text-brand-800 underline underline-offset-4 decoration-slate-200 hover:decoration-brand-300"
+                  >
+                    {link.label.replace('Related: ', '').replace('Related: Penetration Testing', 'Pentesting').replace('Related: Vendor Risk Assessment', 'Vendor Risk')}
+                  </Link>
+                ))}
+              </div>
+            )}
           <div className="mt-6 bg-white/70 border border-slate-200 rounded-lg p-4 text-left max-w-3xl mx-auto">
             <p className="text-sm font-semibold text-slate-800 mb-2">Trust &amp; privacy</p>
             <ul className="list-disc list-inside text-sm text-slate-600 space-y-1 leading-relaxed">
