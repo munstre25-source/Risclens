@@ -46,12 +46,11 @@ export default function HomePage() {
               </div>
 
                 <h1 className="text-3xl sm:text-6xl lg:text-7xl font-bold text-slate-900 leading-[1.1] tracking-tight mb-4 sm:mb-8">
-                  The Intelligence Layer for <br className="hidden lg:block" />
-                  <span className="text-brand-600">AI Trust & Compliance.</span>
+                  Get your SOC 2 and AI audit-ready fast.
                 </h1>
                 
                 <p className="text-lg sm:text-xl text-slate-600 leading-relaxed max-w-3xl mx-auto mb-8 sm:mb-12">
-                  The definitive source for ISO 42001 (AI) and SOC 2 readiness. Stop guessing costs. Clear procurement 2x faster with deterministic intelligence and auditor directories.
+                  Auditor-approved ISO 42001 and SOC 2 roadmaps. Faster procurement, fewer rewrites.
                 </p>
                 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -60,17 +59,17 @@ export default function HomePage() {
                       className="w-full sm:w-auto bg-brand-600 text-white text-lg font-bold px-8 py-4 sm:px-10 sm:py-5 rounded-xl shadow-xl hover:bg-brand-700 transition-all flex flex-col items-center group relative overflow-hidden"
                     >
                       <div className="absolute top-0 right-0 bg-white/20 text-[10px] px-2 py-0.5 rounded-bl-lg font-bold uppercase tracking-tighter animate-pulse">Trending</div>
-                      <span>Get ISO 42001 Index</span>
+                      <span>Get my AI roadmap</span>
 
-                    <span className="text-[10px] font-medium text-white/70 uppercase tracking-widest mt-1 group-hover:text-white">AI Governance Roadmap →</span>
+                    <span className="text-[10px] font-medium text-white/70 uppercase tracking-widest mt-1 group-hover:text-white">ISO 42001 (AI) index →</span>
                   </Link>
 
                   <Link
                     href="/soc-2-readiness-index"
                     className="w-full sm:w-auto bg-slate-900 text-white text-lg font-bold px-8 py-4 sm:px-10 sm:py-5 rounded-xl shadow-xl hover:bg-slate-800 transition-all flex flex-col items-center group"
                   >
-                    <span>Get SOC 2 Index</span>
-                    <span className="text-[10px] font-medium text-slate-400 uppercase tracking-widest mt-1 group-hover:text-slate-300">Readiness & Cost →</span>
+                    <span>Get my SOC 2 roadmap</span>
+                    <span className="text-[10px] font-medium text-slate-400 uppercase tracking-widest mt-1 group-hover:text-slate-300">Readiness & cost →</span>
                   </Link>
                 </div>
 
@@ -87,8 +86,8 @@ export default function HomePage() {
         <section className="py-24 bg-white">
           <div className="max-w-6xl mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">The GPS for the Compliance Journey</h2>
-              <p className="text-lg text-slate-600">While platforms handle the "pipes," RiscLens provides the deterministic intelligence to navigate them.</p>
+              <h2 className="text-3xl font-bold text-slate-900 mb-4">What you get</h2>
+              <p className="text-lg text-slate-600">Clear roadmaps, calculators, and a vetted auditor directory to move faster.</p>
             </div>
 
             <div className="grid md:grid-cols-3 gap-8">
