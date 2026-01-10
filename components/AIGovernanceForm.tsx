@@ -195,7 +195,7 @@ export default function AIGovernanceForm() {
                 required
                 value={formData.company_name}
                 onChange={(e) => setFormData({ ...formData, company_name: e.target.value })}
-                className="w-full p-4 rounded-xl border-2 border-slate-100 bg-slate-50 font-bold"
+                className="w-full p-4 rounded-xl border-2 border-slate-100 bg-white text-slate-900 font-bold"
                 placeholder="Acme AI"
               />
             </div>
@@ -206,7 +206,7 @@ export default function AIGovernanceForm() {
                 required
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full p-4 rounded-xl border-2 border-slate-100 bg-slate-50 font-bold"
+                className="w-full p-4 rounded-xl border-2 border-slate-100 bg-white text-slate-900 font-bold"
                 placeholder="you@acme.ai"
               />
             </div>
@@ -216,7 +216,7 @@ export default function AIGovernanceForm() {
                 type="number" 
                 value={formData.companySize}
                 onChange={(e) => setFormData({ ...formData, companySize: parseInt(e.target.value) })}
-                className="w-full p-4 rounded-xl border-2 border-slate-100 bg-slate-50 font-bold"
+                className="w-full p-4 rounded-xl border-2 border-slate-100 bg-white text-slate-900 font-bold"
               />
             </div>
           </div>

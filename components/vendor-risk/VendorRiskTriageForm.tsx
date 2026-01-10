@@ -81,7 +81,7 @@ export function VendorRiskTriageForm() {
             <select
               value={inputs.dataSensitivity}
               onChange={(e) => setInputs((prev) => ({ ...prev, dataSensitivity: e.target.value as VendorRiskInput['dataSensitivity'] }))}
-              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
+              className="w-full rounded-lg border border-slate-200 bg-white text-slate-900 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
             >
               {dataSensitivityOptions.map((opt) => (
                 <option key={opt.value as string} value={opt.value}>
@@ -96,7 +96,7 @@ export function VendorRiskTriageForm() {
             <select
               value={inputs.accessLevel}
               onChange={(e) => setInputs((prev) => ({ ...prev, accessLevel: e.target.value as VendorRiskInput['accessLevel'] }))}
-              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
+              className="w-full rounded-lg border border-slate-200 bg-white text-slate-900 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
             >
               {accessLevelOptions.map((opt) => (
                 <option key={opt.value as string} value={opt.value}>
@@ -113,7 +113,7 @@ export function VendorRiskTriageForm() {
               onChange={(e) =>
                 setInputs((prev) => ({ ...prev, vendorCriticality: e.target.value as VendorRiskInput['vendorCriticality'] }))
               }
-              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
+              className="w-full rounded-lg border border-slate-200 bg-white text-slate-900 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
             >
               {vendorCriticalityOptions.map((opt) => (
                 <option key={opt.value as string} value={opt.value}>
@@ -130,7 +130,7 @@ export function VendorRiskTriageForm() {
               onChange={(e) =>
                 setInputs((prev) => ({ ...prev, integrationType: e.target.value as VendorRiskInput['integrationType'] }))
               }
-              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
+              className="w-full rounded-lg border border-slate-200 bg-white text-slate-900 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
             >
               {integrationTypeOptions.map((opt) => (
                 <option key={opt.value as string} value={opt.value}>
@@ -145,7 +145,7 @@ export function VendorRiskTriageForm() {
             <select
               value={inputs.dataVolume}
               onChange={(e) => setInputs((prev) => ({ ...prev, dataVolume: e.target.value as VendorRiskInput['dataVolume'] }))}
-              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
+              className="w-full rounded-lg border border-slate-200 bg-white text-slate-900 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
             >
               {dataVolumeOptions.map((opt) => (
                 <option key={opt.value as string} value={opt.value}>
@@ -186,7 +186,7 @@ export function VendorRiskTriageForm() {
               onChange={(e) =>
                 setInputs((prev) => ({ ...prev, incidentHistory: e.target.value as VendorRiskInput['incidentHistory'] }))
               }
-              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
+              className="w-full rounded-lg border border-slate-200 bg-white text-slate-900 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
             >
               {incidentHistoryOptions.map((opt) => (
                 <option key={opt.value as string} value={opt.value}>

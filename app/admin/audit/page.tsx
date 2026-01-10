@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { Database } from 'lucide-react';
 
 interface AuditLog {
   id: string;
@@ -45,7 +47,16 @@ export default function AuditPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-900">System Audit Logs</h1>
-        <button onClick={fetchLogs} className="btn-secondary text-sm">Refresh</button>
+        <div className="flex gap-3">
+          <Link 
+            href="/admin/audit/content"
+            className="flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-700 rounded-xl text-sm font-bold border border-emerald-100 hover:bg-emerald-100 transition-all"
+          >
+            <Database className="h-4 w-4" />
+            Content Audit
+          </Link>
+          <button onClick={fetchLogs} className="btn-secondary text-sm">Refresh</button>
+        </div>
       </div>
 
       {error && (

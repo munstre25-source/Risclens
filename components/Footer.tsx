@@ -61,6 +61,7 @@ export default function Footer() {
                 <li><Link href="/penetration-testing" className="hover:text-white transition-colors">Pentest Hub</Link></li>
                 <li><Link href="/vendor-risk-assessment" className="hover:text-white transition-colors">Vendor Risk Hub</Link></li>
                 <li><Link href="/auditor-directory" className="hover:text-white transition-colors font-semibold text-blue-400">Auditor Directory</Link></li>
+                <li><Link href="/auditor-portal" className="hover:text-white transition-colors font-semibold text-brand-400">Auditor Bidding Portal</Link></li>
                 <li><Link href="/compliance/directory" className="hover:text-white transition-colors">Security Signals</Link></li>
               </ul>
             </div>

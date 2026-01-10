@@ -23,7 +23,8 @@ import {
   X,
   History,
   Terminal,
-  Search as SearchIcon
+  Search as SearchIcon,
+  Database
 } from 'lucide-react';
 
 type AuthState = 'loading' | 'unauthenticated' | 'authenticated';
@@ -40,8 +41,9 @@ const SECONDARY_NAV = [
   { href: '/admin/kgr/explorer', label: 'Signal Explorer', icon: Search },
   { href: '/admin/analytics', label: 'Metrics', icon: ShieldCheck },
   { href: '/admin/buyers', label: 'Partners', icon: Users },
-  { href: '/admin/audit', label: 'Audit Logs', icon: History },
-  { href: '/admin/intelligence/directory', label: 'Repository', icon: Library },
+    { href: '/admin/audit', label: 'Audit Logs', icon: History },
+    { href: '/admin/audit/content', label: 'Content Audit', icon: Database },
+    { href: '/admin/intelligence/directory', label: 'Repository', icon: Library },
   { href: '/admin/test-mode', label: 'Dev Console', icon: Terminal },
   { href: '/admin/experiments', label: 'A/B Labs', icon: FlaskConical },
   { href: '/admin/settings', label: 'Config', icon: Settings },

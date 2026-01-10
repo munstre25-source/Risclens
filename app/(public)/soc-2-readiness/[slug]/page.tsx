@@ -6,16 +6,19 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AssessmentCTA from '@/components/AssessmentCTA';
 import DefinitionCallout from '@/components/DefinitionCallout';
+import { ContentFeedback } from '@/components/ContentFeedback';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { readinessGuides, readinessGuideBySlug, Soc2GuidePage } from '@/lib/soc2Guides';
 import { AuthorBio, VerifiedBy } from '@/components/AuthorBio';
 import { authors } from '@/lib/authors';
+import { getContentPage } from '@/lib/content';
+import { LastVerifiedBadge, AccuracyDisclaimer } from '@/components/AccuracyGuards';
 
 interface PageProps {
   params: { slug: string };
 }
 
-function buildFaqs(title: string) {
+function buildDefaultFaqs(title: string) {
   return [
     {
       question: `Why does ${title} matter for SOC 2?`,
@@ -77,22 +80,41 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default function Soc2ReadinessGuidePage({ params }: PageProps) {
-  const page = readinessGuideBySlug[params.slug];
-  if (!page) notFound();
+export default async function Soc2ReadinessGuidePage({ params }: PageProps) {
+  const staticPage = readinessGuideBySlug[params.slug];
+  const dbPage = await getContentPage(params.slug);
 
-  const faqs = buildFaqs(page.title);
+  if (!staticPage && !dbPage) notFound();
+
+  const page = dbPage ? {
+    ...staticPage,
+    title: dbPage.title,
+    summary: dbPage.description,
+    highlights: dbPage.content_json?.highlights || staticPage?.highlights || [],
+    faqs: dbPage.faqs || buildDefaultFaqs(dbPage.title),
+    last_reviewed_at: dbPage.last_reviewed_at,
+    framework_version: dbPage.framework_version || 'SOC 2 (2025)',
+    author_note: dbPage.author_note
+    } : {
+      ...staticPage!,
+      faqs: buildDefaultFaqs(staticPage!.title),
+      last_reviewed_at: new Date().toISOString(),
+      framework_version: 'SOC 2 (2025)',
+      author_note: undefined
+    };
+
   const faqSchema = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: faqs.map((faq) => ({
+    dateModified: page.last_reviewed_at,
+    mainEntity: page.faqs.map((faq: any) => ({
       '@type': 'Question',
       name: faq.question,
       acceptedAnswer: { '@type': 'Answer', text: faq.answer },
     })),
   };
 
-  const related = relatedPages(page.slug);
+  const related = relatedPages(params.slug);
   const author = authors.raphael;
 
   const personSchema = {
@@ -106,13 +128,13 @@ export default function Soc2ReadinessGuidePage({ params }: PageProps) {
 
   return (
     <>
-      <script
-        id={`readiness-faq-${page.slug}`}
+      <Script
+        id={`readiness-faq-${params.slug}`}
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
-      <script
-        id={`author-schema-${page.slug}`}
+      <Script
+        id={`author-schema-${params.slug}`}
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
       />
@@ -130,6 +152,7 @@ export default function Soc2ReadinessGuidePage({ params }: PageProps) {
             />
           </div>
           <div className="max-w-4xl mx-auto px-4 sm:px-6 pb-14 lg:pb-20 pt-4 text-center">
+            <LastVerifiedBadge date={page.last_reviewed_at} framework={page.framework_version} />
             <div className="flex justify-center mb-6">
               <VerifiedBy authorId="raphael" />
             </div>
@@ -140,14 +163,14 @@ export default function Soc2ReadinessGuidePage({ params }: PageProps) {
             <div className="flex justify-center">
               <AssessmentCTA />
             </div>
-            {page.slug === 'vendor-management' && (
+            {params.slug === 'vendor-management' && (
               <div className="mt-4 text-sm text-brand-700">
                 <Link href="/vendor-risk-assessment" className="underline underline-offset-4 hover:text-brand-800">
                   Related: Vendor Risk Assessment
                 </Link>
               </div>
             )}
-            {page.slug === 'vendor-management' && (
+            {params.slug === 'vendor-management' && (
               <div className="max-w-3xl mx-auto mt-6">
                 <DefinitionCallout
                   title="What is a vendor risk assessment?"
@@ -156,7 +179,7 @@ export default function Soc2ReadinessGuidePage({ params }: PageProps) {
                 />
               </div>
             )}
-            {page.slug === 'vulnerability-management' && (
+            {params.slug === 'vulnerability-management' && (
               <div className="max-w-3xl mx-auto mt-6">
                 <DefinitionCallout
                   title="What is penetration testing?"
@@ -170,11 +193,17 @@ export default function Soc2ReadinessGuidePage({ params }: PageProps) {
 
         <section className="bg-white border-t border-slate-200">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 space-y-10">
+            {page.author_note && (
+              <div className="p-4 rounded-lg bg-brand-50 border border-brand-100 text-brand-900 text-sm italic">
+                <strong>Analyst Note:</strong> {page.author_note}
+              </div>
+            )}
+
             <div className="space-y-3 text-slate-700 leading-relaxed">
               <p className="text-sm font-semibold text-slate-800">Control expectations</p>
               <p>{page.summary}</p>
               <ul className="space-y-2 text-sm">
-                {page.highlights.map((item) => (
+                {page.highlights.map((item: string) => (
                   <li key={item} className="flex gap-2">
                     <span className="text-brand-600">•</span>
                     <span>{item}</span>
@@ -198,7 +227,7 @@ export default function Soc2ReadinessGuidePage({ params }: PageProps) {
             <div className="bg-white border border-slate-200 rounded-xl p-6">
               <h3 className="text-lg font-semibold text-slate-900 mb-3">FAQ</h3>
               <div className="space-y-4">
-                {faqs.map((faq) => (
+                {page.faqs.map((faq: any) => (
                   <div key={faq.question}>
                     <p className="font-semibold text-slate-900">{faq.question}</p>
                     <p className="text-sm text-slate-700 leading-relaxed">{faq.answer}</p>
@@ -207,9 +236,12 @@ export default function Soc2ReadinessGuidePage({ params }: PageProps) {
               </div>
             </div>
 
-            <AuthorBio authorId="raphael" />
+              <AuthorBio authorId="raphael" />
 
-            <div className="border border-slate-200 rounded-xl p-6 bg-white">
+              <ContentFeedback pageUrl={`/soc-2-readiness/${params.slug}`} />
+
+              <div className="border border-slate-200 rounded-xl p-6 bg-white">
+
               <h3 className="text-lg font-semibold text-slate-900 mb-3">Related</h3>
               <div className="flex flex-wrap gap-3 text-sm">
                 <Link href={page.parent} className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">
@@ -229,6 +261,8 @@ export default function Soc2ReadinessGuidePage({ params }: PageProps) {
                 </Link>
               </div>
             </div>
+            
+            <AccuracyDisclaimer />
           </div>
         </section>
 

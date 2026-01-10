@@ -7,6 +7,9 @@
  * to test scoring, admin panel, and other features.
  */
 
+import * as dotenv from 'dotenv';
+import path from 'path';
+dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
 import { getSupabaseAdmin } from '../lib/supabase';
 import { calculateLeadScore, generateRecommendations } from '../lib/scoring';
 

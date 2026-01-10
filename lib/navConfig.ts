@@ -29,14 +29,16 @@ export const navConfig = {
       { label: 'VRA ROI Calculator', href: '/vendor-risk-assessment/roi-calculator', badge: 'Tool' },
     ]
   },
-  directory: {
-    label: 'Directory',
-    href: '/auditor-directory',
-    items: [
-      { label: 'Auditor Directory', href: '/auditor-directory' },
-      { label: 'Compliance Directory', href: '/compliance/directory' },
-    ]
-  },
+    directory: {
+      label: 'Directory',
+      href: '/auditor-directory',
+      items: [
+        { label: 'Compliance Directory', href: '/compliance/directory' },
+        { label: 'Auditor Directory', href: '/auditor-directory' },
+        { label: 'Auditor Bidding Portal', href: '/auditor-portal' },
+      ]
+    },
+
     resources: {
       label: 'Resources',
       about: { label: 'About RiscLens', href: '/about' },

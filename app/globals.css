@@ -20,9 +20,15 @@
     scroll-behavior: smooth;
   }
 
-  body {
-    @apply min-h-screen bg-slate-100 text-slate-900 font-normal leading-relaxed;
-  }
+    body {
+      @apply min-h-screen bg-slate-100 text-slate-900 font-normal leading-relaxed;
+    }
+
+    /* Global form resets to prevent dark mode overrides from browser */
+    input, select, textarea {
+      @apply bg-white text-slate-900;
+    }
+
 
   section[id],
   div[id],

@@ -362,11 +362,6 @@ export default function Header() {
                   className="flex items-center justify-between px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
                 >
                   <span className="font-medium text-slate-900">{item.label}</span>
-                  {item.label.toLowerCase().includes('auditor') && (
-                    <span className="ml-2 px-1.5 py-0.5 text-[10px] font-bold text-white bg-brand-500 rounded uppercase tracking-wider">
-                      New
-                    </span>
-                  )}
                 </Link>
               ))}
             </DropdownPortal>

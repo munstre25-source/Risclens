@@ -17,13 +17,6 @@ export async function GET(request: NextRequest) {
       (adminSecret && cookieToken === adminSecret) ||
       (adminSecret && validateAdminAuth(authHeader, adminSecret));
     
-    if (!isAuthed) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
-
     const { searchParams } = new URL(request.url);
     const keepOrSell = sanitizeString(searchParams.get('keep_or_sell') || '');
     const industry = sanitizeString(searchParams.get('industry') || '');
@@ -34,12 +27,27 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '100', 10);
     const offset = parseInt(searchParams.get('offset') || '0', 10);
 
+    // Auditor Portal Public Access: Allow listing sellable unsold leads without auth
+    const isPublicAuditorRequest = keepOrSell === 'sell' && sold === 'false' && !search;
+
+    if (!isAuthed && !isPublicAuditorRequest) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
     const supabase = getSupabaseAdmin();
+
+    // Select fields based on auth status
+    const selectFields = isAuthed
+      ? '*'
+      : 'id,industry,num_employees,readiness_score,lead_score,estimated_cost_low,estimated_cost_high,created_at,sold,audit_date';
 
     // Build query
     let query = supabase
       .from('leads')
-      .select('*', { count: 'exact' })
+      .select(selectFields, { count: 'exact' })
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1);
 
@@ -61,7 +69,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Urgency filter requires post-filtering
-    let { data: leads, error, count } = await query;
+    const { data, error, count } = await query;
 
     if (error) {
       console.error('Failed to fetch leads:', error);
@@ -71,10 +79,13 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    let leads: any[] = Array.isArray(data) ? (data as any[]) : [];
+
     // Apply urgency filter (requires date calculation)
-    if (urgency && leads) {
+    if (urgency && leads.length > 0) {
       const now = new Date();
-      leads = leads.filter((lead) => {
+      const typedLeads = leads as Array<{ audit_date?: string | null }>;
+      leads = typedLeads.filter((lead) => {
         if (!lead.audit_date) return false;
         const audit = new Date(lead.audit_date);
         const daysUntil = (audit.getTime() - now.getTime()) / (1000 * 60 * 60 * 24);
