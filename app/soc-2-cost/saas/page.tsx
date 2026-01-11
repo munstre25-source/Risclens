@@ -54,14 +54,14 @@ const content: CostIndustryContent = {
       detail: 'Longer observation window and stricter sampling raise both audit and internal effort.',
     },
   ],
-  hubHref: '/soc-2/industries/saas',
-  timelineHref: '/soc-2-timeline/saas',
-  readinessHref: '/soc-2-readiness/saas',
-  relatedLinks: [
-    { href: '/soc-2-timeline/saas', label: 'Timeline for SaaS' },
-    { href: '/soc-2-readiness/saas', label: 'Readiness for SaaS' },
-  ],
-};
+    hubHref: '/soc-2/industries/saas',
+    timelineHref: '/soc-2-timeline/saas',
+    readinessHref: '/soc-2-readiness-checklist/saas',
+    relatedLinks: [
+      { href: '/soc-2-timeline/saas', label: 'Timeline for SaaS' },
+      { href: '/soc-2-readiness-checklist/saas', label: 'Readiness for SaaS' },
+    ],
+  };
 
 export const metadata: Metadata = {
   title: 'SOC 2 Cost for SaaS | RiscLens',

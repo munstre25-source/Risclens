@@ -54,14 +54,14 @@ const content: CostIndustryContent = {
       detail: 'Leaner scope if data is controlled; logging and access evidence still required for lower cost band.',
     },
   ],
-  hubHref: '/soc-2/industries/ai-data',
-  timelineHref: '/soc-2-timeline',
-  readinessHref: '/soc-2-readiness/saas',
-  relatedLinks: [
-    { href: '/soc-2-timeline', label: 'SOC 2 timeline (overview)' },
-    { href: '/soc-2-readiness/saas', label: 'Readiness for SaaS teams' },
-  ],
-};
+    hubHref: '/soc-2/industries/ai-data',
+    timelineHref: '/soc-2-timeline',
+    readinessHref: '/soc-2-readiness-checklist/ai-ml',
+    relatedLinks: [
+      { href: '/soc-2-timeline', label: 'SOC 2 timeline (overview)' },
+      { href: '/soc-2-readiness-checklist/ai-ml', label: 'Readiness for AI/ML teams' },
+    ],
+  };
 
 export const metadata: Metadata = {
   title: 'SOC 2 Cost for AI/Data | RiscLens',

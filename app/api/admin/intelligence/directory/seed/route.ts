@@ -8,232 +8,62 @@ export async function GET(request: NextRequest) {
     const supabase = getSupabaseAdmin();
     
     const companies = [
-      {
-        name: 'Stripe',
-        slug: 'stripe',
-        domain: 'stripe.com',
-        signal_score: 94,
-        indexable: true,
-        public_signals: {
-          has_security_page: true,
-          has_trust_page: true,
-          mentions_soc2: true,
-          security_url: 'https://stripe.com/docs/security',
-          trust_url: 'https://stripe.com/docs/security/stripe-security',
-          soc2_status: 'Type II'
-        }
-      },
-      {
-        name: 'Vercel',
-        slug: 'vercel',
-        domain: 'vercel.com',
-        signal_score: 92,
-        indexable: true,
-        public_signals: {
-          has_security_page: true,
-          has_trust_page: true,
-          mentions_soc2: true,
-          security_url: 'https://vercel.com/security',
-          trust_url: 'https://vercel.com/security',
-          soc2_status: 'Type II'
-        }
-      },
-      {
-        name: 'Auth0',
-        slug: 'auth0',
-        domain: 'auth0.com',
-        signal_score: 91,
-        indexable: true,
-        public_signals: {
-          has_security_page: true,
-          has_trust_page: true,
-          mentions_soc2: true,
-          security_url: 'https://auth0.com/security',
-          trust_url: 'https://auth0.com/security/compliance',
-          soc2_status: 'Type II'
-        }
-      },
-      {
-        name: 'Supabase',
-        slug: 'supabase',
-        domain: 'supabase.com',
-        signal_score: 90,
-        indexable: true,
-        public_signals: {
-          has_security_page: true,
-          has_trust_page: true,
-          mentions_soc2: true,
-          security_url: 'https://supabase.com/security',
-          trust_url: 'https://supabase.com/security',
-          soc2_status: 'Type II'
-        }
-      },
-      {
-        name: 'HubSpot',
-        slug: 'hubspot',
-        domain: 'hubspot.com',
-        signal_score: 90,
-        indexable: true,
-        public_signals: {
-          has_security_page: true,
-          has_trust_page: true,
-          mentions_soc2: true,
-          security_url: 'https://www.hubspot.com/security',
-          trust_url: 'https://trust.hubspot.com',
-          soc2_status: 'Type II'
-        }
-      },
-      {
-        name: 'Okta',
-        slug: 'okta',
-        domain: 'okta.com',
-        signal_score: 90,
-        indexable: true,
-        public_signals: {
-          has_security_page: true,
-          has_trust_page: true,
-          mentions_soc2: true,
-          security_url: 'https://www.okta.com/security',
-          trust_url: 'https://trust.okta.com',
-          soc2_status: 'Type II'
-        }
-      },
-      {
-        name: 'Split',
-        slug: 'split',
-        domain: 'split.io',
-        signal_score: 89,
-        indexable: true,
-        public_signals: {
-          has_security_page: true,
-          has_trust_page: true,
-          mentions_soc2: true,
-          security_url: 'https://www.split.io/security',
-          trust_url: 'https://www.split.io/trust-center',
-          soc2_status: 'Type II'
-        }
-      },
-      {
-        name: 'Salesloft',
-        slug: 'salesloft',
-        domain: 'salesloft.com',
-        signal_score: 89,
-        indexable: true,
-        public_signals: {
-          has_security_page: true,
-          has_trust_page: true,
-          mentions_soc2: true,
-          security_url: 'https://salesloft.com/security',
-          trust_url: 'https://trust.salesloft.com',
-          soc2_status: 'Type II'
-        }
-      },
-      {
-        name: 'GitHub',
-        slug: 'github',
-        domain: 'github.com',
-        signal_score: 88,
-        indexable: true,
-        public_signals: {
-          has_security_page: true,
-          has_trust_page: true,
-          mentions_soc2: true,
-          security_url: 'https://github.com/security',
-          trust_url: 'https://github.com/security/compliance',
-          soc2_status: 'Type II'
-        }
-      },
-      {
-        name: 'Slack',
-        slug: 'slack',
-        domain: 'slack.com',
-        signal_score: 88,
-        indexable: true,
-        public_signals: {
-          has_security_page: true,
-          has_trust_page: true,
-          mentions_soc2: true,
-          security_url: 'https://slack.com/security',
-          trust_url: 'https://slack.com/trust',
-          soc2_status: 'Type II'
-        }
-      },
-      {
-        name: 'Snowflake',
-        slug: 'snowflake',
-        domain: 'snowflake.com',
-        signal_score: 88,
-        indexable: true,
-        public_signals: {
-          has_security_page: true,
-          has_trust_page: true,
-          mentions_soc2: true,
-          security_url: 'https://www.snowflake.com/security',
-          trust_url: 'https://www.snowflake.com/trust-center',
-          soc2_status: 'Type II'
-        }
-      },
-      {
-        name: 'Datadog',
-        slug: 'datadog',
-        domain: 'datadoghq.com',
-        signal_score: 87,
-        indexable: true,
-        public_signals: {
-          has_security_page: true,
-          has_trust_page: true,
-          mentions_soc2: true,
-          security_url: 'https://www.datadoghq.com/security',
-          trust_url: 'https://www.datadoghq.com/trust-center',
-          soc2_status: 'Type II'
-        }
-      },
-      {
-        name: 'Drift',
-        slug: 'drift',
-        domain: 'drift.com',
-        signal_score: 86,
-        indexable: true,
-        public_signals: {
-          has_security_page: true,
-          has_trust_page: true,
-          mentions_soc2: true,
-          security_url: 'https://www.drift.com/security',
-          trust_url: 'https://www.drift.com/trust',
-          soc2_status: 'Type II'
-        }
-      },
-      {
-        name: 'MongoDB',
-        slug: 'mongodb',
-        domain: 'mongodb.com',
-        signal_score: 86,
-        indexable: true,
-        public_signals: {
-          has_security_page: true,
-          has_trust_page: true,
-          mentions_soc2: true,
-          security_url: 'https://www.mongodb.com/security',
-          trust_url: 'https://www.mongodb.com/trust-center',
-          soc2_status: 'Type II'
-        }
-      },
-      {
-        name: 'Zoom',
-        slug: 'zoom',
-        domain: 'zoom.us',
-        signal_score: 85,
-        indexable: true,
-        public_signals: {
-          has_security_page: true,
-          has_trust_page: true,
-          mentions_soc2: true,
-          security_url: 'https://zoom.us/security',
-          trust_url: 'https://zoom.us/trust',
-          soc2_status: 'Type II'
-        }
-      }
-    ];
+      { name: 'Stripe', slug: 'stripe', domain: 'stripe.com' },
+      { name: 'Vercel', slug: 'vercel', domain: 'vercel.com' },
+      { name: 'Auth0', slug: 'auth0', domain: 'auth0.com' },
+      { name: 'Supabase', slug: 'supabase', domain: 'supabase.com' },
+      { name: 'HubSpot', slug: 'hubspot', domain: 'hubspot.com' },
+      { name: 'Okta', slug: 'okta', domain: 'okta.com' },
+      { name: 'GitHub', slug: 'github', domain: 'github.com' },
+      { name: 'Slack', slug: 'slack', domain: 'slack.com' },
+      { name: 'Snowflake', slug: 'snowflake', domain: 'snowflake.com' },
+      { name: 'Datadog', slug: 'datadog', domain: 'datadoghq.com' },
+      { name: 'MongoDB', slug: 'mongodb', domain: 'mongodb.com' },
+      { name: 'Zoom', slug: 'zoom', domain: 'zoom.us' },
+      { name: 'Atlassian', slug: 'atlassian', domain: 'atlassian.com' },
+      { name: 'Salesforce', slug: 'salesforce', domain: 'salesforce.com' },
+      { name: 'Adobe', slug: 'adobe', domain: 'adobe.com' },
+      { name: 'Shopify', slug: 'shopify', domain: 'shopify.com' },
+      { name: 'ServiceNow', slug: 'servicenow', domain: 'servicenow.com' },
+      { name: 'Workday', slug: 'workday', domain: 'workday.com' },
+      { name: 'Square', slug: 'square', domain: 'squareup.com' },
+      { name: 'Twilio', slug: 'twilio', domain: 'twilio.com' },
+      { name: 'Zendesk', slug: 'zendesk', domain: 'zendesk.com' },
+      { name: 'Cloudflare', slug: 'cloudflare', domain: 'cloudflare.com' },
+      { name: 'ZoomInfo', slug: 'zoominfo', domain: 'zoominfo.com' },
+      { name: 'DocuSign', slug: 'docusign', domain: 'docusign.com' },
+      { name: 'PagerDuty', slug: 'pagerduty', domain: 'pagerduty.com' },
+      { name: 'Asana', slug: 'asana', domain: 'asana.com' },
+      { name: 'Monday.com', slug: 'monday', domain: 'monday.com' },
+      { name: 'Notion', slug: 'notion', domain: 'notion.so' },
+      { name: 'Figma', slug: 'figma', domain: 'figma.com' },
+      { name: 'Canva', slug: 'canva', domain: 'canva.com' },
+      { name: 'Miro', slug: 'miro', domain: 'miro.com' },
+      { name: 'Airtable', slug: 'airtable', domain: 'airtable.com' },
+      { name: 'Zapier', slug: 'zapier', domain: 'zapier.com' },
+      { name: 'Box', slug: 'box', domain: 'box.com' },
+      { name: 'Dropbox', slug: 'dropbox', domain: 'dropbox.com' },
+      { name: 'Intercom', slug: 'intercom', domain: 'intercom.com' },
+      { name: 'Segment', slug: 'segment', domain: 'segment.com' },
+      { name: 'Postman', slug: 'postman', domain: 'postman.com' },
+      { name: 'Docker', slug: 'docker', domain: 'docker.com' },
+      { name: 'HashiCorp', slug: 'hashicorp', domain: 'hashicorp.com' },
+      { name: 'Elastic', slug: 'elastic', domain: 'elastic.co' },
+      { name: 'Confluent', slug: 'confluent', domain: 'confluent.io' },
+      { name: 'Fastly', slug: 'fastly', domain: 'fastly.com' },
+      { name: 'New Relic', slug: 'newrelic', domain: 'newrelic.com' },
+      { name: 'Snyk', slug: 'snyk', domain: 'snyk.io' },
+      { name: 'Wiz', slug: 'wiz', domain: 'wiz.io' },
+      { name: 'Netskope', slug: 'netskope', domain: 'netskope.com' },
+      { name: 'Zscaler', slug: 'zscaler', domain: 'zscaler.com' },
+      { name: 'CrowdStrike', slug: 'crowdstrike', domain: 'crowdstrike.com' },
+      { name: 'SentinelOne', slug: 'sentinelone', domain: 'sentinelone.com' }
+    ].map(c => ({
+      ...c,
+      signal_score: 0,
+      indexable: true,
+      public_signals: {}
+    }));
 
     const { data, error } = await supabase
       .from('company_signals')

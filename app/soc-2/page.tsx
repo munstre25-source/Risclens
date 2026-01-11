@@ -234,31 +234,76 @@ export default function Soc2HubPage() {
         </div>
       </section>
 
-      {/* INDUSTRIES SECTION */}
-      <section className="bg-white py-20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-12">
-          <div className="text-center space-y-2">
-            <h2 className="text-3xl font-bold text-slate-900">Industry-Specific Playbooks</h2>
-            <p className="text-slate-600">Tailored SOC 2 advice for your specific business model.</p>
+        {/* INDUSTRIES SECTION */}
+        <section className="bg-white py-20 border-b border-slate-200">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-12">
+            <div className="text-center space-y-2">
+              <h2 className="text-3xl font-bold text-slate-900">Industry-Specific Playbooks</h2>
+              <p className="text-slate-600">Tailored SOC 2 advice for your specific business model.</p>
+            </div>
+            
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+              {SOC2_INDUSTRIES.map((industry) => (
+                <Link
+                  key={industry.href}
+                  href={industry.href}
+                  className={`block border border-slate-200 rounded-2xl p-6 transition-all hover:border-brand-200 hover:shadow-sm ${industry.bg}`}
+                >
+                  <h3 className="text-base font-bold text-slate-900 mb-2">{industry.name}</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed mb-4">{industry.summary}</p>
+                    <span className="text-xs font-medium text-brand-700 underline underline-offset-4">Execute Roadmap</span>
+                </Link>
+              ))}
+            </div>
           </div>
-          
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {SOC2_INDUSTRIES.map((industry) => (
-              <Link
-                key={industry.href}
-                href={industry.href}
-                className={`block border border-slate-200 rounded-2xl p-6 transition-all hover:border-brand-200 hover:shadow-sm ${industry.bg}`}
-              >
-                <h3 className="text-base font-bold text-slate-900 mb-2">{industry.name}</h3>
-                <p className="text-sm text-slate-600 leading-relaxed mb-4">{industry.summary}</p>
-                  <span className="text-xs font-medium text-brand-700 underline underline-offset-4">Execute Roadmap</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CONTENT & LINKS SECTION */}
+        {/* AUDITOR DIRECTORY SECTION */}
+        <section className="bg-slate-50 py-20">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6">
+            <div className="grid lg:grid-cols-[1fr_2fr] gap-12 items-center">
+              <div className="space-y-6">
+                <h2 className="text-3xl font-bold text-slate-900">Find Local SOC 2 Auditors</h2>
+                <p className="text-slate-600 leading-relaxed">
+                  Audit pricing and availability varies significantly by location. Browse our directory of vetted CPA firms in major tech hubs to find a partner that understands your local market and stack.
+                </p>
+                <Link 
+                  href="/auditor-directory"
+                  className="inline-flex items-center gap-2 text-brand-700 font-bold hover:underline"
+                >
+                  View Full Directory
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </Link>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {[
+                  { name: 'New York', slug: 'new-york' },
+                  { name: 'San Francisco', slug: 'san-francisco' },
+                  { name: 'Austin', slug: 'austin' },
+                  { name: 'Seattle', slug: 'seattle' },
+                  { name: 'Boston', slug: 'boston' },
+                  { name: 'Chicago', slug: 'chicago' },
+                  { name: 'Los Angeles', slug: 'los-angeles' },
+                  { name: 'Denver', slug: 'denver' },
+                  { name: 'Washington DC', slug: 'washington-dc' },
+                ].map((city) => (
+                  <Link
+                    key={city.slug}
+                    href={`/auditor-directory/${city.slug}`}
+                    className="bg-white border border-slate-200 px-4 py-3 rounded-xl text-sm font-semibold text-slate-700 text-center hover:border-brand-300 hover:text-brand-600 shadow-sm transition-all"
+                  >
+                    {city.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* CONTENT & LINKS SECTION */}
+
       <section className="bg-slate-50 py-20 border-t border-slate-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-12">
           <div className="grid gap-8 md:grid-cols-2">

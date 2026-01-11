@@ -234,18 +234,18 @@ export default function PentestHubPage() {
               </div>
             </div>
 
-            <div className="pt-8 border-t border-slate-200">
-              <RelatedGuidesRow
-                links={[
-                  { href: '/penetration-testing/scoping', label: 'Scoping Worksheet' },
-                  { href: '/penetration-testing/cost-estimator', label: 'Cost Estimator' },
-                  { href: '/penetration-testing/sow', label: 'SOW Template' },
-                  { href: '/soc-2-readiness-calculator', label: 'Readiness Score' },
-                  { href: '/soc-2-cost-calculator', label: 'SOC 2 Cost' },
-                  { href: '/vendor-risk-assessment', label: 'Vendor Risk Hub' },
-                ]}
-              />
-            </div>
+              <div className="pt-8 border-t border-slate-200">
+                <RelatedGuidesRow
+                  links={[
+                    { href: '/penetration-testing/scoping', label: 'Scoping Worksheet' },
+                    { href: '/penetration-testing/cost-estimator', label: 'Cost Estimator' },
+                    { href: '/penetration-testing/sow', label: 'SOW Template' },
+                    { href: '/vendor-risk-assessment', label: 'Vendor Risk Hub' },
+                    { href: '/soc-2-readiness-calculator', label: 'Readiness Score' },
+                    { href: '/soc-2-cost-calculator', label: 'SOC 2 Cost' },
+                  ]}
+                />
+              </div>
           </div>
         </section>
         <Footer />

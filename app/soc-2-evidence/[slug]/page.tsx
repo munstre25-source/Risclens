@@ -88,12 +88,13 @@ export default async function EvidencePage({ params }: PageProps) {
         <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-8">
             <Breadcrumb 
-              items={[
-                { label: 'Home', href: '/' },
-                { label: 'SOC 2', href: '/soc-2' },
-                { label: 'Evidence', href: '/soc-2-evidence/vault' },
-                { label: guide.title }
-              ]} 
+                items={[
+                  { label: 'Home', href: '/' },
+                  { label: 'SOC 2', href: '/soc-2' },
+                  { label: 'Evidence', href: '/soc-2-evidence' },
+                  { label: guide.title }
+                ]} 
+
             />
           </div>
           <div className="max-w-5xl mx-auto px-4 sm:px-6 pb-14 lg:pb-20 pt-4 text-center space-y-4">

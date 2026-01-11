@@ -54,15 +54,15 @@ const content: CostIndustryContent = {
       detail: 'Stricter evidence expectations and contract reviews; higher audit and advisory time.',
     },
   ],
-  hubHref: '/soc-2/industries/healthcare',
-  timelineHref: '/soc-2-timeline',
-  readinessHref: '/soc-2-readiness/saas',
-  relatedLinks: [
-    { href: '/soc-2-timeline', label: 'SOC 2 timeline (overview)' },
-    { href: '/soc-2-cost', label: 'Cost overview' },
-    { href: '/soc-2-readiness/saas', label: 'Readiness for SaaS teams' },
-  ],
-};
+    hubHref: '/soc-2/industries/healthcare',
+    timelineHref: '/soc-2-timeline',
+    readinessHref: '/soc-2-readiness-checklist/healthcare',
+    relatedLinks: [
+      { href: '/soc-2-timeline', label: 'SOC 2 timeline (overview)' },
+      { href: '/soc-2-cost', label: 'Cost overview' },
+      { href: '/soc-2-readiness-checklist/healthcare', label: 'Readiness for Healthcare teams' },
+    ],
+  };
 
 export const metadata: Metadata = {
   title: 'SOC 2 Cost for Healthcare | RiscLens',

@@ -4,6 +4,7 @@ import Script from 'next/script';
 import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
 import AssessmentCTA from '@/components/AssessmentCTA';
 import { CopyButton } from '@/components/CopyButton';
 import { salesGuides, salesGuideBySlug, Soc2GuidePage } from '@/lib/soc2Guides';
@@ -95,21 +96,30 @@ export default function Soc2SalesDetailPage({ params }: PageProps) {
 
   const related = getRelatedPages(page.slug);
 
-  return (
-    <>
-      <Script id={`faq-${page.slug}`} type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <main className="min-h-screen flex flex-col bg-slate-100">
-        <Header />
-        <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 lg:py-20 text-center">
-            <p className="text-sm font-semibold uppercase tracking-wide text-brand-700 mb-3">Sales & Operations</p>
-            <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-5 leading-tight">{page.title}</h1>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-8 leading-relaxed">{page.summary}</p>
-            <div className="flex justify-center">
-              <AssessmentCTA />
+    return (
+      <>
+        <Script id={`faq-${page.slug}`} type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+        <main className="min-h-screen flex flex-col bg-slate-100">
+          <Header />
+          <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8">
+              <Breadcrumbs 
+                items={[
+                  { label: 'SOC 2 Sales', href: '/soc-2-sales' },
+                  { label: page.title, href: '#' }
+                ]}
+              />
             </div>
-          </div>
-        </section>
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 pb-14 lg:pb-20 pt-4 text-center">
+              <p className="text-sm font-semibold uppercase tracking-wide text-brand-700 mb-3">Sales & Operations</p>
+              <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-5 leading-tight">{page.title}</h1>
+              <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-8 leading-relaxed">{page.summary}</p>
+              <div className="flex justify-center">
+                <AssessmentCTA />
+              </div>
+            </div>
+          </section>
+
 
         <section className="bg-white border-t border-slate-200">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 space-y-10">

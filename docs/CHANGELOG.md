@@ -2,6 +2,17 @@
 
 Most recent first. For commit-level notes see [COMMITS_SUMMARY.md](COMMITS_SUMMARY.md).
 
+## 2026-01-11
+- **E-E-A-T Signal Hardening**: Implemented Google 2026 standard trust signals across all pSEO pages.
+  - Expanded author roster in `lib/authors.ts` (Sarah L. - JD/CIPP, Kevin A. - CISSP).
+  - Integrated `AuthorBio` components and expert verification badges.
+  - Added [Editorial Policy](/editorial-policy) and enhanced [Methodology](/methodology) pages.
+- **Smart Contextual Linking**: Strengthened sitewide crawling architecture.
+  - Implemented high-intent linking loops (Pricing ↔ Alternatives).
+  - Added Industry-to-Tool and Role-to-Product bridges.
+  - Centralized link logic in `lib/pseo-links.ts`.
+- **Documentation Overhaul**: Updated `pSEO.md`, `SEO.md`, `METHODOLOGY_PAGE.md` and created `EEAT_GUIDELINES.md`.
+
 ## 2026-01-06
 - Auditor Match Tool: Added `/auditor-match` for connecting companies with CPAs.
 - Methodology Page: Created `/methodology` to explain deterministic scoring and RiscLens approach.

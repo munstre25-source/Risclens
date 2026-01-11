@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AboutSection from '@/components/AboutSection';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'About RiscLens | Our Mission and Methodology',
@@ -56,6 +57,18 @@ export default function AboutPage() {
               Our Methodology
             </h2>
             <div className="space-y-12">
+              <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm text-center">
+                <p className="text-slate-600 mb-6 italic">
+                  "Transparency is our core control. We publish our logic so you can verify our results."
+                </p>
+                <Link 
+                  href="/editorial-policy" 
+                  className="text-brand-600 font-bold hover:underline inline-flex items-center gap-2"
+                >
+                  Read our full Editorial & Data Policy →
+                </Link>
+              </div>
+
               <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
                 <h3 className="text-xl font-bold text-slate-900 mb-4">Deterministic Scoring</h3>
                 <p className="text-slate-600 leading-relaxed">
@@ -82,24 +95,44 @@ export default function AboutPage() {
 
         {/* Leadership & Expertise Section */}
         <section className="py-20">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-16">
               <h2 className="text-3xl font-bold text-slate-900 mb-4">Leadership & Expertise</h2>
-              <p className="text-lg text-slate-600">Built by veterans of the audit and security industry.</p>
+              <p className="text-lg text-slate-600">Built by veterans of the audit, security, and privacy industry.</p>
             </div>
             
-            <div className="grid md:grid-cols-1 max-w-2xl mx-auto">
-              <div className="flex flex-col sm:flex-row gap-6 items-start">
-                <div className="w-20 h-20 bg-slate-200 rounded-full flex-shrink-0 overflow-hidden flex items-center justify-center text-slate-500 font-bold text-xl border-2 border-slate-100">
-                  RM
+            <div className="grid md:grid-cols-3 gap-12">
+              <div className="flex flex-col items-center text-center">
+                <div className="w-24 h-24 bg-slate-200 rounded-full flex-shrink-0 overflow-hidden flex items-center justify-center text-slate-500 font-bold text-2xl border-2 border-white shadow-md mb-6">
+                  RN
                 </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-slate-900">RiscLens</h3>
-                    <p className="text-brand-600 font-semibold text-sm mb-1">Founder & Principal Advisor (CISO, CISA)</p>
-                      <p className="text-slate-600 text-sm leading-relaxed">
-                        Built on over 15 years of cybersecurity expertise and 200+ SOC 2 audits at Big Four firms, RiscLens was created to democratize compliance knowledge that usually sits behind expensive consulting walls.
-                      </p>
-                  </div>
+                <h3 className="text-xl font-bold text-slate-900">Raphael Ngare</h3>
+                <p className="text-brand-600 font-semibold text-sm mb-4">Head of Compliance Strategy (CPA, CISA)</p>
+                <p className="text-slate-600 text-sm leading-relaxed">
+                  Over a decade of experience across Big Four firms and fintech startups, specializing in translating complex SOC 2 requirements into automated, engineering-friendly workflows.
+                </p>
+              </div>
+
+              <div className="flex flex-col items-center text-center">
+                <div className="w-24 h-24 bg-slate-200 rounded-full flex-shrink-0 overflow-hidden flex items-center justify-center text-slate-500 font-bold text-2xl border-2 border-white shadow-md mb-6">
+                  KA
+                </div>
+                <h3 className="text-xl font-bold text-slate-900">Kevin Anderson</h3>
+                <p className="text-brand-600 font-semibold text-sm mb-4">Principal Security Engineer (CISSP, CISM)</p>
+                <p className="text-slate-600 text-sm leading-relaxed">
+                  Security engineer turned GRC specialist focused on mapping cloud-native infrastructure (AWS/Azure/GCP) to modern compliance frameworks.
+                </p>
+              </div>
+
+              <div className="flex flex-col items-center text-center">
+                <div className="w-24 h-24 bg-slate-200 rounded-full flex-shrink-0 overflow-hidden flex items-center justify-center text-slate-500 font-bold text-2xl border-2 border-white shadow-md mb-6">
+                  SL
+                </div>
+                <h3 className="text-xl font-bold text-slate-900">Sarah Levin</h3>
+                <p className="text-brand-600 font-semibold text-sm mb-4">Privacy & Data Advisor (CIPP/US, JD)</p>
+                <p className="text-slate-600 text-sm leading-relaxed">
+                  Privacy attorney and data protection specialist ensuring our readiness tools account for global regulatory landscapes like GDPR and HIPAA.
+                </p>
               </div>
             </div>
 

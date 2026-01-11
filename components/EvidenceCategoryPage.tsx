@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import { FileText, CheckSquare, Shield, Search } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AboutSection from '@/components/AboutSection';
@@ -7,7 +8,7 @@ import StickyCTA from '@/components/StickyCTA';
 import { AuthorBio, VerifiedBy } from '@/components/AuthorBio';
 import ExpertReview from '@/components/ExpertReview';
 import { GeneralPageSchema } from '@/components/GeneralPageSchema';
-import { FileText, CheckSquare, Shield, Clock, Search } from 'lucide-react';
+import GapAnalyzerCTA from '@/components/GapAnalyzerCTA';
 
 interface EvidenceRequirement {
   title: string;
@@ -99,11 +100,15 @@ export default function EvidenceCategoryPage({
                 </div>
               </div>
             ))}
+            </div>
           </div>
-        </div>
-      </section>
 
-      {/* Automation Section */}
+          <div className="mt-16">
+            <GapAnalyzerCTA />
+          </div>
+        </section>
+
+        {/* Automation Section */}
       <section className="py-16 lg:py-24 bg-slate-900 text-white overflow-hidden relative">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
           <div className="flex flex-col md:flex-row gap-12 items-center">

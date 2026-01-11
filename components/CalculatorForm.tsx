@@ -276,19 +276,22 @@ export default function CalculatorForm() {
 
   return (
     <div className="card">
-      {/* Progress Bar */}
-      <div className="mb-8">
-        <div className="flex justify-between text-sm text-gray-600 mb-2">
-          <span>Step {step} of {TOTAL_STEPS}</span>
-          <span>{Math.round((step / TOTAL_STEPS) * 100)}% Complete</span>
+        {/* Progress Bar */}
+        <div className="mb-8">
+          <div className="flex justify-between text-sm text-gray-600 mb-2">
+            <span className="font-bold flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand-600 animate-pulse" />
+              Live readiness check active
+            </span>
+            <span className="font-medium">Step {step} of {TOTAL_STEPS} • {Math.round((step / TOTAL_STEPS) * 100)}%</span>
+          </div>
+          <div className="progress-bar h-2 bg-slate-100 rounded-full overflow-hidden">
+            <div
+              className="progress-bar-fill h-full bg-brand-600 transition-all duration-500 ease-out shadow-[0_0_10px_rgba(37,99,235,0.4)]"
+              style={{ width: `${(step / TOTAL_STEPS) * 100}%` }}
+            />
+          </div>
         </div>
-        <div className="progress-bar">
-          <div
-            className="progress-bar-fill"
-            style={{ width: `${(step / TOTAL_STEPS) * 100}%` }}
-          />
-        </div>
-      </div>
 
       <form onSubmit={handleSubmit}>
         {/* Step 1: Company Info */}

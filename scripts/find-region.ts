@@ -8,7 +8,7 @@ const regions = [
 ];
 
 const projectId = 'txbluzobjjlpbocpyygt';
-const password = 'ngarerisky254';
+const password = 'lx570s10k34';
 
 async function testRegion(region: string) {
   const host = `aws-0-${region}.pooler.supabase.com`;

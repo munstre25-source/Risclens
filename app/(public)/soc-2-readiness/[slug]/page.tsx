@@ -164,13 +164,6 @@ export default async function Soc2ReadinessGuidePage({ params }: PageProps) {
               <AssessmentCTA />
             </div>
             {params.slug === 'vendor-management' && (
-              <div className="mt-4 text-sm text-brand-700">
-                <Link href="/vendor-risk-assessment" className="underline underline-offset-4 hover:text-brand-800">
-                  Related: Vendor Risk Assessment
-                </Link>
-              </div>
-            )}
-            {params.slug === 'vendor-management' && (
               <div className="max-w-3xl mx-auto mt-6">
                 <DefinitionCallout
                   title="What is a vendor risk assessment?"

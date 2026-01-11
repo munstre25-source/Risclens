@@ -6,14 +6,23 @@ import { trackEvent } from '@/lib/analytics';
 interface AssessmentCTAProps {
   label?: string;
   href?: string;
+  variant?: 'primary' | 'outline';
+  className?: string;
 }
 
 export default function AssessmentCTA({ 
   label = 'Validate Readiness Now', 
-  href = '/soc-2-readiness-calculator' 
+  href = '/soc-2-readiness-calculator',
+  variant = 'primary',
+  className = '',
 }: AssessmentCTAProps) {
+  const buttonClass =
+    variant === 'outline'
+      ? 'btn-secondary text-lg px-8 py-4 bg-white text-brand-900 hover:bg-brand-50 border border-brand-200'
+      : 'btn-primary text-lg px-8 py-4';
+
   return (
-    <section className="border-t border-slate-200 bg-white">
+    <section className={`border-t border-slate-200 bg-white ${className}`}>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 lg:py-12 text-center space-y-4">
         <div className="inline-flex items-center gap-2 px-2 py-0.5 rounded-full bg-brand-50 border border-brand-100 mb-1 mx-auto">
           <span className="text-[10px] font-bold uppercase tracking-wider text-brand-700">Audit Readiness Validation</span>
@@ -24,7 +33,7 @@ export default function AssessmentCTA({
           <Link
             href={href}
             onClick={() => trackEvent('cta_click', { cta_label: label, destination: href })}
-            className="btn-primary text-lg px-8 py-4"
+            className={buttonClass}
           >
             {label}
           </Link>

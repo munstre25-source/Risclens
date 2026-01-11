@@ -4,8 +4,10 @@ import Link from 'next/link';
 import { getSupabaseAdmin } from '@/lib/supabase';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { SignalScore } from '@/components/compliance/SignalScore';
+
+const hasSupabaseAdmin = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
 
 export const metadata: Metadata = {
   title: 'Company Security Comparison | RiscLens',
@@ -14,6 +16,22 @@ export const metadata: Metadata = {
 
 export default async function ComparePage({ searchParams }: { searchParams: { slugs?: string } }) {
   const slugs = searchParams.slugs?.split(',').filter(Boolean) || [];
+  if (!hasSupabaseAdmin) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex flex-col">
+        <Header />
+        <main className="flex-grow container mx-auto px-4 py-16 max-w-3xl text-center space-y-4">
+          <h1 className="text-3xl font-bold text-gray-900">Comparison unavailable</h1>
+          <p className="text-gray-600">Supabase credentials are missing; set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY to enable peer comparisons.</p>
+          <Link href="/compliance/directory" className="btn-primary inline-flex justify-center">
+            Back to Directory
+          </Link>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
   const supabase = getSupabaseAdmin();
 
   const { data: companies, error } = await supabase
@@ -40,11 +58,11 @@ export default async function ComparePage({ searchParams }: { searchParams: { sl
       <Header />
       
       <main className="flex-grow container mx-auto px-4 py-8 max-w-6xl">
-        <Breadcrumbs 
+        <Breadcrumb
           items={[
             { label: 'Directory', href: '/compliance/directory' },
             { label: 'Compare', href: '/compliance/compare' },
-          ]} 
+          ]}
         />
 
         <div className="mt-8 mb-12">

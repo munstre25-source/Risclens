@@ -128,9 +128,16 @@ export default function TechStackSOC2Page({
             </div>
           </div>
         </div>
-      </section>
+        </section>
 
-      <AboutSection />
+        <section className="py-16 bg-white border-t border-slate-100">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6">
+            <AuthorBio authorId="kevin" />
+          </div>
+        </section>
+
+        <AboutSection />
+
 
       <Footer />
       <StickyCTA 

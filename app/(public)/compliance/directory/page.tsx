@@ -10,9 +10,11 @@ import { RelatedProfiles } from '@/components/compliance/RelatedProfiles';
 import { DirectoryIntelligence } from '@/components/compliance/DirectoryIntelligence';
 import { MarketIntelligenceStats } from '@/components/compliance/MarketIntelligenceStats';
 
+const hasSupabaseAdmin = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
+
 export const metadata: Metadata = {
   title: 'Compliance & Security Intelligence Directory | RiscLens',
-  description: 'The Crunchbase of Compliance. Browse public security signals, SOC 2 disclosures, and trust centers for the technology ecosystem.',
+    description: 'The Ground Truth for Compliance. Browse public security signals, SOC 2 disclosures, and trust centers for the technology ecosystem.',
   alternates: {
     canonical: 'https://risclens.com/compliance/directory',
   },
@@ -26,19 +28,48 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function DirectoryPage() {
-  const supabase = getSupabaseAdmin();
-  
-  const { data: companies, error } = await supabase
-    .from('company_signals')
-    .select('name, slug, signal_score, domain, public_signals, updated_at')
-    .eq('indexable', true)
-    .order('signal_score', { ascending: false });
-
-  if (error) {
-    console.error('Error fetching companies:', error);
+  if (!hasSupabaseAdmin) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex flex-col">
+        <Header />
+        <main className="flex-grow container mx-auto px-4 py-16 max-w-4xl text-center space-y-6">
+          <h1 className="text-4xl font-black text-gray-900">Compliance Directory unavailable</h1>
+          <p className="text-lg text-gray-600">
+            Supabase credentials are missing. Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY to enable directory data.
+          </p>
+          <Link href="/" className="btn-primary inline-flex justify-center">
+            Return to Home
+          </Link>
+        </main>
+        <Footer />
+      </div>
+    );
   }
 
-  const allCompanies = companies || [];
+  const supabase = getSupabaseAdmin();
+  
+    const { data: companies, error } = await supabase
+      .from('company_signals')
+      .select('name, slug, signal_score, domain, public_signals, updated_at, has_security_page, has_trust_page, mentions_soc2, mentions_compliance_tool')
+      .eq('indexable', true)
+      .gt('signal_score', 0)
+      .order('signal_score', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching companies:', error);
+    }
+
+    const allCompanies = (companies || []).map(c => ({
+      ...c,
+      public_signals: {
+        ...(typeof c.public_signals === 'object' && !Array.isArray(c.public_signals) ? c.public_signals : {}),
+        has_security_page: c.has_security_page,
+        has_trust_page: c.has_trust_page,
+        mentions_soc2: c.mentions_soc2,
+        mentions_compliance_tool: c.mentions_compliance_tool
+      }
+    }));
+
   
   // Calculate stats for Market Intelligence
   const totalCompanies = allCompanies.length;
@@ -107,9 +138,9 @@ export default async function DirectoryPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 bg-white p-12 rounded-3xl border border-gray-100 shadow-sm">
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Why Market Intelligence?</h2>
-              <p className="text-gray-600 leading-relaxed mb-6 font-medium">
-                Traditional compliance is a black box. RiscLens provides the "Crunchbase of Compliance" to help buyers and security teams verify transparency signals before they even start a questionnaire.
-              </p>
+                <p className="text-gray-600 leading-relaxed mb-6 font-medium">
+                  Traditional compliance is a black box. RiscLens provides "The Ground Truth" to help buyers and security teams verify transparency signals before they even start a questionnaire.
+                </p>
               <div className="space-y-4">
                 {[
                   "Verify SOC 2 claims via public disclosures",

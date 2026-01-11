@@ -5,7 +5,8 @@ interface DropdownIntentConfig {
   closeDelay?: number;
 }
 
-export function useDropdownIntent({ openDelay = 120, closeDelay = 280 }: DropdownIntentConfig = {}) {
+// Bump delays slightly to reduce hover flicker between trigger and panel
+export function useDropdownIntent({ openDelay = 50, closeDelay = 400 }: DropdownIntentConfig = {}) {
   const [open, setOpen] = useState(false);
   const openTimer = useRef<NodeJS.Timeout | null>(null);
   const closeTimer = useRef<NodeJS.Timeout | null>(null);

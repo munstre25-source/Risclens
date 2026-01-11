@@ -7,15 +7,89 @@ import {
   ArrowRightLeft, 
   Database, 
   Layers, 
-  Scale 
+  Scale,
+  ChevronRight
 } from 'lucide-react';
+import { getSupabaseAdmin } from '@/lib/supabase';
 
-export default function ComplianceHub() {
+async function getRoles() {
+  const supabase = getSupabaseAdmin();
+  const { data } = await supabase
+    .from('pseo_pages')
+    .select('slug, content_json')
+    .eq('category', 'role')
+    .order('slug');
+  
+  return data || [];
+}
+
+async function getPricing() {
+  const supabase = getSupabaseAdmin();
+  const { data } = await supabase
+    .from('pseo_pages')
+    .select('slug, content_json')
+    .eq('category', 'pricing')
+    .order('slug');
+  
+  return data || [];
+}
+
+async function getAlternatives() {
+  const supabase = getSupabaseAdmin();
+  const { data } = await supabase
+    .from('pseo_pages')
+    .select('slug, content_json')
+    .eq('category', 'alternatives')
+    .order('slug');
+  
+  return data || [];
+}
+
+export default async function ComplianceHub() {
+  const dbRoles = await getRoles();
+  const dbPricing = await getPricing();
+  const dbAlternatives = await getAlternatives();
+  
+      const roleLinks = dbRoles
+        .filter(role => role.content_json?.roleName || role.content_json?.title)
+        .map(role => {
+          const name = role.content_json.roleName || role.content_json.title;
+          return {
+            name: name.endsWith('s') ? name : `${name}s`,
+            href: `/soc-2/for/${role.slug}`
+          };
+        })
+        .slice(0, 4);
+
+      const pricingLinks = dbPricing
+        .filter(p => p.content_json?.toolName || p.content_json?.vendor || p.content_json?.title)
+        .map(p => {
+          const toolName = p.content_json.toolName || p.content_json.vendor;
+          const name = p.content_json.title || `${toolName} Pricing`;
+          return {
+            name: name,
+            href: `/pricing/${p.slug}`
+          };
+        })
+        .slice(0, 4);
+
+      const alternativeLinks = dbAlternatives
+        .filter(alt => alt.content_json?.toolName || alt.content_json?.vendor || alt.content_json?.title)
+        .map(alt => {
+          const toolName = alt.content_json.toolName || alt.content_json.vendor;
+          const name = alt.content_json.title || `${toolName} Alternatives`;
+          return {
+            name: name,
+            href: `/compare/${alt.slug}`
+          };
+        })
+        .slice(0, 4);
+
   const sections = [
     {
       title: 'SOC 2 for Roles',
       icon: <Users className="w-6 h-6 text-brand-600" />,
-      links: [
+      links: roleLinks.length > 0 ? roleLinks : [
         { name: 'CTOs', href: '/soc-2/for/cto' },
         { name: 'CISOs', href: '/soc-2/for/ciso' },
         { name: 'Founders', href: '/soc-2/for/founders' },
@@ -32,16 +106,17 @@ export default function ComplianceHub() {
         { name: 'Chicago', href: '/auditor-directory/chicago' },
       ]
     },
-    {
-      title: 'Tool Pricing 2026',
-      icon: <DollarSign className="w-6 h-6 text-brand-600" />,
-      links: [
-        { name: 'Vanta Pricing', href: '/pricing/vanta' },
-        { name: 'Drata Pricing', href: '/pricing/drata' },
-        { name: 'Secureframe Pricing', href: '/pricing/secureframe' },
-        { name: 'Sprinto Pricing', href: '/pricing/sprinto' },
-      ]
-    },
+      {
+        title: 'Tool Pricing 2026',
+        icon: <DollarSign className="w-6 h-6 text-brand-600" />,
+        links: pricingLinks.length > 0 ? pricingLinks : [
+          { name: 'Vanta Pricing', href: '/pricing/vanta' },
+          { name: 'Drata Pricing', href: '/pricing/drata' },
+          { name: 'Secureframe Pricing', href: '/pricing/secureframe' },
+          { name: 'Sprinto Pricing', href: '/pricing/sprinto' },
+        ]
+      },
+
     {
       title: 'Industry Checklists',
       icon: <CheckSquare className="w-6 h-6 text-brand-600" />,
@@ -61,16 +136,16 @@ export default function ComplianceHub() {
         { name: 'SOC 2 to GDPR', href: '/compliance/migrate/soc2-to-gdpr' },
       ]
     },
-    {
-      title: 'Evidence Vault',
-      icon: <Database className="w-6 h-6 text-brand-600" />,
-      links: [
-        { name: 'Access Reviews', href: '/soc-2-evidence/access-reviews' },
-        { name: 'Change Management', href: '/soc-2-evidence/change-management' },
-        { name: 'Incident Response', href: '/soc-2-evidence/incident-response' },
-        { name: 'Vulnerabilities', href: '/soc-2-evidence/vulnerability-management' },
-      ]
-    },
+      {
+        title: 'Evidence Vault',
+        icon: <Database className="w-6 h-6 text-brand-600" />,
+        links: [
+          { name: 'Access Control', href: '/soc-2-evidence/access-control' },
+          { name: 'Change Management', href: '/soc-2-evidence/change-management' },
+          { name: 'Incident Response', href: '/soc-2-evidence/incident-response' },
+          { name: 'Logging & Monitoring', href: '/soc-2-evidence/logging-monitoring' },
+        ]
+      },
     {
       title: 'Tech Stack Guides',
       icon: <Layers className="w-6 h-6 text-brand-600" />,
@@ -84,7 +159,7 @@ export default function ComplianceHub() {
     {
       title: 'Tool Alternatives',
       icon: <Scale className="w-6 h-6 text-brand-600" />,
-      links: [
+      links: alternativeLinks.length > 0 ? alternativeLinks : [
         { name: 'Vanta Alternatives', href: '/compare/vanta-alternatives' },
         { name: 'Drata Alternatives', href: '/compare/drata-alternatives' },
         { name: 'Secureframe Alternatives', href: '/compare/secureframe-alternatives' },
@@ -96,14 +171,21 @@ export default function ComplianceHub() {
   return (
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-black text-slate-900 mb-4 tracking-tight">
-            The RiscLens <span className="text-brand-600">Compliance Hub</span>
-          </h2>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            Explore our comprehensive library of role-specific guides, local auditor directories, and tool intelligence to accelerate your compliance journey.
-          </p>
-        </div>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 mb-4 tracking-tight">
+              The RiscLens <span className="text-brand-600">Compliance Hub</span>
+            </h2>
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-6">
+              Explore our comprehensive library of role-specific guides, local auditor directories, and tool intelligence to accelerate your compliance journey.
+            </p>
+            <Link 
+              href="/compliance"
+              className="inline-flex items-center gap-2 text-brand-600 font-black hover:gap-3 transition-all group"
+            >
+              Open Master Intelligence Hub
+              <ChevronRight className="w-5 h-5" />
+            </Link>
+          </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
           {sections.map((section, idx) => (
@@ -116,7 +198,7 @@ export default function ComplianceHub() {
                   {section.title}
                 </h3>
               </div>
-              <ul className="space-y-2">
+                <ul className="space-y-2 pr-2">
                 {section.links.map((link, i) => (
                   <li key={i}>
                     <Link 

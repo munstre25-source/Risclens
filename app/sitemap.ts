@@ -3,19 +3,25 @@ import { ROUTES, getRouteBucket } from '@/src/seo/routes';
 import { getSupabaseAdmin } from '@/lib/supabase';
 
 const baseUrl = 'https://risclens.com';
+const hasSupabaseAdmin = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
 
 // Build date used as fallback for lastmod
 const BUILD_DATE = new Date();
 
 async function getDynamicRoutes() {
-  const supabase = getSupabaseAdmin();
+  if (!hasSupabaseAdmin) return [];
+  try {
+    const supabase = getSupabaseAdmin();
+    const { data } = await supabase
+      .from('company_signals')
+      .select('slug')
+      .eq('indexable', true);
 
-  const { data } = await supabase
-    .from('company_signals')
-    .select('slug')
-    .eq('indexable', true);
-
-  return data?.map(c => `/compliance/directory/${c.slug}`) || [];
+    return data?.map(c => `/compliance/directory/${c.slug}`) || [];
+  } catch (err) {
+    console.warn('Sitemap: skipping dynamic compliance routes (Supabase unavailable)', err);
+    return [];
+  }
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

@@ -48,19 +48,26 @@ We have implemented a comprehensive "Content Moat" strategy using programmatic S
 ## EEAT & SEO Optimizations
 
 ### 1. Expertise, Experience, Authoritativeness, and Trustworthiness (EEAT)
-- **Authoritative Reviewers**: All pages are "Expert Reviewed" by certified professionals (CPA, CISA, CISSP) from `lib/authors`.
+- **Authoritative Reviewers**: All pages are "Expert Reviewed" by certified professionals from `lib/authors.ts`. 
+  - **Raphael N. (CPA, CISA)**: Focuses on audit readiness and SOC 2 controls.
+  - **Sarah L. (Privacy Attorney, JD/CIPP)**: Reviews regulatory and privacy-heavy content (GDPR, HIPAA).
+  - **Kevin A. (Principal Security Engineer, CISSP)**: Audits technical stack and implementation guides.
+- **Author Bios & Proof**: Every page features a detailed `AuthorBio` component with LinkedIn links, credentials, and verification badges.
+- **Institutional Authority**: Direct links to the `Editorial Policy` and `Methodology` pages are integrated to signal transparency to search crawlers.
 - **Structured Data (Schema)**: 
   - `Organization` schema in Root Layout.
-  - `Review` and `Person` schema on all programmatic pages.
+  - `Review`, `Person`, and `WebPage` schema on all programmatic pages.
   - `FAQPage` schema for role-based guides.
   - `BreadcrumbList` schema for all routes.
-- **Last Updated Metadata**: All content includes "Last Verified" dates (Jan 10, 2026) to signal freshness.
-- **Methodology Transparency**: Links to the `/methodology` page are prominent to build trust in data sources.
+- **Last Updated Metadata**: All content includes quarterly "Last Verified" dates to signal data freshness (e.g., pricing accuracy).
 
-### 2. Internal Linking Strategy
+### 2. Internal Linking Strategy (Smart Contextual Linking)
+We use a centralized logic layer (`lib/pseo-links.ts`) to manage high-intent contextual loops:
+- **Pricing ↔ Alternatives Loop**: Tool pricing pages link to their specific Alternatives/Comparison pages and vice-versa.
+- **Industry → Tool Mapping**: Industry checklists suggest and link to the top 3-4 recommended tools for that vertical.
+- **Role-Based Recommendations**: Role guides (CTO, Founder) link to the tools and tech stacks most relevant to their operational level.
+- **Market Intelligence Hubs**: Footer "Related" modules allow crawlers to jump between similar tools in the same category (e.g., GRC vs Endpoint).
 - **Compliance Hub**: A master navigation component added to the footer and home page to pass link equity to all programmatic silos.
-- **Contextual Cross-Linking**: Tool pricing pages link to Alternatives; Role guides link to Evidence Vault and Tech Stacks.
-- **Sticky CTAs**: Dynamic, dismissible CTAs on all pages to drive users toward high-intent tools (Cost & Readiness calculators).
 
 ### 3. Technical SEO
 - **Canonical Tags**: Self-referencing canonicals on all routes to prevent duplicate content issues.
