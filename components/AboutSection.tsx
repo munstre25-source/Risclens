@@ -9,12 +9,12 @@ export default function AboutSection() {
           <h2 className="text-3xl font-bold text-slate-900 mb-4">
             About RiscLens
           </h2>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            Our mission is to provide transparency and clarity to early-stage technology companies navigating the complexities of SOC 2 compliance.
-          </p>
-        </div>
-        
-        <div className="grid gap-8 md:grid-cols-3">
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+              Our mission is to provide transparency and clarity to early-stage technology companies navigating the complexities of SOC 2 (System and Organization Controls 2) compliance.
+            </p>
+          </div>
+          
+          <div className="grid gap-8 md:grid-cols-3">
           {/* Who we serve */}
           <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
             <div className="w-12 h-12 bg-brand-50 rounded-xl flex items-center justify-center mb-6">
@@ -65,6 +65,15 @@ export default function AboutSection() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </Link>
+        </div>
+
+        <div className="mt-16 pt-8 border-t border-slate-200">
+          <div className="max-w-3xl mx-auto text-center">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-3 block">Technical Definition</span>
+            <p className="text-sm text-slate-500 leading-relaxed italic">
+              <strong>SOC 2 (System and Organization Controls 2)</strong> is a voluntary compliance standard for service organizations, developed by the AICPA, which specifies how organizations should manage customer data based on the Trust Services Criteria: security, availability, processing integrity, confidentiality, and privacy.
+            </p>
+          </div>
         </div>
       </div>
     </section>

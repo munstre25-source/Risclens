@@ -54,14 +54,14 @@ const content: CostIndustryContent = {
       detail: 'Accelerated prep increases auditor and advisor hours; prioritize scope freeze and change control evidence.',
     },
   ],
-  hubHref: '/soc-2/industries/startups',
-  timelineHref: '/soc-2-timeline/startups',
-  readinessHref: '/soc-2-readiness/startups',
-  relatedLinks: [
-    { href: '/soc-2-timeline/startups', label: 'Timeline for startups' },
-    { href: '/soc-2-readiness/startups', label: 'Readiness for startups' },
-  ],
-};
+    hubHref: '/soc-2/industries/startups',
+    timelineHref: '/soc-2-timeline/startups',
+    readinessHref: '/soc-2-readiness-checklist/saas',
+    relatedLinks: [
+      { href: '/soc-2-timeline/startups', label: 'Timeline for startups' },
+      { href: '/soc-2-readiness-checklist/saas', label: 'Readiness for startups' },
+    ],
+  };
 
 export const metadata: Metadata = {
   title: 'SOC 2 Cost for Startups | RiscLens',

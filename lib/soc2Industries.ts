@@ -10,6 +10,8 @@ export interface IndustryGuide {
   checklist: string[];
   related: string[];
   faqs: { question: string; answer: string }[];
+  criticalControls?: string[];
+  checklistData?: { category: string; items: string[] }[];
 }
 
 export const industryGuides: IndustryGuide[] = [

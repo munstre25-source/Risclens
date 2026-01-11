@@ -17,7 +17,7 @@ Route map with purpose, key components, and data dependencies. See [PRODUCT_OVER
 | `/soc-2-readiness/[slug]` (+ startups/enterprise-sales/saas/fintech) | Industry/vertical readiness guides. | Guide components | Static |
 | `/soc-2-vs-iso-27001` (+ `[slug]`) | Framework comparison hub. | Guide components | Static |
 | `/compare` | Unified platform comparison hub (24+ pairings). | `CompareHub`, `PlatformMatchupCard` | Static |
-| `/compliance/compare/[slug]` | Programmatic platform vs platform showdowns (Comparison Factory). | `ComparisonLayout`, `FeatureGrid` | Static |
+| `/compliance/compare/[slug]` | Programmatic platform vs platform comparisons (Comparison Factory). | `ComparisonLayout`, `FeatureGrid` | Static |
 | `/compliance/directory` | Compliance platform intelligence directory. | `DirectoryGrid`, `FilterSidebar` | Static |
 | `/compliance/directory/[slug]` | Detailed platform profiles with cross-links to comparisons. | `CompanyProfile`, `RelatedComparisons` | Static |
 | `/soc-2/industries` (+ `[slug]`) | Industries hub + detail pages. | `Header`, guide components | Static |

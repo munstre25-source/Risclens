@@ -91,11 +91,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
-      <head>
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-7BR1HET2Y2"
-          strategy="afterInteractive"
-        />
+        <head>
+          <link rel="preload" href="/favicon.ico" as="image" />
+          <Script
+            src="https://www.googletagmanager.com/gtag/js?id=G-7BR1HET2Y2"
+            strategy="afterInteractive"
+          />
+
         <Script id="ga-init" strategy="afterInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
@@ -106,6 +108,12 @@ export default function RootLayout({
         </Script>
       </head>
         <body className="font-sans antialiased">
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-brand-600 focus:text-white focus:rounded-lg focus:shadow-xl focus:font-bold"
+          >
+            Skip to main content
+          </a>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <Suspense fallback={null}>
               <HashScrollFix />

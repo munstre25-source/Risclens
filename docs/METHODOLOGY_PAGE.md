@@ -28,8 +28,15 @@ Estimates are directional. Actual costs and timelines will vary based on:
 - **Remediation Speed**: How fast your team can implement required controls.
 - **System Description**: The complexity of your specific product architecture.
 
-## 5. Interpreting Results
-- **Pre-audit (0-40)**: Focus on fundamental policies and technical baselines.
-- **Early-stage (41-70)**: Implement repeatable controls and start evidence collection.
-- **Near-ready (71-85)**: Fine-tune scope and perform a dry run.
-- **Audit-ready (86-100)**: Formalize engagement with a CPA auditor.
+## 6. Editorial Policy & Content Integrity
+To ensure the highest level of Trustworthiness (EEAT), RiscLens follows a strict editorial protocol:
+- **Expert Review**: Every technical guide, pricing breakdown, and industry checklist is reviewed by a subject matter expert (SME). Current reviewers include CPAs, CISSPs, and Privacy Attorneys.
+- **Independence**: RiscLens is not a vendor and does not accept payment for "Top Tool" rankings. Recommendations are based on deterministic data and auditor feedback.
+- **Fact-Checking**: Data points (especially pricing) are verified through a combination of public records, anonymized buyer feedback, and direct vendor inquiries.
+- **Correction Policy**: We perform quarterly audits of our entire pSEO catalog to ensure regulatory updates (e.g., changes to ISO 42001 or SOC 2 TSC) are reflected immediately.
+
+## 7. Author Expertise (EEAT Signals)
+We explicitly link our content to the following professional identities to establish Authoritativeness:
+- **Raphael N. (CPA, CISA)**: Expert in SOC 2 Trust Service Criteria and financial controls.
+- **Sarah L. (JD, CIPP/E)**: Expert in global privacy regulations (GDPR, CCPA) and legal compliance.
+- **Kevin A. (CISSP)**: Expert in cloud infrastructure security and technical remediation.

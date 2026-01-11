@@ -45,6 +45,7 @@ export const HUB_ROUTES = [
   '/ai-compliance',
   '/ai-governance-readiness-index',
   '/iso-42001-calculator',
+  '/tools',
 ];
 
 export const LEGAL_ROUTES = [

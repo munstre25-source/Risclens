@@ -1,59 +1,82 @@
-import Link from 'next/link';
+'use client';
 
-type BreadcrumbItem = {
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
+import { ChevronRight, Home } from 'lucide-react';
+import Script from 'next/script';
+
+interface BreadcrumbItem {
   label: string;
   href: string;
-};
+}
 
-type BreadcrumbsProps = {
-  items: BreadcrumbItem[];
-  className?: string;
-};
+interface BreadcrumbsProps {
+  items?: BreadcrumbItem[];
+}
 
-export function Breadcrumbs({ items, className = '' }: BreadcrumbsProps) {
+export function Breadcrumbs({ items }: BreadcrumbsProps) {
+  const pathname = usePathname();
+  
+  const breadcrumbs = items || (pathname === '/' ? [] : pathname.split('/').filter(Boolean).map((segment, index, array) => {
+    const href = `/${array.slice(0, index + 1).join('/')}`;
+    const label = segment
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+    
+    return { label, href };
+  }));
+
+  if (breadcrumbs.length === 0) return null;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://risclens.com"
+      },
+      ...breadcrumbs.map((crumb, index) => ({
+        "@type": "ListItem",
+        "position": index + 2,
+        "name": crumb.label,
+        "item": `https://risclens.com${crumb.href}`
+      }))
+    ]
+  };
+
   return (
-    <nav aria-label="Breadcrumb" className={`flex text-sm text-slate-500 mb-6 ${className}`}>
-      <ol className="flex list-none p-0">
-        <li className="flex items-center">
-          <Link href="/" className="hover:text-brand-700 transition-colors">
-            Home
+    <>
+      <Script
+        id="breadcrumb-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <nav aria-label="Breadcrumb" className="bg-white border-b border-slate-100 py-3">
+        <div className="max-w-6xl mx-auto px-4 flex items-center gap-2 text-sm text-slate-500 overflow-x-auto whitespace-nowrap scrollbar-hide">
+          <Link href="/" className="hover:text-brand-600 transition-colors flex items-center gap-1">
+            <Home className="w-3.5 h-3.5" />
+            <span className="sr-only">Home</span>
           </Link>
-          <svg
-            className="w-4 h-4 mx-2 flex-shrink-0"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </li>
-        {items.map((item, index) => {
-          const isLast = index === items.length - 1;
-          return (
-            <li key={item.href} className="flex items-center">
-                {isLast ? (
-                  <span className="font-medium text-slate-900" aria-current="page">
-                    {item.label}
-                  </span>
-                ) : (
-                <>
-                  <Link href={item.href} className="hover:text-brand-700 transition-colors">
-                    {item.label}
-                  </Link>
-                  <svg
-                    className="w-4 h-4 mx-2 flex-shrink-0"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </>
+          {breadcrumbs.map((crumb, index) => (
+            <div key={crumb.href} className="flex items-center gap-2">
+              <ChevronRight className="w-3.5 h-3.5 text-slate-300 shrink-0" />
+              {index === breadcrumbs.length - 1 ? (
+                <span className="font-medium text-slate-900 truncate max-w-[200px]" aria-current="page">
+                  {crumb.label}
+                </span>
+              ) : (
+                <Link href={crumb.href} className="hover:text-brand-600 transition-colors">
+                  {crumb.label}
+                </Link>
               )}
-            </li>
-          );
-        })}
-      </ol>
-    </nav>
+            </div>
+          ))}
+        </div>
+      </nav>
+    </>
   );
 }

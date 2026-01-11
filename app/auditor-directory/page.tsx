@@ -3,6 +3,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { Search, MapPin, ExternalLink, ShieldCheck, Sparkles } from 'lucide-react';
+import { getPSEOLocations } from '@/lib/pseo';
 
 export const metadata: Metadata = {
   title: 'Verified Auditor Directory | SOC 2 & ISO 42001 Partners',
@@ -55,7 +56,11 @@ const auditors = [
   },
 ];
 
-export default function AuditorDirectoryPage() {
+export default async function AuditorDirectoryPage() {
+  const locations = await getPSEOLocations();
+  // Sort locations alphabetically
+  const sortedLocations = [...locations].sort((a, b) => a.name.localeCompare(b.name));
+
   return (
     <main className="min-h-screen flex flex-col bg-slate-50">
       <Header />
@@ -79,10 +84,10 @@ export default function AuditorDirectoryPage() {
                   <p className="text-3xl font-bold text-brand-600">6+</p>
                   <p className="text-sm text-slate-500 font-medium uppercase tracking-wider">Vetted Partners</p>
                 </div>
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-brand-600">11+</p>
-                  <p className="text-sm text-slate-500 font-medium uppercase tracking-wider">Tech Hubs</p>
-                </div>
+              <div className="text-center">
+                    <p className="text-3xl font-bold text-brand-600">{locations.length}+</p>
+                    <p className="text-sm text-slate-500 font-medium uppercase tracking-wider">Tech Hubs</p>
+                  </div>
                 <div className="text-center">
                   <p className="text-3xl font-bold text-brand-600">500+</p>
                   <p className="text-sm text-slate-500 font-medium uppercase tracking-wider">Audits Benchmarked</p>
@@ -98,25 +103,18 @@ export default function AuditorDirectoryPage() {
           {/* City Silos Section */}
           <section className="py-12 bg-slate-100 border-y border-slate-200">
             <div className="max-w-5xl mx-auto px-4 sm:px-6">
-              <h3 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-8 text-center">Browse by Tech Hub</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[
-                { name: 'New York City', href: '/auditor-directory/new-york' },
-                { name: 'San Francisco', href: '/auditor-directory/san-francisco' },
-                { name: 'Los Angeles', href: '/auditor-directory/los-angeles' },
-                { name: 'Seattle', href: '/auditor-directory/seattle' },
-                { name: 'Austin', href: '/auditor-directory/austin' },
-                { name: 'Chicago', href: '/auditor-directory/chicago' },
-              ].map((city) => (
-                <Link 
-                  key={city.name}
-                  href={city.href}
-                  className="bg-white border border-slate-200 p-4 rounded-xl text-center hover:border-brand-300 hover:text-brand-600 transition-all font-bold text-slate-700 shadow-sm"
-                >
-                  {city.name}
-                </Link>
-              ))}
-            </div>
+            <h3 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-8 text-center">Browse by Tech Hub</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {sortedLocations.map((location) => (
+                  <Link 
+                    key={location.id}
+                    href={`/auditor-directory/${location.slug}`}
+                    className="bg-white border border-slate-200 p-4 rounded-xl text-center hover:border-brand-300 hover:text-brand-600 transition-all font-bold text-slate-700 shadow-sm"
+                  >
+                    {location.name}
+                  </Link>
+                ))}
+              </div>
           </div>
         </section>
   

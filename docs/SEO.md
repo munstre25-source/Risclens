@@ -22,10 +22,20 @@ Focus: high-intent security/compliance queries and clean crawlability.
 - Header dropdowns and mobile drawer cover SOC 2, Pentest, Vendor Risk (including ROI Calculator), Guides, Industries.
 - `AssessmentCTA` and hero CTAs point to a single primary action; secondary link allowed to a relevant guide.
 - “Learn more” links are centralized in `lib/learnMoreLinks.ts` to avoid broken hrefs.
+- **Smart Contextual Linking (pSEO)**:
+  - **Linking Loops**: We implement circular high-intent loops via `lib/pseo-links.ts`. E.g., Pricing pages link to Alternatives, and Alternatives link back to Pricing.
+  - **Vertical Suggestions**: Industry-specific pages (e.g., /soc-2-readiness-checklist/fintech) provide contextual links to recommended compliance tools.
+  - **Role-to-Product Bridge**: Role-based guides bridge persona-based intent with product-based solutions via dynamic "Top Tools for [Role]" modules.
+  - **Market Segments**: "Related Market Intelligence" blocks at the footer of dynamic pages allow crawlers to discover sister categories (GRC, SIEM, IAM).
 - **Programmatic Linking**:
-- **Related Profiles**: Profile pages use a similarity engine (marker overlap + signal score proximity) to link to 6-8 similar companies, improving crawl depth.
-- **Keyword-Rich Anchors**: The directory index features an "Explore" block with direct, crawlable links to high-signal companies (e.g., "Stripe SOC 2 & security profile").
-- Related/FAQ blocks kept concise; “How it works” accordions prevent content bloat above the fold.
+  - **Related Profiles**: Profile pages use a similarity engine to link to 6-8 similar companies, improving crawl depth.
+  - **Keyword-Rich Anchors**: The directory index features an "Explore" block with direct, crawlable links to high-signal companies.
+
+## E-E-A-T (Experience, Expertise, Authoritativeness, Trustworthiness)
+- **Verified Experts**: Content is reviewed and signed off by a multi-disciplinary team (CPA, CISSP, JD/CIPP) defined in `lib/authors.ts`.
+- **Author Identity**: Each page injects `Schema.org/Person` and `Schema.org/Review` markup to explicitly link content to professional identities.
+- **Institutional Trust**: Transparency via `/editorial-policy` and `/methodology` links sitewide.
+- **Data Freshness**: Quarterly technical audits of pricing and regulatory data, reflected in "Last Updated" metadata.
 
 ## Metadata & Sitemap
 - Per-page `metadata` exports; OG via `app/opengraph-image.tsx` (`public/og.png`).

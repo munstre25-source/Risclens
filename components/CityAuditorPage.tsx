@@ -26,6 +26,75 @@ interface CityAuditorPageProps {
   nearbyCities?: { name: string; href: string }[];
 }
 
+const TOP_CITIES = [
+  { name: 'New York City', href: '/auditor-directory/new-york' },
+  { name: 'San Francisco', href: '/auditor-directory/san-francisco' },
+  { name: 'Los Angeles', href: '/auditor-directory/los-angeles' },
+  { name: 'Seattle', href: '/auditor-directory/seattle' },
+  { name: 'Austin', href: '/auditor-directory/austin' },
+  { name: 'Chicago', href: '/auditor-directory/chicago' },
+  { name: 'Boston', href: '/auditor-directory/boston' },
+  { name: 'Denver', href: '/auditor-directory/denver' },
+  { name: 'Miami', href: '/auditor-directory/miami' },
+  { name: 'Atlanta', href: '/auditor-directory/atlanta' },
+  { name: 'Phoenix', href: '/auditor-directory/phoenix' },
+  { name: 'Salt Lake City', href: '/auditor-directory/salt-lake-city' },
+  { name: 'Nashville', href: '/auditor-directory/nashville' },
+  { name: 'Raleigh', href: '/auditor-directory/raleigh' },
+  { name: 'Minneapolis', href: '/auditor-directory/minneapolis' },
+  { name: 'Portland', href: '/auditor-directory/portland' },
+  { name: 'Washington DC', href: '/auditor-directory/washington-dc' },
+  { name: 'San Diego', href: '/auditor-directory/san-diego' },
+  { name: 'Dallas', href: '/auditor-directory/dallas' },
+  { name: 'Houston', href: '/auditor-directory/houston' },
+];
+
+function KeywordLinker({ text }: { text: string }) {
+  if (!text) return null;
+  
+  const keywords = [
+    { phrase: 'SOC 2', href: '/soc-2' },
+    { phrase: 'ISO 42001', href: '/ai-compliance' },
+    { phrase: 'ISO 27001', href: '/soc-2-vs-iso-27001' },
+    { phrase: 'cost', href: '/soc-2-cost' },
+    { phrase: 'pricing', href: '/soc-2-cost' },
+    { phrase: 'readiness', href: '/soc-2-readiness-calculator' },
+    { phrase: 'automation platforms', href: '/compare/vanta-alternatives' },
+    { phrase: 'compliance automation', href: '/compare/vanta-alternatives' },
+    { phrase: 'Vanta', href: '/pricing/vanta' },
+    { phrase: 'Drata', href: '/pricing/drata' },
+    { phrase: 'Pentest', href: '/penetration-testing' },
+    { phrase: 'penetration testing', href: '/penetration-testing' },
+  ];
+
+  // Simple replacement logic for demo purposes - in a real app you'd use a more robust regex or library
+  let parts: (string | JSX.Element)[] = [text];
+
+  keywords.forEach(({ phrase, href }) => {
+    const newParts: (string | JSX.Element)[] = [];
+    parts.forEach(part => {
+      if (typeof part !== 'string') {
+        newParts.push(part);
+        return;
+      }
+
+      const regex = new RegExp(`(${phrase})`, 'gi');
+      const split = part.split(regex);
+      
+      split.forEach((subPart, i) => {
+        if (subPart.toLowerCase() === phrase.toLowerCase()) {
+          newParts.push(<Link key={`${phrase}-${i}`} href={href} className="text-brand-600 hover:underline font-medium">{subPart}</Link>);
+        } else if (subPart !== '') {
+          newParts.push(subPart);
+        }
+      });
+    });
+    parts = newParts;
+  });
+
+  return <>{parts}</>;
+}
+
 export default function CityAuditorPage({
   cityName,
   citySlug,
@@ -77,7 +146,7 @@ export default function CityAuditorPage({
                 SOC 2 Auditors in <span className="text-brand-600">{cityName}</span>
               </h1>
               <p className="text-lg text-slate-600 mb-8 leading-relaxed">
-                {heroDescription}
+                <KeywordLinker text={heroDescription} />
               </p>
               
               <div className="space-y-4 mb-8">
@@ -86,7 +155,7 @@ export default function CityAuditorPage({
                     <svg className="w-5 h-5 text-brand-500 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
-                    <span>{insight}</span>
+                    <span><KeywordLinker text={insight} /></span>
                   </div>
                 ))}
               </div>
@@ -133,7 +202,7 @@ export default function CityAuditorPage({
                   {pricingNotes.map((note) => (
                     <li key={note} className="flex gap-3 items-start">
                       <span className="text-brand-600 font-semibold">•</span>
-                      <span>{note}</span>
+                      <span><KeywordLinker text={note} /></span>
                     </li>
                   ))}
                 </ul>
@@ -143,7 +212,7 @@ export default function CityAuditorPage({
             {onsitePolicy && (
               <>
                 <h3 className="text-xl font-bold text-slate-900 mt-10 mb-4">On-site vs. remote in {cityName}</h3>
-                <p className="mb-6">{onsitePolicy}</p>
+                <p className="mb-6"><KeywordLinker text={onsitePolicy} /></p>
               </>
             )}
 
@@ -165,17 +234,17 @@ export default function CityAuditorPage({
 
             <h3 className="text-xl font-bold text-slate-900 mt-10 mb-4">1. Remote vs. On-site</h3>
             <p className="mb-6">
-              {remoteVsOnsiteText || `Modern SOC 2 audits are 95% remote. However, some ${cityName} firms still offer on-site walk-throughs which can be helpful for the "physical security" component of the audit if you maintain a physical office.`}
+              <KeywordLinker text={remoteVsOnsiteText || `Modern SOC 2 audits are 95% remote. However, some ${cityName} firms still offer on-site walk-throughs which can be helpful for the "physical security" component of the audit if you maintain a physical office.`} />
             </p>
 
             <h3 className="text-xl font-bold text-slate-900 mt-10 mb-4">2. Firm Reputation</h3>
             <p className="mb-6">
-              {firmReputationText || `Your SOC 2 report is a sales tool. In ${cityName}, where competition is high, having a report from a recognized CPA firm can significantly reduce friction with enterprise procurement teams.`}
+              <KeywordLinker text={firmReputationText || `Your SOC 2 report is a sales tool. In ${cityName}, where competition is high, having a report from a recognized CPA firm can significantly reduce friction with enterprise procurement teams.`} />
             </p>
 
             <h3 className="text-xl font-bold text-slate-900 mt-10 mb-4">3. Automation Compatibility</h3>
             <p className="mb-6">
-              {automationText || `Ensure your ${cityName} auditor is comfortable working with modern compliance automation platforms. A "tech-forward" auditor can shave weeks off the audit timeline by accepting automated evidence exports.`}
+              <KeywordLinker text={automationText || `Ensure your ${cityName} auditor is comfortable working with modern compliance automation platforms. A "tech-forward" auditor can shave weeks off the audit timeline by accepting automated evidence exports.`} />
             </p>
           </div>
 
@@ -194,24 +263,46 @@ export default function CityAuditorPage({
         </div>
       </section>
 
-      {nearbyCities && nearbyCities.length > 0 && (
-        <section className="py-12 bg-slate-100 border-t border-slate-200">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6">
-            <h4 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-6">Nearby Audit Hubs</h4>
-            <div className="flex flex-wrap gap-4">
-              {nearbyCities.map((city, idx) => (
-                <Link 
-                  key={idx} 
-                  href={city.href}
-                  className="bg-white border border-slate-200 px-4 py-2 rounded-full text-slate-700 hover:border-brand-300 hover:text-brand-600 transition-all text-sm font-medium"
-                >
-                  Auditors in {city.name}
+      {/* Regional Navigation / Nearby Hubs */}
+      <section className="py-12 bg-slate-100 border-t border-slate-200">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
+          <div className="grid md:grid-cols-2 gap-12">
+            {nearbyCities && nearbyCities.length > 0 && (
+              <div>
+                <h4 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-6">Nearby Audit Hubs</h4>
+                <div className="flex flex-wrap gap-3">
+                  {nearbyCities.map((city, idx) => (
+                    <Link 
+                      key={idx} 
+                      href={city.href}
+                      className="bg-white border border-slate-200 px-4 py-2 rounded-full text-slate-700 hover:border-brand-300 hover:text-brand-600 transition-all text-sm font-medium shadow-sm"
+                    >
+                      Auditors in {city.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+            <div>
+              <h4 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-6">Popular Tech Hubs</h4>
+              <div className="flex flex-wrap gap-3">
+                {TOP_CITIES.filter(c => c.name !== cityName).slice(0, 10).map((city, idx) => (
+                  <Link 
+                    key={idx} 
+                    href={city.href}
+                    className="bg-white border border-slate-200 px-4 py-2 rounded-full text-slate-700 hover:border-brand-300 hover:text-brand-600 transition-all text-sm font-medium shadow-sm"
+                  >
+                    {city.name}
+                  </Link>
+                ))}
+                <Link href="/auditor-directory" className="px-4 py-2 rounded-full text-brand-600 font-bold text-sm hover:underline flex items-center gap-1">
+                  View All Cities →
                 </Link>
-              ))}
+              </div>
             </div>
           </div>
-        </section>
-      )}
+        </div>
+      </section>
 
       {faqs && faqs.length > 0 && (
         <section className="py-16 bg-white border-t border-slate-200">

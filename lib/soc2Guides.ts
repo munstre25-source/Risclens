@@ -187,19 +187,56 @@ export const costGuides: Soc2GuidePage[] = [
       'Sequencing readiness before enterprise deals close.',
     ],
   },
-  {
-    slug: '50-200-employees',
-    title: 'SOC 2 Cost for 50-200 Employees',
-    summary: 'Maturing organizations with more systems in scope and heavier evidence requirements.',
-    category: 'cost',
-    parent: costParent,
-    highlights: [
-      'Scaling access reviews and asset inventories.',
-      'Observation windows and sampling across multiple teams.',
-      'Integrating SOC 2 with existing security programs.',
-    ],
-  },
-];
+    {
+      slug: '50-200-employees',
+      title: 'SOC 2 Cost for 50-200 Employees',
+      summary: 'Maturing organizations with more systems in scope and heavier evidence requirements.',
+      category: 'cost',
+      parent: costParent,
+      highlights: [
+        'Scaling access reviews and asset inventories.',
+        'Observation windows and sampling across multiple teams.',
+        'Integrating SOC 2 with existing security programs.',
+      ],
+    },
+    {
+      slug: 'fintech',
+      title: 'SOC 2 Cost for Fintech',
+      summary: 'Specialized breakdown of audit fees and implementation costs for fintech and payment platforms.',
+      category: 'cost',
+      parent: costParent,
+      highlights: [
+        'Pay-fac and PII scope considerations for audit pricing.',
+        'Cost of layered monitoring and high-availability evidence.',
+        'Vendor risk budget for critical financial sub-processors.',
+      ],
+    },
+    {
+      slug: 'saas',
+      title: 'SOC 2 Cost for SaaS',
+      summary: 'Budgeting for multi-tenant architectures, CI/CD pipelines, and cloud-native security controls.',
+      category: 'cost',
+      parent: costParent,
+      highlights: [
+        'Balancing rapid release cycles with evidence collection costs.',
+        'Automation ROI for high-growth SaaS platforms.',
+        'Tenant isolation and data residency cost factors.',
+      ],
+    },
+    {
+      slug: 'healthcare',
+      title: 'SOC 2 Cost for Healthcare',
+      summary: 'Addressing PHI protection and HIPAA alignment within your SOC 2 budget.',
+      category: 'cost',
+      parent: costParent,
+      highlights: [
+        'PHI handling and the cost of specialized Trust Service Criteria.',
+        'HITRUST vs SOC 2 cost-benefit analysis for health tech.',
+        'Budgeting for deeper vulnerability management and encryption.',
+      ],
+    },
+  ];
+
 
 export const timelineGuides: Soc2GuidePage[] = [
   {

@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
@@ -154,9 +155,34 @@ function formatRange(low: number, high: number): string {
 }
 
 export default function ComplianceROICalculator() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex flex-col bg-slate-100">
+        <Header />
+        <div className="flex-1 flex items-center justify-center">
+          <p className="text-slate-500 animate-pulse">Loading calculator...</p>
+        </div>
+        <Footer />
+      </div>
+    }>
+      <ComplianceROICalculatorContent />
+    </Suspense>
+  );
+}
+
+function ComplianceROICalculatorContent() {
+  const searchParams = useSearchParams();
   const [step, setStep] = useState(1);
   const [companyName, setCompanyName] = useState('');
   const [industry, setIndustry] = useState('');
+
+  useEffect(() => {
+    const industryParam = searchParams.get('industry');
+    if (industryParam) {
+      setIndustry(industryParam);
+    }
+  }, [searchParams]);
+
   const [email, setEmail] = useState('');
   const [employees, setEmployees] = useState<number>(50);
   const [techStack, setTechStack] = useState<string>('moderate');

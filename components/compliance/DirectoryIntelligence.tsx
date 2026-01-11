@@ -19,7 +19,7 @@ interface DirectoryIntelligenceProps {
 
 export function DirectoryIntelligence({ companies }: DirectoryIntelligenceProps) {
   const [search, setSearch] = useState('');
-  const [minScore, setMinScore] = useState(0);
+  const [minScore, setMinScore] = useState(1);
   const [filterSignals, setFilterSignals] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<'score' | 'updated' | 'name'>('score');
 
@@ -199,7 +199,7 @@ export function DirectoryIntelligence({ companies }: DirectoryIntelligenceProps)
             </div>
           )}
 
-        {/* Enhanced Crunchbase-style Grid */}
+          {/* Intelligence-Grade Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredCompanies.map((company) => (
             <Link 

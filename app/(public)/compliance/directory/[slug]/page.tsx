@@ -9,11 +9,15 @@ import { SOC2ReadinessSignals } from '@/components/compliance/SOC2ReadinessSigna
 import { RelatedProfiles } from '@/components/compliance/RelatedProfiles';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { CompanyActionButtons } from '@/components/compliance/CompanyActionButtons';
+import { ContextualLinks } from '@/components/compliance/ContextualLinks';
+import { AuthorByline, EditorialPolicyBadge } from '@/components/compliance/AuthorByline';
 import Link from 'next/link';
+import { Users, CheckCircle } from 'lucide-react';
 
 interface Props {
   params: { slug: string };
 }
+const hasSupabaseAdmin = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
 
 interface CompanySignals {
   id: string;
@@ -36,6 +40,8 @@ interface CompanySignals {
 }
 
 export async function generateStaticParams() {
+  if (!hasSupabaseAdmin) return [];
+
   const supabase = getSupabaseAdmin();
   const { data: companies } = await supabase
     .from('company_signals')
@@ -51,6 +57,13 @@ export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
+  if (!hasSupabaseAdmin) {
+    return {
+      title: 'Security Profile Unavailable',
+      robots: { index: false, follow: false },
+    };
+  }
+
   const supabase = getSupabaseAdmin();
   const { data: company } = await supabase
     .from('company_signals')
@@ -150,11 +163,27 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function Page({ params }: { params: { slug: string } }) {
+  if (!hasSupabaseAdmin) {
+    return (
+      <div className="min-h-screen bg-white flex flex-col">
+        <Header />
+        <main className="flex-grow max-w-3xl mx-auto px-4 py-16 text-center space-y-4">
+          <h1 className="text-3xl font-bold text-slate-900">Directory unavailable in this environment</h1>
+          <p className="text-slate-600">Security profiles require Supabase access; set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY to enable them.</p>
+          <Link href="/" className="btn-primary inline-flex justify-center">
+            Return Home
+          </Link>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
   const supabase = getSupabaseAdmin();
   
   const { data: company, error } = await supabase
     .from('company_signals')
-    .select('*')
+    .select('*, has_security_page, has_trust_page, mentions_soc2, mentions_compliance_tool, has_responsible_disclosure, has_security_contact')
     .eq('slug', params.slug)
     .single();
 
@@ -162,7 +191,15 @@ export default async function Page({ params }: { params: { slug: string } }) {
     notFound();
   }
 
-  const signals = company.public_signals || {};
+  const signals = {
+    ...(typeof company.public_signals === 'object' && !Array.isArray(company.public_signals) ? company.public_signals : {}),
+    has_security_page: company.has_security_page,
+    has_trust_page: company.has_trust_page,
+    mentions_soc2: company.mentions_soc2,
+    mentions_compliance_tool: company.mentions_compliance_tool,
+    has_responsible_disclosure: company.has_responsible_disclosure,
+    has_security_contact: company.has_security_contact
+  };
   const jsonLd = generateJsonLd(company as CompanySignals);
 
     const signalItems = [
@@ -257,20 +294,25 @@ export default async function Page({ params }: { params: { slug: string } }) {
                   </div>
                 </section>
                 
-                {/* Educational Context */}
-                <section className="bg-blue-50 rounded-xl p-8 border border-blue-100">
-                  <h3 className="text-xl font-bold text-blue-900 mb-4">About Public Disclosures</h3>
-                  <div className="prose prose-blue text-blue-800">
-                    <p>
-                      Public disclosures help with vendor risk reviews by providing a baseline of transparency. 
-                      A lack of public disclosure does not necessarily indicate a lack of security controls, 
-                      but it may require more direct inquiry during a procurement process.
-                    </p>
-                    <p className="mt-4 font-medium italic">
-                      Note: This profile is based only on publicly observable data and automated discovery.
-                    </p>
-                  </div>
-                </section>
+                  {/* Educational Context */}
+                  <section className="bg-blue-50 rounded-xl p-8 border border-blue-100">
+                    <h3 className="text-xl font-bold text-blue-900 mb-4">About Public Disclosures</h3>
+                    <div className="prose prose-blue text-blue-800">
+                      <p>
+                        Public disclosures help with <Link href="/vendor-risk-assessment" className="underline font-bold">vendor risk reviews</Link> by providing a baseline of transparency. 
+                        A lack of public disclosure does not necessarily indicate a lack of security controls, 
+                        but it may require more direct inquiry during a procurement process.
+                      </p>
+                      <p className="mt-4">
+                        Many companies use automation platforms like <Link href="/pricing/vanta" className="underline">Vanta</Link> or <Link href="/pricing/drata" className="underline">Drata</Link> to maintain their <Link href="/soc-2" className="underline font-bold">SOC 2 compliance</Link> and generate these public-facing trust pages.
+                      </p>
+                      <p className="mt-4 font-medium italic">
+                        Note: This profile is based only on publicly observable data and automated discovery.
+                      </p>
+                      </div>
+                    </section>
+
+                <EditorialPolicyBadge variant="footer" />
   
                 <SOC2ReadinessSignals companyName={company.name} />
 
@@ -328,11 +370,44 @@ export default async function Page({ params }: { params: { slug: string } }) {
                         >
                           View all 24+ comparisons →
                         </Link>
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
 
-                  <div className="p-6 bg-white rounded-2xl shadow-sm border border-gray-100">
+                    <div className="p-6 bg-slate-50 rounded-2xl border border-slate-200 shadow-sm">
+                      <h4 className="font-bold text-slate-900 mb-4 uppercase text-xs tracking-wider flex items-center gap-2">
+                        <Users className="w-4 h-4 text-brand-600" />
+                        Role-Specific Guides
+                      </h4>
+                      <p className="text-xs text-slate-600 mb-4">
+                        Custom SOC 2 roadmaps tailored for different stakeholders at {company.name}.
+                      </p>
+                      <div className="grid grid-cols-2 gap-2">
+                        {[
+                          { name: 'Founders', slug: 'founders' },
+                          { name: 'CTOs', slug: 'cto' },
+                          { name: 'CISOs', slug: 'ciso' },
+                          { name: 'Legal', slug: 'legal-counsel' }
+                        ].map((role) => (
+                          <Link 
+                            key={role.slug}
+                            href={`/soc-2/for/${role.slug}`}
+                            className="flex items-center justify-center p-2 bg-white rounded-lg border border-slate-200 hover:border-brand-300 hover:text-brand-600 transition-all text-[11px] font-bold text-slate-700"
+                          >
+                            {role.name}
+                          </Link>
+                        ))}
+                      </div>
+                      <Link 
+                        href="/soc-2/guides"
+                        className="block text-center text-[10px] font-bold text-brand-600 hover:text-brand-700 pt-3 uppercase tracking-tighter"
+                      >
+                        View all 50+ role guides →
+                      </Link>
+                    </div>
+
+                    <div className="p-6 bg-white rounded-2xl shadow-sm border border-gray-100">
+
 
                   <h4 className="font-bold text-gray-900 mb-6 uppercase text-xs tracking-wider">Intelligence Actions</h4>
                   <CompanyActionButtons 
@@ -355,12 +430,16 @@ export default async function Page({ params }: { params: { slug: string } }) {
                       {company.domain}
                     </a>
                   </div>
-                  <div>
-                    <label className="text-xs text-gray-400 block uppercase">Last Updated</label>
-                    <span className="text-gray-600 text-sm">
-                      {new Date(company.updated_at).toLocaleDateString()}
-                    </span>
-                  </div>
+                    <div>
+                      <label className="text-xs text-gray-400 block uppercase">Last Updated</label>
+                      <span className="text-gray-600 text-sm flex items-center gap-1.5">
+                        {new Date(company.updated_at).toLocaleDateString()}
+                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-green-50 text-green-700 rounded border border-green-100 text-[10px] font-bold uppercase">
+                          <CheckCircle className="w-2.5 h-2.5" />
+                          Verified
+                        </span>
+                      </span>
+                    </div>
                 </div>
               </div>
 
@@ -376,13 +455,15 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
           </div>
 
-          <RelatedProfiles 
-            currentCompanySlug={params.slug} 
-            currentSignals={{ ...signals, signal_score: company.signal_score }} 
-            limit={8}
-            mode="related"
-          />
-        </div>
+            <RelatedProfiles 
+              currentCompanySlug={params.slug} 
+              currentSignals={{ ...signals, signal_score: company.signal_score }} 
+              limit={8}
+              mode="related"
+            />
+
+            <ContextualLinks currentPageType="directory" currentSlug={params.slug} />
+          </div>
       </main>
 
       <Footer />

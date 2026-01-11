@@ -4,7 +4,9 @@ import Script from 'next/script';
 import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { timelineGuides, timelineGuideBySlug, Soc2GuidePage } from '@/lib/soc2Guides';
+import { industryCostLinks } from '@/lib/industryCostLinks';
 
 interface PageProps {
   params: { slug: string };
@@ -47,7 +49,9 @@ function relatedPages(slug: string): Soc2GuidePage[] {
 }
 
 export async function generateStaticParams() {
-  return timelineGuides.map((page) => ({ slug: page.slug }));
+  const guideSlugs = timelineGuides.map((page) => ({ slug: page.slug }));
+  const industrySlugs = industryCostLinks.map((i) => ({ slug: i.slug }));
+  return [...guideSlugs, ...industrySlugs];
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -75,7 +79,29 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default function Soc2TimelinePage({ params }: PageProps) {
-  const page = timelineGuideBySlug[params.slug];
+  const staticPage = timelineGuideBySlug[params.slug];
+  
+  let page = staticPage;
+
+  // Programmatic fallback for industries not in static guides
+  if (!staticPage) {
+    const industry = industryCostLinks.find(i => i.slug === params.slug);
+    if (industry) {
+      page = {
+        slug: params.slug,
+        title: `SOC 2 Timeline for ${industry.label}`,
+        summary: `A typical SOC 2 compliance roadmap for ${industry.label} companies, including readiness, observation, and audit milestones.`,
+        category: 'timeline',
+        parent: '/soc-2-timeline',
+        highlights: [
+          `Readiness phase focused on ${industry.label}-specific controls.`,
+          'Standard 3-6 month observation window for Type II reports.',
+          'Audit field work and final report issuance timelines.',
+        ],
+      };
+    }
+  }
+
   if (!page) notFound();
 
   const faqs = buildFaqs(page.title);
@@ -91,34 +117,42 @@ export default function Soc2TimelinePage({ params }: PageProps) {
 
   const related = relatedPages(page.slug);
 
-  return (
-    <>
-      <script
-        id={`timeline-faq-${page.slug}`}
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
-      <main className="min-h-screen flex flex-col bg-slate-100">
-        <Header />
-        <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 lg:py-20 text-center">
-            <p className="text-sm font-semibold uppercase tracking-wide text-brand-700 mb-3">SOC 2 Timeline</p>
-            <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-5 leading-tight">{page.title}</h1>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-8 leading-relaxed">{page.summary}</p>
-            <div className="flex justify-center">
-              <Link
-                href={CTA_HREF}
-                className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
-              >
-                Estimate SOC 2 Timeline
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
+    return (
+      <>
+        <script
+          id={`timeline-faq-${page.slug}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+        <main className="min-h-screen flex flex-col bg-slate-100">
+          <Header />
+          <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8">
+              <Breadcrumbs 
+                items={[
+                  { label: 'SOC 2 Timeline', href: '/soc-2-timeline' },
+                  { label: page.title, href: '#' }
+                ]}
+              />
             </div>
-            <p className="mt-4 text-sm text-slate-500">Uses the readiness assessment—no extra steps required.</p>
-          </div>
-        </section>
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 pb-14 lg:pb-20 pt-4 text-center">
+              <p className="text-sm font-semibold uppercase tracking-wide text-brand-700 mb-3">SOC 2 Timeline</p>
+              <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-5 leading-tight">{page.title}</h1>
+              <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-8 leading-relaxed">{page.summary}</p>
+              <div className="flex justify-center">
+                <Link
+                  href={CTA_HREF}
+                  className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
+                >
+                  Estimate SOC 2 Timeline
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </Link>
+              </div>
+            </div>
+          </section>
+
 
         <section className="bg-white border-t border-slate-200">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 space-y-10">

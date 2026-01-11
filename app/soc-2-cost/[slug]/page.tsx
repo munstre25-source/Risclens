@@ -8,6 +8,7 @@ import AssessmentCTA from '@/components/AssessmentCTA';
 import { ContentFeedback } from '@/components/ContentFeedback';
 import { costGuides, costGuideBySlug, Soc2GuidePage } from '@/lib/soc2Guides';
 import { getContentPage } from '@/lib/content';
+import { industryCostLinks } from '@/lib/industryCostLinks';
 import { LastVerifiedBadge, AccuracyDisclaimer } from '@/components/AccuracyGuards';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
 
@@ -65,7 +66,14 @@ function getRelatedPages(slug: string): Soc2GuidePage[] {
 }
 
 export async function generateStaticParams() {
-  return costGuides.map((page) => ({ slug: page.slug }));
+  const guideSlugs = costGuides.map((page) => ({ slug: page.slug }));
+  const industrySlugs = industryCostLinks.map((i) => ({ slug: i.slug }));
+  const sizeSlugs = [
+    { slug: '5-10-employees' },
+    { slug: '10-50-employees' },
+    { slug: '50-200-employees' },
+  ];
+  return [...guideSlugs, ...industrySlugs, ...sizeSlugs];
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -95,28 +103,57 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function Soc2CostDetailPage({ params }: PageProps) {
   const staticPage = costGuideBySlug[params.slug];
+  
+  // Programmatic fallback for industries or company sizes not in static guides
+  let programmaticPage = null;
+  if (!staticPage) {
+    const isIndustrySlug = industryCostLinks.some(i => i.slug === params.slug);
+    const isSizeSlug = ['5-10-employees', '10-50-employees', '50-200-employees'].includes(params.slug);
+    const topic = params.slug.startsWith('soc-2-cost-for-') 
+      ? params.slug.replace('soc-2-cost-for-', '').replace(/-/g, ' ')
+      : params.slug.replace(/-/g, ' ');
+
+    if (params.slug.startsWith('soc-2-cost-for-') || isIndustrySlug || isSizeSlug) {
+      programmaticPage = {
+        slug: params.slug,
+        title: `SOC 2 Cost for ${topic.charAt(0).toUpperCase() + topic.slice(1)}`,
+        summary: `A specialized breakdown of SOC 2 compliance costs, audit fees, and implementation effort specifically for ${topic} organizations.`,
+        category: 'cost' as const,
+        parent: '/soc-2-cost',
+        highlights: [
+          `Industry-specific Trust Service Criteria (TSC) mapping for ${topic}.`,
+          `Benchmarked auditor fees for ${topic} startups and enterprises.`,
+          `Remediation priorities based on common ${topic} tech stacks.`,
+        ],
+      };
+    }
+  }
+
   const dbPage = await getContentPage(params.slug);
   
+  const basePage = staticPage || programmaticPage;
+
+  if (!basePage && !dbPage) {
+    notFound();
+  }
+
   const page = dbPage ? {
-    ...staticPage,
+    ...basePage,
     title: dbPage.title,
     summary: dbPage.description,
-    highlights: dbPage.content_json?.highlights || staticPage.highlights,
+    highlights: dbPage.content_json?.highlights || basePage?.highlights || [],
     faqs: dbPage.faqs || buildDefaultFaqs(dbPage.title),
     last_reviewed_at: dbPage.last_reviewed_at,
     framework_version: dbPage.framework_version,
     author_note: dbPage.author_note
     } : {
-      ...staticPage,
-      faqs: buildDefaultFaqs(staticPage.title),
-      last_reviewed_at: new Date().toISOString(), // Fallback
-      framework_version: 'SOC 2 (2025)',
-      author_note: undefined
-    };
+        ...basePage!,
+        faqs: buildDefaultFaqs(basePage!.title),
+        last_reviewed_at: new Date().toISOString(),
+        framework_version: 'SOC 2 (2026)',
+        author_note: undefined
+      };
 
-  if (!staticPage && !dbPage) {
-    notFound();
-  }
 
   const faqSchema = {
     '@context': 'https://schema.org',

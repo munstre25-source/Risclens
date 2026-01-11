@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import AboutSection from '@/components/AboutSection';
 import ComplianceHub from '@/components/ComplianceHub';
 import { Search, BarChart3, Cpu, Cloud, CreditCard, Activity, Rocket, ChevronRight, ArrowRight } from 'lucide-react';
+import { AdvancedSchema } from '@/components/AdvancedSchema';
 
 export const metadata: Metadata = {
   title: 'The Intelligence Layer for Enterprise Trust | RiscLens',
@@ -15,14 +16,14 @@ export const metadata: Metadata = {
     title: 'The Intelligence Layer for Enterprise Trust | RiscLens',
     description:
       'Deterministic compliance infrastructure, auditor directories, and the world\'s first ISO 42001 (AI) roadmap for B2B startups.',
-    images: [{ url: '/og.png', width: 1200, height: 630, alt: 'RiscLens' }],
+    images: [{ url: '/og-home.png', width: 1200, height: 630, alt: 'RiscLens' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'The Intelligence Layer for Enterprise Trust | RiscLens',
     description:
       'Deterministic compliance infrastructure, auditor directories, and the world\'s first ISO 42001 (AI) roadmap for B2B startups.',
-    images: ['/og.png'],
+    images: ['/og-home.png'],
   },
   alternates: {
     canonical: 'https://risclens.com',
@@ -30,50 +31,101 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
+  const faqItems = [
+    {
+      question: "What is RiscLens?",
+      answer: "RiscLens is a compliance intelligence platform that helps early-stage companies navigate SOC 2, ISO 27001, and ISO 42001 (AI) audits with deterministic roadmaps and auditor matching."
+    },
+    {
+      question: "How does the SOC 2 Readiness Assessment work?",
+      answer: "Our assessment analyzes your current security stack and team size to provide a readiness score and estimated compliance budget in under 2 minutes."
+    }
+  ];
+
   return (
     <>
+      <AdvancedSchema faq={faqItems} />
       <main className="min-h-screen flex flex-col bg-slate-50">
         <Header />
 
-        {/* New Intelligence Layer Hero */}
-        <section className="bg-white border-b border-slate-200 overflow-hidden relative">
-          <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-30" />
-          
-            <div className="max-w-6xl mx-auto px-4 pt-12 pb-16 sm:pt-24 sm:pb-32 relative text-center">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 border border-brand-100 mb-4 sm:mb-8">
-                <span className="flex h-2 w-2 rounded-full bg-brand-600 animate-pulse" />
-                <span className="text-xs font-bold text-brand-700 uppercase tracking-wider">The Source of Truth for 100+ B2B Security Stacks</span>
-              </div>
-
-                <h1 className="text-3xl sm:text-6xl lg:text-7xl font-bold text-slate-900 leading-[1.1] tracking-tight mb-4 sm:mb-8">
-                  Get your SOC 2 and AI audit-ready fast.
-                </h1>
-                
-                <p className="text-lg sm:text-xl text-slate-600 leading-relaxed max-w-3xl mx-auto mb-8 sm:mb-12">
-                  Auditor-approved ISO 42001 and SOC 2 roadmaps. Faster procurement, fewer rewrites.
-                </p>
-                
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <Link
-                      href="/ai-governance-readiness-index"
-                      className="w-full sm:w-auto bg-brand-600 text-white text-lg font-bold px-8 py-4 sm:px-10 sm:py-5 rounded-xl shadow-xl hover:bg-brand-700 transition-all flex flex-col items-center group relative overflow-hidden"
-                    >
-                      <div className="absolute top-0 right-0 bg-white/20 text-[10px] px-2 py-0.5 rounded-bl-lg font-bold uppercase tracking-tighter animate-pulse">Trending</div>
-                      <span>Get my AI roadmap</span>
-
-                    <span className="text-[10px] font-medium text-white/70 uppercase tracking-widest mt-1 group-hover:text-white">ISO 42001 (AI) index →</span>
-                  </Link>
-
-                  <Link
-                    href="/soc-2-readiness-index"
-                    className="w-full sm:w-auto bg-slate-900 text-white text-lg font-bold px-8 py-4 sm:px-10 sm:py-5 rounded-xl shadow-xl hover:bg-slate-800 transition-all flex flex-col items-center group"
-                  >
-                    <span>Get my SOC 2 roadmap</span>
-                    <span className="text-[10px] font-medium text-slate-400 uppercase tracking-widest mt-1 group-hover:text-slate-300">Readiness & cost →</span>
-                  </Link>
+          {/* New Intelligence Layer Hero */}
+          <section className="bg-white border-b border-slate-200 overflow-hidden relative">
+            <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-30" />
+            
+              <div className="max-w-6xl mx-auto px-4 pt-12 pb-16 sm:pt-24 sm:pb-32 relative text-center">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 border border-brand-100 mb-4 sm:mb-8">
+                  <span className="flex h-2 w-2 rounded-full bg-brand-600 animate-pulse" />
+                  <span className="text-xs font-bold text-brand-700 uppercase tracking-wider">The Source of Truth for 100+ B2B Security Stacks</span>
                 </div>
 
-              <div className="mt-8 sm:mt-16 flex flex-wrap justify-center gap-x-12 gap-y-6 opacity-40 grayscale pointer-events-none">
+                  <h1 className="text-3xl sm:text-6xl lg:text-7xl font-bold text-slate-900 leading-[1.1] tracking-tight mb-4 sm:mb-8">
+                    Get your SOC 2 and AI audit-ready fast.
+                  </h1>
+                  
+                  <p className="text-lg sm:text-xl text-slate-600 leading-relaxed max-w-3xl mx-auto mb-8 sm:mb-12">
+                    Auditor-approved ISO 42001 and SOC 2 roadmaps. Faster procurement, fewer rewrites.
+                  </p>
+                  
+                      <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 sm:mb-20">
+                          <Link
+                            href="/soc-2-readiness-index"
+                            className="w-full sm:w-auto bg-brand-600 text-white text-lg font-bold px-8 py-4 sm:px-10 sm:py-5 rounded-xl shadow-xl hover:bg-brand-700 transition-all flex flex-col items-center group relative overflow-hidden"
+                          >
+                            <span>Start Free Readiness Assessment</span>
+                            <span className="text-[10px] font-medium text-white/70 uppercase tracking-widest mt-1 group-hover:text-white">SOC 2, ISO 42001 & Cost Estimate →</span>
+                          </Link>
+
+                        <Link
+                          href="/tools"
+                          className="w-full sm:w-auto bg-slate-100 text-slate-900 text-lg font-bold px-8 py-4 sm:px-10 sm:py-5 rounded-xl shadow-sm hover:bg-slate-200 transition-all flex flex-col items-center group border border-slate-200"
+                        >
+                          <span>All Compliance Tools</span>
+                          <span className="text-[10px] font-medium text-slate-500 uppercase tracking-widest mt-1 group-hover:text-slate-600">Calculators & Benchmarks →</span>
+                        </Link>
+                      </div>
+
+
+                  {/* Social Proof / Trust Bar */}
+                  <div className="mt-8 mb-16 py-8 border-y border-slate-100 max-w-4xl mx-auto px-4">
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+                      <div className="text-center md:text-left">
+                        <div className="text-2xl font-bold text-slate-900">100+</div>
+                        <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">B2B Security Stacks Benchmarked</div>
+                      </div>
+                      <div className="h-px w-full md:h-12 md:w-px bg-slate-200" />
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-slate-900">500+</div>
+                        <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">Audits Analyzed for ROI</div>
+                      </div>
+                      <div className="h-px w-full md:h-12 md:w-px bg-slate-200" />
+                      <div className="text-center md:text-right">
+                        <div className="text-2xl font-bold text-slate-900">2026</div>
+                        <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">Market Intelligence Data</div>
+                      </div>
+                    </div>
+                  </div>
+
+                {/* Subtle Definition Block */}
+                <div className="max-w-3xl mx-auto">
+                  <div className="p-1 rounded-2xl bg-gradient-to-r from-slate-200 via-brand-100 to-slate-200 shadow-sm">
+                    <div className="bg-white rounded-[calc(1rem-1px)] p-6 sm:p-8 text-left relative overflow-hidden group">
+                      <div className="absolute top-0 right-0 p-4 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity">
+                        <svg className="w-24 h-24 text-slate-900" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                      </div>
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="text-[10px] font-black text-brand-600 uppercase tracking-[0.2em]">Industry Standard</span>
+                        <div className="h-px flex-1 bg-slate-100" />
+                      </div>
+                      <h3 className="text-sm font-bold text-slate-400 mb-2 uppercase tracking-tight">System and Organization Controls (SOC 2)</h3>
+                      <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+                        <strong className="text-slate-900 font-bold">SOC 2</strong> is the gold standard for service organizations, developed by the AICPA to verify how customer data is managed. It centers on five <span className="text-brand-700 font-medium italic">Trust Service Principles</span>: security, availability, processing integrity, confidentiality, and privacy.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+              <div className="mt-12 sm:mt-24 flex flex-wrap justify-center gap-x-12 gap-y-6 opacity-40 grayscale pointer-events-none">
+
               <span className="text-xl font-bold">VANTA</span>
               <span className="text-xl font-bold">DRATA</span>
               <span className="text-xl font-bold">SECUREFRAME</span>
@@ -177,12 +229,12 @@ export default function HomePage() {
             </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {[
-                    { label: 'SaaS', href: '/soc-2/industries/saas', icon: <Cloud className="w-8 h-8 text-brand-600" /> },
-                    { label: 'Fintech', href: '/soc-2-cost/fintech', icon: <CreditCard className="w-8 h-8 text-brand-600" /> },
-                    { label: 'Healthcare', href: '/soc-2-cost/healthcare', icon: <Activity className="w-8 h-8 text-brand-600" /> },
-                    { label: 'Startups', href: '/soc-2-cost/startups', icon: <Rocket className="w-8 h-8 text-brand-600" /> },
-                  ].map((industry) => (
+                    {[
+                      { label: 'SaaS', href: '/soc-2/industries/saas', icon: <Cloud className="w-8 h-8 text-brand-600" /> },
+                      { label: 'Fintech', href: '/soc-2/industries/fintech', icon: <CreditCard className="w-8 h-8 text-brand-600" /> },
+                      { label: 'Healthcare', href: '/soc-2/industries/healthcare', icon: <Activity className="w-8 h-8 text-brand-600" /> },
+                      { label: 'Startups', href: '/soc-2/industries/startups', icon: <Rocket className="w-8 h-8 text-brand-600" /> },
+                    ].map((industry) => (
                     <Link
                       key={industry.label}
                       href={industry.href}

@@ -130,13 +130,25 @@ export async function RelatedProfiles({
                 )}
               </div>
 
-              <div className="mt-auto pt-2 flex items-center text-blue-600 text-xs font-bold uppercase tracking-wider group-hover:text-blue-700">
-                View SOC 2 & security profile →
-              </div>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </section>
-  );
+                <div className="mt-auto pt-2 flex items-center text-blue-600 text-xs font-bold uppercase tracking-wider group-hover:text-blue-700">
+                  View SOC 2 & security profile →
+                </div>
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <div className="mt-8 flex justify-center">
+          <Link 
+            href="/compliance/directory"
+            className="text-sm font-bold text-slate-500 hover:text-brand-600 transition-colors flex items-center gap-2"
+          >
+            Explore all 250+ security signal profiles
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </Link>
+        </div>
+      </section>
+    );
 }
+

@@ -54,15 +54,15 @@ const content: CostIndustryContent = {
       detail: 'Lean payment scope but heavy PII handling; logging/monitoring quality drives audit effort.',
     },
   ],
-  hubHref: '/soc-2/industries/fintech',
-  timelineHref: '/soc-2-timeline/fintech',
-  readinessHref: '/soc-2-readiness/fintech',
-  relatedLinks: [
-    { href: '/soc-2-timeline/fintech', label: 'Timeline for fintech' },
-    { href: '/soc-2-readiness/fintech', label: 'Readiness for fintech' },
-    { href: '/penetration-testing/for-soc-2', label: 'Pentest expectations for SOC 2' },
-  ],
-};
+    hubHref: '/soc-2/industries/fintech',
+    timelineHref: '/soc-2-timeline/fintech',
+    readinessHref: '/soc-2-readiness-checklist/fintech',
+    relatedLinks: [
+      { href: '/soc-2-timeline/fintech', label: 'Timeline for fintech' },
+      { href: '/soc-2-readiness-checklist/fintech', label: 'Readiness for fintech' },
+      { href: '/penetration-testing/for-soc-2', label: 'Pentest expectations for SOC 2' },
+    ],
+  };
 
 export const metadata: Metadata = {
   title: 'SOC 2 Cost for Fintech | RiscLens',

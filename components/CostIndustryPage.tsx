@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { StickyCTA } from '@/components/StickyCTA';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
 
 type Scenario = { title: string; detail: string };
 type RelatedLink = { href: string; label: string };
@@ -41,39 +42,37 @@ export function CostIndustryPage({
   readinessHref,
   relatedLinks,
 }: CostIndustryContent) {
-  return (
-    <main className="min-h-screen flex flex-col bg-slate-100">
-      <Header />
+    return (
+      <main className="min-h-screen flex flex-col bg-slate-100">
+        <Header />
 
-      <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-16 lg:py-20 text-center space-y-4">
-          <p className="text-sm font-semibold uppercase tracking-wide text-brand-700">SOC 2 Cost</p>
-          <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 leading-tight">SOC 2 Cost for {industry}</h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">{heroDescription}</p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3">
-            <Link
-              href={CTA_HREF}
-              className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
-            >
-              Get your readiness score
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </Link>
-            <Link href={timelineHref} className="text-sm text-brand-700 underline underline-offset-4">
-              See SOC 2 timeline guides →
-            </Link>
+        <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8">
+            <Breadcrumbs 
+              items={[
+                { label: 'SOC 2 Cost', href: '/soc-2-cost' },
+                { label: industry, href: '#' }
+              ]}
+            />
           </div>
-          <div className="flex flex-col sm:flex-row justify-center gap-3 text-sm text-brand-700">
-            <Link href={hubHref} className="underline underline-offset-4">
-              SOC 2 requirements for {industry} →
-            </Link>
-            <Link href="/soc-2-cost" className="underline underline-offset-4">
-              Back to SOC 2 cost →
-            </Link>
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 pb-16 lg:pb-20 pt-4 text-center space-y-4">
+            <p className="text-sm font-semibold uppercase tracking-wide text-brand-700">SOC 2 Cost</p>
+            <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 leading-tight">SOC 2 Cost for {industry}</h1>
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">{heroDescription}</p>
+            <div className="flex justify-center">
+              <Link
+                href={CTA_HREF}
+                className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
+              >
+                Get your readiness score
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+
 
       <section className="py-12 lg:py-16 bg-white border-t border-slate-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-8">
