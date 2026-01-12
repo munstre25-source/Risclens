@@ -30,8 +30,8 @@ export default function ToolAlternativePage({
   toolName,
   toolSlug,
   heroDescription,
-  alternatives,
-  comparisonFactors,
+  alternatives = [],
+  comparisonFactors = [],
 }: ToolAlternativePageProps) {
   const pageUrl = `https://risclens.com/compare/${toolSlug}-alternatives`;
   const pageTitle = `Top ${toolName} Alternatives for 2026 | RiscLens Report`;

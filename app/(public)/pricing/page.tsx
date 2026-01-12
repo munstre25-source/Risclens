@@ -11,18 +11,43 @@ import {
 } from 'lucide-react';
 import { toolPricing } from '@/src/content/pricing';
 import { GeneralPageSchema } from '@/components/GeneralPageSchema';
+import { getSupabaseAdmin } from '@/lib/supabase';
 
 export const metadata: Metadata = {
   title: 'Compliance Pricing Intelligence | RiscLens',
   description: 'Access verified pricing data, platform comparisons, and cost calculators to budget your SOC 2 journey with confidence.',
 };
 
-export default function PricingHubPage() {
-  // Map all tools from content
-  const tools = toolPricing.map(tool => ({
+export default async function PricingHubPage() {
+  const supabase = getSupabaseAdmin();
+  const { data: pseoPages } = await supabase
+    .from('pseo_pages')
+    .select('slug, content_json')
+    .eq('category', 'pricing');
+
+  // Map tools from static content
+  const staticTools = toolPricing.map(tool => ({
     name: `${tool.name} Pricing`,
-    slug: tool.slug
-  })).sort((a, b) => a.name.localeCompare(b.name));
+    slug: tool.slug,
+    isPseo: false
+  }));
+
+  // Map tools from pSEO database
+  const pseoTools = pseoPages?.map(p => ({
+    name: `${p.content_json?.toolName || p.slug} Pricing`,
+    slug: p.slug,
+    isPseo: true
+  })) || [];
+
+  // Merge and deduplicate by slug
+  const allTools = [...staticTools];
+  pseoTools.forEach(pt => {
+    if (!allTools.find(st => st.slug === pt.slug)) {
+      allTools.push(pt);
+    }
+  });
+
+  const tools = allTools.sort((a, b) => a.name.localeCompare(b.name));
 
   const calculators = [
     { name: 'SOC 2 Cost Guide', href: '/soc-2-cost', description: 'Deep dive into total compliance budgeting' },

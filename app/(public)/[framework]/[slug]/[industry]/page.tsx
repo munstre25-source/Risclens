@@ -5,15 +5,56 @@ import { getSupabaseAdmin } from '@/lib/supabase';
 
 interface Props {
   params: Promise<{ 
-    decision: string; 
+    framework: string; 
+    slug: string; 
     industry: string;
   }>;
 }
 
-async function getMatrixData(decisionSlug: string, industrySlug: string) {
+export const dynamic = "force-static";
+export const revalidate = 86400; // 24 hours
+
+export async function generateStaticParams() {
+  try {
+    const supabase = getSupabaseAdmin();
+    
+    const [frameworksRes, decisionsRes, industriesRes] = await Promise.all([
+      supabase.from('pseo_frameworks').select('slug'),
+      supabase.from('pseo_decision_types').select('slug'),
+      supabase.from('pseo_industries').select('slug'),
+    ]);
+
+    if (!frameworksRes.data || !decisionsRes.data || !industriesRes.data) return [];
+
+    const params = [];
+    for (const f of frameworksRes.data) {
+      for (const d of decisionsRes.data) {
+        for (const i of industriesRes.data) {
+          params.push({
+            framework: f.slug,
+            slug: d.slug,
+            industry: i.slug
+          });
+          // Also handle the framework-prefixed slugs often used
+          params.push({
+            framework: f.slug,
+            slug: `${f.slug}-${d.slug}`,
+            industry: i.slug
+          });
+        }
+      }
+    }
+    return params;
+  } catch (err) {
+    console.error('[generateStaticParams] Failed for [framework]/[slug]/[industry]:', err);
+    return [];
+  }
+}
+
+async function getMatrixData(frameworkSlug: string, decisionSlug: string, industrySlug: string) {
   const supabase = getSupabaseAdmin();
-  const frameworkSlug = 'iso-27001';
   
+  // 1. Get dimension details with fallback for decision slug
   const [frameworkRes, industryRes] = await Promise.all([
     supabase.from('pseo_frameworks').select('*').eq('slug', frameworkSlug).single(),
     supabase.from('pseo_industries').select('*').eq('slug', industrySlug).single(),
@@ -21,24 +62,26 @@ async function getMatrixData(decisionSlug: string, industrySlug: string) {
 
   if (frameworkRes.error || industryRes.error) return null;
 
+  // Try to find decision, with fallback to generic slug
   let { data: decision } = await supabase
     .from('pseo_decision_types')
     .select('*')
     .eq('slug', decisionSlug)
     .single();
 
-  if (!decision) {
-    const genericSlug = decisionSlug.replace(/^(soc-2|iso-27001|pci-dss|hipaa|gdpr)-/, '');
-    const { data: genericDecision } = await supabase
-      .from('pseo_decision_types')
-      .select('*')
-      .eq('slug', genericSlug)
-      .single();
-    decision = genericDecision;
-  }
+    if (!decision) {
+      const genericSlug = decisionSlug.replace(/^(soc-2|iso-27001|pci-dss|hipaa|gdpr|ai-governance|iso-42001|eu-ai-act|nist-ai-rmf)-/, '');
+      const { data: genericDecision } = await supabase
+        .from('pseo_decision_types')
+        .select('*')
+        .eq('slug', genericSlug)
+        .single();
+      decision = genericDecision;
+    }
 
   if (!decision) return null;
 
+  // 2. Look for an existing page
   const { data: page } = await supabase
     .from('pseo_pages')
     .select('*')
@@ -56,8 +99,8 @@ async function getMatrixData(decisionSlug: string, industrySlug: string) {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { decision, industry } = await params;
-  const data = await getMatrixData(decision, industry);
+  const { framework, slug, industry } = await params;
+  const data = await getMatrixData(framework, slug, industry);
 
   if (!data) return { title: 'Not Found' };
 
@@ -68,17 +111,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description,
     alternates: {
-      canonical: `https://risclens.com/iso-27001/${decision}/${industry}`,
+      canonical: `https://risclens.com/${framework}/${slug}/${industry}`,
     },
   };
 }
 
-export default async function Iso27001DecisionIndustryPage({ params }: Props) {
-  const { decision, industry } = await params;
-  const data = await getMatrixData(decision, industry);
+export default async function FrameworkDecisionIndustryPage({ params }: Props) {
+  const { framework, slug, industry } = await params;
+  const data = await getMatrixData(framework, slug, industry);
 
   if (!data) notFound();
 
+  // Construct dynamic content
   const content = data.page?.content_json || {
     heroDescription: `Managing ${data.framework.name} ${data.decision.name} for ${data.industry.name} requires a specialized approach. Our data-driven benchmarks help you understand what to expect and how to optimize your compliance roadmap.`,
     keyPriorities: [

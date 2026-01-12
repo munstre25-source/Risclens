@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import MatrixPage from '@/components/compliance/MatrixPage';
+import { RelatedPseoPages } from '@/components/seo/RelatedPseoPages';
+import { constructMetadata } from '@/lib/seo';
 import { getSupabaseAdmin } from '@/lib/supabase';
 
 interface Props {
@@ -67,13 +69,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = data.page?.title || `${data.framework.name} Compliance for ${data.industry.name} ${data.role.name}s`;
   const description = data.page?.meta_description || `A strategic guide for ${data.role.name}s at ${data.industry.name} companies navigating ${data.framework.name} compliance.`;
 
-  return {
+  return constructMetadata({
     title,
     description,
-    alternates: {
-      canonical: `https://risclens.com/${framework}/for/${role}/${industry}`,
-    },
-  };
+    path: `/${framework}/for/${role}/${industry}`,
+    keywords: [data.framework.name, data.industry.name, data.role.name, 'Compliance'].filter(Boolean) as string[],
+    category: 'role-based',
+  });
 }
 
 export default async function FrameworkRoleIndustryPage({ params }: Props) {
@@ -112,11 +114,20 @@ export default async function FrameworkRoleIndustryPage({ params }: Props) {
   };
 
   return (
-    <MatrixPage
-      framework={data.framework}
-      role={data.role}
-      industry={data.industry}
-      content={content}
-    />
+    <>
+      <MatrixPage
+        framework={data.framework}
+        role={data.role}
+        industry={data.industry}
+        content={content}
+      />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+        <RelatedPseoPages 
+          currentSlug={data.page?.slug || ''} 
+          category="role" 
+          frameworkId={data.framework.id} 
+        />
+      </div>
+    </>
   );
 }

@@ -304,7 +304,7 @@ export default function AiComplianceHub() {
             </div>
             
             <div className="grid md:grid-cols-3 gap-8">
-              <Link href="/ai-governance-readiness-index" className="group">
+              <Link href="/soc-2-readiness-calculator?framework=iso42001" className="group">
                 <div className="bg-brand-50 border-2 border-brand-200 rounded-2xl p-8 h-full hover:shadow-xl hover:border-brand-300 transition-all">
                   <div className="w-14 h-14 bg-brand-100 rounded-xl flex items-center justify-center mb-6">
                     <BarChart3 className="w-7 h-7 text-brand-600" />

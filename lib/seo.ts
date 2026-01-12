@@ -1,61 +1,142 @@
 import { Metadata } from 'next';
 
-export function generateIndustryMetadata(
-  industry: string,
-  type: 'readiness' | 'cost',
-  description?: string
-): Metadata {
-  const isReadiness = type === 'readiness';
-  const title = isReadiness
-    ? `SOC 2 Readiness Assessment for ${industry} | RiscLens`
-    : `SOC 2 Audit Cost Guide for ${industry} | RiscLens`;
-  
-  const defaultDesc = isReadiness
-    ? `Understand your SOC 2 readiness for ${industry}: security controls, access, change management, and vendor risk. Get a score and next steps in under 2 minutes.`
-    : `Complete breakdown of SOC 2 audit costs for ${industry} companies. Learn about auditor fees, compliance software, and hidden internal costs.`;
+const DOMAIN = process.env.NEXT_PUBLIC_APP_URL || 'https://risclens.com';
 
-  const finalDescription = description || defaultDesc;
+interface SEOProps {
+  title: string;
+  description: string;
+  path: string;
+  image?: string;
+  type?: 'website' | 'article';
+  noindex?: boolean;
+  keywords?: string[];
+  category?: string;
+  author?: string;
+}
+
+/**
+ * Centrally managed SEO metadata generator
+ */
+export function constructMetadata({
+  title,
+  description,
+  path,
+  image = '/og.png',
+  type = 'website',
+  noindex = false,
+  keywords = [],
+  category,
+}: SEOProps): Metadata {
+  const url = `${DOMAIN}${path.startsWith('/') ? path : `/${path}`}`;
+  
+  // Standardize title with brand if not already present
+  const fullTitle = title.includes('RiscLens') ? title : `${title} | RiscLens`;
 
   return {
-    title,
-    description: finalDescription,
+    title: fullTitle,
+    description,
+    keywords: [
+      'SOC 2', 
+      'ISO 27001', 
+      'AI Governance', 
+      'Compliance Automation', 
+      'Security readiness', 
+      ...keywords
+    ],
+    category,
+    alternates: {
+      canonical: url,
+    },
     openGraph: {
-      title,
-      description: finalDescription,
-      images: [{ url: '/og.png', width: 1200, height: 630, alt: 'RiscLens' }],
+      title: fullTitle,
+      description,
+      url,
+      type,
+      siteName: 'RiscLens',
+      images: [
+        {
+          url: image.startsWith('http') ? image : `${DOMAIN}${image}`,
+          width: 1200,
+          height: 630,
+          alt: fullTitle,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
-      title,
-      description: finalDescription,
-      images: ['/og.png'],
+      title: fullTitle,
+      description,
+      images: [image.startsWith('http') ? image : `${DOMAIN}${image}`],
+      creator: '@risclens',
+    },
+    robots: {
+      index: !noindex,
+      follow: !noindex,
+      googleBot: {
+        index: !noindex,
+        follow: !noindex,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
     },
   };
 }
 
+/**
+ * Generates metadata for industry-specific readiness pages
+ */
+export function generateIndustryMetadata(industryName: string, category: string = 'Compliance'): Metadata {
+  const slug = industryName.toLowerCase().split(' ')[0];
+  return constructMetadata({
+    title: `${industryName} SOC 2 Readiness Guide`,
+    description: `Comprehensive SOC 2 readiness guide for ${industryName}. Learn about specific challenges, required controls, and how to accelerate your compliance journey.`,
+    path: `/soc-2-readiness/${slug}`,
+    category,
+  });
+}
+
+/**
+ * Generates metadata for topic-specific pages
+ */
 export function generateTopicMetadata(
   title: string,
   description: string,
   path: string,
-  category: string
+  category: string = 'Compliance'
 ): Metadata {
-  const fullTitle = `${title} | ${category} | RiscLens`;
-  
-  return {
-    title: fullTitle,
+  return constructMetadata({
+    title,
     description,
-    alternates: { canonical: path },
-    openGraph: {
-      title: fullTitle,
-      description,
-      url: `https://risclens.com${path}`,
-      images: [{ url: '/og.png', width: 1200, height: 630, alt: 'RiscLens' }],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: fullTitle,
-      description,
-      images: ['/og.png'],
-    },
+    path,
+    category,
+  });
+}
+
+export function generateBreadcrumbSchema(items: { name: string; item: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": items.map((item, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "name": item.name,
+      "item": item.item.startsWith('http') ? item.item : `${DOMAIN}${item.item}`
+    }))
+  };
+}
+
+export function generateFAQSchema(faqs: { question: string; answer: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
   };
 }

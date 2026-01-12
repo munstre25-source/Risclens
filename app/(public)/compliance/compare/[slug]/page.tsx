@@ -1,23 +1,75 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import { Shield, Zap, Target, Lock, TrendingUp, AlertCircle, ChevronRight, Check, X, ArrowRight } from 'lucide-react';
+import { getSupabaseAdmin } from '@/lib/supabase';
+import FrameworkComparisonView from '@/components/compliance/FrameworkComparisonView';
 
-export function generateStaticParams() {
-  const platforms = ['vanta', 'drata', 'secureframe', 'thoropass', 'laika', 'strike-graph'];
-  const params: { slug: string }[] = [];
+export const dynamic = 'force-static';
+export const revalidate = 86400; // 24 hours
+
+export async function generateStaticParams() {
+  const supabase = getSupabaseAdmin();
   
-  for (let i = 0; i < platforms.length; i++) {
-    for (let j = i + 1; j < platforms.length; j++) {
-      params.push({ slug: `${platforms[i]}-vs-${platforms[j]}` });
-    }
-  }
+  // Get all pSEO comparison pages
+  const { data: pseoPages } = await supabase
+    .from('pseo_pages')
+    .select('slug')
+    .in('category', ['alternatives', 'framework_comparison']);
+
+  const staticSlugs = ['vanta-vs-drata', 'vanta-vs-secureframe', 'drata-vs-secureframe'];
+  const pseoSlugs = pseoPages?.map(p => p.slug) || [];
   
-  return params;
+  const allSlugs = Array.from(new Set([...staticSlugs, ...pseoSlugs]));
+  return allSlugs.map(slug => ({ slug }));
+}
+
+async function getPseoPage(slug: string) {
+  const supabase = getSupabaseAdmin();
+  const { data } = await supabase
+    .from('pseo_pages')
+    .select('*, pseo_frameworks(*)')
+    .eq('slug', slug)
+    .single();
+  return data;
 }
 
 export default async function ComparisonPage({ params }: { params: { slug: string } }) {
   const { slug } = params;
+  
+  const page = await getPseoPage(slug);
+  
+  if (page && page.category === 'framework_comparison') {
+    const { 
+      title, 
+      description, 
+      frameworkA, 
+      frameworkB, 
+      tableRows, 
+      decisions, 
+      faqs 
+    } = page.content_json;
+
+    return (
+      <>
+        <Header />
+        <FrameworkComparisonView
+          title={title}
+          description={description}
+          frameworkA={frameworkA}
+          frameworkB={frameworkB}
+          tableRows={tableRows}
+          decisions={decisions}
+          faqs={faqs}
+          lastUpdated={new Date(page.updated_at || page.created_at).toISOString().split('T')[0]}
+        />
+        <Footer />
+      </>
+    );
+  }
+
+  // Fallback to legacy static or other pSEO types
   const parts = slug.split('-vs-');
   const platformA = parts[0]?.charAt(0).toUpperCase() + parts[0]?.slice(1) || 'Platform A';
   const platformB = parts[1]?.charAt(0).toUpperCase() + parts[1]?.slice(1) || 'Platform B';
@@ -106,3 +158,4 @@ export default async function ComparisonPage({ params }: { params: { slug: strin
     </main>
   );
 }
+

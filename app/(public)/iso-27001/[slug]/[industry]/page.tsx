@@ -5,14 +5,14 @@ import { getSupabaseAdmin } from '@/lib/supabase';
 
 interface Props {
   params: Promise<{ 
-    decision: string; 
+    slug: string; 
     industry: string;
   }>;
 }
 
 async function getMatrixData(decisionSlug: string, industrySlug: string) {
   const supabase = getSupabaseAdmin();
-  const frameworkSlug = 'pci-dss';
+  const frameworkSlug = 'iso-27001';
   
   const [frameworkRes, industryRes] = await Promise.all([
     supabase.from('pseo_frameworks').select('*').eq('slug', frameworkSlug).single(),
@@ -56,8 +56,8 @@ async function getMatrixData(decisionSlug: string, industrySlug: string) {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { decision, industry } = await params;
-  const data = await getMatrixData(decision, industry);
+  const { slug, industry } = await params;
+  const data = await getMatrixData(slug, industry);
 
   if (!data) return { title: 'Not Found' };
 
@@ -68,14 +68,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description,
     alternates: {
-      canonical: `https://risclens.com/pci-dss/${decision}/${industry}`,
+      canonical: `https://risclens.com/iso-27001/${slug}/${industry}`,
     },
   };
 }
 
-export default async function PciDssDecisionIndustryPage({ params }: Props) {
-  const { decision, industry } = await params;
-  const data = await getMatrixData(decision, industry);
+export default async function Iso27001DecisionIndustryPage({ params }: Props) {
+  const { slug, industry } = await params;
+  const data = await getMatrixData(slug, industry);
 
   if (!data) notFound();
 
@@ -84,11 +84,11 @@ export default async function PciDssDecisionIndustryPage({ params }: Props) {
     keyPriorities: [
       { 
         title: `Optimizing ${data.decision.name}`, 
-        description: `For ${data.industry.name} startups, ${data.decision.name} is often impacted by ${data.industry.slug === 'fintech' ? 'complex data flows and legacy system integrations' : 'rapid scaling and high-volume AI processing'}.` 
+        description: `For ${data.industry.name} startups, ${data.decision.name} is often impacted by ${data.industry.slug === 'fintech' ? 'complex data flows and legacy system integrations' : 'rapid scaling and high-volume data processing'}.` 
       },
       { 
         title: "Industry Benchmarks", 
-        description: `Most ${data.industry.name} companies at the Seed to Series A stage spend between ${data.framework.slug === 'soc-2' ? '$20k-$50k' : '$15k-$35k'} on their initial audit when factoring in tool costs.` 
+        description: `Most ${data.industry.name} companies at the Seed to Series A stage spend between $30k-$60k on their initial ${data.framework.name} audit when factoring in implementation and auditor fees.` 
       },
       { 
         title: "Strategic Shortcuts", 
@@ -98,11 +98,11 @@ export default async function PciDssDecisionIndustryPage({ params }: Props) {
     faqs: [
       { 
         question: `What is the average ${data.decision.name} for ${data.framework.name} in ${data.industry.name}?`, 
-        answer: `While it varies by team size, most ${data.industry.name} startups find that ${data.decision.name} is heavily influenced by their choice of auditor and the level of automation they implement.` 
+        answer: `While it varies by team size, most ${data.industry.name} startups find that ${data.decision.name} is heavily influenced by the maturity of their ISMS and the choice of accredited registrar.` 
       },
       { 
         question: `How can we minimize ${data.decision.name}?`, 
-        answer: `The most effective way for ${data.industry.name} companies to optimize ${data.decision.name} is through early gap analysis and selecting tools that integrate natively with their existing tech stack.` 
+        answer: `The most effective way for ${data.industry.name} companies to optimize ${data.decision.name} is through early internal audits and selecting tools that automate the Annex A control evidence collection.` 
       }
     ]
   };

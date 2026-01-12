@@ -83,7 +83,7 @@ export default function ToolPricingPage({
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {pricingTiers.map((tier, idx) => (
+            {pricingTiers?.map((tier, idx) => (
               <div key={idx} className={`bg-white rounded-2xl p-8 border ${idx === 1 ? 'border-brand-500 shadow-xl ring-1 ring-brand-500 relative' : 'border-slate-200 shadow-sm'}`}>
                 {idx === 1 && (
                   <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-brand-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase">
@@ -97,7 +97,7 @@ export default function ToolPricingPage({
                   <span className="text-sm font-normal text-slate-400 block mt-1">Estimated annual cost</span>
                 </div>
                 <ul className="space-y-4 mb-8">
-                  {tier.features.map((feature, i) => (
+                  {tier.features?.map((feature, i) => (
                     <li key={i} className="flex gap-3 text-sm text-slate-600">
                       <Check className="w-5 h-5 text-brand-500 flex-shrink-0" />
                       <span>{feature}</span>
@@ -115,41 +115,42 @@ export default function ToolPricingPage({
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <ExpertReview authorId="raphael" date={lastUpdated} />
           
-          <div className="grid lg:grid-cols-2 gap-12 mt-12">
-            <div>
-              <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
-                <DollarSign className="text-brand-600" />
-                Hidden Costs to Watch For
-              </h2>
-              <div className="space-y-4">
-                {hiddenCosts.map((cost, idx) => (
-                  <div key={idx} className="bg-slate-50 border border-slate-200 rounded-xl p-5">
-                    <p className="text-slate-700 font-medium flex gap-3">
-                      <span className="text-brand-500">•</span>
-                      {cost}
-                    </p>
-                  </div>
-                ))}
+            <div className="grid lg:grid-cols-2 gap-12 mt-12">
+              <div>
+                <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                  <DollarSign className="text-brand-600" />
+                  Hidden Costs to Watch For
+                </h2>
+                <div className="space-y-4">
+                  {hiddenCosts?.map((cost, idx) => (
+                    <div key={idx} className="bg-slate-50 border border-slate-200 rounded-xl p-5">
+                      <p className="text-slate-700 font-medium flex gap-3">
+                        <span className="text-brand-500">•</span>
+                        {cost}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+  
+              <div>
+                <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                  <TrendingDown className="text-brand-600" />
+                  Negotiation Strategy
+                </h2>
+                <div className="space-y-4">
+                  {negotiationTips?.map((tip, idx) => (
+                    <div key={idx} className="bg-brand-50/50 border border-brand-100 rounded-xl p-5">
+                      <p className="text-slate-700 font-medium flex gap-3">
+                        <span className="text-brand-500 font-bold">{idx + 1}.</span>
+                        {tip}
+                      </p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
-            <div>
-              <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
-                <TrendingDown className="text-brand-600" />
-                Negotiation Strategy
-              </h2>
-              <div className="space-y-4">
-                {negotiationTips.map((tip, idx) => (
-                  <div key={idx} className="bg-brand-50/50 border border-brand-100 rounded-xl p-5">
-                    <p className="text-slate-700 font-medium flex gap-3">
-                      <span className="text-brand-500 font-bold">{idx + 1}.</span>
-                      {tip}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
 
             <AuthorBio authorId="raphael" />
 

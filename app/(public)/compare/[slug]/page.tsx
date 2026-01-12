@@ -2,21 +2,17 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import Link from 'next/link';
 import Script from 'next/script';
-import { Check, X, ArrowRight, ExternalLink } from 'lucide-react';
 import {
   getAllTools,
-    getToolsForComparison,
-    getToolComparisonBySlug,
-    parseComparisonSlug,
-
+  getToolsForComparison,
+  getToolComparisonBySlug,
+  parseComparisonSlug,
   generateComparisonData,
   generateComparisonTitle,
   generateComparisonDescription,
   generateVerdict,
   getAlternativesFor,
-  ComplianceTool,
   getAllComparisonSlugs,
   getAllAlternativesSlugs,
 } from '@/lib/compliance-tools';
@@ -28,9 +24,12 @@ import {
   generateFAQSchema,
   generateSchemaOrgBreadcrumbs,
 } from '@/lib/pseo-internal-links';
-import { EEATSignals, ExpertAuthorBox, TrustSignals } from '@/components/EEATSignals';
-import { InternalLinks, Breadcrumbs, InternalLinksInline } from '@/components/InternalLinks';
 import { getSupabaseAdmin } from '@/lib/supabase';
+import ComparisonView from '@/components/compliance/ComparisonView';
+import FrameworkComparisonView from '@/components/compliance/FrameworkComparisonView';
+import { InternalLinks, Breadcrumbs } from '@/components/InternalLinks';
+import AlternativeCard from '@/components/AlternativeCard';
+import ToolAlternativePage from '@/components/ToolAlternativePage';
 
 export const dynamic = 'force-static';
 export const dynamicParams = true;
@@ -38,10 +37,11 @@ export const revalidate = 86400; // 24 hours
 
 export async function generateStaticParams() {
   try {
+    const supabase = getSupabaseAdmin();
     const [comparisonSlugs, alternativesSlugs, pseoPages] = await Promise.all([
       getAllComparisonSlugs(),
       getAllAlternativesSlugs(),
-      getSupabaseAdmin().from('pseo_pages').select('slug').eq('category', 'alternatives')
+      supabase.from('pseo_pages').select('slug').in('category', ['alternatives', 'framework_comparison'])
     ]);
 
     const pseoSlugs = pseoPages.data?.map(p => p.slug) || [];
@@ -59,19 +59,28 @@ export async function generateStaticParams() {
   }
 }
 
-async function getAlternativePage(slug: string) {
+async function getPseoPage(slug: string) {
   const supabase = getSupabaseAdmin();
   const { data } = await supabase
     .from('pseo_pages')
     .select('*')
     .eq('slug', slug)
-    .eq('category', 'alternatives')
     .single();
   return data;
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const { slug } = params;
+
+  // First check if it's a framework comparison in pSEO
+  const pseoPage = await getPseoPage(slug);
+  if (pseoPage) {
+    return {
+      title: pseoPage.title,
+      description: pseoPage.meta_description,
+      alternates: { canonical: `https://risclens.com/compare/${slug}` },
+    };
+  }
 
   if (slug.includes('-vs-')) {
     const parsed = parseComparisonSlug(slug);
@@ -106,57 +115,80 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     }
   }
 
-  const page = await getAlternativePage(slug);
-  if (page) {
-    return {
-      title: page.title,
-      description: page.meta_description,
-      alternates: { canonical: `https://risclens.com/compare/${slug}` },
-    };
-  }
-
   return { title: 'Tool Comparison | RiscLens' };
 }
 
 export default async function DynamicComparisonPage({ params }: { params: { slug: string } }) {
   const { slug } = params;
 
+  // Check if it's a pSEO page first (handles framework_comparison and alternatives)
+  const page = await getPseoPage(slug);
+  
+    if (page) {
+      if (page.category === 'framework_comparison') {
+        const { 
+          title = '', 
+          description = '', 
+          frameworkA = { name: '', slug: '' }, 
+          frameworkB = { name: '', slug: '' }, 
+          tableRows = [], 
+          decisions = [], 
+          faqs = [] 
+        } = page.content_json || {};
+
+        return (
+          <>
+            <Header />
+            <FrameworkComparisonView
+              title={title}
+              description={description}
+              frameworkA={frameworkA}
+              frameworkB={frameworkB}
+              tableRows={tableRows}
+              decisions={decisions}
+              faqs={faqs}
+              lastUpdated={new Date(page.updated_at || page.created_at).toISOString().split('T')[0]}
+            />
+            <Footer />
+          </>
+        );
+      }
+
+      if (page.category === 'alternatives') {
+        const { toolName = '', heroDescription = '', alternatives = [], comparisonFactors = [] } = page.content_json || {};
+        return (
+          <ToolAlternativePage
+            toolName={toolName}
+            toolSlug={slug.replace('-alternatives', '')}
+            heroDescription={heroDescription}
+            alternatives={alternatives}
+            comparisonFactors={comparisonFactors}
+          />
+        );
+      }
+    }
+
   if (slug.includes('-vs-')) {
-    return <ComparisonPage slug={slug} />;
+    return <ComparisonPageWrapper slug={slug} />;
   }
 
   if (slug.endsWith('-alternatives')) {
     return <AlternativesPage slug={slug} />;
   }
 
-  const page = await getAlternativePage(slug);
-  if (!page) notFound();
-
-  const { toolName, heroDescription, alternatives, comparisonFactors } = page.content_json;
-  const ToolAlternativePage = (await import('@/components/ToolAlternativePage')).default;
-
-  return (
-    <ToolAlternativePage
-      toolName={toolName}
-      toolSlug={slug.replace('-alternatives', '')}
-      heroDescription={heroDescription}
-      alternatives={alternatives}
-      comparisonFactors={comparisonFactors}
-    />
-  );
+  notFound();
 }
 
-async function ComparisonPage({ slug }: { slug: string }) {
+async function ComparisonPageWrapper({ slug }: { slug: string }) {
   const parsed = parseComparisonSlug(slug);
   if (!parsed) notFound();
 
   const { toolA, toolB } = await getToolsForComparison(parsed.toolASlug, parsed.toolBSlug);
   if (!toolA || !toolB) notFound();
 
-  // Try to get specialized comparison data from the database
   const specializedData = await getToolComparisonBySlug(slug);
-
   const generatedData = generateComparisonData(toolA, toolB);
+  
   const { comparisonRows, pricingComparison, faqs } = specializedData 
     ? { 
         comparisonRows: specializedData.comparison_rows || generatedData.comparisonRows, 
@@ -171,175 +203,34 @@ async function ComparisonPage({ slug }: { slug: string }) {
   
   const internalLinks = await getComparisonInternalLinks(toolA.slug, toolB.slug);
   const breadcrumbs = getBreadcrumbs(`/compare/${slug}`);
+  const alternativesA = (await getAlternativesFor(toolA.slug)).slice(0, 3);
+  const alternativesB = (await getAlternativesFor(toolB.slug)).slice(0, 3);
 
   const comparisonSchema = generateComparisonSchema(toolA, toolB, `https://risclens.com/compare/${slug}`);
   const faqSchema = generateFAQSchema(faqs);
   const breadcrumbSchema = generateSchemaOrgBreadcrumbs(breadcrumbs);
-
-  const totalReviews = (toolA.g2_reviews_count || 0) + (toolB.g2_reviews_count || 0);
 
   return (
     <>
       <Script id="comparison-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(comparisonSchema) }} />
       <Script id="faq-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <Script id="breadcrumb-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-
-      <main className="min-h-screen bg-slate-50">
-        <Header />
-
-        <div className="max-w-7xl mx-auto px-4 pt-8">
-          <Breadcrumbs items={breadcrumbs} />
-        </div>
-
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <div className="lg:col-span-3">
-              <div className="text-center mb-12">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 mb-6">
-                  <span className="flex h-2 w-2 rounded-full bg-blue-600 animate-pulse" />
-                  <span className="text-xs font-bold text-blue-700 uppercase tracking-wider">Independent Analysis</span>
-                </div>
-                <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-6 tracking-tight">
-                  {title}
-                </h1>
-                <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-                  {description}
-                </p>
-              </div>
-
-              <EEATSignals
-                lastVerified={toolA.last_verified_at}
-                reviewCount={totalReviews}
-                sources={['G2 Crowd', 'Capterra', 'Vendor Documentation', 'User Interviews']}
-              />
-
-              <TrustSignals />
-
-              <div className="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden my-8">
-                <div className="grid grid-cols-3 border-b border-slate-100">
-                  <div className="p-4 bg-slate-50 border-r border-slate-100 font-bold text-slate-500 text-xs uppercase tracking-wider">Feature</div>
-                  <div className="p-4 font-bold text-slate-900 text-center bg-blue-50">{toolA.name}</div>
-                  <div className="p-4 font-bold text-slate-900 text-center">{toolB.name}</div>
-                </div>
-
-                {comparisonRows.map((row, i) => (
-                  <div key={i} className={`grid grid-cols-3 border-b border-slate-50 ${i % 2 === 0 ? 'bg-white' : 'bg-slate-50/30'}`}>
-                    <div className="p-4 border-r border-slate-100 text-sm font-semibold text-slate-700">{row.feature}</div>
-                    <div className="p-4 flex items-center justify-center text-sm text-center bg-blue-50/30">
-                      {renderValue(row.tool_a_value)}
-                    </div>
-                    <div className="p-4 flex items-center justify-center text-sm text-center">
-                      {renderValue(row.tool_b_value)}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="bg-white rounded-2xl border border-slate-200 p-8 my-8">
-                <h2 className="text-2xl font-bold text-slate-900 mb-6">Pricing Comparison</h2>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <PricingCard tool={toolA} pricing={pricingComparison} side="a" />
-                  <PricingCard tool={toolB} pricing={pricingComparison} side="b" />
-                </div>
-                <p className="mt-6 text-slate-600 text-sm">{pricingComparison.summary}</p>
-              </div>
-
-              <div className="bg-slate-900 rounded-2xl p-8 my-8 text-white">
-                <h2 className="text-2xl font-bold mb-4">Our Verdict</h2>
-                <div className="prose prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: verdict.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n\n/g, '<br/><br/>') }} />
-              </div>
-
-              <div className="bg-white rounded-2xl border border-slate-200 p-8 my-8">
-                <h2 className="text-2xl font-bold text-slate-900 mb-6">{toolA.name} Pros & Cons</h2>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <h4 className="font-semibold text-green-700 mb-3">Pros</h4>
-                    <ul className="space-y-2">
-                      {toolA.pros?.map((pro, i) => (
-                        <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
-                          <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                          {pro}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-red-700 mb-3">Cons</h4>
-                    <ul className="space-y-2">
-                      {toolA.cons?.map((con, i) => (
-                        <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
-                          <X className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
-                          {con}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-2xl border border-slate-200 p-8 my-8">
-                <h2 className="text-2xl font-bold text-slate-900 mb-6">{toolB.name} Pros & Cons</h2>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <h4 className="font-semibold text-green-700 mb-3">Pros</h4>
-                    <ul className="space-y-2">
-                      {toolB.pros?.map((pro, i) => (
-                        <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
-                          <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                          {pro}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-red-700 mb-3">Cons</h4>
-                    <ul className="space-y-2">
-                      {toolB.cons?.map((con, i) => (
-                        <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
-                          <X className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
-                          {con}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-2xl border border-slate-200 p-8 my-8">
-                <h2 className="text-2xl font-bold text-slate-900 mb-6">Frequently Asked Questions</h2>
-                <div className="space-y-6">
-                  {faqs.map((faq, i) => (
-                    <div key={i} className="border-b border-slate-100 pb-4 last:border-0">
-                      <h3 className="font-semibold text-slate-900 mb-2">{faq.question}</h3>
-                      <p className="text-slate-600 text-sm">{faq.answer}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <ExpertAuthorBox />
-
-              <InternalLinksInline clusters={internalLinks} />
-
-              <div className="bg-blue-600 rounded-2xl p-8 text-white text-center my-8">
-                <h2 className="text-2xl font-bold mb-4">Still deciding?</h2>
-                <p className="text-blue-100 mb-6">Use our SOC 2 Cost Calculator to estimate your total compliance investment.</p>
-                <Link href="/soc-2-cost-calculator" className="inline-flex items-center gap-2 bg-white text-blue-600 font-bold px-6 py-3 rounded-lg hover:bg-blue-50 transition-colors">
-                  Calculate Your Costs <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
-            </div>
-
-            <div className="lg:col-span-1">
-              <div className="sticky top-8">
-                <InternalLinks clusters={internalLinks} />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <Footer />
-      </main>
+      <Header />
+        <ComparisonView
+          toolA={toolA}
+          toolB={toolB}
+          comparisonRows={comparisonRows}
+          pricingComparison={pricingComparison}
+          faqs={faqs}
+          verdict={verdict}
+          title={title}
+          description={description}
+          internalLinks={internalLinks}
+          breadcrumbs={breadcrumbs}
+          alternativesA={alternativesA}
+          alternativesB={alternativesB}
+        />
+      <Footer />
     </>
   );
 }
@@ -359,10 +250,8 @@ async function AlternativesPage({ slug }: { slug: string }) {
   return (
     <>
       <Script id="breadcrumb-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-
+      <Header />
       <main className="min-h-screen bg-slate-50">
-        <Header />
-
         <div className="max-w-7xl mx-auto px-4 pt-8">
           <Breadcrumbs items={breadcrumbs} />
         </div>
@@ -378,11 +267,6 @@ async function AlternativesPage({ slug }: { slug: string }) {
                   Looking for alternatives to {tool.name}? Compare {alternatives.length} compliance platforms by pricing, features, and best fit for your organization.
                 </p>
               </div>
-
-              <EEATSignals
-                lastVerified={tool.last_verified_at}
-                sources={['G2 Crowd', 'Capterra', 'Vendor Documentation']}
-              />
 
               <div className="bg-white rounded-2xl border border-slate-200 p-6 my-8">
                 <h2 className="text-xl font-bold text-slate-900 mb-4">About {tool.name}</h2>
@@ -400,10 +284,6 @@ async function AlternativesPage({ slug }: { slug: string }) {
                   <AlternativeCard key={alt.slug} tool={alt} originalTool={tool} rank={i + 1} />
                 ))}
               </div>
-
-              <ExpertAuthorBox />
-
-              <InternalLinksInline clusters={internalLinks} />
             </div>
 
             <div className="lg:col-span-1">
@@ -413,101 +293,8 @@ async function AlternativesPage({ slug }: { slug: string }) {
             </div>
           </div>
         </div>
-
-        <Footer />
       </main>
+      <Footer />
     </>
-  );
-}
-
-function renderValue(value: string) {
-  if (value === 'Yes') return <Check className="w-5 h-5 text-green-500" />;
-  if (value === 'No') return <X className="w-5 h-5 text-red-400" />;
-  return <span className="text-slate-700">{value}</span>;
-}
-
-function PricingCard({ tool, pricing, side }: { tool: ComplianceTool; pricing: any; side: 'a' | 'b' }) {
-  const starting = side === 'a' ? pricing.tool_a_starting : pricing.tool_b_starting;
-  const range = side === 'a' ? pricing.tool_a_range : pricing.tool_b_range;
-  const hidden = side === 'a' ? pricing.tool_a_hidden_costs : pricing.tool_b_hidden_costs;
-  const auditorIncluded = side === 'a' ? pricing.tool_a_auditor_included : pricing.tool_b_auditor_included;
-
-  return (
-    <div className="border border-slate-200 rounded-xl p-6">
-      <h3 className="font-bold text-slate-900 text-lg mb-4">{tool.name}</h3>
-      <div className="space-y-3 text-sm">
-        <div className="flex justify-between">
-          <span className="text-slate-500">Starting Price</span>
-          <span className="font-semibold text-slate-900">{starting}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-slate-500">Typical Range</span>
-          <span className="text-slate-700">{range}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-slate-500">Hidden Costs</span>
-          <span className="text-slate-700">{hidden}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-slate-500">Auditor Included</span>
-          {auditorIncluded ? (
-            <span className="text-green-600 font-medium">Yes</span>
-          ) : (
-            <span className="text-slate-500">No (separate fee)</span>
-          )}
-        </div>
-      </div>
-      <Link
-        href={`/pricing/${tool.slug}`}
-        className="mt-4 block text-center text-sm text-blue-600 hover:text-blue-800 font-medium"
-      >
-        Full Pricing Guide →
-      </Link>
-    </div>
-  );
-}
-
-function AlternativeCard({ tool, originalTool, rank }: { tool: ComplianceTool; originalTool: ComplianceTool; rank: number }) {
-  return (
-    <div className="bg-white rounded-2xl border border-slate-200 p-6 hover:border-blue-300 transition-colors">
-      <div className="flex items-start justify-between mb-4">
-        <div>
-          <span className="text-xs font-bold text-slate-400 uppercase">#{rank} Alternative</span>
-          <h3 className="text-xl font-bold text-slate-900">{tool.name}</h3>
-          <p className="text-slate-500 text-sm">{tool.tagline}</p>
-        </div>
-        {tool.g2_rating && (
-          <div className="text-right">
-            <div className="text-lg font-bold text-slate-900">{tool.g2_rating}/5</div>
-            <div className="text-xs text-slate-500">{tool.g2_reviews_count} reviews</div>
-          </div>
-        )}
-      </div>
-
-      <p className="text-slate-600 text-sm mb-4">{tool.description}</p>
-
-      <div className="flex flex-wrap gap-2 mb-4">
-        <span className="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded">{tool.pricing_starting}</span>
-        <span className="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded">{tool.target_market}</span>
-        {tool.auditor_included && (
-          <span className="px-2 py-1 bg-green-50 text-green-700 text-xs rounded">Auditor Included</span>
-        )}
-      </div>
-
-      <div className="flex gap-3">
-        <Link
-          href={`/compare/${[tool.slug, originalTool.slug].sort().join('-vs-')}`}
-          className="flex-1 text-center py-2 px-4 bg-slate-900 text-white text-sm font-medium rounded-lg hover:bg-slate-800 transition-colors"
-        >
-          Compare with {originalTool.name}
-        </Link>
-        <Link
-          href={`/pricing/${tool.slug}`}
-          className="py-2 px-4 border border-slate-200 text-slate-700 text-sm font-medium rounded-lg hover:bg-slate-50 transition-colors"
-        >
-          Pricing
-        </Link>
-      </div>
-    </div>
   );
 }

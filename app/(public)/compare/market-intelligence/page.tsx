@@ -7,6 +7,7 @@ import { ArrowRight, BarChart3, ShieldCheck, Zap, Scale, Layers } from 'lucide-r
 import { getAllTools, TOP_TOOLS } from '@/lib/compliance-tools';
 import { Breadcrumbs } from '@/components/InternalLinks';
 import { getBreadcrumbs } from '@/lib/pseo-internal-links';
+import { getSupabaseAdmin } from '@/lib/supabase';
 
 export const metadata: Metadata = {
   title: 'Market Intelligence: Compliance Automation Comparison Hub 2026',
@@ -14,14 +15,38 @@ export const metadata: Metadata = {
 };
 
 export default async function MarketIntelligencePage() {
+  // Fetch high-intent comparisons from database
+  const { data: dbComparisons } = await getSupabaseAdmin()
+    .from('tool_comparisons')
+    .select('slug, title, tool_a_slug, tool_b_slug')
+    .eq('is_active', true)
+    .limit(50);
+
   const tools = await getAllTools();
   const breadcrumbs = getBreadcrumbs('/compare/market-intelligence');
 
   const topToolObjects = tools.filter(t => TOP_TOOLS.includes(t.slug));
   const otherTools = tools.filter(t => !TOP_TOOLS.includes(t.slug));
 
-  return (
-    <main className="min-h-screen bg-slate-50">
+    const displayComparisons = dbComparisons?.map(c => {
+      const toolA = tools.find(t => t.slug === c.tool_a_slug);
+      const toolB = tools.find(t => t.slug === c.tool_b_slug);
+      return {
+        slug: c.slug,
+        toolA: toolA?.name || c.tool_a_slug,
+        toolB: toolB?.name || c.tool_b_slug
+      };
+    }) || generateTopComparisons(topToolObjects);
+
+    // Fetch framework comparisons
+    const { data: frameworkComparisons } = await getSupabaseAdmin()
+      .from('pseo_pages')
+      .select('slug, title')
+      .eq('category', 'framework_comparison');
+
+    return (
+      <main className="min-h-screen bg-slate-50">
+
       <Header />
       
       <div className="max-w-7xl mx-auto px-4 pt-8">
@@ -71,10 +96,10 @@ export default async function MarketIntelligencePage() {
         <section className="mb-20">
           <h2 className="text-3xl font-bold text-slate-900 mb-8 flex items-center gap-3">
             <Layers className="w-8 h-8 text-blue-600" />
-            Primary Market Comparisons
+            High Intent Comparisons
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {generateTopComparisons(topToolObjects).map((comp, i) => (
+            {displayComparisons.map((comp, i) => (
               <Link 
                 key={i} 
                 href={`/compare/${comp.slug}`}
@@ -99,6 +124,33 @@ export default async function MarketIntelligencePage() {
             ))}
           </div>
         </section>
+
+        {/* Framework Comparisons */}
+        {frameworkComparisons && frameworkComparisons.length > 0 && (
+          <section className="mb-20">
+            <h2 className="text-3xl font-bold text-slate-900 mb-8 flex items-center gap-3">
+              <ShieldCheck className="w-8 h-8 text-brand-600" />
+              Framework & Regulatory Comparisons
+            </h2>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {frameworkComparisons.map((comp) => (
+                <Link 
+                  key={comp.slug} 
+                  href={`/compliance/compare/${comp.slug}`}
+                  className="group bg-white p-6 rounded-xl border border-slate-200 hover:border-brand-300 hover:shadow-md transition-all"
+                >
+                  <div className="flex justify-between items-center mb-3">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-brand-500">Regulatory Analysis</span>
+                    <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-brand-500 transition-colors" />
+                  </div>
+                  <h3 className="font-bold text-slate-900 group-hover:text-brand-600 transition-colors line-clamp-2">
+                    {comp.title.split('|')[0].trim()}
+                  </h3>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Directory List */}
         <section className="bg-white rounded-3xl border border-slate-200 p-8 sm:p-12 overflow-hidden relative">

@@ -27,14 +27,21 @@ export const messaging = {
         cta: 'Validate Program Design'
       }
     },
-        readinessCalculator: {
-          hero: {
-            headline: 'Validate Your SOC 2 Audit Readiness',
-            subhead: 'Establish your baseline, identify critical audit gaps, and estimate the total cost of compliance. No spreadsheets required.',
-            cta: 'Start Readiness Assessment'
-          }
-        },
-        iso42001Calculator: {
+          readinessCalculator: {
+            hero: {
+              headline: 'Validate Your SOC 2 Audit Readiness',
+              subhead: 'Establish your baseline, identify critical audit gaps, and estimate the total cost of compliance. No spreadsheets required.',
+              cta: 'Start Readiness Assessment'
+            }
+          },
+          iso27001Readiness: {
+            hero: {
+              headline: 'Validate Your ISO 27001 Audit Readiness',
+              subhead: 'Establish your baseline, identify critical ISMS gaps, and estimate the total cost of ISO 27001 certification. No spreadsheets required.',
+              cta: 'Start ISMS Assessment'
+            }
+          },
+          iso42001Calculator: {
           hero: {
             headline: 'ISO 42001 Readiness for AI Companies',
             subhead: 'Get an instant readiness score for the world\'s first AI Management System standard. Identify gaps in your AI governance before the audit.',
