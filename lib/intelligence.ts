@@ -3,10 +3,11 @@ import { scrapeCompanySecurityPages, detectSignalsFromContent } from './browser'
 const SCORING_LOGIC = {
   has_security_page: 20,
   has_trust_page: 20,
-  mentions_soc2: 20,
-  has_responsible_disclosure: 15,
+  mentions_soc2: 15,
+  has_responsible_disclosure: 10,
   mentions_compliance_tool: 15,
   has_security_contact: 10,
+  has_pricing_page: 10,
 };
 
 export function normalizeDomain(domain: string): string {
@@ -34,6 +35,7 @@ export async function extractSignalsForCompany(domain: string, openaiApiKey: str
     mentions_compliance_tool: false,
     has_responsible_disclosure: false,
     has_security_contact: false,
+    has_pricing_page: false,
   };
 
   for (const url of scrapeResult.discoveredUrls) {
@@ -42,6 +44,9 @@ export async function extractSignalsForCompany(domain: string, openaiApiKey: str
     }
     if (url.includes('trust')) {
       markers.has_trust_page = true;
+    }
+    if (url.includes('pricing') || url.includes('plans')) {
+      markers.has_pricing_page = true;
     }
   }
 

@@ -2,12 +2,28 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import MatrixPage from '@/components/compliance/MatrixPage';
 import { getSupabaseAdmin } from '@/lib/supabase';
+import { iso27001PseoData } from '@/src/content/iso27001Content';
 
 interface Props {
   params: Promise<{ 
     role: string; 
     industry: string;
   }>;
+}
+
+export async function generateStaticParams() {
+  const params: { role: string; industry: string }[] = [];
+  
+  for (const role of iso27001PseoData.roles) {
+    for (const industry of iso27001PseoData.industries) {
+      params.push({
+        role: role.slug,
+        industry: industry.slug,
+      });
+    }
+  }
+  
+  return params;
 }
 
 async function getMatrixData(roleSlug: string, industrySlug: string) {

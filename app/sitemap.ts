@@ -24,9 +24,25 @@ async function getDynamicRoutes() {
   }
 }
 
+async function getMigrationRoutes() {
+  if (!hasSupabaseAdmin) return [];
+  try {
+    const supabase = getSupabaseAdmin();
+    const { data } = await supabase
+      .from('framework_migrations')
+      .select('slug');
+
+    return data?.map(m => `/compliance/migrate/${m.slug}`) || [];
+  } catch (err) {
+    console.warn('Sitemap: skipping migration routes (Supabase unavailable)', err);
+    return [];
+  }
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const dynamicRoutes = await getDynamicRoutes();
-  const allRoutes = Array.from(new Set([...ROUTES, ...dynamicRoutes]));
+  const migrationRoutes = await getMigrationRoutes();
+  const allRoutes = Array.from(new Set([...ROUTES, ...dynamicRoutes, ...migrationRoutes]));
 
   const entries = allRoutes.map((path) => {
     const bucket = getRouteBucket(path);
@@ -37,6 +53,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     if (path.startsWith('/compliance/directory/')) {
       priority = 0.75;
+      changeFrequency = 'weekly';
+    } else if (path.startsWith('/compliance/migrate/')) {
+      priority = 0.85;
       changeFrequency = 'weekly';
     } else {
       switch (bucket) {
