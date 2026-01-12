@@ -74,7 +74,7 @@ export const navConfig: Record<string, NavCategoryConfig> = {
   },
 
   marketIntel: {
-    label: 'Market Intel',
+    label: 'Market Intelligence',
     href: '/intelligence-hub',
     sections: [
       {
