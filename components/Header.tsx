@@ -241,15 +241,15 @@ export default function Header() {
       }}
       onMouseLeave={() => intent.scheduleClose()}
     >
-      <Link
-        href={config.href}
-        aria-expanded={intent.open}
-        aria-haspopup="true"
-        aria-controls={id}
-        className={`flex items-center gap-1.5 px-3 py-2 text-[15px] font-bold rounded-lg transition-all ${
-          intent.open ? 'text-brand-700 bg-brand-50' : 'text-slate-700 hover:text-brand-700 hover:bg-slate-50'
-        }`}
-      >
+        <Link
+          href={config.href}
+          aria-expanded={intent.open}
+          aria-haspopup="true"
+          aria-controls={id}
+          className={`flex items-center gap-1.5 px-3 py-2 text-[15px] font-bold rounded-lg transition-all whitespace-nowrap ${
+            intent.open ? 'text-brand-700 bg-brand-50' : 'text-slate-700 hover:text-brand-700 hover:bg-slate-50'
+          }`}
+        >
         {label}
         <svg
           className={`w-3.5 h-3.5 transition-transform duration-200 ${intent.open ? 'rotate-180' : ''}`}
@@ -306,17 +306,17 @@ export default function Header() {
         isScrolled ? 'bg-white/95 backdrop-blur border-slate-200 shadow-sm' : 'bg-white border-slate-100'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 lg:h-20 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-3 shrink-0">
-          <Image
-            src="/logo/logo-wordmark.png"
-            alt="RiscLens"
-            width={240}
-            height={70}
-            priority
-            className="h-10 lg:h-12 w-auto object-contain"
-          />
-        </Link>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-20 lg:h-24 flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-3 shrink-0">
+              <Image
+                src="/logo/logo-wordmark.png"
+                alt="RiscLens"
+                width={432}
+                height={126}
+                priority
+                className="h-[72px] lg:h-[86px] w-auto object-contain"
+              />
+            </Link>
 
         <nav className="hidden xl:flex items-center gap-1">
           <NavLink
@@ -333,13 +333,13 @@ export default function Header() {
             id="frameworks-menu"
             label="Frameworks"
           />
-          <NavLink
-            anchorRef={marketIntelRef}
-            intent={marketIntelIntent}
-            config={navConfig.marketIntel}
-            id="market-intel-menu"
-            label="Market Intel"
-          />
+            <NavLink
+              anchorRef={marketIntelRef}
+              intent={marketIntelIntent}
+              config={navConfig.marketIntel}
+              id="market-intel-menu"
+              label="Market Intelligence"
+            />
           <NavLink
             anchorRef={solutionsRef}
             intent={solutionsIntent}
@@ -415,13 +415,13 @@ export default function Header() {
               }`}
             >
               <div className="p-4 border-b border-slate-100 flex items-center justify-between">
-                 <Image
-                    src="/logo/logo-wordmark.png"
-                    alt="RiscLens"
-                    width={180}
-                    height={60}
-                    className="h-8 w-auto object-contain"
-                  />
+                     <Image
+                        src="/logo/logo-wordmark.png"
+                        alt="RiscLens"
+                        width={324}
+                        height={108}
+                        className="h-[58px] w-auto object-contain"
+                      />
                   <button
                     onClick={() => setMobileOpen(false)}
                     className="p-2 text-slate-400 hover:text-slate-600"
@@ -433,13 +433,13 @@ export default function Header() {
               </div>
 
               <div className="flex-1 overflow-y-auto p-4 space-y-3">
-                {[
-                  { id: 'platform', label: 'Platform', config: navConfig.platform },
-                  { id: 'frameworks', label: 'Frameworks', config: navConfig.frameworks },
-                  { id: 'marketIntel', label: 'Market Intel', config: navConfig.marketIntel },
-                  { id: 'solutions', label: 'Solutions', config: navConfig.solutions },
-                  { id: 'resources', label: 'Resources', config: navConfig.resources },
-                ].map((section) => (
+                  {[
+                    { id: 'platform', label: 'Platform', config: navConfig.platform },
+                    { id: 'frameworks', label: 'Frameworks', config: navConfig.frameworks },
+                    { id: 'marketIntel', label: 'Market Intelligence', config: navConfig.marketIntel },
+                    { id: 'solutions', label: 'Solutions', config: navConfig.solutions },
+                    { id: 'resources', label: 'Resources', config: navConfig.resources },
+                  ].map((section) => (
                   <div key={section.id} className="rounded-xl border border-slate-100 bg-slate-50/50 overflow-hidden">
                     <button
                       type="button"

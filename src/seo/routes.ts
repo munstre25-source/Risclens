@@ -4,6 +4,30 @@ import { pentestPages } from '@/lib/pentestPages';
 import { comparisonPages } from '@/lib/soc2Comparisons';
 import { evidenceGuides } from '@/lib/soc2Evidence';
 
+const COMPLIANCE_TOOL_SLUGS = [
+  'vanta', 'drata', 'secureframe', 'sprinto', 'thoropass', 'auditboard',
+  'hyperproof', 'scrut', 'scytale', 'strike-graph', 'logicgate', 'onetrust',
+  'a-lign', 'jupiterone', 'lacework', 'cynomi', 'apptega', 'workiva', 'resolver', 'anecdotes'
+];
+
+function generateComparisonRoutes(): string[] {
+  const routes: string[] = [];
+  for (let i = 0; i < COMPLIANCE_TOOL_SLUGS.length; i++) {
+    for (let j = i + 1; j < COMPLIANCE_TOOL_SLUGS.length; j++) {
+      routes.push(`/compare/${COMPLIANCE_TOOL_SLUGS[i]}-vs-${COMPLIANCE_TOOL_SLUGS[j]}`);
+    }
+  }
+  return routes;
+}
+
+function generateAlternativesRoutes(): string[] {
+  return COMPLIANCE_TOOL_SLUGS.map(slug => `/compare/${slug}-alternatives`);
+}
+
+function generatePricingRoutes(): string[] {
+  return COMPLIANCE_TOOL_SLUGS.map(slug => `/pricing/${slug}`);
+}
+
 /**
  * SITEMAP BUCKETS & PRIORITIES
  * 
@@ -54,30 +78,29 @@ export const LEGAL_ROUTES = [
 ];
 
 export const COMMERCIAL_ROUTES = [
-  '/compare',
-  '/soc-2-audit-delay-cost',
-  '/about',
-  '/security',
-  '/methodology',
-  '/auditor-directory',
-  '/iso-27001-checklist',
-  '/soc-2-readiness-checklist',
-  '/soc-2-cost-breakdown',
-  '/when-do-you-need-soc-2',
-  '/soc-2-vs-iso-27001',
-  '/soc-2-type-i-vs-type-ii',
-  ...costGuides.map(g => `${g.parent}/${g.slug}`),
-  ...timelineGuides.map(g => `${g.parent}/${g.slug}`),
-  ...salesGuides.map(g => `${g.parent}/${g.slug}`),
-  ...industryGuides.map(g => `/soc-2/industries/${g.slug}`),
-  ...pentestPages.map(p => `/penetration-testing/${p.slug}`),
-  ...comparisonPages.map(c => `/compare/${c.slug}`),
+    '/compare',
+    '/compare/market-intelligence',
+    '/soc-2-audit-delay-cost',
+    '/about',
+    '/security',
+    '/methodology',
+    '/auditor-directory',
+    '/iso-27001-checklist',
+    '/soc-2-readiness-checklist',
+    '/soc-2-cost-breakdown',
+    '/when-do-you-need-soc-2',
+    '/soc-2-vs-iso-27001',
+    '/soc-2-type-i-vs-type-ii',
+    ...costGuides.map(g => `${g.parent}/${g.slug}`),
+    ...timelineGuides.map(g => `${g.parent}/${g.slug}`),
+    ...salesGuides.map(g => `${g.parent}/${g.slug}`),
+    ...industryGuides.map(g => `/soc-2/industries/${g.slug}`),
+    ...pentestPages.map(p => `/penetration-testing/${p.slug}`),
+    ...comparisonPages.map(c => `/compare/${c.slug}`),
     ...evidenceGuides.map(e => `/soc-2-evidence/${e.slug}`),
-    // Comparison Factory (15 pairings)
-    ...['vanta', 'drata', 'secureframe', 'thoropass', 'laika', 'strike-graph'].flatMap((p1, i, arr) => 
-      arr.slice(i + 1).map(p2 => `/compliance/compare/${p1}-vs-${p2}`)
-    ),
-    // Static subpages from file system not in libs
+    ...generateComparisonRoutes(),
+    ...generateAlternativesRoutes(),
+    ...generatePricingRoutes(),
 
   '/penetration-testing/pricing',
   '/penetration-testing/sow',
