@@ -91,34 +91,35 @@ const CACHE_TTL = process.env.NODE_ENV === 'development' ? 5 * 1000 : 60 * 60 * 
 let toolsCache: { data: ComplianceTool[]; timestamp: number } | null = null;
 
 export async function getAllTools(): Promise<ComplianceTool[]> {
-  if (toolsCache && toolsCache.data.length > 0 && Date.now() - toolsCache.timestamp < CACHE_TTL) {
-    return toolsCache.data;
-  }
-
-  try {
-    const supabase = getSupabaseClient();
-    const { data, error } = await supabase
-      .from('compliance_tools')
-      .select('*', { count: 'exact' })
-      .eq('is_active', true)
-      .order('display_order', { ascending: true });
-
-    if (error) {
-      console.error('[getAllTools] Supabase error:', error.message, error.code);
-      return [];
+    if (toolsCache && Date.now() - toolsCache.timestamp < CACHE_TTL) {
+      return toolsCache.data;
     }
 
-    if (!data || data.length === 0) {
-      console.warn('[getAllTools] No tools found in database');
-      return [];
+    try {
+      const supabase = getSupabaseAdmin();
+      const { data, error } = await supabase
+        .from('compliance_tools')
+        .select('*', { count: 'exact' })
+        .eq('is_active', true)
+        .order('display_order', { ascending: true });
+
+      if (error) {
+        console.error('[getAllTools] Supabase error:', error.message, error.code);
+        return toolsCache?.data || [];
+      }
+
+      const tools = data || [];
+      if (tools.length === 0) {
+        console.warn('[getAllTools] No tools found in database');
+      }
+
+      toolsCache = { data: tools, timestamp: Date.now() };
+      return tools;
+    } catch (err) {
+      console.error('[getAllTools] Exception:', err);
+      return toolsCache?.data || [];
     }
 
-    toolsCache = { data: data, timestamp: Date.now() };
-    return data;
-  } catch (err) {
-    console.error('[getAllTools] Exception:', err);
-    return [];
-  }
 }
 
 export async function getToolBySlug(slug: string): Promise<ComplianceTool | null> {
@@ -144,7 +145,7 @@ export async function getToolsForComparison(slugA: string, slugB: string): Promi
 
 export async function getToolComparisonBySlug(slug: string): Promise<ToolComparison | null> {
   try {
-    const supabase = getSupabaseClient();
+    const supabase = getSupabaseAdmin();
     const { data, error } = await supabase
       .from('tool_comparisons')
       .select('*')
@@ -204,7 +205,8 @@ export async function getAllComparisonSlugs(): Promise<string[]> {
   
   for (let i = 0; i < tools.length; i++) {
     for (let j = i + 1; j < tools.length; j++) {
-      slugs.push(generateComparisonSlug(tools[i].slug, tools[j].slug));
+      const baseSlug = generateComparisonSlug(tools[i].slug, tools[j].slug);
+      slugs.push(baseSlug);
     }
   }
   
@@ -216,22 +218,49 @@ export async function getAllAlternativesSlugs(): Promise<string[]> {
   return tools.map(t => `${t.slug}-alternatives`);
 }
 
-export async function getAllPricingSlugs(): Promise<string[]> {
-  const tools = await getAllTools();
-  return tools.map(t => t.slug);
+export async function getIndustryBySlug(slug: string) {
+  const { data } = await getSupabaseAdmin()
+    .from('pseo_industries')
+    .select('*')
+    .eq('slug', slug)
+    .single();
+  return data;
 }
 
-export function generateComparisonData(toolA: ComplianceTool, toolB: ComplianceTool): {
+export async function getFrameworkOverlap(fromFramework: string, toFramework: string) {
+  const { data } = await getSupabaseAdmin()
+    .from('framework_migrations')
+    .select('*')
+    .eq('from_framework_slug', fromFramework)
+    .eq('to_framework_slug', toFramework)
+    .single();
+  return data;
+}
+
+export function generateComparisonData(toolA: ComplianceTool, toolB: ComplianceTool, industry?: any): {
   comparisonRows: ComparisonRow[];
   pricingComparison: PricingComparison;
   faqs: FAQ[];
 } {
+  const commonFrameworks = toolA.frameworks_supported?.filter(f => toolB.frameworks_supported?.includes(f)) || [];
+  
   const comparisonRows: ComparisonRow[] = [
     {
-      feature: 'Target Market',
-      tool_a_value: toolA.target_market || 'N/A',
-      tool_b_value: toolB.target_market || 'N/A',
+      feature: 'Industry Fit',
+      tool_a_value: industry ? (toolA.industry_focus?.includes(industry.name) ? `Excellent for ${industry.name}` : toolA.target_market || 'N/A') : toolA.target_market || 'N/A',
+      tool_b_value: industry ? (toolB.industry_focus?.includes(industry.name) ? `Excellent for ${industry.name}` : toolB.target_market || 'N/A') : toolB.target_market || 'N/A',
     },
+    {
+      feature: 'Multi-Framework Support',
+      tool_a_value: `${toolA.frameworks_count}+ frameworks (${toolA.frameworks_supported?.slice(0, 3).join(', ')})`,
+      tool_b_value: `${toolB.frameworks_count}+ frameworks (${toolB.frameworks_supported?.slice(0, 3).join(', ')})`,
+    },
+    {
+      feature: 'Common Frameworks',
+      tool_a_value: commonFrameworks.length > 0 ? commonFrameworks.join(', ') : 'SOC 2, ISO 27001',
+      tool_b_value: commonFrameworks.length > 0 ? commonFrameworks.join(', ') : 'SOC 2, ISO 27001',
+    },
+
     {
       feature: 'Starting Price',
       tool_a_value: toolA.pricing_starting || 'Contact Sales',
@@ -309,15 +338,28 @@ function generatePricingSummary(toolA: ComplianceTool, toolB: ComplianceTool): s
   const aPrice = parsePriceRange(toolA.pricing_starting);
   const bPrice = parsePriceRange(toolB.pricing_starting);
   
+  let summary = "";
+  
   if (aPrice && bPrice) {
     if (aPrice < bPrice) {
-      return `${toolA.name} typically has lower entry pricing at ${toolA.pricing_starting} compared to ${toolB.name} at ${toolB.pricing_starting}. However, total cost of ownership depends on your specific requirements and whether auditor fees are included.`;
+      summary = `${toolA.name} is generally the more budget-friendly entry point, starting at ${toolA.pricing_starting} compared to ${toolB.name}'s ${toolB.pricing_starting}. `;
     } else if (bPrice < aPrice) {
-      return `${toolB.name} typically has lower entry pricing at ${toolB.pricing_starting} compared to ${toolA.name} at ${toolA.pricing_starting}. However, total cost of ownership depends on your specific requirements and whether auditor fees are included.`;
+      summary = `${toolB.name} is generally more accessible for early-stage teams, with pricing starting at ${toolB.pricing_starting} vs ${toolA.name}'s ${toolA.pricing_starting}. `;
+    } else {
+      summary = `Both ${toolA.name} and ${toolB.name} have similar starting price points around ${toolA.pricing_starting}. `;
     }
+  } else {
+    summary = `Both platforms typically require a custom quote, though ${toolA.pricing_starting || toolB.pricing_starting} is the reported starting point. `;
   }
+
+  if (toolA.auditor_included !== toolB.auditor_included) {
+    const inclusive = toolA.auditor_included ? toolA.name : toolB.name;
+    summary += `Crucially, ${inclusive} includes bundled auditor fees, which can save $8,000–$15,000 in out-of-pocket costs compared to the other. `;
+  }
+
+  summary += `For 2026, we recommend ${toolA.name} for ${toolA.primary_value?.toLowerCase()} and ${toolB.name} for ${toolB.primary_value?.toLowerCase()}.`;
   
-  return `Both ${toolA.name} and ${toolB.name} offer competitive pricing. Your total cost will depend on company size, frameworks needed, and whether you need bundled audit services.`;
+  return summary;
 }
 
 function generatePriceFAQ(toolA: ComplianceTool, toolB: ComplianceTool): string {
@@ -405,7 +447,22 @@ export function generateVerdict(toolA: ComplianceTool, toolB: ComplianceTool): s
   return verdict;
 }
 
-export const TOP_TOOLS = ['vanta', 'drata', 'secureframe', 'sprinto', 'thoropass', 'auditboard'];
+export const TOP_TOOLS = [
+  'vanta', 
+  'drata', 
+  'secureframe', 
+  'sprinto', 
+  'thoropass', 
+  'auditboard', 
+  'wiz', 
+  'hyperproof', 
+  'scrut-automation', 
+  'cynomi',
+  'smartsuite',
+  'scytale',
+  'anecdotes',
+  'tugboat-logic'
+];
 
 export function isTopTool(slug: string): boolean {
   return TOP_TOOLS.includes(slug);

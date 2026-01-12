@@ -10,6 +10,7 @@ import { ContextualLinks } from '@/components/compliance/ContextualLinks';
 import { EditorialPolicyBadge } from '@/components/compliance/AuthorByline';
 import Link from 'next/link';
 import { ShieldCheck, Zap, DollarSign, BarChart3, Clock, AlertTriangle, Sparkles, ChevronRight } from 'lucide-react';
+import { getCalculatorUrl, getReadinessChecklistUrl } from '@/lib/calculators';
 
 interface MatrixPageProps {
   framework: { name: string; slug: string };
@@ -17,13 +18,13 @@ interface MatrixPageProps {
   industry?: { name: string; slug: string };
   decision?: { name: string; slug: string };
   content: {
-    heroTitle?: string;
-    heroDescription: string;
-    keyPriorities: { title: string; description: string }[];
-    faqs: { question: string; answer: string }[];
-    metaTitle?: string;
-    metaDescription?: string;
-  };
+      heroTitle?: string;
+      heroDescription: string;
+      keyPriorities?: { title: string; description: string }[];
+      faqs?: { question: string; answer: string }[];
+      metaTitle?: string;
+      metaDescription?: string;
+    };
 }
 
 export default function MatrixPage({
@@ -72,7 +73,7 @@ export default function MatrixPage({
         title={pageTitle}
         description={content.heroDescription}
         url={pageUrl}
-        faqs={content.faqs}
+          faqs={content.faqs || []}
         breadcrumbs={breadcrumbs.map((b, i) => ({ 
           name: b.label, 
           item: b.href ? `https://risclens.com${b.href}` : pageUrl 
@@ -98,14 +99,15 @@ export default function MatrixPage({
             {content.heroDescription}
           </p>
           
-          <div className="flex flex-col items-center gap-4 mb-8">
-            <Link
-              href="/soc-2-cost-calculator"
-              className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
-            >
-              Get Your {framework.name} Cost Quote
-              <Zap className="w-5 h-5" />
-            </Link>
+            <div className="flex flex-col items-center gap-4 mb-8">
+              <Link
+                href={getCalculatorUrl(framework.slug)}
+                className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
+              >
+                Get Your {framework.name} Cost Quote
+                <Zap className="w-5 h-5" />
+              </Link>
+
             <p className="text-sm text-slate-500">
               Tailored for {industry?.name || 'your industry'} and {role?.name || 'your role'}.
             </p>
@@ -122,9 +124,9 @@ export default function MatrixPage({
             Strategic Priorities for {industry?.name} {role?.name || 'Leaders'}
           </h2>
           
-          <div className="grid gap-6 mb-16">
-            {content.keyPriorities.map((priority, idx) => (
-              <div key={idx} className="bg-slate-50 border border-slate-200 rounded-xl p-6 hover:border-brand-200 transition-colors">
+            <div className="grid gap-6 mb-16">
+              {(content.keyPriorities || []).map((priority, idx) => (
+                <div key={idx} className="bg-slate-50 border border-slate-200 rounded-xl p-6 hover:border-brand-200 transition-colors">
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0 w-10 h-10 bg-brand-100 text-brand-600 rounded-lg flex items-center justify-center font-bold">
                     {idx + 1}
@@ -244,8 +246,8 @@ export default function MatrixPage({
           <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-12 text-center">
             Frequently Asked Questions
           </h2>
-          <div className="space-y-6">
-            {content.faqs.map((faq, idx) => (
+            <div className="space-y-6">
+              {(content.faqs || []).map((faq, idx) => (
               <div key={idx} className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
                 <h3 className="text-lg font-bold text-slate-900 mb-3 flex gap-3">
                   <span className="text-brand-600">Q:</span>
@@ -264,7 +266,8 @@ export default function MatrixPage({
       <Footer />
       <StickyCTA 
         label={`Get ${framework.name} Support`} 
-        targetHref="/soc-2-readiness-checklist" 
+        description={`Get your personalized ${framework.name} cost estimate`}
+        targetHref={getReadinessChecklistUrl(framework.slug)} 
       />
     </main>
   );

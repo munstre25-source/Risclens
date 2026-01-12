@@ -5,14 +5,14 @@ import { getSupabaseAdmin } from '@/lib/supabase';
 
 interface Props {
   params: Promise<{ 
-    decision: string; 
+    slug: string; 
     industry: string;
   }>;
 }
 
 async function getMatrixData(decisionSlug: string, industrySlug: string) {
   const supabase = getSupabaseAdmin();
-  const frameworkSlug = 'soc-2';
+  const frameworkSlug = 'pci-dss';
   
   const [frameworkRes, industryRes] = await Promise.all([
     supabase.from('pseo_frameworks').select('*').eq('slug', frameworkSlug).single(),
@@ -56,8 +56,8 @@ async function getMatrixData(decisionSlug: string, industrySlug: string) {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { decision, industry } = await params;
-  const data = await getMatrixData(decision, industry);
+  const { slug, industry } = await params;
+  const data = await getMatrixData(slug, industry);
 
   if (!data) return { title: 'Not Found' };
 
@@ -68,14 +68,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description,
     alternates: {
-      canonical: `https://risclens.com/soc-2/${decision}/${industry}`,
+      canonical: `https://risclens.com/pci-dss/${slug}/${industry}`,
     },
   };
 }
 
-export default async function Soc2DecisionIndustryPage({ params }: Props) {
-  const { decision, industry } = await params;
-  const data = await getMatrixData(decision, industry);
+export default async function PciDssDecisionIndustryPage({ params }: Props) {
+  const { slug, industry } = await params;
+  const data = await getMatrixData(slug, industry);
 
   if (!data) notFound();
 
@@ -84,25 +84,25 @@ export default async function Soc2DecisionIndustryPage({ params }: Props) {
     keyPriorities: [
       { 
         title: `Optimizing ${data.decision.name}`, 
-        description: `For ${data.industry.name} startups, ${data.decision.name} is often impacted by ${data.industry.slug === 'fintech' ? 'complex data flows and legacy system integrations' : 'rapid scaling and high-volume AI processing'}.` 
+        description: `For ${data.industry.name} startups, ${data.decision.name} is often impacted by ${data.industry.slug === 'fintech' ? 'high-volume transaction processing and payment gateway integrations' : 'data segment isolation and encryption requirements'}.` 
       },
       { 
         title: "Industry Benchmarks", 
-        description: `Most ${data.industry.name} companies at the Seed to Series A stage spend between ${data.framework.slug === 'soc-2' ? '$20k-$50k' : '$15k-$35k'} on their initial audit when factoring in tool costs.` 
+        description: `Most ${data.industry.name} companies at the Seed to Series A stage spend between $25k-$55k on their initial ${data.framework.name} compliance when factoring in QSA fees and technical controls.` 
       },
       { 
         title: "Strategic Shortcuts", 
-        description: `Reduce your ${data.decision.name} by leveraging pre-mapped controls and automation platforms specifically designed for ${data.industry.name} workflows.` 
+        description: `Reduce your ${data.decision.name} by leveraging pre-mapped controls and automation platforms specifically designed for ${data.industry.name} payment flows.` 
       }
     ],
     faqs: [
       { 
         question: `What is the average ${data.decision.name} for ${data.framework.name} in ${data.industry.name}?`, 
-        answer: `While it varies by team size, most ${data.industry.name} startups find that ${data.decision.name} is heavily influenced by their choice of auditor and the level of automation they implement.` 
+        answer: `While it varies by transaction volume, most ${data.industry.name} startups find that ${data.decision.name} is heavily influenced by the scope of their Cardholder Data Environment (CDE).` 
       },
       { 
         question: `How can we minimize ${data.decision.name}?`, 
-        answer: `The most effective way for ${data.industry.name} companies to optimize ${data.decision.name} is through early gap analysis and selecting tools that integrate natively with their existing tech stack.` 
+        answer: `The most effective way for ${data.industry.name} companies to optimize ${data.decision.name} is through network segmentation and using tokenization to reduce the number of systems in scope.` 
       }
     ]
   };

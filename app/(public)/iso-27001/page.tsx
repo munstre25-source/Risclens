@@ -116,21 +116,21 @@ export default function ISO27001HubPage() {
                 {iso27001Hub.hero.subhead}
               </p>
               
-              <div className="flex flex-wrap gap-4">
-                <Link
-                  href="/soc-2-readiness-calculator"
-                  className="bg-white text-blue-900 font-bold px-6 py-3.5 rounded-xl shadow-lg hover:bg-blue-50 transition-all flex items-center gap-2"
-                >
-                  Check ISMS Readiness
-                  <ArrowRight className="w-5 h-5" />
-                </Link>
-                <Link
-                  href="/iso-27001-checklist"
-                  className="bg-white/10 text-white border border-white/20 font-bold px-6 py-3.5 rounded-xl hover:bg-white/20 transition-all flex items-center gap-2"
-                >
-                  View Checklist
-                </Link>
-              </div>
+                <div className="flex flex-wrap gap-4">
+                  <Link
+                    href="/soc-2-readiness-calculator?framework=iso27001"
+                    className="bg-white text-blue-900 font-bold px-6 py-3.5 rounded-xl shadow-lg hover:bg-blue-50 transition-all flex items-center gap-2"
+                  >
+                    Check ISMS Readiness
+                    <ArrowRight className="w-5 h-5" />
+                  </Link>
+                  <Link
+                    href="/iso-27001-checklist"
+                    className="bg-white/10 text-white border border-white/20 font-bold px-6 py-3.5 rounded-xl hover:bg-white/20 transition-all flex items-center gap-2"
+                  >
+                    View Checklist
+                  </Link>
+                </div>
               
               <p className="text-sm text-blue-300 mt-6">Last updated: {iso27001Hub.lastUpdated}. Aligned with ISO 27001:2022.</p>
             </div>

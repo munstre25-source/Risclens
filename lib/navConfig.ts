@@ -32,18 +32,21 @@ export const navConfig: Record<string, NavCategoryConfig> = {
       { label: 'SOC 2 Suite', href: '/soc-2', badge: 'Flagship', description: 'Complete readiness, costs & timelines' },
       { label: 'ISO 27001 Hub', href: '/iso-27001', description: 'Controls, checklists & certification' },
       { label: 'PCI-DSS Compliance', href: '/pci-dss', description: 'Payment security requirements' },
-      { label: 'AI Governance', href: '/ai-compliance', badge: 'New', description: 'ISO 42001 & emerging AI standards' },
+      { label: 'AI Governance Hub', href: '/ai-governance', badge: 'Hub', description: 'ISO 42001 & emerging AI standards' },
     ],
-    sections: [
-      {
-        title: 'Framework Comparisons',
-        items: [
-          { label: 'SOC 2 vs ISO 27001', href: '/soc-2-vs-iso-27001', description: 'Side-by-side requirements' },
-          { label: 'Migration Hub', href: '/compliance/migrate', description: 'Cross-framework mapping guides' },
-          { label: 'Type I vs Type II', href: '/soc-2-type-i-vs-type-ii', description: 'Which audit is right for you' },
-        ],
-      },
-    ],
+      sections: [
+        {
+          title: 'Framework Comparisons',
+          items: [
+            { label: 'SOC 2 vs ISO 27001', href: '/compliance/compare/soc-2-vs-iso-27001', description: 'Side-by-side requirements' },
+            { label: 'ISO 42001 vs EU AI Act', href: '/compliance/compare/iso-42001-vs-eu-ai-act', description: 'AI Governance guide' },
+            { label: 'NIST AI RMF vs EU AI Act', href: '/compliance/compare/nist-ai-rmf-vs-eu-ai-act', description: 'AI Risk comparison' },
+            { label: 'HIPAA vs GDPR', href: '/compliance/compare/hipaa-vs-gdpr', description: 'Privacy framework mapping' },
+            { label: 'Migration Hub', href: '/compliance/migrate', description: 'Cross-framework mapping guides' },
+            { label: 'Type I vs Type II', href: '/soc-2-type-i-vs-type-ii', description: 'Which audit is right for you' },
+          ],
+        },
+      ],
   },
 
   tools: {

@@ -1329,5 +1329,76 @@ export const toolPricing: ToolPricing[] = [
     bestFor: 'Startups that want both a platform and heavy-duty expert support.',
     risclensVerdict: 'Scytale is a strong choice for founders who need a "helping hand" through the audit process, not just a software tool.',
     website: 'https://scytale.ai'
+  },
+  {
+    id: 'resolver',
+    name: 'Resolver',
+    slug: 'resolver',
+    category: 'Enterprise GRC & Risk Management platform',
+    startingPrice: '$10,000',
+    priceModel: 'Custom (based on modules + users)',
+    typicalRange: '$10,000 – $75,000+ / year',
+    targetMarket: 'Mid-market to Global Enterprises',
+    hiddenCosts: 'Implementation fees, Customization, Training',
+    detailedHiddenCosts: [
+      { title: 'Implementation & Onboarding', description: 'Customization beyond out-of-the-box workflows often requires professional service hours.' },
+      { title: 'Advanced Training Services', description: 'Deep-dive training for advanced users is often a paid engagement.' },
+      { title: 'Module Sprawl', description: 'Adding Security & Investigations or Trust & Safety modules significantly increases the base fee.' }
+    ],
+    negotiationTips: [
+      'Ask for a bundle discount if combining GRC with Security or Incident Management modules.',
+      'Request a "Fixed-Price Implementation" SOW to avoid hourly rate creep during setup.',
+      'Check if user licensing can be scaled based on "Active Risk Managers" vs. general employees.'
+    ],
+    pricingDrivers: [
+      { title: 'Module Selection', description: 'Pricing is heavily influenced by the specific solutions chosen (GRC, ERM, ORM, etc.).' },
+      { title: 'User Access Levels', description: 'The number of administrative users managing the risk program is a primary cost driver.' },
+      { title: 'Customization Depth', description: 'The complexity of custom triggers, alerts, and bespoke dashboard configurations.' }
+    ],
+    featuresOverview: [
+      'Automated risk assessments',
+      'No-code workflow builder',
+      'Real-time risk scoring',
+      'Internal controls management',
+      'ERM & ORM capabilities',
+      'Configurable drag-and-drop dashboards'
+    ],
+    compareData: [
+      { platform: 'Resolver', startingPrice: '$10,000/year', auditorIncluded: false, targetMarket: 'Mid-Market to Enterprise' },
+      { platform: 'AuditBoard', startingPrice: '$50,000/year', auditorIncluded: false, targetMarket: 'Fortune 500' },
+      { platform: 'OneTrust', startingPrice: '$10,000/year', auditorIncluded: false, targetMarket: 'Global Enterprise' },
+      { platform: 'Hyperproof', startingPrice: '$15,000/year', auditorIncluded: false, targetMarket: 'Mature Security Teams' }
+    ],
+    implementationTimeline: '8-16 weeks',
+    integrationsCount: '80+',
+    tiers: [
+      {
+        name: 'Core GRC',
+        price: '$10,000+',
+        description: 'Essential risk and compliance management.',
+        features: ['Risk assessments', 'Internal controls', 'Policy management', 'Standard reporting']
+      },
+      {
+        name: 'Advanced Risk',
+        price: 'Contact Sales',
+        description: 'Comprehensive ERM and ORM capabilities.',
+        features: ['Enterprise Risk Management', 'Custom workflows', 'Advanced analytics', 'API access']
+      },
+      {
+        name: 'Enterprise Suite',
+        price: 'Contact Sales',
+        description: 'Integrated security, risk, and compliance.',
+        features: ['Integrated Risk & Security', 'Incident Management', 'Dedicated support', 'Custom dashboards']
+      }
+    ],
+    pros: ['High customization flexibility', 'No-code workflow builder', 'Strong reporting & dashboards'],
+    cons: ['High cost for small businesses', 'Steep learning curve', 'Complex initial setup'],
+    faqs: [
+      { question: 'Is Resolver suitable for startups?', answer: 'Generally no. Resolver is designed for organizations with more mature risk and compliance needs.' },
+      { question: 'Does Resolver include external audits?', answer: 'No, Resolver is a GRC platform. You will still need to hire an independent auditor for certifications like SOC 2 or ISO 27001.' }
+    ],
+    bestFor: 'manage complex risk, compliance, and security operations in an integrated platform',
+    risclensVerdict: 'Resolver is a powerful, highly customizable GRC tool best suited for mature organizations with complex risk environments. It is overkill for early-stage startups.',
+    website: 'https://resolver.com'
   }
 ];

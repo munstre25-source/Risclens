@@ -32,6 +32,8 @@ import {
 } from 'lucide-react';
 import { toolPricing } from '@/src/content/pricing';
 import { AuthorBio } from '@/components/AuthorBio';
+import { getSupabaseAdmin } from '@/lib/supabase';
+import ToolPricingPageContent from '@/components/ToolPricingPage';
 
 export const dynamic = 'force-static';
 export const revalidate = 86400; // 24 hours
@@ -42,10 +44,36 @@ interface PageProps {
   }>;
 }
 
+async function getPseoPricingData(slug: string) {
+  const supabase = getSupabaseAdmin();
+  const { data } = await supabase
+    .from('pseo_pages')
+    .select('*')
+    .eq('category', 'pricing')
+    .eq('slug', slug)
+    .single();
+  
+  return data;
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const tool = toolPricing.find(t => t.slug === slug);
   
+  // Try pSEO database first
+  const pseoData = await getPseoPricingData(slug);
+  if (pseoData?.content_json) {
+    const { toolName, heroDescription } = pseoData.content_json;
+    return {
+      title: `${toolName} Pricing Guide 2026 | Verified Tiers & Hidden Costs`,
+      description: heroDescription || `Expert breakdown of ${toolName} pricing. See starting costs, tiers, and negotiation tips. Verified by RiscLens.`,
+      alternates: {
+        canonical: `https://risclens.com/pricing/${slug}`,
+      }
+    };
+  }
+
+  // Fallback to static content
+  const tool = toolPricing.find(t => t.slug === slug);
   if (!tool) return { title: 'Pricing Not Found' };
 
   return {
@@ -57,14 +85,51 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export async function generateStaticParams() {
-  return toolPricing.map((tool) => ({
-    slug: tool.slug,
-  }));
-}
+  export async function generateStaticParams() {
+    const supabase = getSupabaseAdmin();
+    const { data: pseoPages } = await supabase
+      .from('pseo_pages')
+      .select('slug')
+      .eq('category', 'pricing');
+
+    const pseoSlugs = pseoPages?.filter(p => p.slug).map(p => ({ slug: p.slug })) || [];
+    const staticSlugs = toolPricing.filter(t => t.slug).map((tool) => ({
+      slug: tool.slug,
+    }));
+
+    // Merge and deduplicate
+    const allSlugs = [...staticSlugs];
+    pseoSlugs.forEach(p => {
+      if (!allSlugs.find(s => s.slug === p.slug)) {
+        allSlugs.push(p);
+      }
+    });
+
+    return allSlugs;
+  }
+
 
 export default async function ToolPricingPage({ params }: PageProps) {
   const { slug } = await params;
+  
+  // 1. Try pSEO database first
+  const pseoData = await getPseoPricingData(slug);
+  if (pseoData?.content_json) {
+    const content = pseoData.content_json;
+    return (
+      <ToolPricingPageContent 
+        toolName={content.toolName}
+        toolSlug={slug}
+        heroDescription={content.heroDescription}
+        pricingTiers={content.pricingTiers}
+        hiddenCosts={content.hiddenCosts}
+        negotiationTips={content.negotiationTips}
+        comparisonLinks={content.comparisonLinks || []}
+      />
+    );
+  }
+
+  // 2. Fallback to static content
   const tool = toolPricing.find(t => t.slug === slug);
 
   if (!tool) {
@@ -80,10 +145,12 @@ export default async function ToolPricingPage({ params }: PageProps) {
       .slice(0, 8);
   
     const linkify = (text: string) => {
+      if (!text) return [];
       let result: (string | JSX.Element)[] = [text];
       
       // Linkify tool names to external pricing pages
       toolPricing.forEach(t => {
+        if (!t.name || !t.slug) return;
         const newResult: (string | JSX.Element)[] = [];
         result.forEach(part => {
           if (typeof part === 'string') {
@@ -227,59 +294,60 @@ export default async function ToolPricingPage({ params }: PageProps) {
                     </div>
                   </div>
 
-                  {/* Pricing Tiers Section */}
-                  <div className="mb-20">
-                    <h2 className="text-2xl lg:text-3xl font-black text-[#002B49] mb-10 tracking-tight">
-                      Estimated Pricing Tiers
-                    </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      {tool.tiers.map((tier, i) => (
-                        <div key={i} className="border border-slate-100 rounded-xl p-8 bg-white flex flex-col h-full shadow-sm">
-                          <div className="mb-6">
-                            <h3 className="text-xl font-black text-[#002B49] mb-1">{tier.name}</h3>
-                            <p className="text-slate-500 text-xs font-medium">{tier.description}</p>
-                          </div>
-                          {tier.price && (
-                            <div className="mb-8">
-                              <span className="text-2xl font-black text-[#0070B8]">{tier.price}</span>
+                    {/* Pricing Tiers Section */}
+                    <div className="mb-20">
+                      <h2 className="text-2xl lg:text-3xl font-black text-[#002B49] mb-10 tracking-tight">
+                        Estimated Pricing Tiers
+                      </h2>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {tool.tiers?.map((tier, i) => (
+                          <div key={i} className="border border-slate-100 rounded-xl p-8 bg-white flex flex-col h-full shadow-sm">
+                            <div className="mb-6">
+                              <h3 className="text-xl font-black text-[#002B49] mb-1">{tier.name}</h3>
+                              <p className="text-slate-500 text-xs font-medium">{tier.description}</p>
                             </div>
-                          )}
-                          <div className="space-y-4">
-                            {tier.features.map((feature, j) => (
-                              <div key={j} className="flex items-start gap-3 text-slate-600 text-xs font-bold">
-                                <CheckCircle2 className="w-4 h-4 text-[#22C55E] shrink-0" />
-                                {feature}
+                            {tier.price && (
+                              <div className="mb-8">
+                                <span className="text-2xl font-black text-[#0070B8]">{tier.price}</span>
                               </div>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Negotiation Tips */}
-                  {tool.negotiationTips && tool.negotiationTips.length > 0 && (
-                    <div className="mb-20 bg-[#F0F7FF] rounded-2xl p-8 lg:p-10">
-                      <div className="flex items-center gap-4 mb-10">
-                        <div className="w-10 h-10 rounded-lg bg-[#0070B8] flex items-center justify-center text-white">
-                          <Lightbulb className="w-6 h-6" />
-                        </div>
-                        <h2 className="text-2xl font-black text-[#002B49] tracking-tight">How to Negotiate {tool.name} Pricing</h2>
-                      </div>
-                      <div className="space-y-4">
-                        {tool.negotiationTips.map((tip, i) => (
-                          <div key={i} className="bg-white p-6 rounded-xl border border-blue-100 flex items-center gap-6">
-                            <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-[#0070B8] font-black text-sm shrink-0">
-                              {i + 1}
+                            )}
+                            <div className="space-y-4">
+                              {tier.features?.map((feature, j) => (
+                                <div key={j} className="flex items-start gap-3 text-slate-600 text-xs font-bold">
+                                  <CheckCircle2 className="w-4 h-4 text-[#22C55E] shrink-0" />
+                                  {feature}
+                                </div>
+                              ))}
                             </div>
-                              <p className="text-slate-700 font-bold text-sm leading-relaxed">
-                                {typeof tip === 'string' ? linkify(tip) : linkify(tip.description)}
-                              </p>
                           </div>
                         ))}
                       </div>
                     </div>
-                  )}
+
+                    {/* Negotiation Tips */}
+                    {tool.negotiationTips && tool.negotiationTips.length > 0 && (
+                      <div className="mb-20 bg-[#F0F7FF] rounded-2xl p-8 lg:p-10">
+                        <div className="flex items-center gap-4 mb-10">
+                          <div className="w-10 h-10 rounded-lg bg-[#0070B8] flex items-center justify-center text-white">
+                            <Lightbulb className="w-6 h-6" />
+                          </div>
+                          <h2 className="text-2xl font-black text-[#002B49] tracking-tight">How to Negotiate {tool.name} Pricing</h2>
+                        </div>
+                        <div className="space-y-4">
+                          {tool.negotiationTips?.map((tip, i) => (
+                            <div key={i} className="bg-white p-6 rounded-xl border border-blue-100 flex items-center gap-6">
+                              <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-[#0070B8] font-black text-sm shrink-0">
+                                {i + 1}
+                              </div>
+                                <p className="text-slate-700 font-bold text-sm leading-relaxed">
+                                  {typeof tip === 'string' ? linkify(tip) : linkify(tip.description)}
+                                </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
 
                   {/* Pricing Drivers */}
                   <div className="mb-20">
@@ -336,31 +404,32 @@ export default async function ToolPricingPage({ params }: PageProps) {
                     </div>
                   </div>
 
-                  {/* Pros & Cons */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
-                    <div>
-                      <h3 className="text-xl font-black text-emerald-600 mb-6">Pros</h3>
-                      <div className="space-y-4">
-                        {tool.pros.map((pro, i) => (
-                          <div key={i} className="flex items-start gap-3">
-                            <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
-                            <p className="text-slate-600 text-sm font-bold">{pro}</p>
-                          </div>
-                        ))}
+                    {/* Pros & Cons */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+                      <div>
+                        <h3 className="text-xl font-black text-emerald-600 mb-6">Pros</h3>
+                        <div className="space-y-4">
+                          {tool.pros?.map((pro, i) => (
+                            <div key={i} className="flex items-start gap-3">
+                              <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                              <p className="text-slate-600 text-sm font-bold">{pro}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-black text-red-600 mb-6">Cons</h3>
+                        <div className="space-y-4">
+                          {tool.cons?.map((con, i) => (
+                            <div key={i} className="flex items-start gap-3">
+                              <X className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+                              <p className="text-slate-600 text-sm font-bold">{con}</p>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
-                    <div>
-                      <h3 className="text-xl font-black text-red-600 mb-6">Cons</h3>
-                      <div className="space-y-4">
-                        {tool.cons.map((con, i) => (
-                          <div key={i} className="flex items-start gap-3">
-                            <X className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
-                            <p className="text-slate-600 text-sm font-bold">{con}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
+
 
                   {/* Verdict Card */}
                   <div className="bg-[#0A1628] rounded-2xl p-10 text-white mb-20">

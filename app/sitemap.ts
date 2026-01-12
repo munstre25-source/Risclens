@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { ROUTES, getRouteBucket } from '@/src/seo/routes';
 import { getSupabaseAdmin } from '@/lib/supabase';
 
-const baseUrl = 'https://risclens.com';
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://risclens.com';
 const hasSupabaseAdmin = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
 
 // Build date used as fallback for lastmod
@@ -45,21 +45,30 @@ async function getPSEORoutes() {
     const supabase = getSupabaseAdmin();
     const { data } = await supabase
       .from('pseo_pages')
-      .select('slug, category');
+      .select('slug, category, framework:pseo_frameworks(slug)');
 
     return data?.map(p => {
-      if (p.category === 'role') return `/soc-2/for/${p.slug}`;
-      if (p.category === 'pricing') return `/pricing/${p.slug}`;
-      if (p.category === 'alternatives') return `/compare/${p.slug}`;
-if (p.category === 'directory') return `/auditor-directory/${p.slug}`;
-        if (p.category === 'stack') return `/soc-2/stack/${p.slug}`;
-        if (p.category === 'industry') return `/soc-2/industries/${p.slug}`;
-        if (p.category === 'compliance') {
-
-        const framework = p.slug.startsWith('soc-2') ? 'soc-2' : 'iso-27001';
-        return `/compliance/${framework}/${p.slug}`;
+      const frameworkSlug = (p.framework as any)?.slug;
+      
+      switch (p.category) {
+        case 'role': return `/soc-2/for/${p.slug}`;
+        case 'pricing': return `/pricing/${p.slug}`;
+        case 'alternatives': return `/compare/${p.slug}`;
+        case 'directory': return `/auditor-directory/${p.slug}`;
+        case 'stack': return `/soc-2/stack/${p.slug}`;
+        case 'industry': return `/soc-2/industries/${p.slug}`;
+        case 'compliance': 
+          if (frameworkSlug === 'soc-2' || frameworkSlug === 'iso-27001') {
+            return `/compliance/${frameworkSlug}/${p.slug}`;
+          }
+          return `/ai-governance/${p.slug}`;
+        default:
+          if (frameworkSlug === 'ai-governance') return `/ai-governance/${p.slug}`;
+          if (['role-based', 'comparison', 'cost', 'roi', 'use-case', 'readiness', 'roadmap', 'analysis', 'checklist', 'risk-assessment', 'classification', 'audit', 'software', 'best-practices', 'budgeting'].includes(p.category || '')) {
+            return `/ai-governance/${p.slug}`;
+          }
+          return null;
       }
-      return null;
     }).filter(Boolean) as string[] || [];
   } catch (err) {
     console.warn('Sitemap: skipping PSEO routes (Supabase unavailable)', err);
@@ -128,11 +137,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority,
     };
   });
-
-  // Sanity check summary in dev
-  if (process.env.NODE_ENV !== 'production') {
-    console.log(`Total indexable routes: ${allRoutes.length} (${dynamicRoutes.length} signals, ${migrationRoutes.length} migrations, ${pseoRoutes.length} PSEO)`);
-  }
 
   return entries;
 }

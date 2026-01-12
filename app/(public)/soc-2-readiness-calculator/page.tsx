@@ -51,16 +51,32 @@ function FormSkeleton() {
   );
 }
 
-export default function CalculatorPage() {
+interface PageProps {
+  searchParams: Promise<{ framework?: string }>;
+}
+
+export default async function CalculatorPage({ searchParams }: PageProps) {
+  const { framework = 'soc2' } = await searchParams;
+  const isIso27001 = framework === 'iso27001';
+  const isIso42001 = framework === 'iso42001';
+
+  const heroContent = isIso27001 
+    ? messaging.iso27001Readiness.hero 
+    : isIso42001 
+      ? messaging.iso42001Calculator.hero 
+      : messaging.readinessCalculator.hero;
+
+  const frameworkName = isIso27001 ? 'ISO 27001' : isIso42001 ? 'ISO 42001' : 'SOC 2';
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header />
       
       <main className="flex-grow">
         <SoftwareApplicationSchema
-          name="SOC 2 Readiness Calculator"
-          description="Get an instant SOC 2 readiness score and gap analysis."
-          url="https://risclens.com/soc-2-readiness-calculator"
+          name={`${frameworkName} Readiness Calculator`}
+          description={`Get an instant ${frameworkName} readiness score and gap analysis.`}
+          url={`https://risclens.com/soc-2-readiness-calculator?framework=${framework}`}
           category="SecurityApplication"
         />
 
@@ -74,10 +90,10 @@ export default function CalculatorPage() {
                 Recommended starting point for serious buyers
               </div>
               <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 leading-tight">
-                {messaging.readinessCalculator.hero.headline}
+                {heroContent.headline}
               </h1>
             <p className="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
-              {messaging.readinessCalculator.hero.subhead}
+              {heroContent.subhead}
             </p>
           </div>
         </section>
@@ -89,7 +105,7 @@ export default function CalculatorPage() {
             <div id="calculator" className="space-y-6 text-left">
               <div className="rounded-2xl border border-slate-200 bg-white p-6">
                 <Suspense fallback={<FormSkeleton />}>
-                  <CalculatorForm />
+                  <CalculatorForm framework={framework} />
                 </Suspense>
               </div>
               

@@ -47,9 +47,12 @@ export default function Footer() {
               <li><Link href="/pricing" className="hover:text-white transition-colors">Tool Pricing Guides</Link></li>
               <li><Link href="/compare" className="hover:text-white transition-colors">Platform Comparisons</Link></li>
               <li><Link href="/compliance/directory" className="hover:text-white transition-colors">Security Signals Directory</Link></li>
-              <li><Link href="/auditor-directory" className="hover:text-white transition-colors font-semibold text-blue-400">Auditor Directory</Link></li>
+              <li className="pt-2"><p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Framework Comparisons</p></li>
+              <li><Link href="/compliance/compare/soc-2-vs-iso-27001" className="hover:text-white transition-colors">SOC 2 vs ISO 27001</Link></li>
+              <li><Link href="/compliance/compare/iso-42001-vs-eu-ai-act" className="hover:text-white transition-colors">ISO 42001 vs EU AI Act</Link></li>
+              <li><Link href="/compliance/compare/hipaa-vs-gdpr" className="hover:text-white transition-colors">HIPAA vs GDPR</Link></li>
+              <li><Link href="/auditor-directory" className="hover:text-white transition-colors font-semibold text-blue-400 mt-2 block">Auditor Directory</Link></li>
               <li><Link href="/auditor-portal" className="hover:text-white transition-colors font-semibold text-brand-400">Auditor Bidding Portal</Link></li>
-              <li><Link href="/soc-2-evidence" className="hover:text-white transition-colors">Evidence & Controls</Link></li>
             </ul>
           </div>
 

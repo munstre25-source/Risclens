@@ -6,6 +6,8 @@ import { trackEvent } from '@/lib/analytics';
 
 interface StickyCTAProps {
   label?: string;
+  description?: string;
+  subDescription?: string;
   href?: string;
   targetHref?: string; // backward compatibility for older prop name
   showAfterScroll?: number;
@@ -13,6 +15,8 @@ interface StickyCTAProps {
 
 export function StickyCTA({ 
   label = 'Calculate Your SOC 2 Cost', 
+  description = 'Get your personalized SOC 2 cost estimate',
+  subDescription = 'Free • No sales calls • Instant results',
   href = '/soc-2-readiness-calculator',
   targetHref,
   showAfterScroll = 400
@@ -50,11 +54,12 @@ export function StickyCTA({
     >
       <div className="bg-gradient-to-r from-brand-700 to-brand-800 border-t border-brand-600 shadow-2xl">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-3 sm:py-4">
-          <div className="flex items-center justify-between gap-4">
-            <div className="hidden sm:block">
-              <p className="text-white font-semibold text-sm">Get your personalized SOC 2 cost estimate</p>
-              <p className="text-brand-200 text-xs">Free • No sales calls • Instant results</p>
-            </div>
+            <div className="flex items-center justify-between gap-4">
+              <div className="hidden sm:block">
+                <p className="text-white font-semibold text-sm">{description}</p>
+                <p className="text-brand-200 text-xs">{subDescription}</p>
+              </div>
+
             <div className="flex items-center gap-3 w-full sm:w-auto">
               <Link
                 href={destination}

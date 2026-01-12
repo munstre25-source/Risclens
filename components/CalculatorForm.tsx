@@ -66,13 +66,22 @@ interface CalculatorResults {
 
 const TOTAL_STEPS = 3;
 
-export default function CalculatorForm() {
+interface CalculatorFormProps {
+  framework?: string;
+}
+
+export default function CalculatorForm({ framework = 'soc2' }: CalculatorFormProps) {
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [results, setResults] = useState<CalculatorResults | null>(null);
   const [leadId, setLeadId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const isIso27001 = framework === 'iso27001';
+  const isIso42001 = framework === 'iso42001';
+  const frameworkName = isIso27001 ? 'ISO 27001' : isIso42001 ? 'ISO 42001' : 'SOC 2';
+  const readinessLabel = isIso27001 ? 'ISMS' : isIso42001 ? 'AIMS' : 'SOC 2';
 
   // Hidden fields for A/B testing and UTM tracking
   const [variationId, setVariationId] = useState<string>('default');
@@ -123,7 +132,7 @@ export default function CalculatorForm() {
 
     if (!startedRef.current) {
       startedRef.current = true;
-      trackEvent('calculator_started', { tool_id: 'soc2_readiness' });
+      trackEvent('calculator_started', { tool_id: `${framework}_readiness` });
     }
   };
 
@@ -168,10 +177,10 @@ export default function CalculatorForm() {
             body: JSON.stringify({
               email: formData.email,
               phone: formData.phone,
-              company: formData.company_name,
-              industry: formData.industry,
-              lead_type: 'soc2_readiness_partial',
-              source_url: typeof window !== 'undefined' ? window.location.href : '',
+                company: formData.company_name,
+                industry: formData.industry,
+                lead_type: `${framework}_readiness_partial`,
+                source_url: typeof window !== 'undefined' ? window.location.href : '',
               utm_source: utmParams.utm_source,
               utm_medium: utmParams.utm_medium,
               utm_campaign: utmParams.utm_campaign,
@@ -248,14 +257,14 @@ export default function CalculatorForm() {
         }).catch(console.error);
       }
 
-      setLeadId(data.lead_id);
-      setResults(data.results);
-      setShowResults(true);
-      trackEvent('calculator_completed', { 
-        tool_id: 'soc2_readiness',
-        score: data.results.readiness_score,
-        industry: formData.industry 
-      });
+        setLeadId(data.lead_id);
+        setResults(data.results);
+        setShowResults(true);
+        trackEvent('calculator_completed', { 
+          tool_id: `${framework}_readiness`,
+          score: data.results.readiness_score,
+          industry: formData.industry 
+        });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
@@ -298,7 +307,7 @@ export default function CalculatorForm() {
         {step === 1 && (
           <div className="animate-fade-in">
             <h2 className="text-xl font-semibold text-gray-900 mb-6">
-              Get your readiness score
+              Get your {readinessLabel.toLowerCase()} readiness score
             </h2>
               <div className="space-y-4">
                 <div>
@@ -426,28 +435,28 @@ export default function CalculatorForm() {
                   ))}
                 </div>
               </div>
-                <div>
-                  <label htmlFor="budget_range" className="form-label">
-                    What is your approximate budget for SOC 2? <span className="text-gray-400 text-xs font-normal">(optional)</span>
-                  </label>
-                  <select
-                    id="budget_range"
-                    name="budget_range"
-                    value={formData.budget_range}
-                    onChange={handleInputChange}
-                    className="form-input"
-                  >
-                    <option value="">Select budget comfort</option>
-                    <option value="under_10k">Under $10k (Very tight)</option>
-                    <option value="10k_20k">$10k - $20k (Standard startup)</option>
-                    <option value="20k_50k">$20k - $50k (Mid-market)</option>
-                    <option value="over_50k">$50k+ (Enterprise/Complex)</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="form-label">
-                    Who requires SOC 2 from you? <span className="text-gray-400 text-xs font-normal">(optional)</span>
-                  </label>
+                  <div>
+                    <label htmlFor="budget_range" className="form-label">
+                      What is your approximate budget for {frameworkName}? <span className="text-gray-400 text-xs font-normal">(optional)</span>
+                    </label>
+                    <select
+                      id="budget_range"
+                      name="budget_range"
+                      value={formData.budget_range}
+                      onChange={handleInputChange}
+                      className="form-input"
+                    >
+                      <option value="">Select budget comfort</option>
+                      <option value="under_10k">Under $10k (Very tight)</option>
+                      <option value="10k_20k">$10k - $20k (Standard startup)</option>
+                      <option value="20k_50k">$20k - $50k (Mid-market)</option>
+                      <option value="over_50k">$50k+ (Enterprise/Complex)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="form-label">
+                      Who requires {frameworkName} from you? <span className="text-gray-400 text-xs font-normal">(optional)</span>
+                    </label>
 
                 <div className="space-y-2 mt-2">
                   {SOC2_REQUIRERS.map((req) => (
@@ -529,16 +538,16 @@ export default function CalculatorForm() {
                 </div>
                 <div className="pt-4 border-t border-gray-100">
                   <label className="flex items-start cursor-pointer group">
-                    <input
-                      type="checkbox"
-                      checked={formData.consent}
-                      onChange={(e) => setFormData(prev => ({ ...prev, consent: e.target.checked }))}
-                      className="mt-1 w-4 h-4 text-brand-600 rounded border-gray-300 focus:ring-brand-500"
-                    />
-                    <span className="ml-3 text-xs text-gray-500 leading-relaxed group-hover:text-gray-700 transition-colors">
-                      By calculating my score, I agree to receive a SOC 2 roadmap PDF and 1-hour auditor shortlist. 
-                      I consent to Risclens sharing my requirements with verified auditors to facilitate my search.
-                    </span>
+                      <input
+                        type="checkbox"
+                        checked={formData.consent}
+                        onChange={(e) => setFormData(prev => ({ ...prev, consent: e.target.checked }))}
+                        className="mt-1 w-4 h-4 text-brand-600 rounded border-gray-300 focus:ring-brand-500"
+                      />
+                      <span className="ml-3 text-xs text-gray-500 leading-relaxed group-hover:text-gray-700 transition-colors">
+                        By calculating my score, I agree to receive a {frameworkName} roadmap PDF and 1-hour auditor shortlist. 
+                        I consent to Risclens sharing my requirements with verified auditors to facilitate my search.
+                      </span>
                   </label>
                 </div>
               </div>
