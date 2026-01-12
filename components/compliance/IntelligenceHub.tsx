@@ -184,67 +184,98 @@ export function IntelligenceHub({
           />
         </div>
 
-        <div className="flex flex-wrap justify-center gap-2">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveTab(cat)}
-              className={`px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2 ${
-                activeTab === cat 
-                  ? 'bg-brand-600 text-white shadow-lg shadow-brand-200 scale-105' 
-                  : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
-              }`}
-            >
-              {cat !== 'All' && <span className="opacity-70">{getIcon(cat as HubItem['category'])}</span>}
-              {cat}
-            </button>
-          ))}
+          <div className="flex flex-wrap justify-center gap-2">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveTab(cat)}
+                className={`px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2 ${
+                  activeTab === cat 
+                    ? 'bg-brand-600 text-white shadow-lg shadow-brand-200 scale-105' 
+                    : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                {cat !== 'All' && <span className="opacity-70">{getIcon(cat as HubItem['category'])}</span>}
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          {activeTab === 'Companies' && (
+            <div className="flex justify-center pt-2">
+              <Link 
+                href="/compliance/directory"
+                className="text-xs font-bold text-brand-600 hover:text-brand-700 flex items-center gap-1 group transition-all"
+              >
+                Browse the full directory of 100+ companies
+                <ChevronRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+              </Link>
+            </div>
+          )}
         </div>
-      </div>
 
       {/* Results Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredItems.length > 0 ? (
-          filteredItems.map((item) => (
-            <Link 
-              key={item.id}
-              href={item.href}
-              className="group p-6 bg-white rounded-2xl border border-slate-200 hover:border-brand-300 hover:shadow-xl transition-all flex flex-col h-full"
-            >
-              <div className="flex items-start justify-between mb-4">
-                <div className={`p-2 rounded-lg ${
-                  item.category === 'Frameworks' ? 'bg-blue-50 text-blue-600' :
-                  item.category === 'Companies' ? 'bg-indigo-50 text-indigo-600' :
-                  item.category === 'Roles' ? 'bg-purple-50 text-purple-600' :
-                  item.category === 'Pricing' ? 'bg-green-50 text-green-600' :
-                  item.category === 'Checklists' ? 'bg-orange-50 text-orange-600' :
-                  item.category === 'Evidence' ? 'bg-amber-50 text-amber-600' :
-                  item.category === 'Tech Stack' ? 'bg-cyan-50 text-cyan-600' :
-                  'bg-brand-50 text-brand-600'
-                }`}>
-                  {getIcon(item.category)}
+          <>
+            {filteredItems.map((item) => (
+              <Link 
+                key={item.id}
+                href={item.href}
+                className="group p-6 bg-white rounded-2xl border border-slate-200 hover:border-brand-300 hover:shadow-xl transition-all flex flex-col h-full"
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div className={`p-2 rounded-lg ${
+                    item.category === 'Frameworks' ? 'bg-blue-50 text-blue-600' :
+                    item.category === 'Companies' ? 'bg-indigo-50 text-indigo-600' :
+                    item.category === 'Roles' ? 'bg-purple-50 text-purple-600' :
+                    item.category === 'Pricing' ? 'bg-green-50 text-green-600' :
+                    item.category === 'Checklists' ? 'bg-orange-50 text-orange-600' :
+                    item.category === 'Evidence' ? 'bg-amber-50 text-amber-600' :
+                    item.category === 'Tech Stack' ? 'bg-cyan-50 text-cyan-600' :
+                    'bg-brand-50 text-brand-600'
+                  }`}>
+                    {getIcon(item.category)}
+                  </div>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-brand-500 transition-colors">
+                    {item.category}
+                  </span>
                 </div>
-                <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-brand-500 transition-colors">
-                  {item.category}
-                </span>
-              </div>
-              
-              <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand-600 transition-colors">
-                {item.name}
-              </h3>
-              
-              {item.description && (
-                <p className="text-slate-500 text-sm leading-relaxed mb-6 flex-grow">
-                  {item.description}
-                </p>
-              )}
-              
-              <div className="flex items-center text-sm font-bold text-brand-600 group-hover:gap-2 transition-all">
-                <span>Explore Intelligence</span>
-                <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all" />
-              </div>
-            </Link>
-          ))
+                
+                <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand-600 transition-colors">
+                  {item.name}
+                </h3>
+                
+                {item.description && (
+                  <p className="text-slate-500 text-sm leading-relaxed mb-6 flex-grow">
+                    {item.description}
+                  </p>
+                )}
+                
+                <div className="flex items-center text-sm font-bold text-brand-600 group-hover:gap-2 transition-all">
+                  <span>Explore Intelligence</span>
+                  <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all" />
+                </div>
+              </Link>
+            ))}
+            
+            {activeTab === 'Companies' && searchQuery === '' && (
+              <Link 
+                href="/compliance/directory"
+                className="group p-8 bg-slate-50 rounded-2xl border border-dashed border-slate-300 hover:border-brand-300 hover:bg-white transition-all flex flex-col items-center justify-center text-center h-full min-h-[280px]"
+              >
+                <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 group-hover:bg-brand-50 transition-all">
+                  <Building2 className="w-7 h-7 text-brand-600" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 mb-2">View Full Directory</h3>
+                <p className="text-slate-500 text-sm mb-6 max-w-[200px]">Access security signals for 100+ tracked enterprises.</p>
+                <div className="flex items-center gap-1 text-sm font-black text-brand-600 uppercase tracking-wider">
+                  <span>Open Now</span>
+                  <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </Link>
+            )}
+          </>
         ) : (
           <div className="col-span-full py-20 text-center">
             <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6">

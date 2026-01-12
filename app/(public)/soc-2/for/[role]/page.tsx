@@ -4,15 +4,15 @@ import RoleSOC2Page from '@/components/RoleSOC2Page';
 import { getSupabaseAdmin } from '@/lib/supabase';
 
 interface Props {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ role: string }>;
 }
 
-async function getRolePage(slug: string) {
+async function getRolePage(role: string) {
   const supabase = getSupabaseAdmin();
   const { data, error } = await supabase
     .from('pseo_pages')
     .select('*')
-    .eq('slug', slug)
+    .eq('slug', role)
     .eq('category', 'role')
     .single();
 
@@ -32,8 +32,8 @@ async function getAllRoles() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
-  const page = await getRolePage(slug);
+  const { role } = await params;
+  const page = await getRolePage(role);
 
   if (!page) {
     return {
@@ -45,14 +45,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: page.title,
     description: page.meta_description,
     alternates: {
-      canonical: `https://risclens.com/soc-2/for/${slug}`,
+      canonical: `https://risclens.com/soc-2/for/${role}`,
     },
   };
 }
 
 export default async function DynamicRolePage({ params }: Props) {
-  const { slug } = await params;
-  const page = await getRolePage(slug);
+  const { role } = await params;
+  const page = await getRolePage(role);
 
   if (!page) {
     notFound();
@@ -82,9 +82,9 @@ export default async function DynamicRolePage({ params }: Props) {
 
   return (
     <RoleSOC2Page
-      roleName={content.roleName || slug.charAt(0).toUpperCase() + slug.slice(1)}
-      roleSlug={slug}
-      heroDescription={content.heroDescription || `A comprehensive guide for ${content.roleName || slug}s on navigating SOC 2 compliance requirements and best practices.`}
+      roleName={content.roleName || role.charAt(0).toUpperCase() + role.slice(1)}
+      roleSlug={role}
+      heroDescription={content.heroDescription || `A comprehensive guide for ${content.roleName || role}s on navigating SOC 2 compliance requirements and best practices.`}
       keyPriorities={content.keyPriorities && content.keyPriorities.length > 0 ? content.keyPriorities : fallbackKeyPriorities}
       faqs={content.faqs && content.faqs.length > 0 ? content.faqs : fallbackFaqs}
       relatedLinks={content.relatedLinks}
