@@ -29,19 +29,18 @@ export const navConfig: Record<string, NavCategoryConfig> = {
     label: 'Platform',
     href: '/tools',
     items: [
-      { label: 'Intelligence Hub', href: '/intelligence-hub', description: 'Real-time vendor & pricing data', badge: 'Hub' },
+      { label: 'Intelligence Hub', href: '/intelligence-hub', description: 'Real-time vendor & pricing data', badge: 'Live' },
       { label: 'Matrix Explorer', href: '/compliance', description: 'Custom compliance roadmap generator', badge: 'AI' },
-      { label: 'Penetration Testing', href: '/penetration-testing', description: 'Scoping, costs, and SOW tools', badge: 'Service' },
-      { label: 'Vendor Risk Mgmt', href: '/vendor-risk-program', description: 'Automation & triage tools', badge: 'New' },
-      { label: 'Evidence Gap Analyzer', href: '/evidence-gap-analyzer', description: 'Policy analysis for SOC 2 gaps', badge: 'AI' },
+      { label: 'Evidence Gap Analyzer', href: '/evidence-gap-analyzer', description: 'AI-powered policy & control gaps', badge: 'AI' },
+      { label: 'Vendor Risk Program', href: '/vendor-risk-program', description: 'Automation & triage tools', badge: 'New' },
     ],
     sections: [
       {
-        title: 'Indices & Readiness',
+        title: 'Assessments & Services',
         items: [
           { label: 'SOC 2 Readiness Index', href: '/soc-2-readiness-index', badge: 'Popular' },
-          { label: 'AI Governance Index', href: '/ai-governance-readiness-index', badge: 'New' },
-          { label: 'Compliance ROI Calculator', href: '/compliance-roi-calculator' },
+          { label: 'AI Governance Index', href: '/ai-governance-readiness-index' },
+          { label: 'Penetration Testing', href: '/penetration-testing', badge: 'Service' },
         ],
       },
     ],
@@ -55,19 +54,19 @@ export const navConfig: Record<string, NavCategoryConfig> = {
         title: 'Core Standards',
         items: [
           { label: 'SOC 2 Suite', href: '/soc-2', badge: 'Flagship', description: 'Readiness, costs, and timelines' },
-          { label: 'ISO 27001 Hub', href: '/iso-27001' },
-          { label: 'HIPAA Compliance', href: '/soc-2/industries/healthcare' },
-          { label: 'PCI-DSS Compliance', href: '/pci-dss' },
-          { label: 'AI (ISO 42001)', href: '/ai-compliance', badge: 'New' },
+      { label: 'ISO 27001 Hub', href: '/iso-27001' },
+            { label: 'HIPAA Compliance', href: '/soc-2/industries/healthcare' },
+            { label: 'PCI-DSS Compliance', href: '/pci-dss' },
+            { label: 'AI Governance Hub', href: '/ai-compliance', badge: 'Hub' },
         ],
       },
       {
-        title: 'SOC 2 Deep Dives',
+        title: 'Strategic Path',
         items: [
+          { label: 'Migration Hub', href: '/compliance/migrate', badge: 'Guides', description: 'Cross-framework mapping' },
           { label: 'SOC 2 Cost Guide', href: '/soc-2-cost' },
           { label: 'SOC 2 Timeline', href: '/soc-2-timeline' },
           { label: 'Readiness Checklist', href: '/soc-2-readiness-checklist' },
-          { label: 'Evidence & Controls', href: '/soc-2-evidence' },
         ],
       },
     ],
@@ -83,15 +82,14 @@ export const navConfig: Record<string, NavCategoryConfig> = {
           { label: 'Pricing Hub', href: '/pricing', description: 'Benchmark SaaS compliance costs' },
           { label: 'Platform Comparisons', href: '/compare', description: 'In-depth head-to-head analysis' },
           { label: 'Compliance Directory', href: '/compliance/directory', description: 'Search 2,400+ verified companies' },
-          { label: 'Auditor Match', href: '/auditor-match', description: 'Connect with regional auditors' },
         ],
       },
       {
-        title: 'Vendor Intelligence',
+        title: 'Auditor Discovery',
         items: [
-          { label: 'Market Intelligence', href: '/intelligence-hub', badge: 'Live' },
-          { label: 'Auditor Directory', href: '/auditor-directory' },
-          { label: 'Auditor Portal', href: '/auditor-portal', badge: 'Bidding' },
+          { label: 'Auditor Directory', href: '/auditor-directory', description: 'Find local compliance partners' },
+          { label: 'Auditor Match', href: '/auditor-match', description: 'Connect & request bids' },
+          { label: 'Auditor Portal', href: '/auditor-portal', badge: 'Partner' },
         ],
       },
     ],
@@ -102,12 +100,22 @@ export const navConfig: Record<string, NavCategoryConfig> = {
     href: '/soc-2/industries',
     sections: [
       {
+        title: 'By Tech Stack',
+        items: [
+          { label: 'Tech-Stack Hub', href: '/soc-2/stack', badge: 'Hub', description: 'All platform guides' },
+          { label: 'AWS Compliance', href: '/soc-2/stack/aws' },
+          { label: 'Azure Compliance', href: '/soc-2/stack/azure' },
+          { label: 'GCP Compliance', href: '/soc-2/stack/gcp' },
+          { label: 'Kubernetes', href: '/soc-2/stack/kubernetes' },
+          { label: 'Supabase & Vercel', href: '/soc-2/stack/supabase' },
+        ],
+      },
+      {
         title: 'By Industry',
         items: [
           { label: 'SaaS Compliance', href: '/soc-2/industries/saas' },
           { label: 'Fintech Compliance', href: '/soc-2/industries/fintech' },
           { label: 'Healthcare & AI', href: '/soc-2/industries/healthcare' },
-          { label: 'Migration Hub', href: '/compliance/migrate', badge: 'Guides' },
         ],
       },
       {
@@ -126,10 +134,11 @@ export const navConfig: Record<string, NavCategoryConfig> = {
     href: '/learn',
     sections: [
       {
-        title: 'Utility & Tools',
+        title: 'Calculators & Tools',
         items: [
           { label: 'SOC 2 Cost Calculator', href: '/soc-2-cost-calculator' },
           { label: 'Timeline Estimator', href: '/soc-2-timeline/estimator' },
+          { label: 'Compliance ROI', href: '/compliance-roi-calculator' },
           { label: 'Audit Delay Cost', href: '/soc-2-audit-delay-cost' },
         ],
       },

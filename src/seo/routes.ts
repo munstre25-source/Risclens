@@ -10,6 +10,10 @@ const COMPLIANCE_TOOL_SLUGS = [
   'a-lign', 'jupiterone', 'lacework', 'cynomi', 'apptega', 'workiva', 'resolver', 'anecdotes'
 ];
 
+const TECH_STACK_SLUGS = [
+  'aws', 'azure', 'gcp', 'kubernetes', 'supabase', 'vercel'
+];
+
 function generateComparisonRoutes(): string[] {
   const routes: string[] = [];
   for (let i = 0; i < COMPLIANCE_TOOL_SLUGS.length; i++) {
@@ -26,6 +30,10 @@ function generateAlternativesRoutes(): string[] {
 
 function generatePricingRoutes(): string[] {
   return COMPLIANCE_TOOL_SLUGS.map(slug => `/pricing/${slug}`);
+}
+
+function generateStackRoutes(): string[] {
+  return TECH_STACK_SLUGS.map(slug => `/soc-2/stack/${slug}`);
 }
 
 /**
@@ -66,10 +74,14 @@ export const HUB_ROUTES = [
   '/soc-2-evidence/vault',
   '/learn/soc-2-readiness',
   '/compliance/directory',
+  '/compliance/migrate',
   '/ai-compliance',
   '/ai-governance-readiness-index',
   '/iso-42001-calculator',
   '/tools',
+  '/intelligence-hub',
+  '/auditor-directory',
+  '/soc-2/stack',
 ];
 
 export const LEGAL_ROUTES = [
@@ -101,6 +113,7 @@ export const COMMERCIAL_ROUTES = [
     ...generateComparisonRoutes(),
     ...generateAlternativesRoutes(),
     ...generatePricingRoutes(),
+    ...generateStackRoutes(),
 
   '/penetration-testing/pricing',
   '/penetration-testing/sow',

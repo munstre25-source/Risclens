@@ -3,7 +3,7 @@ import TechStackSOC2Page from '@/components/TechStackSOC2Page';
 
 export const metadata: Metadata = {
   title: 'SOC 2 Compliance for Kubernetes (K8s): Implementation Guide | RiscLens',
-  description: 'Learn how to secure your Kubernetes clusters for SOC 2. Map K8s native security (RBAC, Network Policies, Secrets) to SOC 2 controls.',
+  description: 'Learn how to secure your Kubernetes clusters for SOC 2. Map K8s features (RBAC, Network Policies, Secrets, Pod Security) to SOC 2 controls.',
   alternates: {
     canonical: 'https://risclens.com/soc-2/stack/kubernetes',
   },
@@ -12,32 +12,32 @@ export const metadata: Metadata = {
 export default function KubernetesSoc2Page() {
   return (
     <TechStackSOC2Page
-      platformName="Kubernetes (K8s)"
+      platformName="Kubernetes"
       platformSlug="kubernetes"
-      heroDescription="Kubernetes introduces new security abstractions that auditors must understand. By securing your control plane and implementing strict container isolation, you can meet SOC 2 standards in a cloud-native way."
+      heroDescription="Kubernetes orchestration requires a layered security approach. For SOC 2, you must demonstrate control over cluster access, workload isolation, and secret management within your K8s environment."
       keyControls={[
         {
           title: 'Role-Based Access Control (RBAC)',
-          implementation: 'Disable the default "cluster-admin" for developers. Use fine-grained RBAC roles, integrate with SSO via OIDC, and perform regular audits of ServiceAccounts.',
+          implementation: 'Implement strict RBAC policies. Avoid using cluster-admin roles for daily operations and ensure that service accounts have the minimum necessary permissions.',
         },
         {
           title: 'Network Policies',
-          implementation: 'Implement a "Default Deny" network policy. Use a Service Mesh (Istio/Linkerd) or K8s NetworkPolicies to enforce pod-to-pod encryption and isolation.',
+          implementation: 'Use Kubernetes Network Policies to enforce pod-to-pod traffic isolation. Deny all traffic by default and explicitly allow only required communication paths.',
         },
         {
-          title: 'Secrets Management',
-          implementation: 'Do not store secrets in K8s Secret objects without encryption at rest. Integrate with AWS Secrets Manager or HashiCorp Vault using the CSI Secrets Store driver.',
+          title: 'Secret Management',
+          implementation: 'Encrypt Kubernetes Secrets at rest. Consider using external secret managers like HashiCorp Vault or AWS Secrets Manager integrated via CSI drivers for enhanced security.',
         },
         {
-          title: 'Runtime Security',
-          implementation: 'Use Admission Controllers to enforce security standards (e.g., "no root containers"). Implement runtime monitoring with tools like Falco or Pixie.',
+          title: 'Pod Security Standards',
+          implementation: 'Enforce Pod Security Standards (Admission Controllers) to prevent privileged containers, ensure read-only root filesystems, and block host path mounts.',
         },
       ]}
       bestPractices={[
-        'Enable audit logging for the K8s API server and ship logs to a centralized, encrypted log management system.',
-        'Use "Infrastructure-as-Code" (Helm/Kustomize) to ensure all cluster configurations are version-controlled and peer-reviewed.',
-        'Implement automated vulnerability scanning for all container images in your CI/CD pipeline.',
-        'Perform regular "Kubernetes Benchmarks" (CIS) to identify and remediate cluster misconfigurations.',
+        'Enable Audit Logging for the API Server and ship logs to a secure, centralized location for monitoring.',
+        'Use a container image scanner (like Trivy or Snyk) to scan all images for vulnerabilities before they are deployed to the cluster.',
+        'Implement "Runtime Security" monitoring (e.g., Falco) to detect and alert on anomalous behavior within running containers.',
+        'Keep your cluster version up to date and regularly patch nodes to address underlying OS and K8s vulnerabilities.',
       ]}
     />
   );

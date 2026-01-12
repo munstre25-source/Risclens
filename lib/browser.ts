@@ -187,6 +187,8 @@ export async function scrapeCompanySecurityPages(domain: string): Promise<{
     `https://${normalized}/trust`,
     `https://${normalized}/trust-center`,
     `https://${normalized}/compliance`,
+    `https://${normalized}/pricing`,
+    `https://${normalized}/plans`,
     `https://${normalized}/.well-known/security.txt`,
     `https://${normalized}/security.txt`,
   ];
