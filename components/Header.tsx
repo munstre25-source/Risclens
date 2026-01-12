@@ -97,10 +97,10 @@ function DropdownPortal({ id, isOpen, anchorRef, children, onMouseEnter, onMouse
 export default function Header() {
   const pathname = usePathname();
 
-  const platformIntent = useDropdownIntent();
   const frameworksIntent = useDropdownIntent();
-  const marketIntelIntent = useDropdownIntent();
-  const solutionsIntent = useDropdownIntent();
+  const toolsIntent = useDropdownIntent();
+  const marketInsightsIntent = useDropdownIntent();
+  const guidesIntent = useDropdownIntent();
   const resourcesIntent = useDropdownIntent();
 
   const [isMobileOpen, setMobileOpen] = useState(false);
@@ -109,21 +109,21 @@ export default function Header() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  const platformRef = useRef<HTMLDivElement>(null);
   const frameworksRef = useRef<HTMLDivElement>(null);
-  const marketIntelRef = useRef<HTMLDivElement>(null);
-  const solutionsRef = useRef<HTMLDivElement>(null);
+  const toolsRef = useRef<HTMLDivElement>(null);
+  const marketInsightsRef = useRef<HTMLDivElement>(null);
+  const guidesRef = useRef<HTMLDivElement>(null);
   const resourcesRef = useRef<HTMLDivElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const mobileToggleRef = useRef<HTMLButtonElement>(null);
 
   const closeAllDropdowns = useCallback((except?: string) => {
-    if (except !== 'platform-menu') platformIntent.immediateClose();
     if (except !== 'frameworks-menu') frameworksIntent.immediateClose();
-    if (except !== 'market-intel-menu') marketIntelIntent.immediateClose();
-    if (except !== 'solutions-menu') solutionsIntent.immediateClose();
+    if (except !== 'tools-menu') toolsIntent.immediateClose();
+    if (except !== 'market-insights-menu') marketInsightsIntent.immediateClose();
+    if (except !== 'guides-menu') guidesIntent.immediateClose();
     if (except !== 'resources-menu') resourcesIntent.immediateClose();
-  }, [platformIntent, frameworksIntent, marketIntelIntent, solutionsIntent, resourcesIntent]);
+  }, [frameworksIntent, toolsIntent, marketInsightsIntent, guidesIntent, resourcesIntent]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -134,12 +134,12 @@ export default function Header() {
       }
 
       const isInside = [
-        { anchor: platformRef, menuId: 'platform-menu' },
-        { anchor: frameworksRef, menuId: 'frameworks-menu' },
-        { anchor: marketIntelRef, menuId: 'market-intel-menu' },
-        { anchor: solutionsRef, menuId: 'solutions-menu' },
-        { anchor: resourcesRef, menuId: 'resources-menu' },
-      ].some(({ anchor, menuId }) => {
+          { anchor: frameworksRef, menuId: 'frameworks-menu' },
+          { anchor: toolsRef, menuId: 'tools-menu' },
+          { anchor: marketInsightsRef, menuId: 'market-insights-menu' },
+          { anchor: guidesRef, menuId: 'guides-menu' },
+          { anchor: resourcesRef, menuId: 'resources-menu' },
+        ].some(({ anchor, menuId }) => {
         const anchorMatch = anchor.current?.contains(target);
         const panel = document.getElementById(menuId);
         const panelMatch = panel?.contains(target);
@@ -319,43 +319,43 @@ export default function Header() {
             </Link>
 
         <nav className="hidden xl:flex items-center gap-1">
-          <NavLink
-            anchorRef={platformRef}
-            intent={platformIntent}
-            config={navConfig.platform}
-            id="platform-menu"
-            label="Platform"
-          />
-          <NavLink
-            anchorRef={frameworksRef}
-            intent={frameworksIntent}
-            config={navConfig.frameworks}
-            id="frameworks-menu"
-            label="Frameworks"
-          />
             <NavLink
-              anchorRef={marketIntelRef}
-              intent={marketIntelIntent}
-              config={navConfig.marketIntel}
-              id="market-intel-menu"
-              label="Market Intelligence"
+              anchorRef={frameworksRef}
+              intent={frameworksIntent}
+              config={navConfig.frameworks}
+              id="frameworks-menu"
+              label="Frameworks"
             />
-          <NavLink
-            anchorRef={solutionsRef}
-            intent={solutionsIntent}
-            config={navConfig.solutions}
-            id="solutions-menu"
-            label="Solutions"
-          />
-          <NavLink
-            anchorRef={resourcesRef}
-            intent={resourcesIntent}
-            config={navConfig.resources}
-            id="resources-menu"
-            label="Resources"
-          />
-          <SearchNav />
-        </nav>
+            <NavLink
+              anchorRef={toolsRef}
+              intent={toolsIntent}
+              config={navConfig.tools}
+              id="tools-menu"
+              label="Tools & Calculators"
+            />
+            <NavLink
+              anchorRef={marketInsightsRef}
+              intent={marketInsightsIntent}
+              config={navConfig.marketInsights}
+              id="market-insights-menu"
+              label="Market Insights"
+            />
+            <NavLink
+              anchorRef={guidesRef}
+              intent={guidesIntent}
+              config={navConfig.guides}
+              id="guides-menu"
+              label="Guides"
+            />
+            <NavLink
+              anchorRef={resourcesRef}
+              intent={resourcesIntent}
+              config={navConfig.resources}
+              id="resources-menu"
+              label="Resources"
+            />
+            <SearchNav />
+          </nav>
 
         <div className="flex items-center gap-2 sm:gap-4">
           <Link
@@ -432,14 +432,14 @@ export default function Header() {
                   </button>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-4 space-y-3">
-                  {[
-                    { id: 'platform', label: 'Platform', config: navConfig.platform },
-                    { id: 'frameworks', label: 'Frameworks', config: navConfig.frameworks },
-                    { id: 'marketIntel', label: 'Market Intelligence', config: navConfig.marketIntel },
-                    { id: 'solutions', label: 'Solutions', config: navConfig.solutions },
-                    { id: 'resources', label: 'Resources', config: navConfig.resources },
-                  ].map((section) => (
+                <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                    {[
+                      { id: 'frameworks', label: 'Frameworks', config: navConfig.frameworks },
+                      { id: 'tools', label: 'Tools & Calculators', config: navConfig.tools },
+                      { id: 'marketInsights', label: 'Market Insights', config: navConfig.marketInsights },
+                      { id: 'guides', label: 'Guides', config: navConfig.guides },
+                      { id: 'resources', label: 'Resources', config: navConfig.resources },
+                    ].map((section) => (
                   <div key={section.id} className="rounded-xl border border-slate-100 bg-slate-50/50 overflow-hidden">
                     <button
                       type="button"
