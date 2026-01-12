@@ -1,4 +1,5 @@
 import { ComplianceTool, getAllTools, TOP_TOOLS } from './compliance-tools';
+import { getSupabaseClient } from './supabase';
 
 export interface InternalLink {
   href: string;
@@ -13,6 +14,21 @@ export interface LinkCluster {
   links: InternalLink[];
 }
 
+export async function getIndustryGuides(): Promise<InternalLink[]> {
+  const supabase = getSupabaseClient();
+  const { data } = await supabase
+    .from('pseo_pages')
+    .select('slug, title, category')
+    .eq('category', 'compliance')
+    .limit(10);
+  
+  return (data || []).map(page => ({
+    href: `/compliance/${page.slug}`,
+    text: page.title.replace(' | RiscLens', ''),
+    priority: 'medium' as const,
+  }));
+}
+
 export async function getComparisonInternalLinks(
   toolASlug: string,
   toolBSlug: string
@@ -25,11 +41,12 @@ export async function getComparisonInternalLinks(
 
   const clusters: LinkCluster[] = [];
 
+  // Cluster 1: More Tool A Comparisons
   clusters.push({
     title: `More ${toolA.name} Comparisons`,
     links: tools
       .filter(t => t.slug !== toolASlug && t.slug !== toolBSlug)
-      .slice(0, 5)
+      .slice(0, 8)
       .map(t => ({
         href: `/compare/${[toolASlug, t.slug].sort().join('-vs-')}`,
         text: `${toolA.name} vs ${t.name}`,
@@ -37,17 +54,27 @@ export async function getComparisonInternalLinks(
       })),
   });
 
+  // Cluster 2: More Tool B Comparisons
   clusters.push({
     title: `More ${toolB.name} Comparisons`,
     links: tools
       .filter(t => t.slug !== toolASlug && t.slug !== toolBSlug)
-      .slice(0, 5)
+      .slice(0, 8)
       .map(t => ({
         href: `/compare/${[toolBSlug, t.slug].sort().join('-vs-')}`,
         text: `${toolB.name} vs ${t.name}`,
         priority: TOP_TOOLS.includes(t.slug) ? 'high' : 'medium' as const,
       })),
   });
+
+  // Cluster 3: Industry Specific Guides
+  const industryGuides = await getIndustryGuides();
+  if (industryGuides.length > 0) {
+    clusters.push({
+      title: 'Industry Compliance Guides',
+      links: industryGuides.slice(0, 6),
+    });
+  }
 
   clusters.push({
     title: 'Related Resources',
@@ -76,7 +103,7 @@ export async function getComparisonInternalLinks(
   });
 
   clusters.push({
-    title: 'Compliance Resources',
+    title: 'Compliance Hub',
     links: [
       { href: '/soc-2-cost-calculator', text: 'SOC 2 Cost Calculator', priority: 'high' },
       { href: '/soc-2-readiness', text: 'SOC 2 Readiness Guide', priority: 'medium' },
@@ -100,7 +127,7 @@ export async function getAlternativesInternalLinks(toolSlug: string): Promise<Li
     title: `${tool.name} Comparisons`,
     links: tools
       .filter(t => t.slug !== toolSlug)
-      .slice(0, 6)
+      .slice(0, 8)
       .map(t => ({
         href: `/compare/${[toolSlug, t.slug].sort().join('-vs-')}`,
         text: `${tool.name} vs ${t.name}`,
@@ -119,6 +146,14 @@ export async function getAlternativesInternalLinks(toolSlug: string): Promise<Li
       })),
   });
 
+  const industryGuides = await getIndustryGuides();
+  if (industryGuides.length > 0) {
+    clusters.push({
+      title: 'Industry Compliance Guides',
+      links: industryGuides.slice(0, 6),
+    });
+  }
+
   clusters.push({
     title: 'Pricing Guides',
     links: [
@@ -135,7 +170,7 @@ export async function getAlternativesInternalLinks(toolSlug: string): Promise<Li
   });
 
   clusters.push({
-    title: 'Compliance Resources',
+    title: 'Compliance Hub',
     links: [
       { href: '/soc-2-cost-calculator', text: 'SOC 2 Cost Calculator', priority: 'high' },
       { href: '/soc-2-readiness', text: 'SOC 2 Readiness Guide', priority: 'medium' },
@@ -159,7 +194,7 @@ export async function getPricingInternalLinks(toolSlug: string): Promise<LinkClu
     title: 'Compare Pricing',
     links: tools
       .filter(t => t.slug !== toolSlug)
-      .slice(0, 5)
+      .slice(0, 8)
       .map(t => ({
         href: `/compare/${[toolSlug, t.slug].sort().join('-vs-')}`,
         text: `${tool.name} vs ${t.name} Pricing`,
@@ -177,6 +212,14 @@ export async function getPricingInternalLinks(toolSlug: string): Promise<LinkClu
         priority: 'medium' as const,
       })),
   });
+
+  const industryGuides = await getIndustryGuides();
+  if (industryGuides.length > 0) {
+    clusters.push({
+      title: 'Compliance by Industry',
+      links: industryGuides.slice(0, 6),
+    });
+  }
 
   clusters.push({
     title: 'Related Resources',
@@ -272,6 +315,21 @@ export function generateSchemaOrgBreadcrumbs(breadcrumbs: { label: string; href:
   };
 }
 
+export const generateFAQSchema = (faqs: { question: string; answer: string }[]): any => {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(faq => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
+  };
+};
+
 export function generateComparisonSchema(
   toolA: ComplianceTool,
   toolB: ComplianceTool,
@@ -350,17 +408,54 @@ export function generateToolSchema(tool: ComplianceTool, url: string): object {
   };
 }
 
-export function generateFAQSchema(faqs: { question: string; answer: string }[]): object {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqs.map(faq => ({
-      '@type': 'Question',
-      name: faq.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: faq.answer,
-      },
-    })),
-  };
+export async function getIndustryGuideClusters(
+  frameworkSlug: string,
+  currentSlug: string
+): Promise<LinkCluster[]> {
+  const tools = await getAllTools();
+  const supabase = getSupabaseClient();
+  
+  // Get other guides in the same framework
+  const { data: otherGuides } = await supabase
+    .from('pseo_pages')
+    .select('slug, title, category')
+    .eq('category', 'compliance')
+    .neq('slug', currentSlug)
+    .limit(8);
+
+  const clusters: LinkCluster[] = [];
+
+  clusters.push({
+    title: 'Top Compliance Platforms',
+    links: tools
+      .filter(t => TOP_TOOLS.includes(t.slug))
+      .map(t => ({
+        href: `/pricing/${t.slug}`,
+        text: `${t.name} for ${frameworkSlug.toUpperCase().replace('-', ' ')}`,
+        priority: 'high',
+      })),
+  });
+
+  if (otherGuides && otherGuides.length > 0) {
+    clusters.push({
+      title: 'Industry Specific Compliance',
+      links: otherGuides.map(guide => ({
+        href: `/compliance/${guide.slug}`,
+        text: guide.title.replace(' | RiscLens', ''),
+        priority: 'medium',
+      })),
+    });
+  }
+
+  clusters.push({
+    title: 'Decision Tools',
+    links: [
+      { href: '/soc-2-cost-calculator', text: 'SOC 2 Cost Calculator', priority: 'high' },
+      { href: '/auditor-match', text: 'Auditor Selection Tool', priority: 'high' },
+      { href: '/compare/market-intelligence', text: 'Market Intelligence Hub', priority: 'medium' },
+      { href: '/compliance/directory/san-francisco', text: 'Auditor Directory', priority: 'medium' },
+    ],
+  });
+
+  return clusters;
 }
