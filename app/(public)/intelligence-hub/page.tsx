@@ -41,7 +41,11 @@ async function getCompanies() {
   return data || [];
 }
 
-export default async function IntelligenceHubPage() {
+export default async function IntelligenceHubPage({
+  searchParams,
+}: {
+  searchParams: { tab?: string };
+}) {
   const frameworks = await getPSEOFrameworks();
   const companies = await getCompanies();
     const roles = await getPSEOData('role');
@@ -96,6 +100,7 @@ export default async function IntelligenceHubPage() {
         {/* Interactive Hub Component */}
         <div className="max-w-7xl mx-auto px-4 py-16 -mt-12">
           <IntelligenceHub 
+            initialTab={searchParams.tab as any}
             frameworks={frameworks}
             companies={companies}
             roles={roles}

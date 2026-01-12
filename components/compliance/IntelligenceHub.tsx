@@ -28,6 +28,7 @@ interface HubItem {
 }
 
 interface IntelligenceHubProps {
+  initialTab?: 'All' | HubItem['category'];
   frameworks: any[];
   companies: any[];
   roles: any[];
@@ -37,6 +38,7 @@ interface IntelligenceHubProps {
 }
 
 export function IntelligenceHub({ 
+  initialTab = 'All',
   frameworks, 
   companies, 
   roles, 
@@ -45,7 +47,13 @@ export function IntelligenceHub({
   industryGuides 
 }: IntelligenceHubProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState<'All' | HubItem['category']>('All');
+  const [activeTab, setActiveTab] = useState<'All' | HubItem['category']>(initialTab);
+
+  React.useEffect(() => {
+    if (initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [initialTab]);
 
   const allItems: HubItem[] = useMemo(() => {
     const items: HubItem[] = [];

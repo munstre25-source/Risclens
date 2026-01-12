@@ -25,107 +25,118 @@ export const CTA = {
 };
 
 export const navConfig: Record<string, NavCategoryConfig> = {
-  platform: {
-    label: 'Platform',
-    href: '/tools',
-    items: [
-      { label: 'Intelligence Hub', href: '/intelligence-hub', description: 'Real-time vendor & pricing data', badge: 'Live' },
-      { label: 'Matrix Explorer', href: '/compliance', description: 'Custom compliance roadmap generator', badge: 'AI' },
-      { label: 'Evidence Gap Analyzer', href: '/evidence-gap-analyzer', description: 'AI-powered policy & control gaps', badge: 'AI' },
-      { label: 'Vendor Risk Program', href: '/vendor-risk-program', description: 'Automation & triage tools', badge: 'New' },
-    ],
-    sections: [
-      {
-        title: 'Assessments & Services',
-        items: [
-          { label: 'SOC 2 Readiness Index', href: '/soc-2-readiness-index', badge: 'Popular' },
-          { label: 'AI Governance Index', href: '/ai-governance-readiness-index' },
-          { label: 'Penetration Testing', href: '/penetration-testing', badge: 'Service' },
-        ],
-      },
-    ],
-  },
-
   frameworks: {
     label: 'Frameworks',
     href: '/compliance',
+    items: [
+      { label: 'SOC 2 Suite', href: '/soc-2', badge: 'Flagship', description: 'Complete readiness, costs & timelines' },
+      { label: 'ISO 27001 Hub', href: '/iso-27001', description: 'Controls, checklists & certification' },
+      { label: 'PCI-DSS Compliance', href: '/pci-dss', description: 'Payment security requirements' },
+      { label: 'AI Governance', href: '/ai-compliance', badge: 'New', description: 'ISO 42001 & emerging AI standards' },
+    ],
     sections: [
       {
-        title: 'Core Standards',
+        title: 'Framework Comparisons',
         items: [
-          { label: 'SOC 2 Suite', href: '/soc-2', badge: 'Flagship', description: 'Readiness, costs, and timelines' },
-      { label: 'ISO 27001 Hub', href: '/iso-27001' },
-            { label: 'HIPAA Compliance', href: '/soc-2/industries/healthcare' },
-            { label: 'PCI-DSS Compliance', href: '/pci-dss' },
-            { label: 'AI Governance Hub', href: '/ai-compliance', badge: 'Hub' },
-        ],
-      },
-      {
-        title: 'Strategic Path',
-        items: [
-          { label: 'Migration Hub', href: '/compliance/migrate', badge: 'Guides', description: 'Cross-framework mapping' },
-          { label: 'SOC 2 Cost Guide', href: '/soc-2-cost' },
-          { label: 'SOC 2 Timeline', href: '/soc-2-timeline' },
-          { label: 'Readiness Checklist', href: '/soc-2-readiness-checklist' },
+          { label: 'SOC 2 vs ISO 27001', href: '/soc-2-vs-iso-27001', description: 'Side-by-side requirements' },
+          { label: 'Migration Hub', href: '/compliance/migrate', description: 'Cross-framework mapping guides' },
+          { label: 'Type I vs Type II', href: '/soc-2-type-i-vs-type-ii', description: 'Which audit is right for you' },
         ],
       },
     ],
   },
 
-  marketIntel: {
-    label: 'Market Intelligence',
-    href: '/intelligence-hub',
+  tools: {
+    label: 'Tools & Calculators',
+    href: '/tools',
+    items: [
+      { label: 'SOC 2 Readiness Index', href: '/soc-2-readiness-index', badge: 'Popular', description: 'Free 5-minute assessment' },
+      { label: 'Evidence Gap Analyzer', href: '/evidence-gap-analyzer', badge: 'AI', description: 'AI-powered control gap detection' },
+      { label: 'Vendor Risk Program', href: '/vendor-risk-program', badge: 'New', description: 'Third-party risk automation' },
+    ],
     sections: [
       {
-        title: 'Buying & Selection',
+        title: 'Cost & Timeline Estimators',
         items: [
-          { label: 'Pricing Hub', href: '/pricing', description: 'Benchmark SaaS compliance costs' },
-          { label: 'Platform Comparisons', href: '/compare', description: 'In-depth head-to-head analysis' },
+          { label: 'SOC 2 Cost Calculator', href: '/soc-2-cost-calculator', description: 'Budget your audit spend' },
+          { label: 'Timeline Estimator', href: '/soc-2-timeline/estimator', description: 'Plan your certification path' },
+          { label: 'Audit Delay Cost', href: '/soc-2-audit-delay-cost', description: 'Revenue impact calculator' },
+          { label: 'Compliance ROI', href: '/compliance-roi-calculator', description: 'Justify your investment' },
+        ],
+      },
+      {
+        title: 'Specialized Assessments',
+        items: [
+          { label: 'AI Governance Index', href: '/ai-governance-readiness-index', description: 'ISO 42001 readiness' },
+          { label: 'PCI-DSS Calculator', href: '/pci-dss-readiness-calculator', description: 'Payment compliance costs' },
+          { label: 'ISO 42001 Calculator', href: '/iso-42001-calculator', description: 'AI compliance budget' },
+        ],
+      },
+    ],
+  },
+
+  marketInsights: {
+    label: 'Market Insights',
+    href: '/intelligence-hub',
+    items: [
+      { label: 'Intelligence Hub', href: '/intelligence-hub', badge: 'Live', description: 'Real-time vendor & market data' },
+    ],
+    sections: [
+      {
+        title: 'Software Selection',
+        items: [
+          { label: 'Pricing Hub', href: '/pricing', description: 'Compare 50+ platform costs' },
+          { label: 'Platform Comparisons', href: '/compare', description: 'Drata vs Vanta, Secureframe & more' },
           { label: 'Compliance Directory', href: '/compliance/directory', description: 'Search 2,400+ verified companies' },
         ],
       },
       {
         title: 'Auditor Discovery',
         items: [
-          { label: 'Auditor Directory', href: '/auditor-directory', description: 'Find local compliance partners' },
-          { label: 'Auditor Match', href: '/auditor-match', description: 'Connect & request bids' },
-          { label: 'Auditor Portal', href: '/auditor-portal', badge: 'Partner' },
+          { label: 'Auditor Directory', href: '/auditor-directory', description: 'Find SOC 2 & ISO auditors by city' },
+          { label: 'Auditor Match', href: '/auditor-match', description: 'Get competitive bids from auditors' },
+          { label: 'Auditor Portal', href: '/auditor-portal', badge: 'Partner', description: 'For audit firms' },
         ],
       },
     ],
   },
 
-  solutions: {
-    label: 'Solutions',
-    href: '/soc-2/industries',
+  guides: {
+    label: 'Guides',
+    href: '/learn',
     sections: [
-      {
-        title: 'By Tech Stack',
-        items: [
-          { label: 'Tech-Stack Hub', href: '/soc-2/stack', badge: 'Hub', description: 'All platform guides' },
-          { label: 'AWS Compliance', href: '/soc-2/stack/aws' },
-          { label: 'Azure Compliance', href: '/soc-2/stack/azure' },
-          { label: 'GCP Compliance', href: '/soc-2/stack/gcp' },
-          { label: 'Kubernetes', href: '/soc-2/stack/kubernetes' },
-          { label: 'Supabase & Vercel', href: '/soc-2/stack/supabase' },
-        ],
-      },
       {
         title: 'By Industry',
         items: [
-          { label: 'SaaS Compliance', href: '/soc-2/industries/saas' },
-          { label: 'Fintech Compliance', href: '/soc-2/industries/fintech' },
-          { label: 'Healthcare & AI', href: '/soc-2/industries/healthcare' },
+          { label: 'SaaS Compliance', href: '/soc-2/industries/saas', description: 'B2B software requirements' },
+          { label: 'Fintech Compliance', href: '/soc-2/industries/fintech', description: 'Financial services security' },
+          { label: 'Healthcare Compliance', href: '/soc-2/industries/healthcare', description: 'HIPAA + SOC 2 overlap' },
+          { label: 'All Industries', href: '/soc-2/industries', badge: '12+', description: 'View all industry guides' },
         ],
       },
       {
-        title: 'By Role',
+        title: 'By Tech Stack',
         items: [
-          { label: 'For Founders', href: '/soc-2/for/founders' },
-          { label: 'For CTOs', href: '/soc-2/for/cto' },
-          { label: 'For Security Leaders', href: '/soc-2/for/devops' },
+          { label: 'AWS Compliance', href: '/soc-2/stack/aws', description: 'Amazon Web Services' },
+          { label: 'Azure Compliance', href: '/soc-2/stack/azure', description: 'Microsoft Azure' },
+          { label: 'GCP Compliance', href: '/soc-2/stack/gcp', description: 'Google Cloud Platform' },
+          { label: 'All Tech Stacks', href: '/soc-2/stack', badge: '18+', description: 'Kubernetes, Vercel & more' },
         ],
       },
+        {
+          title: 'By Role',
+          items: [
+            { label: 'For Founders', href: '/soc-2/for/founders', description: 'Executive compliance roadmap' },
+            { label: 'For CTOs', href: '/soc-2/for/cto', description: 'Technical implementation' },
+            { label: 'For Security Leaders', href: '/soc-2/for/devops', description: 'DevSecOps best practices' },
+            { 
+              label: 'View All Roles', 
+              href: '/intelligence-hub?tab=Roles', 
+              badge: '50+', 
+              description: 'Department-specific roadmaps' 
+            },
+          ],
+        },
     ],
   },
 
@@ -134,21 +145,29 @@ export const navConfig: Record<string, NavCategoryConfig> = {
     href: '/learn',
     sections: [
       {
-        title: 'Calculators & Tools',
+        title: 'Learning Hub',
         items: [
-          { label: 'SOC 2 Cost Calculator', href: '/soc-2-cost-calculator' },
-          { label: 'Timeline Estimator', href: '/soc-2-timeline/estimator' },
-          { label: 'Compliance ROI', href: '/compliance-roi-calculator' },
-          { label: 'Audit Delay Cost', href: '/soc-2-audit-delay-cost' },
+          { label: 'Learning Center', href: '/learn', description: 'All guides & tutorials' },
+          { label: 'SOC 2 Glossary', href: '/glossary', description: '100+ compliance terms' },
+          { label: 'Evidence Vault', href: '/soc-2-evidence/vault', description: 'Sample policies & templates' },
+          { label: 'Readiness Checklist', href: '/soc-2-readiness-checklist', description: 'Step-by-step preparation' },
         ],
       },
       {
-        title: 'Learning & Company',
+        title: 'Deep Dives',
         items: [
-          { label: 'Learning Center', href: '/learn' },
-          { label: 'SOC 2 Glossary', href: '/glossary' },
-          { label: 'Methodology', href: '/methodology' },
+          { label: 'SOC 2 Cost Guide', href: '/soc-2-cost', description: 'Complete pricing breakdown' },
+          { label: 'SOC 2 Timeline', href: '/soc-2-timeline', description: 'Realistic certification paths' },
+          { label: 'Penetration Testing', href: '/penetration-testing', badge: 'Guide', description: 'Pentest prep & scoping' },
+          { label: 'Vendor Risk Assessment', href: '/vendor-risk-assessment', description: 'Third-party due diligence' },
+        ],
+      },
+      {
+        title: 'Company',
+        items: [
           { label: 'About RiscLens', href: '/about' },
+          { label: 'Methodology', href: '/methodology' },
+          { label: 'Editorial Policy', href: '/editorial-policy' },
         ],
       },
     ],
