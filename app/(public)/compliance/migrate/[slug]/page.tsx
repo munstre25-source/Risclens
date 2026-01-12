@@ -32,6 +32,9 @@ import {
   ChevronRight
 } from 'lucide-react';
 
+export const dynamic = "force-static";
+export const revalidate = 86400; // 24 hours
+
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
@@ -196,266 +199,179 @@ export default async function MigrationPage({ params }: PageProps) {
               </div>
             )}
             <div className="bg-slate-600 rounded-xl p-4 text-center text-white">
-              <div className="text-3xl sm:text-4xl font-black">{migration.migration_steps.length}</div>
+              <div className="text-3xl sm:text-4xl font-black">{migration.migration_steps?.length || 0}</div>
               <div className="text-xs sm:text-sm opacity-80 font-medium">Migration Steps</div>
             </div>
           </div>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link 
-              href="/soc-2-cost-calculator"
-              className="bg-brand-600 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl hover:bg-brand-700 transition-all text-center"
-            >
-              Get Multi-Framework Quote
-            </Link>
-            <Link 
-              href="/auditor-match"
-              className="bg-white border border-slate-200 text-slate-700 font-bold px-8 py-4 rounded-xl hover:bg-slate-50 transition-all text-center"
-            >
-              Find an Auditor
-            </Link>
-          </div>
         </div>
       </section>
 
-      {/* Gap Analysis Section */}
-      <section className="py-16 lg:py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center gap-3 mb-4">
-            <AlertTriangle className="w-6 h-6 text-amber-600" />
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">Gap Analysis: What {toName} Requires</h2>
-          </div>
-          <p className="text-slate-600 mb-8">
-            These are the key areas where {fromName} compliance doesn't fully satisfy {toName} requirements. 
-            Priority is indicated by severity level.
-          </p>
-          
-          <div className="space-y-4">
-            {migration.key_gaps.map((gap, idx) => (
-              <div 
-                key={idx} 
-                className={`bg-white border border-slate-200 rounded-xl p-6 shadow-sm border-l-4 ${getSeverityColor(gap.severity)}`}
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <h3 className="text-lg font-bold text-slate-900 mb-2">{gap.area}</h3>
-                    <p className="text-slate-600">{gap.description}</p>
+      {/* Main Content */}
+      <section className="py-12 lg:py-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="grid lg:grid-cols-3 gap-12">
+            {/* Left Column: Content */}
+            <div className="lg:col-span-2 space-y-16">
+              
+              {/* Key Gaps */}
+              {migration.key_gaps && migration.key_gaps.length > 0 && (
+                <div>
+                  <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
+                    <AlertTriangle className="w-6 h-6 text-amber-500" />
+                    Critical Compliance Gaps
+                  </h2>
+                  <div className="space-y-4">
+                    {migration.key_gaps.map((gap, idx) => (
+                      <div 
+                        key={idx} 
+                        className={`bg-white border border-slate-200 rounded-xl p-6 shadow-sm border-l-4 ${getSeverityColor(gap.severity)}`}
+                      >
+                        <h3 className="font-bold text-slate-900 mb-2">{gap.area}</h3>
+                        <p className="text-slate-600 text-sm">{gap.description}</p>
+                      </div>
+                    ))}
                   </div>
-                  <span className={`flex-shrink-0 px-2 py-1 rounded text-xs font-bold uppercase ${
-                    gap.severity === 'high' ? 'bg-red-100 text-red-700' :
-                    gap.severity === 'medium' ? 'bg-amber-100 text-amber-700' :
-                    gap.severity === 'low' ? 'bg-blue-100 text-blue-700' :
-                    'bg-green-100 text-green-700'
-                  }`}>
-                    {gap.severity === 'none' ? 'No Gap' : `${gap.severity} priority`}
-                  </span>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+              )}
 
-      {/* Shared Controls Section */}
-      {migration.shared_controls && migration.shared_controls.length > 0 && (
-        <section className="py-16 lg:py-20 bg-white border-y border-slate-200">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6">
-            <div className="flex items-center gap-3 mb-4">
-              <CheckCircle2 className="w-6 h-6 text-green-600" />
-              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">Reusable Controls ({migration.overlap_percentage}% Overlap)</h2>
-            </div>
-            <p className="text-slate-600 mb-8">
-              These controls from your {fromName} program directly satisfy {toName} requirements. 
-              You can reuse existing evidence and documentation.
-            </p>
-            
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-              {migration.shared_controls.map((control, idx) => (
-                <div key={idx} className="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
-                  <span className="text-sm font-medium text-green-800">{control}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Migration Roadmap Section */}
-      <section className="py-16 lg:py-20 bg-slate-900 text-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center gap-3 mb-4">
-            <Clock className="w-6 h-6 text-brand-400" />
-            <h2 className="text-2xl sm:text-3xl font-bold">Your {toName} Migration Roadmap</h2>
-          </div>
-          <p className="text-slate-400 mb-10">
-            Follow these {migration.migration_steps.length} steps to achieve {toName} compliance. 
-            Estimated timeline: {migration.time_to_compliance_weeks} weeks.
-          </p>
-          
-          <div className="space-y-4">
-            {migration.migration_steps.map((step, idx) => (
-              <div key={idx} className="flex items-start gap-4 group">
-                <div className="flex-shrink-0 w-10 h-10 rounded-full border-2 border-brand-500 flex items-center justify-center font-bold text-brand-400 group-hover:bg-brand-500 group-hover:text-white transition-all">
-                  {idx + 1}
-                </div>
-                <div className="flex-1 pt-2">
-                  <p className="text-slate-300 group-hover:text-white transition-colors">{step}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Unique Requirements Section */}
-      {migration.unique_requirements && migration.unique_requirements.length > 0 && (
-        <section className="py-16 lg:py-20">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6">
-            <div className="flex items-center gap-3 mb-4">
-              <Shield className="w-6 h-6 text-brand-600" />
-              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">{toName}-Specific Requirements</h2>
-            </div>
-            <p className="text-slate-600 mb-8">
-              These requirements are unique to {toName} and don't exist in {fromName}. 
-              You'll need to implement these from scratch.
-            </p>
-            
-            <div className="grid sm:grid-cols-2 gap-4">
-              {migration.unique_requirements.map((req, idx) => (
-                <div key={idx} className="bg-white border border-slate-200 rounded-xl p-4 flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-brand-100 flex items-center justify-center flex-shrink-0">
-                    <ArrowRight className="w-3 h-3 text-brand-600" />
+              {/* Migration Steps */}
+              {migration.migration_steps && migration.migration_steps.length > 0 && (
+                <div>
+                  <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
+                    <TrendingUp className="w-6 h-6 text-brand-600" />
+                    Step-by-Step Migration Roadmap
+                  </h2>
+                  <p className="text-slate-400 mb-10">
+                    Follow these {migration.migration_steps.length} steps to achieve {toName} compliance. 
+                    Estimated timeline: {migration.time_to_compliance_weeks} weeks.
+                  </p>
+                  
+                  <div className="space-y-4">
+                    {migration.migration_steps.map((step, idx) => (
+                      <div key={idx} className="flex items-start gap-4 group">
+                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-sm group-hover:bg-brand-600 group-hover:text-white transition-colors">
+                          {idx + 1}
+                        </div>
+                        <div className="bg-white border border-slate-200 rounded-xl p-4 flex-grow shadow-sm group-hover:border-brand-200 transition-colors">
+                          <p className="text-slate-700 font-medium">{step}</p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                  <span className="text-slate-700">{req}</span>
                 </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+              )}
 
-      {/* Use Cases Section */}
-      {migration.use_cases && migration.use_cases.length > 0 && (
-        <section className="py-16 lg:py-20 bg-white border-y border-slate-200">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6">
-            <div className="flex items-center gap-3 mb-4">
-              <Building2 className="w-6 h-6 text-slate-700" />
-              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">When to Migrate: Common Use Cases</h2>
-            </div>
-            <p className="text-slate-600 mb-8">
-              Companies typically pursue {toName} after {fromName} for these business reasons:
-            </p>
-            
-            <div className="flex flex-wrap gap-3">
-              {migration.use_cases.map((useCase, idx) => (
-                <span 
-                  key={idx} 
-                  className="bg-slate-100 border border-slate-200 rounded-full px-4 py-2 text-sm font-medium text-slate-700"
-                >
-                  {useCase}
-                </span>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* FAQ Section */}
-      {migration.faq && migration.faq.length > 0 && (
-        <section className="py-16 lg:py-20">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6">
-            <div className="flex items-center gap-3 mb-4">
-              <BookOpen className="w-6 h-6 text-slate-700" />
-              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">Frequently Asked Questions</h2>
-            </div>
-            
-            <div className="space-y-4 mt-8">
-              {migration.faq.map((faq, idx) => (
-                <details key={idx} className="bg-white border border-slate-200 rounded-xl overflow-hidden group">
-                  <summary className="p-6 cursor-pointer font-bold text-slate-900 hover:bg-slate-50 transition-colors list-none flex items-center justify-between">
-                    {faq.question}
-                    <ChevronRight className="w-5 h-5 text-slate-400 group-open:rotate-90 transition-transform" />
-                  </summary>
-                  <div className="px-6 pb-6 text-slate-600">
-                    {faq.answer}
+              {/* Unique Requirements */}
+              {migration.unique_requirements && migration.unique_requirements.length > 0 && (
+                <div className="bg-slate-900 rounded-2xl p-8 text-white">
+                  <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
+                    <Shield className="w-6 h-6 text-brand-400" />
+                    Unique {toName} Requirements
+                  </h2>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    {migration.unique_requirements.map((req, idx) => (
+                      <div key={idx} className="bg-slate-800 border border-slate-700 rounded-xl p-4 flex items-start gap-3">
+                        <CheckCircle2 className="w-5 h-5 text-brand-400 flex-shrink-0 mt-0.5" />
+                        <span className="text-slate-300 text-sm leading-relaxed">{req}</span>
+                      </div>
+                    ))}
                   </div>
-                </details>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+                </div>
+              )}
 
-      {/* Related Migrations */}
-      {relatedMigrations.length > 0 && (
-        <section className="py-16 lg:py-20 bg-white border-y border-slate-200">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6">
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-8">Related Migration Paths</h2>
-            
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {relatedMigrations.map((related) => (
+              {/* Use Cases */}
+              {migration.use_cases && migration.use_cases.length > 0 && (
+                <div>
+                  <h2 className="text-xl font-bold text-slate-900 mb-4">Strategic Use Cases</h2>
+                  <div className="flex flex-wrap gap-3">
+                    {migration.use_cases.map((useCase, idx) => (
+                      <span 
+                        key={idx} 
+                        className="bg-slate-100 border border-slate-200 rounded-full px-4 py-2 text-sm font-medium text-slate-700"
+                      >
+                        {useCase}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Sources */}
+              {migration.sources && migration.sources.length > 0 && (
+                <div className="pt-8 border-t border-slate-200">
+                  <h2 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Verification Sources</h2>
+                  <div className="flex flex-wrap gap-4">
+                    {migration.sources.map((source, idx) => (
+                      <a 
+                        key={idx}
+                        href={source.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-brand-600"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                        {source.name}
+                        <span className="text-xs bg-slate-200 px-2 py-0.5 rounded">{source.type}</span>
+                      </a>
+                    ))}
+                  </div>
+                  {migration.last_verified && (
+                    <p className="mt-4 text-xs text-slate-500">
+                      Last verified: {new Date(migration.last_verified).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Right Column: Sidebar */}
+            <div className="space-y-8">
+              {/* Related Migrations */}
+              {relatedMigrations.length > 0 && (
+                <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm sticky top-8">
+                  <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <ArrowRightLeft className="w-5 h-5 text-brand-600" />
+                    Related Migrations
+                  </h3>
+                  <div className="space-y-3">
+                    {relatedMigrations.map((rel) => (
+                      <Link 
+                        key={rel.slug}
+                        href={`/compliance/migrate/${rel.slug}`}
+                        className="block p-3 rounded-lg hover:bg-slate-50 border border-transparent hover:border-slate-100 transition-all"
+                      >
+                        <div className="text-sm font-bold text-slate-900">
+                          {getFrameworkDisplayName(rel.from_framework_slug)} to {getFrameworkDisplayName(rel.to_framework_slug)}
+                        </div>
+                        <div className="text-xs text-slate-500 mt-1">
+                          {rel.overlap_percentage}% overlap
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {/* Quick Contact */}
+              <div className="bg-brand-50 border border-brand-100 rounded-2xl p-6">
+                <h3 className="font-bold text-brand-900 mb-2">Need migration help?</h3>
+                <p className="text-sm text-brand-700 mb-4">
+                  Talk to our compliance experts to map your controls efficiently.
+                </p>
                 <Link 
-                  key={related.slug}
-                  href={`/compliance/migrate/${related.slug}`}
-                  className="bg-slate-50 border border-slate-200 rounded-xl p-5 hover:border-brand-300 hover:shadow-md transition-all group"
+                  href="/auditor-match"
+                  className="block w-full text-center bg-brand-600 text-white font-bold py-3 rounded-xl hover:bg-brand-700 transition-all text-sm"
                 >
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="font-bold text-slate-900">{getFrameworkDisplayName(related.from_framework_slug)}</span>
-                    <ArrowRight className="w-4 h-4 text-slate-400" />
-                    <span className="font-bold text-brand-600">{getFrameworkDisplayName(related.to_framework_slug)}</span>
-                  </div>
-                  <div className="flex items-center gap-4 text-sm text-slate-600">
-                    <span className="font-bold text-brand-600">{related.overlap_percentage}% overlap</span>
-                    <span>{related.time_to_compliance_weeks} weeks</span>
-                  </div>
+                  Consult an Expert
                 </Link>
-              ))}
-            </div>
-            
-            <div className="mt-8 text-center">
-              <Link 
-                href="/compliance/migrate"
-                className="inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-700"
-              >
-                View All Migration Paths
-                <ArrowRight className="w-4 h-4" />
-              </Link>
+              </div>
             </div>
           </div>
-        </section>
-      )}
-
-      {/* Sources Section */}
-      {migration.sources && migration.sources.length > 0 && (
-        <section className="py-12 bg-slate-100">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6">
-            <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wide mb-4">Sources & References</h3>
-            <div className="flex flex-wrap gap-4">
-              {migration.sources.map((source, idx) => (
-                <a 
-                  key={idx}
-                  href={source.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-brand-600"
-                >
-                  <ExternalLink className="w-4 h-4" />
-                  {source.name}
-                  <span className="text-xs bg-slate-200 px-2 py-0.5 rounded">{source.type}</span>
-                </a>
-              ))}
-            </div>
-            {migration.last_verified && (
-              <p className="mt-4 text-xs text-slate-500">
-                Last verified: {new Date(migration.last_verified).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-              </p>
-            )}
-          </div>
-        </section>
-      )}
+        </div>
+      </section>
 
       {/* Internal Links Section */}
-      <section className="py-16 lg:py-20">
+      <section className="py-16 lg:py-20 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <h2 className="text-2xl font-bold text-slate-900 mb-8">Continue Your Compliance Journey</h2>
           

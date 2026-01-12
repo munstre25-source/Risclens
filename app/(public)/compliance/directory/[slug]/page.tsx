@@ -159,8 +159,8 @@ function generateJsonLd(company: CompanySignals) {
   };
 }
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const dynamic = "force-static";
+export const revalidate = 86400; // 24 hours
 
 export default async function Page({ params }: { params: { slug: string } }) {
   if (!hasSupabaseAdmin) {

@@ -2,6 +2,25 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import CityAuditorPage from '@/components/CityAuditorPage';
 import { getPSEOPageBySlug } from '@/lib/pseo';
+import { getSupabaseAdmin } from '@/lib/supabase';
+
+export const dynamic = 'force-static';
+export const revalidate = 86400; // 24 hours
+
+export async function generateStaticParams() {
+  try {
+    const supabase = getSupabaseAdmin();
+    const { data } = await supabase
+      .from('pseo_pages')
+      .select('slug')
+      .eq('category', 'directory');
+    
+    return data?.map(p => ({ location: p.slug })) || [];
+  } catch (err) {
+    console.error('[generateStaticParams] Failed to generate params for auditor-directory:', err);
+    return [];
+  }
+}
 
 interface PageProps {
   params: { location: string };

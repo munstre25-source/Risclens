@@ -33,6 +33,9 @@ import {
 import { toolPricing } from '@/src/content/pricing';
 import { AuthorBio } from '@/components/AuthorBio';
 
+export const dynamic = 'force-static';
+export const revalidate = 86400; // 24 hours
+
 interface PageProps {
   params: Promise<{
     slug: string;

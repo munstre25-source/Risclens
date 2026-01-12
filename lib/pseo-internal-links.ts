@@ -237,15 +237,34 @@ export async function getPricingInternalLinks(toolSlug: string): Promise<LinkClu
 export function getContextualLinks(content: string, tools: ComplianceTool[]): string {
   let processedContent = content;
   
+  // Link map for general terms
+  const generalLinks: Record<string, string> = {
+    'SOC 2': '/soc-2',
+    'ISO 27001': '/iso-27001',
+    'auditor': '/auditor-directory',
+    'cost': '/soc-2-cost-calculator',
+    'readiness': '/soc-2-readiness',
+    'vendor risk': '/vendor-risk-assessment',
+    'compliance automation': '/tools',
+    'penetration testing': '/penetration-testing',
+    'HIPAA': '/compliance/hipaa',
+    'GDPR': '/compliance/gdpr',
+    'PCI DSS': '/compliance/pci-dss',
+  };
+
+  // 1. Link tool names
   tools.forEach(tool => {
-    const regex = new RegExp(`\\b${tool.name}\\b(?![^<]*>)`, 'g');
-    let isFirst = true;
+    const regex = new RegExp(`\\b${tool.name}\\b(?![^<]*>)`, 'i');
     processedContent = processedContent.replace(regex, (match) => {
-      if (isFirst) {
-        isFirst = false;
-        return `<a href="/pricing/${tool.slug}" class="text-blue-600 hover:underline">${match}</a>`;
-      }
-      return match;
+      return `<a href="/pricing/${tool.slug}" class="text-blue-600 hover:underline font-medium">${match}</a>`;
+    });
+  });
+
+  // 2. Link general terms (case insensitive, only first occurrence)
+  Object.entries(generalLinks).forEach(([term, href]) => {
+    const regex = new RegExp(`\\b${term}\\b(?![^<]*>)`, 'i');
+    processedContent = processedContent.replace(regex, (match) => {
+      return `<a href="${href}" class="text-blue-600 hover:underline font-medium">${match}</a>`;
     });
   });
   

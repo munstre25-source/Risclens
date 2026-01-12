@@ -51,8 +51,11 @@ async function getPSEORoutes() {
       if (p.category === 'role') return `/soc-2/for/${p.slug}`;
       if (p.category === 'pricing') return `/pricing/${p.slug}`;
       if (p.category === 'alternatives') return `/compare/${p.slug}`;
-      if (p.category === 'directory') return `/auditor-directory/${p.slug}`;
-      if (p.category === 'compliance') {
+if (p.category === 'directory') return `/auditor-directory/${p.slug}`;
+        if (p.category === 'stack') return `/soc-2/stack/${p.slug}`;
+        if (p.category === 'industry') return `/soc-2/industries/${p.slug}`;
+        if (p.category === 'compliance') {
+
         const framework = p.slug.startsWith('soc-2') ? 'soc-2' : 'iso-27001';
         return `/compliance/${framework}/${p.slug}`;
       }
