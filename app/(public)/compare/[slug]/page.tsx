@@ -7,8 +7,10 @@ import Script from 'next/script';
 import { Check, X, ArrowRight, ExternalLink } from 'lucide-react';
 import {
   getAllTools,
-  getToolsForComparison,
-  parseComparisonSlug,
+    getToolsForComparison,
+    getToolComparisonBySlug,
+    parseComparisonSlug,
+
   generateComparisonData,
   generateComparisonTitle,
   generateComparisonDescription,
@@ -28,6 +30,10 @@ import { EEATSignals, ExpertAuthorBox, TrustSignals } from '@/components/EEATSig
 import { InternalLinks, Breadcrumbs, InternalLinksInline } from '@/components/InternalLinks';
 import { getSupabaseAdmin } from '@/lib/supabase';
 
+export const dynamic = 'force-dynamic';
+export const dynamicParams = true;
+export const revalidate = 0;
+
 async function getAlternativePage(slug: string) {
   const supabase = getSupabaseAdmin();
   const { data } = await supabase
@@ -37,23 +43,6 @@ async function getAlternativePage(slug: string) {
     .eq('category', 'alternatives')
     .single();
   return data;
-}
-
-export async function generateStaticParams() {
-  const tools = await getAllTools();
-  const params: { slug: string }[] = [];
-
-  for (let i = 0; i < tools.length; i++) {
-    for (let j = i + 1; j < tools.length; j++) {
-      params.push({ slug: `${tools[i].slug}-vs-${tools[j].slug}` });
-    }
-  }
-
-  tools.forEach(tool => {
-    params.push({ slug: `${tool.slug}-alternatives` });
-  });
-
-  return params;
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
@@ -139,8 +128,22 @@ async function ComparisonPage({ slug }: { slug: string }) {
   const { toolA, toolB } = await getToolsForComparison(parsed.toolASlug, parsed.toolBSlug);
   if (!toolA || !toolB) notFound();
 
-  const { comparisonRows, pricingComparison, faqs } = generateComparisonData(toolA, toolB);
-  const verdict = generateVerdict(toolA, toolB);
+  // Try to get specialized comparison data from the database
+  const specializedData = await getToolComparisonBySlug(slug);
+
+  const generatedData = generateComparisonData(toolA, toolB);
+  const { comparisonRows, pricingComparison, faqs } = specializedData 
+    ? { 
+        comparisonRows: specializedData.comparison_rows || generatedData.comparisonRows, 
+        pricingComparison: specializedData.pricing_comparison || generatedData.pricingComparison, 
+        faqs: specializedData.faqs || generatedData.faqs 
+      }
+    : generatedData;
+
+  const verdict = specializedData?.verdict || generateVerdict(toolA, toolB);
+  const title = specializedData?.title || generateComparisonTitle(toolA, toolB);
+  const description = specializedData?.meta_description || generateComparisonDescription(toolA, toolB);
+  
   const internalLinks = await getComparisonInternalLinks(toolA.slug, toolB.slug);
   const breadcrumbs = getBreadcrumbs(`/compare/${slug}`);
 
@@ -172,10 +175,10 @@ async function ComparisonPage({ slug }: { slug: string }) {
                   <span className="text-xs font-bold text-blue-700 uppercase tracking-wider">Independent Analysis</span>
                 </div>
                 <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-6 tracking-tight">
-                  {toolA.name} vs {toolB.name}
+                  {title}
                 </h1>
                 <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-                  {generateComparisonDescription(toolA, toolB)}
+                  {description}
                 </p>
               </div>
 
