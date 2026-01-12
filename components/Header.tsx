@@ -5,14 +5,12 @@ import type { ReactNode, RefObject } from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
-import { CTA, navConfig } from '@/lib/navConfig';
+import { usePathname } from 'next/navigation';
+import { CTA, navConfig, type NavCategoryConfig, type NavItem, type NavSection } from '@/lib/navConfig';
 import { useDropdownIntent } from './useDropdownIntent';
 import { SearchNav } from './SearchNav';
 
-const DROPDOWN_PANEL_CLASS =
-  'absolute z-[9999] rounded-xl border border-slate-200 bg-white shadow-lg max-h-[70vh] overflow-auto focus:outline-none transition ease-out duration-150 transform';
-const DROPDOWN_WIDTH = 300;
+const DROPDOWN_WIDTH = 320;
 
 type DropdownPortalProps = {
   id: string;
@@ -99,33 +97,33 @@ function DropdownPortal({ id, isOpen, anchorRef, children, onMouseEnter, onMouse
 export default function Header() {
   const pathname = usePathname();
 
+  const platformIntent = useDropdownIntent();
   const frameworksIntent = useDropdownIntent();
+  const marketIntelIntent = useDropdownIntent();
   const solutionsIntent = useDropdownIntent();
-  const toolsIntent = useDropdownIntent();
   const resourcesIntent = useDropdownIntent();
 
   const [isMobileOpen, setMobileOpen] = useState(false);
-  const [mobileFrameworksOpen, setMobileFrameworksOpen] = useState(false);
-  const [mobileSolutionsOpen, setMobileSolutionsOpen] = useState(false);
-  const [mobileToolsOpen, setMobileToolsOpen] = useState(false);
-  const [mobileResourcesOpen, setMobileResourcesOpen] = useState(false);
+  const [mobileSectionOpen, setMobileSectionOpen] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [mounted, setMounted] = useState(false);
 
+  const platformRef = useRef<HTMLDivElement>(null);
   const frameworksRef = useRef<HTMLDivElement>(null);
+  const marketIntelRef = useRef<HTMLDivElement>(null);
   const solutionsRef = useRef<HTMLDivElement>(null);
-  const toolsRef = useRef<HTMLDivElement>(null);
   const resourcesRef = useRef<HTMLDivElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const mobileToggleRef = useRef<HTMLButtonElement>(null);
 
   const closeAllDropdowns = useCallback((except?: string) => {
+    if (except !== 'platform-menu') platformIntent.immediateClose();
     if (except !== 'frameworks-menu') frameworksIntent.immediateClose();
+    if (except !== 'market-intel-menu') marketIntelIntent.immediateClose();
     if (except !== 'solutions-menu') solutionsIntent.immediateClose();
-    if (except !== 'tools-menu') toolsIntent.immediateClose();
     if (except !== 'resources-menu') resourcesIntent.immediateClose();
-  }, [frameworksIntent, solutionsIntent, toolsIntent, resourcesIntent]);
+  }, [platformIntent, frameworksIntent, marketIntelIntent, solutionsIntent, resourcesIntent]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -136,9 +134,10 @@ export default function Header() {
       }
 
       const isInside = [
+        { anchor: platformRef, menuId: 'platform-menu' },
         { anchor: frameworksRef, menuId: 'frameworks-menu' },
+        { anchor: marketIntelRef, menuId: 'market-intel-menu' },
         { anchor: solutionsRef, menuId: 'solutions-menu' },
-        { anchor: toolsRef, menuId: 'tools-menu' },
         { anchor: resourcesRef, menuId: 'resources-menu' },
       ].some(({ anchor, menuId }) => {
         const anchorMatch = anchor.current?.contains(target);
@@ -185,32 +184,6 @@ export default function Header() {
     if (isMobileOpen) {
       setShowMobileMenu(true);
       document.body.style.overflow = 'hidden';
-      
-      // Focus trap for mobile menu
-      const handleTabKey = (e: KeyboardEvent) => {
-        if (e.key !== 'Tab' || !mobileMenuRef.current) return;
-        
-        const focusableElements = mobileMenuRef.current.querySelectorAll(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        );
-        const firstElement = focusableElements[0] as HTMLElement;
-        const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
-
-        if (e.shiftKey) {
-          if (document.activeElement === firstElement) {
-            e.preventDefault();
-            lastElement.focus();
-          }
-        } else {
-          if (document.activeElement === lastElement) {
-            e.preventDefault();
-            firstElement.focus();
-          }
-        }
-      };
-
-      document.addEventListener('keydown', handleTabKey);
-      return () => document.removeEventListener('keydown', handleTabKey);
     } else {
       const timeout = setTimeout(() => setShowMobileMenu(false), 200);
       document.body.style.overflow = '';
@@ -224,27 +197,26 @@ export default function Header() {
 
   useEffect(() => {
     if (!isMobileOpen) {
-      setMobileFrameworksOpen(false);
-      setMobileSolutionsOpen(false);
-      setMobileToolsOpen(false);
-      setMobileResourcesOpen(false);
+      setMobileSectionOpen(null);
     }
   }, [isMobileOpen]);
 
-  const menuItemClass = 'block px-4 py-2 text-sm text-slate-600 hover:text-brand-700 hover:bg-slate-50 transition-colors';
   const menuItemWithBadgeClass =
-    'flex items-center justify-between px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors';
-  const sectionLabelClass = 'px-4 pt-3 pb-1 text-[11px] font-semibold uppercase tracking-wider text-slate-400';
+    'flex items-center justify-between px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 transition-colors group/item';
+  const sectionLabelClass = 'px-4 pt-4 pb-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-400';
 
-  const Badge = ({ label }: { label?: string }) => (
-    <span
-      className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
-        label === 'Flagship' || label === 'Hub' ? 'text-blue-700 bg-blue-50' : 'text-brand-700 bg-brand-50'
-      }`}
-    >
-      {label || 'Tool'}
-    </span>
-  );
+  const Badge = ({ label }: { label?: string }) => {
+    const isSpecial = label === 'Flagship' || label === 'Hub' || label === 'AI';
+    return (
+      <span
+        className={`text-[9px] font-black px-1.5 py-0.5 rounded uppercase tracking-tighter ${
+          isSpecial ? 'text-blue-700 bg-blue-50' : 'text-brand-700 bg-brand-50'
+        }`}
+      >
+        {label || 'Tool'}
+      </span>
+    );
+  };
 
   const NavLink = ({
     anchorRef,
@@ -255,10 +227,11 @@ export default function Header() {
   }: {
     anchorRef: RefObject<HTMLDivElement>;
     intent: any;
-    config: any;
+    config: NavCategoryConfig;
     id: string;
     label: string;
-  }) => (
+  }) => {
+    return (
     <div
       ref={anchorRef}
       className="relative"
@@ -273,18 +246,18 @@ export default function Header() {
         aria-expanded={intent.open}
         aria-haspopup="true"
         aria-controls={id}
-        className={`flex items-center gap-1.5 px-3 py-2 text-base font-bold rounded-lg transition-colors ${
+        className={`flex items-center gap-1.5 px-3 py-2 text-[15px] font-bold rounded-lg transition-all ${
           intent.open ? 'text-brand-700 bg-brand-50' : 'text-slate-700 hover:text-brand-700 hover:bg-slate-50'
         }`}
       >
         {label}
         <svg
-          className={`w-4 h-4 transition-transform ${intent.open ? 'rotate-180' : ''}`}
+          className={`w-3.5 h-3.5 transition-transform duration-200 ${intent.open ? 'rotate-180' : ''}`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
         >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
         </svg>
       </Link>
       <DropdownPortal
@@ -294,28 +267,29 @@ export default function Header() {
         onMouseEnter={() => intent.scheduleOpen()}
         onMouseLeave={() => intent.scheduleClose()}
       >
-        {'items' in config && (
-          <>
+        {config.items && (
+          <div className="bg-slate-50/50 pb-2">
             <div className={sectionLabelClass}>Featured</div>
-            {config.items.map((item: any) => (
+            {config.items.map((item: NavItem) => (
               <Link key={item.href} href={item.href} role="menuitem" className={menuItemWithBadgeClass}>
                 <div className="flex flex-col">
-                  <span className="font-medium text-slate-900">{item.label}</span>
-                  {item.description && <span className="text-[11px] text-slate-500 leading-tight">{item.description}</span>}
+                  <span className="font-bold text-slate-900 group-hover/item:text-brand-700 transition-colors">{item.label}</span>
+                  {item.description && <span className="text-[11px] text-slate-500 leading-tight mt-0.5">{item.description}</span>}
                 </div>
                 {item.badge && <Badge label={item.badge} />}
               </Link>
             ))}
-            <div className="my-1 border-t border-slate-100" />
-          </>
+          </div>
         )}
-        {config.sections.map((section: any, idx: number) => (
-          <div key={section.title}>
-            {idx > 0 && <div className="my-1 border-t border-slate-100" />}
+        {config.sections.map((section: NavSection, idx: number) => (
+          <div key={section.title} className={idx > 0 || config.items ? 'border-t border-slate-100' : ''}>
             <div className={sectionLabelClass}>{section.title}</div>
-            {section.items.map((item: any) => (
+            {section.items.map((item: NavItem) => (
               <Link key={item.href} href={item.href} role="menuitem" className={menuItemWithBadgeClass}>
-                <span className="font-medium text-slate-900">{item.label}</span>
+                <div className="flex flex-col">
+                   <span className="font-semibold text-slate-800 group-hover/item:text-brand-700 transition-colors">{item.label}</span>
+                   {item.description && <span className="text-[10px] text-slate-500 leading-tight">{item.description}</span>}
+                </div>
                 {item.badge && <Badge label={item.badge} />}
               </Link>
             ))}
@@ -323,27 +297,35 @@ export default function Header() {
         ))}
       </DropdownPortal>
     </div>
-  );
+    );
+  };
 
   return (
     <header
-      className={`sticky top-0 z-50 border-b transition-all ${
+      className={`sticky top-0 z-50 border-b transition-all duration-300 ${
         isScrolled ? 'bg-white/95 backdrop-blur border-slate-200 shadow-sm' : 'bg-white border-slate-100'
       }`}
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 lg:h-24 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 lg:h-20 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3 shrink-0">
           <Image
             src="/logo/logo-wordmark.png"
             alt="RiscLens"
-            width={280}
-            height={84}
+            width={240}
+            height={70}
             priority
-            className="h-[50px] lg:h-20 w-auto object-contain"
+            className="h-10 lg:h-12 w-auto object-contain"
           />
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-1">
+        <nav className="hidden xl:flex items-center gap-1">
+          <NavLink
+            anchorRef={platformRef}
+            intent={platformIntent}
+            config={navConfig.platform}
+            id="platform-menu"
+            label="Platform"
+          />
           <NavLink
             anchorRef={frameworksRef}
             intent={frameworksIntent}
@@ -352,13 +334,19 @@ export default function Header() {
             label="Frameworks"
           />
           <NavLink
+            anchorRef={marketIntelRef}
+            intent={marketIntelIntent}
+            config={navConfig.marketIntel}
+            id="market-intel-menu"
+            label="Market Intel"
+          />
+          <NavLink
             anchorRef={solutionsRef}
             intent={solutionsIntent}
             config={navConfig.solutions}
             id="solutions-menu"
             label="Solutions"
           />
-          <NavLink anchorRef={toolsRef} intent={toolsIntent} config={navConfig.tools} id="tools-menu" label="Tools" />
           <NavLink
             anchorRef={resourcesRef}
             intent={resourcesIntent}
@@ -369,60 +357,52 @@ export default function Header() {
           <SearchNav />
         </nav>
 
-          <div className="flex items-center gap-2 sm:gap-3">
-            <Link
-              href="/search"
-              className="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50"
-              aria-label="Search"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-            </Link>
+        <div className="flex items-center gap-2 sm:gap-4">
+          <Link
+            href="/search"
+            className="xl:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50"
+            aria-label="Search"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </Link>
 
-            <Link
-              href={CTA.href}
-              className="hidden lg:inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm px-4 py-2.5 rounded-lg shadow-sm transition-all"
-            >
-              {CTA.label}
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </Link>
+          <Link
+            href={CTA.href}
+            className="hidden sm:inline-flex items-center gap-2 bg-slate-900 hover:bg-brand-700 text-white font-bold text-[13px] px-5 py-2.5 rounded-xl shadow-lg shadow-slate-200/50 transition-all active:scale-95"
+          >
+            {CTA.label}
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </Link>
 
-            <button
-              type="button"
-              className="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50"
-              aria-label="Toggle navigation menu"
-              aria-expanded={isMobileOpen}
-              onClick={() => setMobileOpen((open) => !open)}
-              ref={mobileToggleRef}
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                {isMobileOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                )}
-              </svg>
-            </button>
-          </div>
+          <button
+            type="button"
+            className="xl:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50"
+            aria-label="Toggle navigation menu"
+            aria-expanded={isMobileOpen}
+            onClick={() => setMobileOpen((open) => !open)}
+            ref={mobileToggleRef}
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {isMobileOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
+        </div>
       </div>
 
       {mounted &&
         showMobileMenu &&
         createPortal(
           <>
-            <button
-              type="button"
-              aria-hidden="true"
-              tabIndex={-1}
-              className={`lg:hidden fixed inset-0 z-[9998] bg-slate-900/40 transition-opacity duration-200 ${
+            <div
+              className={`xl:hidden fixed inset-0 z-[9998] bg-slate-900/60 backdrop-blur-sm transition-opacity duration-300 ${
                 isMobileOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
               }`}
               onClick={() => setMobileOpen(false)}
@@ -430,106 +410,63 @@ export default function Header() {
 
             <div
               ref={mobileMenuRef}
-              className={`lg:hidden fixed inset-0 w-full h-[100dvh] z-[9999] bg-white shadow-2xl transition-all duration-200 ${
-                isMobileOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'
+              className={`xl:hidden fixed top-0 right-0 bottom-0 w-[85%] max-w-sm z-[9999] bg-white shadow-2xl transition-transform duration-300 ease-out flex flex-col ${
+                isMobileOpen ? 'translate-x-0' : 'translate-x-full'
               }`}
             >
-              <div className="px-4 py-4 space-y-2 h-full overflow-y-auto overscroll-contain">
-                <div className="flex items-center justify-between pb-2 border-b border-slate-100 mb-2">
-                  <Link href="/" className="flex items-center gap-3 shrink-0" onClick={() => setMobileOpen(false)}>
-                    <Image
-                      src="/logo/logo-wordmark.png"
-                      alt="RiscLens"
-                      width={280}
-                      height={82}
-                      className="h-[50px] w-auto object-contain"
-                    />
-                  </Link>
+              <div className="p-4 border-b border-slate-100 flex items-center justify-between">
+                 <Image
+                    src="/logo/logo-wordmark.png"
+                    alt="RiscLens"
+                    width={180}
+                    height={60}
+                    className="h-8 w-auto object-contain"
+                  />
                   <button
-                    type="button"
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50"
-                    aria-label="Close navigation menu"
                     onClick={() => setMobileOpen(false)}
+                    className="p-2 text-slate-400 hover:text-slate-600"
                   >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
-                </div>
+              </div>
 
-                {/* Mobile Sections */}
+              <div className="flex-1 overflow-y-auto p-4 space-y-3">
                 {[
-                  {
-                    id: 'frameworks',
-                    label: 'Frameworks',
-                    config: navConfig.frameworks,
-                    isOpen: mobileFrameworksOpen,
-                    setOpen: setMobileFrameworksOpen,
-                  },
-                  {
-                    id: 'solutions',
-                    label: 'Solutions',
-                    config: navConfig.solutions,
-                    isOpen: mobileSolutionsOpen,
-                    setOpen: setMobileSolutionsOpen,
-                  },
-                  {
-                    id: 'tools',
-                    label: 'Tools',
-                    config: navConfig.tools,
-                    isOpen: mobileToolsOpen,
-                    setOpen: setMobileToolsOpen,
-                  },
-                  {
-                    id: 'resources',
-                    label: 'Resources',
-                    config: navConfig.resources,
-                    isOpen: mobileResourcesOpen,
-                    setOpen: setMobileResourcesOpen,
-                  },
+                  { id: 'platform', label: 'Platform', config: navConfig.platform },
+                  { id: 'frameworks', label: 'Frameworks', config: navConfig.frameworks },
+                  { id: 'marketIntel', label: 'Market Intel', config: navConfig.marketIntel },
+                  { id: 'solutions', label: 'Solutions', config: navConfig.solutions },
+                  { id: 'resources', label: 'Resources', config: navConfig.resources },
                 ].map((section) => (
-                  <div key={section.id} className="rounded-xl border border-slate-200 overflow-hidden">
-                    <div className="flex items-center justify-between bg-white pr-2">
-                      <Link
-                        href={section.config.href}
-                        className="flex-grow px-4 py-3 text-base font-bold text-slate-900"
-                        onClick={() => setMobileOpen(false)}
+                  <div key={section.id} className="rounded-xl border border-slate-100 bg-slate-50/50 overflow-hidden">
+                    <button
+                      type="button"
+                      className="w-full flex items-center justify-between p-4 text-left"
+                      onClick={() => setMobileSectionOpen(mobileSectionOpen === section.id ? null : section.id)}
+                    >
+                      <span className="font-bold text-slate-900">{section.label}</span>
+                      <svg
+                        className={`w-4 h-4 transition-transform ${mobileSectionOpen === section.id ? 'rotate-180 text-brand-600' : 'text-slate-400'}`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
                       >
-                        {section.label}
-                      </Link>
-                      <button
-                        type="button"
-                        className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-slate-50 transition-colors"
-                        onClick={() => {
-                          setMobileFrameworksOpen(false);
-                          setMobileSolutionsOpen(false);
-                          setMobileToolsOpen(false);
-                          setMobileResourcesOpen(false);
-                          section.setOpen(!section.isOpen);
-                        }}
-                      >
-                        <svg
-                          className={`w-4 h-4 transition-transform ${
-                            section.isOpen ? 'rotate-180 text-brand-700' : 'text-slate-400'
-                          }`}
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
-                      </button>
-                    </div>
-                    {section.isOpen && (
-                      <div className="px-4 pb-4 pt-2 space-y-4 bg-slate-50 border-t border-slate-100">
-                        {'items' in section.config && Array.isArray((section.config as any).items) && (
-                          <div className="space-y-2">
-                            <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Featured</p>
-                            {(section.config as any).items.map((item: any) => (
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                    
+                    {mobileSectionOpen === section.id && (
+                      <div className="px-4 pb-4 space-y-4">
+                        {section.config.items && (
+                          <div className="space-y-2.5">
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Featured</p>
+                            {section.config.items.map((item: NavItem) => (
                               <Link
                                 key={item.href}
                                 href={item.href}
-                                className="flex items-center justify-between text-sm text-slate-700"
+                                className="flex items-center justify-between py-1 text-sm font-semibold text-slate-700"
                                 onClick={() => setMobileOpen(false)}
                               >
                                 {item.label}
@@ -538,16 +475,14 @@ export default function Header() {
                             ))}
                           </div>
                         )}
-                          {Array.isArray((section.config as any).sections) && (section.config as any).sections.map((sub: any) => (
-                            <div key={sub.title} className="space-y-2">
-                            <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
-                              {sub.title}
-                            </p>
-                            {sub.items.map((item: any) => (
+                        {section.config.sections.map((sub: NavSection) => (
+                          <div key={sub.title} className="space-y-2.5 pt-2 border-t border-slate-100">
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{sub.title}</p>
+                            {sub.items.map((item: NavItem) => (
                               <Link
                                 key={item.href}
                                 href={item.href}
-                                className="flex items-center justify-between text-sm text-slate-700"
+                                className="flex items-center justify-between py-1 text-sm font-semibold text-slate-700"
                                 onClick={() => setMobileOpen(false)}
                               >
                                 {item.label}
@@ -560,32 +495,25 @@ export default function Header() {
                     )}
                   </div>
                 ))}
+              </div>
 
+              <div className="p-4 border-t border-slate-100 bg-white space-y-3">
                 <Link
                   href="/search"
-                  className="flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-200 text-base font-bold text-slate-900"
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-slate-200 font-bold text-slate-900"
                   onClick={() => setMobileOpen(false)}
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                    />
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
-                  Search
+                  Search Hub
                 </Link>
-
                 <Link
                   href={CTA.href}
-                  className="w-full inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-4 py-3 rounded-xl shadow-sm transition-all"
+                  className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-slate-900 text-white font-bold"
                   onClick={() => setMobileOpen(false)}
                 >
                   {CTA.label}
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
                 </Link>
               </div>
             </div>

@@ -14,18 +14,39 @@ interface BreadcrumbsProps {
   items?: BreadcrumbItem[];
 }
 
-export function Breadcrumbs({ items }: BreadcrumbsProps) {
-  const pathname = usePathname();
-  
-  const breadcrumbs = items || (pathname === '/' ? [] : pathname.split('/').filter(Boolean).map((segment, index, array) => {
-    const href = `/${array.slice(0, index + 1).join('/')}`;
-    const label = segment
-      .split('-')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+  export function Breadcrumbs({ items }: BreadcrumbsProps) {
+    const pathname = usePathname();
     
-    return { label, href };
-  }));
+    const breadcrumbs = items || (pathname === '/' ? [] : pathname.split('/').filter(Boolean).reduce((acc: BreadcrumbItem[], segment, index, array) => {
+      // Logic for framework routes that were moved to /compliance
+      const frameworks = ['soc-2', 'iso-27001', 'pci-dss', 'hipaa', 'gdpr'];
+      
+      let label = segment
+        .split('-')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+      
+      let href = `/${array.slice(0, index + 1).join('/')}`;
+
+      // Handle the 'for' segment - it's usually just a structural segment, not a page
+      if (segment.toLowerCase() === 'for') {
+        return acc; // Skip 'for' in breadcrumbs to avoid 404
+      }
+
+      // If the segment is a framework, it might need to link to /compliance/[framework]
+      if (frameworks.includes(segment.toLowerCase()) && !href.startsWith('/compliance')) {
+        href = `/compliance/${segment.toLowerCase()}`;
+        
+        // Ensure we only have one 'Compliance' breadcrumb
+        if (acc.length === 0 || acc[acc.length - 1].label !== 'Compliance') {
+          acc.push({ label: 'Compliance', href: '/compliance' });
+        }
+      }
+
+      acc.push({ label, href });
+      return acc;
+    }, []));
+
 
   if (breadcrumbs.length === 0) return null;
 

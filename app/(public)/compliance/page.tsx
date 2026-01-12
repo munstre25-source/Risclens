@@ -3,15 +3,23 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { getPSEOFrameworks } from '@/lib/pseo';
+import { getPSEOFrameworks, getPSEOIndustries } from '@/lib/pseo';
 import { getSupabaseAdmin } from '@/lib/supabase';
-import { IntelligenceHub } from '@/components/compliance/IntelligenceHub';
+import { MatrixExplorer } from '@/components/compliance/MatrixExplorer';
 import { AuthorByline, EditorialPolicyBadge, generateArticleJsonLd } from '@/components/compliance/AuthorByline';
-import { Sparkles } from 'lucide-react';
+import { 
+  Shield, 
+  ChevronRight, 
+  Layers, 
+  Database, 
+  Users, 
+  MapPin, 
+  ExternalLink 
+} from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'RiscLens Intelligence Hub | Compliance & Security Data',
-  description: 'The central intelligence layer for enterprise trust. Access frameworks, pricing data, auditor directories, and company security signals.',
+  title: 'Frameworks Hub | Compliance Matrix Explorer',
+  description: 'Map your compliance roadmap across 1,200+ contextual nodes. Select your framework, role, and industry to generate a tailored security strategy.',
   alternates: {
     canonical: 'https://risclens.com/compliance',
   },
@@ -19,40 +27,44 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-async function getPSEOData(category: string) {
+async function getRolesAndDecisions() {
   const supabase = getSupabaseAdmin();
-  const { data } = await supabase
+  
+  // Get Roles
+  const { data: rolesData } = await supabase
     .from('pseo_pages')
     .select('slug, content_json')
-    .eq('category', category)
+    .eq('category', 'role')
     .order('slug');
-  return data || [];
+
+  // Get Compliance Topics/Decisions (from 'compliance' category)
+  const { data: decisionsData } = await supabase
+    .from('pseo_pages')
+    .select('slug, content_json')
+    .eq('category', 'compliance')
+    .order('slug');
+
+  const roles = (rolesData || []).map(r => ({
+    name: r.content_json?.roleName || r.slug.split('-').map((s: string) => s.charAt(0).toUpperCase() + s.slice(1)).join(' '),
+    slug: r.slug
+  }));
+
+  const decisions = (decisionsData || []).map(d => ({
+    name: d.content_json?.guideTitle || d.slug.split('-').map((s: string) => s.charAt(0).toUpperCase() + s.slice(1)).join(' '),
+    slug: d.slug
+  }));
+
+  return { roles, decisions };
 }
 
-async function getCompanies() {
-  const supabase = getSupabaseAdmin();
-  const { data } = await supabase
-    .from('company_signals')
-    .select('name, slug, domain, signal_score')
-    .eq('indexable', true)
-    .gt('signal_score', 0)
-    .order('signal_score', { ascending: false })
-    .limit(12);
-  return data || [];
-}
-
-export default async function ComplianceHubPage() {
+export default async function FrameworksHubPage() {
   const frameworks = await getPSEOFrameworks();
-  const companies = await getCompanies();
-    const roles = await getPSEOData('role');
-    const pricing = await getPSEOData('pricing');
-    const alternatives = await getPSEOData('alternatives');
-    const industryGuides = await getPSEOData('compliance');
-
+  const industries = await getPSEOIndustries();
+  const { roles, decisions } = await getRolesAndDecisions();
 
   const jsonLd = generateArticleJsonLd({
-    title: 'RiscLens Intelligence Hub | Compliance & Security Data',
-    description: 'The central intelligence layer for enterprise trust. Access frameworks, pricing data, auditor directories, and company security signals.',
+    title: 'Frameworks Hub | Compliance Matrix Explorer',
+    description: 'Map your compliance roadmap across 1,200+ contextual nodes. Select your framework, role, and industry to generate a tailored security strategy.',
     url: 'https://risclens.com/compliance',
     publishedDate: '2025-01-01',
     updatedDate: '2026-01-11',
@@ -69,72 +81,87 @@ export default async function ComplianceHubPage() {
       
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="bg-white border-b border-slate-200 pt-16 pb-24 overflow-hidden relative">
+        <section className="bg-white pt-16 pb-32 overflow-hidden relative">
           <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:24px_24px] opacity-20" />
           <div className="max-w-7xl mx-auto px-4 relative text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 border border-brand-100 mb-6">
-              <Sparkles className="w-3 h-3 text-brand-600" />
-              <span className="text-[10px] font-black text-brand-700 uppercase tracking-[0.2em]">Master Intelligence Hub</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 mb-6">
+              <Shield className="w-3 h-3 text-brand-400" />
+              <span className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em]">Frameworks Matrix v1.0</span>
             </div>
             
-            <h1 className="text-4xl sm:text-6xl font-black text-slate-900 leading-tight mb-6 tracking-tight">
-              The Intelligence Layer for <br className="hidden sm:block" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-indigo-600">Enterprise Trust.</span>
+            <h1 className="text-4xl sm:text-7xl font-black text-slate-900 leading-tight mb-8 tracking-tighter">
+              Map Your Path to <br className="hidden sm:block" />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-indigo-600">Total Compliance.</span>
             </h1>
             
-            <p className="text-lg sm:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed font-medium">
-              A consolidated engine for frameworks, pricing, signals, and roadmaps. 
-              Search the ecosystem or browse by category.
+            <p className="text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed font-medium mb-12">
+              Don't follow a generic checklist. Build a contextual roadmap based on your framework, your role, and your industry.
             </p>
             
-            <div className="mt-8">
-              <AuthorByline authorId="compliance-team" updatedDate="January 11, 2026" variant="compact" />
-            </div>
+            <MatrixExplorer 
+              frameworks={frameworks}
+              industries={industries}
+              roles={roles}
+              decisions={decisions}
+            />
           </div>
         </section>
 
-        {/* Interactive Hub Component */}
-        <div className="max-w-7xl mx-auto px-4 py-16 -mt-12">
-          <IntelligenceHub 
-            frameworks={frameworks}
-            companies={companies}
-            roles={roles}
-            pricing={pricing}
-            alternatives={alternatives}
-            industryGuides={industryGuides}
-          />
-        </div>
-
-        {/* Bottom CTA */}
-        <section className="max-w-7xl mx-auto px-4 pb-24">
-          <div className="bg-brand-600 rounded-3xl p-8 sm:p-16 text-center text-white relative overflow-hidden shadow-2xl">
-            <div className="absolute top-0 left-0 w-64 h-64 bg-white/10 rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl" />
-            <div className="absolute bottom-0 right-0 w-64 h-64 bg-indigo-500/20 rounded-full translate-x-1/2 translate-y-1/2 blur-3xl" />
-            
-            <h2 className="text-3xl sm:text-4xl font-black mb-6 relative z-10">Can't find what you need?</h2>
-            <p className="text-brand-50 text-lg mb-10 max-w-2xl mx-auto relative z-10 opacity-90 leading-relaxed font-medium">
-              Our intelligence team adds new signals and frameworks daily. If you need a specific comparison or roadmap, reach out to our analysts.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 relative z-10">
-              <Link 
-                href="/readiness-review"
-                className="w-full sm:w-auto px-10 py-5 bg-white text-brand-700 font-black rounded-2xl hover:bg-brand-50 transition-all shadow-xl"
-              >
-                Request Custom Intel
-              </Link>
-              <Link 
-                href="/search"
-                className="w-full sm:w-auto px-10 py-5 bg-brand-500 text-white border border-brand-400 font-black rounded-2xl hover:bg-brand-400 transition-all shadow-xl"
-              >
-                Global Search Engine
-              </Link>
+        {/* Intelligence Hub Link Section */}
+        <section className="max-w-7xl mx-auto px-4 py-24 border-t border-slate-200">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            <div>
+              <h2 className="text-3xl font-black text-slate-900 mb-6">Looking for Vendor Signals?</h2>
+              <p className="text-slate-600 text-lg leading-relaxed mb-8 font-medium">
+                Our Frameworks Hub is built for strategy. If you need data on specific vendors, pricing, or auditor directories, visit our Master Intelligence Hub.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <Link 
+                  href="/intelligence-hub"
+                  className="inline-flex items-center gap-2 bg-slate-900 text-white font-bold px-8 py-4 rounded-xl hover:bg-slate-800 transition-all shadow-xl"
+                >
+                  Enter Intelligence Hub
+                  <ChevronRight className="w-5 h-5" />
+                </Link>
+                <Link 
+                  href="/compliance/directory"
+                  className="inline-flex items-center gap-2 bg-white border border-slate-200 text-slate-900 font-bold px-8 py-4 rounded-xl hover:bg-slate-50 transition-all shadow-sm"
+                >
+                  Full Company Directory
+                </Link>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { title: 'Auditor Match', href: '/auditor-match', icon: <MapPin className="w-5 h-5" /> },
+                { title: 'Pricing Data', href: '/pricing', icon: <Layers className="w-5 h-5" /> },
+                { title: 'Evidence Vault', href: '/soc-2-evidence', icon: <Database className="w-5 h-5" /> },
+                { title: 'Role Guides', href: '/soc-2/for/cto', icon: <Users className="w-5 h-5" /> },
+              ].map((item) => (
+                <Link 
+                  key={item.title}
+                  href={item.href}
+                  className="p-6 bg-white border border-slate-200 rounded-2xl hover:border-brand-300 hover:shadow-lg transition-all group"
+                >
+                  <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 group-hover:bg-brand-50 group-hover:text-brand-600 transition-all mb-4">
+                    {item.icon}
+                  </div>
+                  <h3 className="font-bold text-slate-900 flex items-center gap-1">
+                    {item.title}
+                    <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-all" />
+                  </h3>
+                </Link>
+              ))}
             </div>
           </div>
         </section>
 
         {/* Editorial Standards */}
-        <section className="max-w-4xl mx-auto px-4 pb-12">
-          <EditorialPolicyBadge variant="footer" />
+        <section className="max-w-4xl mx-auto px-4 py-12">
+          <AuthorByline authorId="compliance-team" updatedDate="January 11, 2026" />
+          <div className="mt-8">
+            <EditorialPolicyBadge variant="footer" />
+          </div>
         </section>
       </main>
 
