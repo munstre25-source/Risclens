@@ -17,6 +17,8 @@ import {
   generateVerdict,
   getAlternativesFor,
   ComplianceTool,
+  getAllComparisonSlugs,
+  getAllAlternativesSlugs,
 } from '@/lib/compliance-tools';
 import {
   getComparisonInternalLinks,
@@ -30,9 +32,32 @@ import { EEATSignals, ExpertAuthorBox, TrustSignals } from '@/components/EEATSig
 import { InternalLinks, Breadcrumbs, InternalLinksInline } from '@/components/InternalLinks';
 import { getSupabaseAdmin } from '@/lib/supabase';
 
-export const dynamic = 'force-dynamic';
+export const dynamic = 'force-static';
 export const dynamicParams = true;
-export const revalidate = 0;
+export const revalidate = 86400; // 24 hours
+
+export async function generateStaticParams() {
+  try {
+    const [comparisonSlugs, alternativesSlugs, pseoPages] = await Promise.all([
+      getAllComparisonSlugs(),
+      getAllAlternativesSlugs(),
+      getSupabaseAdmin().from('pseo_pages').select('slug').eq('category', 'alternatives')
+    ]);
+
+    const pseoSlugs = pseoPages.data?.map(p => p.slug) || [];
+    
+    const allSlugs = Array.from(new Set([
+      ...comparisonSlugs,
+      ...alternativesSlugs,
+      ...pseoSlugs
+    ]));
+
+    return allSlugs.map(slug => ({ slug }));
+  } catch (err) {
+    console.error('[generateStaticParams] Failed to generate params for compare:', err);
+    return [];
+  }
+}
 
 async function getAlternativePage(slug: string) {
   const supabase = getSupabaseAdmin();

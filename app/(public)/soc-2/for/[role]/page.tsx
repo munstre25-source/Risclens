@@ -7,6 +7,24 @@ interface Props {
   params: Promise<{ role: string }>;
 }
 
+export const dynamic = 'force-static';
+export const revalidate = 86400; // 24 hours
+
+export async function generateStaticParams() {
+  try {
+    const supabase = getSupabaseAdmin();
+    const { data } = await supabase
+      .from('pseo_pages')
+      .select('slug')
+      .eq('category', 'role');
+    
+    return data?.map(p => ({ role: p.slug })) || [];
+  } catch (err) {
+    console.error('[generateStaticParams] Failed to generate params for soc-2/for/[role]:', err);
+    return [];
+  }
+}
+
 async function getRolePage(role: string) {
   const supabase = getSupabaseAdmin();
   const { data, error } = await supabase
