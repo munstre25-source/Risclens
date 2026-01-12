@@ -4,7 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import Script from 'next/script';
-import { Check, X, ArrowRight, DollarSign, Users, Layers, Clock } from 'lucide-react';
+import { Check, X, ArrowRight, DollarSign, Users, Layers, Clock, Lightbulb, Info } from 'lucide-react';
 import {
   getAllTools,
   getToolBySlug,
@@ -21,30 +21,51 @@ import {
 } from '@/lib/pseo-internal-links';
 import { EEATSignals, ExpertAuthorBox, TrustSignals } from '@/components/EEATSignals';
 import { InternalLinks, Breadcrumbs, RelatedToolsGrid } from '@/components/InternalLinks';
+import { getSupabaseAdmin } from '@/lib/supabase';
 
 export async function generateStaticParams() {
   const tools = await getAllTools();
   return tools.map(tool => ({ slug: tool.slug }));
 }
 
+async function getPseoData(slug: string) {
+  const supabase = getSupabaseAdmin();
+  const { data } = await supabase
+    .from('pseo_pages')
+    .select('content_json')
+    .eq('slug', slug)
+    .eq('category', 'pricing')
+    .single();
+  return data?.content_json || null;
+}
+
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const tool = await getToolBySlug(params.slug);
+  const pseoData = await getPseoData(params.slug);
+  
   if (!tool) return { title: 'Pricing | RiscLens' };
 
+  const title = pseoData?.title || generatePricingTitle(tool);
+  const description = pseoData?.heroDescription || generatePricingDescription(tool);
+
   return {
-    title: generatePricingTitle(tool),
-    description: generatePricingDescription(tool),
+    title,
+    description,
     alternates: { canonical: `https://risclens.com/pricing/${params.slug}` },
     openGraph: {
-      title: generatePricingTitle(tool),
-      description: generatePricingDescription(tool),
+      title,
+      description,
       type: 'article',
     },
   };
 }
 
 export default async function PricingPage({ params }: { params: { slug: string } }) {
-  const tool = await getToolBySlug(params.slug);
+  const [tool, pseoData] = await Promise.all([
+    getToolBySlug(params.slug),
+    getPseoData(params.slug)
+  ]);
+
   if (!tool) notFound();
 
   const tools = await getAllTools();
@@ -82,7 +103,7 @@ export default async function PricingPage({ params }: { params: { slug: string }
                   {tool.name} Pricing
                 </h1>
                 <p className="text-xl text-slate-600 max-w-2xl">
-                  {generatePricingDescription(tool)}
+                  {pseoData?.heroDescription || generatePricingDescription(tool)}
                 </p>
               </div>
 
@@ -97,7 +118,7 @@ export default async function PricingPage({ params }: { params: { slug: string }
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-slate-400 text-sm mb-1">Starting at</p>
-                      <p className="text-4xl font-bold">{tool.pricing_starting || 'Contact Sales'}</p>
+                      <p className="text-4xl font-bold">{pseoData?.pricing || tool.pricing_starting || 'Contact Sales'}</p>
                     </div>
                     {tool.auditor_included && (
                       <div className="bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-bold">
@@ -141,6 +162,56 @@ export default async function PricingPage({ params }: { params: { slug: string }
                 </div>
               </div>
 
+              {/* Pricing Tiers from PSEO Data */}
+              {pseoData?.pricingTiers && (
+                <div className="my-12">
+                  <h2 className="text-2xl font-bold text-slate-900 mb-8">Estimated Pricing Tiers</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {pseoData.pricingTiers.map((tier: any, i: number) => (
+                      <div key={i} className="bg-white rounded-2xl border border-slate-200 overflow-hidden flex flex-col">
+                        <div className="p-6 border-b border-slate-100 bg-slate-50">
+                          <h3 className="text-lg font-bold text-slate-900 mb-1">{tier.name}</h3>
+                          <p className="text-sm text-slate-500 mb-4">{tier.targetAudience}</p>
+                          <div className="text-2xl font-black text-brand-600">{tier.estimatedPrice}</div>
+                        </div>
+                        <div className="p-6 flex-grow">
+                          <ul className="space-y-3">
+                            {tier.features.map((feature: string, j: number) => (
+                              <li key={j} className="flex items-start gap-2 text-sm text-slate-600">
+                                <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                                {feature}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Negotiation Tips from PSEO Data */}
+              {pseoData?.negotiationTips && (
+                <div className="bg-blue-50 rounded-2xl border border-blue-100 p-8 my-8">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="p-2 bg-blue-600 rounded-lg">
+                      <Lightbulb className="w-6 h-6 text-white" />
+                    </div>
+                    <h2 className="text-2xl font-bold text-slate-900">How to Negotiate {tool.name} Pricing</h2>
+                  </div>
+                  <div className="grid gap-4">
+                    {pseoData.negotiationTips.map((tip: string, i: number) => (
+                      <div key={i} className="flex gap-4 p-4 bg-white rounded-xl border border-blue-100">
+                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 font-bold">
+                          {i + 1}
+                        </div>
+                        <p className="text-slate-700">{tip}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <div className="bg-white rounded-2xl border border-slate-200 p-8 my-8">
                 <h2 className="text-2xl font-bold text-slate-900 mb-6">What Drives {tool.name} Pricing?</h2>
                 <div className="space-y-4">
@@ -165,6 +236,26 @@ export default async function PricingPage({ params }: { params: { slug: string }
                   )}
                 </div>
               </div>
+
+              {/* Hidden Costs from PSEO Data */}
+              {pseoData?.hiddenCosts && (
+                <div className="bg-amber-50 rounded-2xl border border-amber-100 p-8 my-8">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="p-2 bg-amber-600 rounded-lg">
+                      <Info className="w-6 h-6 text-white" />
+                    </div>
+                    <h2 className="text-2xl font-bold text-slate-900">Hidden Costs to Watch For</h2>
+                  </div>
+                  <ul className="grid gap-3">
+                    {pseoData.hiddenCosts.map((cost: string, i: number) => (
+                      <li key={i} className="flex items-start gap-3 p-4 bg-white rounded-xl border border-amber-100">
+                        <X className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
+                        <span className="text-slate-700 font-medium">{cost}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
               <div className="bg-white rounded-2xl border border-slate-200 p-8 my-8">
                 <h2 className="text-2xl font-bold text-slate-900 mb-6">{tool.name} Features Overview</h2>
@@ -224,7 +315,7 @@ export default async function PricingPage({ params }: { params: { slug: string }
                     <tbody>
                       <tr className="bg-blue-50">
                         <td className="py-3 px-4 font-semibold text-slate-900">{tool.name}</td>
-                        <td className="py-3 px-4">{tool.pricing_starting}</td>
+                        <td className="py-3 px-4">{pseoData?.pricing || tool.pricing_starting}</td>
                         <td className="py-3 px-4">{tool.auditor_included ? <Check className="w-5 h-5 text-green-500" /> : <X className="w-5 h-5 text-slate-300" />}</td>
                         <td className="py-3 px-4 text-sm">{tool.target_market}</td>
                       </tr>

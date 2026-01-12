@@ -87,7 +87,7 @@ export interface FAQ {
   answer: string;
 }
 
-const CACHE_TTL = 60 * 60 * 1000;
+const CACHE_TTL = process.env.NODE_ENV === 'development' ? 5 * 1000 : 60 * 60 * 1000; // 5 seconds in dev, 1 hour in prod
 let toolsCache: { data: ComplianceTool[]; timestamp: number } | null = null;
 
 export async function getAllTools(): Promise<ComplianceTool[]> {
@@ -95,20 +95,30 @@ export async function getAllTools(): Promise<ComplianceTool[]> {
     return toolsCache.data;
   }
 
-  const supabase = getSupabaseClient();
-  const { data, error } = await supabase
-    .from('compliance_tools')
-    .select('*')
-    .eq('is_active', true)
-    .order('display_order', { ascending: true });
+  try {
+    const supabase = getSupabaseClient();
+    const { data, error } = await supabase
+      .from('compliance_tools')
+      .select('*', { count: 'exact' })
+      .eq('is_active', true)
+      .order('display_order', { ascending: true });
 
-  if (error) {
-    console.error('Failed to fetch tools:', error);
+    if (error) {
+      console.error('[getAllTools] Supabase error:', error.message, error.code);
+      return [];
+    }
+
+    if (!data || data.length === 0) {
+      console.warn('[getAllTools] No tools found in database');
+      return [];
+    }
+
+    toolsCache = { data: data, timestamp: Date.now() };
+    return data;
+  } catch (err) {
+    console.error('[getAllTools] Exception:', err);
     return [];
   }
-
-  toolsCache = { data: data || [], timestamp: Date.now() };
-  return data || [];
 }
 
 export async function getToolBySlug(slug: string): Promise<ComplianceTool | null> {
@@ -130,6 +140,30 @@ export async function getToolsForComparison(slugA: string, slugB: string): Promi
     toolA: tools.find(t => t.slug === slugA) || null,
     toolB: tools.find(t => t.slug === slugB) || null
   };
+}
+
+export async function getToolComparisonBySlug(slug: string): Promise<ToolComparison | null> {
+  try {
+    const supabase = getSupabaseClient();
+    const { data, error } = await supabase
+      .from('tool_comparisons')
+      .select('*')
+      .eq('slug', slug)
+      .eq('is_active', true)
+      .single();
+
+    if (error) {
+      if (error.code !== 'PGRST116') { // PGRST116 is "no rows found"
+        console.error('[getToolComparisonBySlug] Supabase error:', error.message);
+      }
+      return null;
+    }
+
+    return data;
+  } catch (err) {
+    console.error('[getToolComparisonBySlug] Exception:', err);
+    return null;
+  }
 }
 
 export async function getAlternativesFor(toolSlug: string): Promise<ComplianceTool[]> {
