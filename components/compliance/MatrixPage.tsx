@@ -9,8 +9,9 @@ import { Breadcrumb, BreadcrumbItem } from '@/components/ui/Breadcrumb';
 import { ContextualLinks } from '@/components/compliance/ContextualLinks';
 import { EditorialPolicyBadge } from '@/components/compliance/AuthorByline';
 import Link from 'next/link';
-import { ShieldCheck, Zap, DollarSign, BarChart3, Clock, AlertTriangle, Sparkles, ChevronRight } from 'lucide-react';
+import { ShieldCheck, Zap, DollarSign, BarChart3, Clock, AlertTriangle, Sparkles, ChevronRight, Globe, Target, Building2 } from 'lucide-react';
 import { getCalculatorUrl, getReadinessChecklistUrl } from '@/lib/calculators';
+import { getPSEOFrameworks, getPSEOIndustries, getPSEORoles, getPSEODecisionTypes } from '@/lib/pseo';
 
 interface MatrixPageProps {
   framework: { name: string; slug: string };
@@ -27,7 +28,7 @@ interface MatrixPageProps {
     };
 }
 
-export default function MatrixPage({
+export default async function MatrixPage({
   framework,
   role,
   industry,
@@ -36,6 +37,14 @@ export default function MatrixPage({
 }: MatrixPageProps) {
   const lastUpdated = "January 11, 2026";
   
+  // Fetch dynamic dimensions for internal linking
+  const [allFrameworks, allIndustries, allRoles, allDecisions] = await Promise.all([
+    getPSEOFrameworks(),
+    getPSEOIndustries(),
+    getPSEORoles(),
+    getPSEODecisionTypes()
+  ]);
+
   // Construct canonical URL and Title based on active dimensions
   const dimensions = [framework.slug];
   if (decision) dimensions.push(decision.slug);
@@ -153,21 +162,21 @@ export default function MatrixPage({
             <div className="space-y-12">
               {/* Vertical Move: Same context, different standard */}
               <div>
-                <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 mb-4">Compare Standards</h3>
-                <div className="grid sm:grid-cols-2 gap-4">
-                  {[
-                    { name: 'ISO 27001', slug: 'iso-27001' },
-                    { name: 'HIPAA', slug: 'hipaa' }
-                  ].filter(f => f.slug !== framework.slug).map((f) => (
+                <div className="flex items-center gap-2 mb-4">
+                  <ShieldCheck className="w-4 h-4 text-slate-400" />
+                  <h3 className="text-xs font-black uppercase tracking-widest text-slate-400">Compare Standards</h3>
+                </div>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {allFrameworks.filter(f => f.slug !== framework.slug).slice(0, 6).map((f) => (
                     <Link
                       key={f.slug}
-                      href={`/${f.slug}/${role ? `for/${role.slug}` : decision?.slug}${industry ? `/${industry.slug}` : ''}`}
+                      href={`/${f.slug}/${role ? `for/${role.slug}` : (decision?.slug || 'readiness-checklist')}${industry ? `/${industry.slug}` : ''}`}
                       className="p-5 bg-white border border-slate-200 rounded-xl hover:border-brand-500 hover:shadow-md transition-all group"
                     >
                       <div className="text-[10px] font-bold text-brand-600 mb-1 uppercase tracking-tight">Switch Framework</div>
-                      <div className="font-bold text-slate-900 flex items-center justify-between">
-                        {f.name} Strategy {role ? `for ${role.name}s` : ''}
-                        <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      <div className="font-bold text-slate-900 flex items-center justify-between text-sm">
+                        {f.name} {role ? `for ${role.name}s` : ''}
+                        <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform flex-shrink-0" />
                       </div>
                     </Link>
                   ))}
@@ -176,22 +185,21 @@ export default function MatrixPage({
 
               {/* Horizontal Move: Same standard, different role */}
               <div>
-                <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 mb-4">Cross-Functional Perspectives</h3>
-                <div className="grid sm:grid-cols-2 gap-4">
-                  {[
-                    { name: 'CTO', slug: 'cto' },
-                    { name: 'Founder', slug: 'founders' },
-                    { name: 'DevOps', slug: 'devops' }
-                  ].filter(r => r.slug !== role?.slug).map((r) => (
+                <div className="flex items-center gap-2 mb-4">
+                  <Target className="w-4 h-4 text-slate-400" />
+                  <h3 className="text-xs font-black uppercase tracking-widest text-slate-400">Cross-Functional Perspectives</h3>
+                </div>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {allRoles.filter(r => r.slug !== role?.slug).slice(0, 6).map((r: any) => (
                     <Link
                       key={r.slug}
                       href={`/${framework.slug}/for/${r.slug}${industry ? `/${industry.slug}` : ''}`}
                       className="p-5 bg-white border border-slate-200 rounded-xl hover:border-brand-500 hover:shadow-md transition-all group"
                     >
                       <div className="text-[10px] font-bold text-brand-600 mb-1 uppercase tracking-tight">Switch Role</div>
-                      <div className="font-bold text-slate-900 flex items-center justify-between">
-                        {framework.name} for {r.name}s
-                        <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      <div className="font-bold text-slate-900 flex items-center justify-between text-sm">
+                        {framework.name} for {r.name || r.slug}s
+                        <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform flex-shrink-0" />
                       </div>
                     </Link>
                   ))}
@@ -200,22 +208,44 @@ export default function MatrixPage({
 
               {/* Deep Dive: Same standard, different decision */}
               <div>
-                <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 mb-4">Specific Decision Guides</h3>
-                <div className="grid sm:grid-cols-2 gap-4">
-                  {[
-                    { name: 'Cost', slug: 'cost' },
-                    { name: 'Timeline', slug: 'timeline' },
-                    { name: 'Auditor Selection', slug: 'auditor-selection' }
-                  ].filter(d => d.slug !== decision?.slug).map((d) => (
+                <div className="flex items-center gap-2 mb-4">
+                  <Globe className="w-4 h-4 text-slate-400" />
+                  <h3 className="text-xs font-black uppercase tracking-widest text-slate-400">Specific Decision Guides</h3>
+                </div>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {allDecisions.filter(d => d.slug !== decision?.slug).slice(0, 6).map((d: any) => (
                     <Link
                       key={d.slug}
                       href={`/${framework.slug}/${d.slug}${industry ? `/${industry.slug}` : ''}`}
                       className="p-5 bg-white border border-slate-200 rounded-xl hover:border-brand-500 hover:shadow-md transition-all group"
                     >
                       <div className="text-[10px] font-bold text-brand-600 mb-1 uppercase tracking-tight">Switch Topic</div>
-                      <div className="font-bold text-slate-900 flex items-center justify-between">
-                        {framework.name} {d.name} breakdown
-                        <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      <div className="font-bold text-slate-900 flex items-center justify-between text-sm">
+                        {framework.name} {d.name || d.slug}
+                        <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform flex-shrink-0" />
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              {/* Industry Exploration: Same framework, same decision, different industry */}
+              <div>
+                <div className="flex items-center gap-2 mb-4">
+                  <Building2 className="w-4 h-4 text-slate-400" />
+                  <h3 className="text-xs font-black uppercase tracking-widest text-slate-400">Industry Exploration</h3>
+                </div>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {allIndustries.filter(i => i.slug !== industry?.slug).slice(0, 9).map((i) => (
+                    <Link
+                      key={i.slug}
+                      href={`/${framework.slug}/${role ? `for/${role.slug}` : (decision?.slug || 'readiness-checklist')}/${i.slug}`}
+                      className="p-5 bg-white border border-slate-200 rounded-xl hover:border-brand-500 hover:shadow-md transition-all group"
+                    >
+                      <div className="text-[10px] font-bold text-brand-600 mb-1 uppercase tracking-tight">Switch Industry</div>
+                      <div className="font-bold text-slate-900 flex items-center justify-between text-sm">
+                        {framework.name} for {i.name}
+                        <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform flex-shrink-0" />
                       </div>
                     </Link>
                   ))}
@@ -223,17 +253,28 @@ export default function MatrixPage({
               </div>
             </div>
             
-            <div className="mt-16 bg-slate-900 rounded-2xl p-8 text-center text-white relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-brand-500/20 rounded-full blur-2xl" />
-              <h3 className="text-xl font-bold mb-4 relative z-10">Need a Master Intelligence View?</h3>
-              <p className="text-slate-400 mb-8 relative z-10">Access the full matrix of companies, vendors, and standards in our Hub.</p>
-              <Link 
-                href="/compliance"
-                className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-500 text-white font-bold px-8 py-3 rounded-lg transition-all"
-              >
-                Back to Frameworks Hub
-                <ChevronRight className="w-4 h-4" />
-              </Link>
+            <div className="mt-16 bg-slate-900 rounded-2xl p-8 text-center text-white relative overflow-hidden shadow-2xl">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-brand-500/10 rounded-full blur-3xl" />
+              <div className="absolute bottom-0 left-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl" />
+              <h3 className="text-2xl font-black mb-4 relative z-10 tracking-tight">Access the Full Compliance Matrix</h3>
+              <p className="text-slate-400 mb-8 relative z-10 max-w-xl mx-auto font-medium">
+                Map your entire security roadmap across 15,000+ contextual nodes in our master explorer.
+              </p>
+              <div className="flex flex-wrap justify-center gap-4 relative z-10">
+                <Link 
+                  href="/compliance"
+                  className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-500 text-white font-bold px-8 py-4 rounded-xl transition-all shadow-lg"
+                >
+                  Open Matrix Explorer
+                  <ChevronRight className="w-5 h-5" />
+                </Link>
+                <Link 
+                  href="/compliance/matrix"
+                  className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-bold px-8 py-4 rounded-xl transition-all backdrop-blur-sm"
+                >
+                  View Full Directory
+                </Link>
+              </div>
             </div>
           </div>
         </div>

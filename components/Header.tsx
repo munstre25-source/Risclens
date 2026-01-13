@@ -10,8 +10,6 @@ import { CTA, navConfig, type NavCategoryConfig, type NavItem, type NavSection }
 import { useDropdownIntent } from './useDropdownIntent';
 import { SearchNav } from './SearchNav';
 
-const DROPDOWN_WIDTH = 320;
-
 type DropdownPortalProps = {
   id: string;
   isOpen: boolean;
@@ -20,11 +18,12 @@ type DropdownPortalProps = {
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
   ariaLabel?: string;
+  columns?: number;
 };
 
-function DropdownPortal({ id, isOpen, anchorRef, children, onMouseEnter, onMouseLeave, ariaLabel }: DropdownPortalProps) {
+function DropdownPortal({ id, isOpen, anchorRef, children, onMouseEnter, onMouseLeave, ariaLabel, columns = 1 }: DropdownPortalProps) {
   const [mounted, setMounted] = useState(false);
-  const [position, setPosition] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
+  const [position, setPosition] = useState<{ top: number; left: number; width: number }>({ top: 0, left: 0, width: 320 });
   const panelRef = useRef<HTMLDivElement>(null);
   const BRIDGE_HEIGHT = 12;
 
@@ -39,14 +38,16 @@ function DropdownPortal({ id, isOpen, anchorRef, children, onMouseEnter, onMouse
       const anchor = anchorRef.current;
       if (!anchor) return;
       const rect = anchor.getBoundingClientRect();
-      const centeredLeft = rect.left + rect.width / 2 - DROPDOWN_WIDTH / 2 + window.scrollX;
+      const dropdownWidth = columns > 1 ? Math.min(window.innerWidth - 32, 800) : 320;
+      const centeredLeft = rect.left + rect.width / 2 - dropdownWidth / 2 + window.scrollX;
       const clampedLeft = Math.max(
-        window.scrollX + 8,
-        Math.min(centeredLeft, window.scrollX + window.innerWidth - DROPDOWN_WIDTH - 8),
+        window.scrollX + 16,
+        Math.min(centeredLeft, window.scrollX + window.innerWidth - dropdownWidth - 16),
       );
       setPosition({
         top: rect.bottom + window.scrollY,
         left: clampedLeft,
+        width: dropdownWidth,
       });
     };
 
@@ -57,7 +58,7 @@ function DropdownPortal({ id, isOpen, anchorRef, children, onMouseEnter, onMouse
       window.removeEventListener('resize', updatePosition);
       window.removeEventListener('scroll', updatePosition, true);
     };
-  }, [isOpen, anchorRef]);
+  }, [isOpen, anchorRef, columns]);
 
   if (!mounted) return null;
 
@@ -67,7 +68,7 @@ function DropdownPortal({ id, isOpen, anchorRef, children, onMouseEnter, onMouse
         position: 'absolute',
         top: position.top - BRIDGE_HEIGHT,
         left: position.left,
-        width: DROPDOWN_WIDTH,
+        width: position.width,
         paddingTop: BRIDGE_HEIGHT,
         zIndex: 9999,
         pointerEvents: isOpen ? 'auto' : 'none',
@@ -83,8 +84,8 @@ function DropdownPortal({ id, isOpen, anchorRef, children, onMouseEnter, onMouse
         data-dropdown-panel="true"
         data-dropdown-id={id}
         ref={panelRef}
-        className={`rounded-xl border border-slate-200 bg-white shadow-lg max-h-[70vh] overflow-auto focus:outline-none transition-all duration-150 ease-out transform ${
-          isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1'
+        className={`rounded-2xl border border-slate-200 bg-white shadow-2xl max-h-[85vh] overflow-hidden focus:outline-none transition-all duration-200 ease-out transform ${
+          isOpen ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 -translate-y-2 scale-[0.98]'
         }`}
       >
         {children}
@@ -99,9 +100,8 @@ export default function Header() {
 
   const frameworksIntent = useDropdownIntent();
   const toolsIntent = useDropdownIntent();
-  const marketInsightsIntent = useDropdownIntent();
-  const guidesIntent = useDropdownIntent();
-  const resourcesIntent = useDropdownIntent();
+  const intelligenceIntent = useDropdownIntent();
+  const auditorsIntent = useDropdownIntent();
 
   const [isMobileOpen, setMobileOpen] = useState(false);
   const [mobileSectionOpen, setMobileSectionOpen] = useState<string | null>(null);
@@ -111,19 +111,17 @@ export default function Header() {
 
   const frameworksRef = useRef<HTMLDivElement>(null);
   const toolsRef = useRef<HTMLDivElement>(null);
-  const marketInsightsRef = useRef<HTMLDivElement>(null);
-  const guidesRef = useRef<HTMLDivElement>(null);
-  const resourcesRef = useRef<HTMLDivElement>(null);
+  const intelligenceRef = useRef<HTMLDivElement>(null);
+  const auditorsRef = useRef<HTMLDivElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const mobileToggleRef = useRef<HTMLButtonElement>(null);
 
   const closeAllDropdowns = useCallback((except?: string) => {
     if (except !== 'frameworks-menu') frameworksIntent.immediateClose();
     if (except !== 'tools-menu') toolsIntent.immediateClose();
-    if (except !== 'market-insights-menu') marketInsightsIntent.immediateClose();
-    if (except !== 'guides-menu') guidesIntent.immediateClose();
-    if (except !== 'resources-menu') resourcesIntent.immediateClose();
-  }, [frameworksIntent, toolsIntent, marketInsightsIntent, guidesIntent, resourcesIntent]);
+    if (except !== 'intelligence-menu') intelligenceIntent.immediateClose();
+    if (except !== 'auditors-menu') auditorsIntent.immediateClose();
+  }, [frameworksIntent, toolsIntent, intelligenceIntent, auditorsIntent]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -136,9 +134,8 @@ export default function Header() {
       const isInside = [
           { anchor: frameworksRef, menuId: 'frameworks-menu' },
           { anchor: toolsRef, menuId: 'tools-menu' },
-          { anchor: marketInsightsRef, menuId: 'market-insights-menu' },
-          { anchor: guidesRef, menuId: 'guides-menu' },
-          { anchor: resourcesRef, menuId: 'resources-menu' },
+          { anchor: intelligenceRef, menuId: 'intelligence-menu' },
+          { anchor: auditorsRef, menuId: 'auditors-menu' },
         ].some(({ anchor, menuId }) => {
         const anchorMatch = anchor.current?.contains(target);
         const panel = document.getElementById(menuId);
@@ -202,11 +199,11 @@ export default function Header() {
   }, [isMobileOpen]);
 
   const menuItemWithBadgeClass =
-    'flex items-center justify-between px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 transition-colors group/item';
+    'flex items-center justify-between px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 transition-colors group/item rounded-lg';
   const sectionLabelClass = 'px-4 pt-4 pb-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-400';
 
   const Badge = ({ label }: { label?: string }) => {
-    const isSpecial = label === 'Flagship' || label === 'Hub' || label === 'AI';
+    const isSpecial = label === 'Flagship' || label === 'Hub' || label === 'AI' || label === '15k+';
     return (
       <span
         className={`text-[9px] font-black px-1.5 py-0.5 rounded uppercase tracking-tighter ${
@@ -264,37 +261,42 @@ export default function Header() {
         id={id}
         isOpen={intent.open}
         anchorRef={anchorRef}
+        columns={config.columns}
         onMouseEnter={() => intent.scheduleOpen()}
         onMouseLeave={() => intent.scheduleClose()}
       >
-        {config.items && (
-          <div className="bg-slate-50/50 pb-2">
-            <div className={sectionLabelClass}>Featured</div>
-            {config.items.map((item: NavItem) => (
-              <Link key={item.href} href={item.href} role="menuitem" className={menuItemWithBadgeClass}>
-                <div className="flex flex-col">
-                  <span className="font-bold text-slate-900 group-hover/item:text-brand-700 transition-colors">{item.label}</span>
-                  {item.description && <span className="text-[11px] text-slate-500 leading-tight mt-0.5">{item.description}</span>}
-                </div>
-                {item.badge && <Badge label={item.badge} />}
-              </Link>
-            ))}
-          </div>
-        )}
-        {config.sections.map((section: NavSection, idx: number) => (
-          <div key={section.title} className={idx > 0 || config.items ? 'border-t border-slate-100' : ''}>
-            <div className={sectionLabelClass}>{section.title}</div>
-            {section.items.map((item: NavItem) => (
-              <Link key={item.href} href={item.href} role="menuitem" className={menuItemWithBadgeClass}>
-                <div className="flex flex-col">
-                   <span className="font-semibold text-slate-800 group-hover/item:text-brand-700 transition-colors">{item.label}</span>
-                   {item.description && <span className="text-[10px] text-slate-500 leading-tight">{item.description}</span>}
-                </div>
-                {item.badge && <Badge label={item.badge} />}
-              </Link>
-            ))}
-          </div>
-        ))}
+        <div className={`p-2 ${config.columns && config.columns > 1 ? `grid grid-cols-${config.columns} divide-x divide-slate-100` : ''}`}>
+          {config.items && (
+            <div className="bg-slate-50/50 rounded-xl pb-2 mb-2">
+              <div className={sectionLabelClass}>Featured</div>
+              {config.items.map((item: NavItem) => (
+                <Link key={item.href} href={item.href} role="menuitem" className={menuItemWithBadgeClass}>
+                  <div className="flex flex-col">
+                    <span className="font-bold text-slate-900 group-hover/item:text-brand-700 transition-colors">{item.label}</span>
+                    {item.description && <span className="text-[11px] text-slate-500 leading-tight mt-0.5">{item.description}</span>}
+                  </div>
+                  {item.badge && <Badge label={item.badge} />}
+                </Link>
+              ))}
+            </div>
+          )}
+          {config.sections.map((section: NavSection, idx: number) => (
+            <div key={section.title} className={`${config.columns && config.columns > 1 ? 'px-4' : (idx > 0 || config.items ? 'border-t border-slate-100 mt-2' : '')}`}>
+              <div className={sectionLabelClass}>{section.title}</div>
+              <div className="space-y-1">
+                {section.items.map((item: NavItem) => (
+                  <Link key={item.href} href={item.href} role="menuitem" className={menuItemWithBadgeClass}>
+                    <div className="flex flex-col">
+                       <span className="font-semibold text-slate-800 group-hover/item:text-brand-700 transition-colors">{item.label}</span>
+                       {item.description && <span className="text-[10px] text-slate-500 leading-tight">{item.description}</span>}
+                    </div>
+                    {item.badge && <Badge label={item.badge} />}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </DropdownPortal>
     </div>
     );
@@ -334,27 +336,22 @@ export default function Header() {
               label="Tools & Calculators"
             />
             <NavLink
-              anchorRef={marketInsightsRef}
-              intent={marketInsightsIntent}
-              config={navConfig.marketInsights}
-              id="market-insights-menu"
-              label="Market Insights"
+              anchorRef={intelligenceRef}
+              intent={intelligenceIntent}
+              config={navConfig.intelligence}
+              id="intelligence-menu"
+              label="Intelligence Hub"
             />
             <NavLink
-              anchorRef={guidesRef}
-              intent={guidesIntent}
-              config={navConfig.guides}
-              id="guides-menu"
-              label="Guides"
+              anchorRef={auditorsRef}
+              intent={auditorsIntent}
+              config={navConfig.auditors}
+              id="auditors-menu"
+              label="Auditors"
             />
-            <NavLink
-              anchorRef={resourcesRef}
-              intent={resourcesIntent}
-              config={navConfig.resources}
-              id="resources-menu"
-              label="Resources"
-            />
-            <SearchNav />
+            <div className="ml-2 pl-4 border-l border-slate-100">
+              <SearchNav />
+            </div>
           </nav>
 
         <div className="flex items-center gap-2 sm:gap-4">
@@ -436,9 +433,8 @@ export default function Header() {
                     {[
                       { id: 'frameworks', label: 'Frameworks', config: navConfig.frameworks },
                       { id: 'tools', label: 'Tools & Calculators', config: navConfig.tools },
-                      { id: 'marketInsights', label: 'Market Insights', config: navConfig.marketInsights },
-                      { id: 'guides', label: 'Guides', config: navConfig.guides },
-                      { id: 'resources', label: 'Resources', config: navConfig.resources },
+                      { id: 'intelligence', label: 'Intelligence Hub', config: navConfig.intelligence },
+                      { id: 'auditors', label: 'Auditors', config: navConfig.auditors },
                     ].map((section) => (
                   <div key={section.id} className="rounded-xl border border-slate-100 bg-slate-50/50 overflow-hidden">
                     <button
