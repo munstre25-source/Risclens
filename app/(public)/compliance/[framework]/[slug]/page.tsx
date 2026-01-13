@@ -12,18 +12,20 @@ import { getSupabaseAdmin } from '@/lib/supabase';
 import { SmartContent } from '@/components/seo/SmartContent';
 import { getAllTools } from '@/lib/compliance-tools';
 
-export const dynamic = "force-static";
+export const dynamicParams = true;
 export const revalidate = 86400; // 24 hours
 
 export async function generateStaticParams() {
   try {
     const supabase = getSupabaseAdmin();
+    // Only pre-render the top 20 most important compliance pages
     const { data } = await supabase
       .from('pseo_pages')
       .select('slug')
-      .eq('category', 'compliance');
+      .eq('category', 'compliance')
+      .limit(20);
     
-    return data?.map(p => {
+    return data?.filter(p => !p.slug.includes('/')).map(p => {
       const framework = p.slug.startsWith('soc-2') ? 'soc-2' : 'iso-27001';
       return { 
         framework,
