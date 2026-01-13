@@ -90,3 +90,17 @@ export async function getPSEOVendors() {
   if (error) throw error;
   return data as PSEOVendor[];
 }
+
+export async function getPSEODecisionTypes() {
+  const supabase = getSupabaseClient();
+  const { data, error } = await supabase.from('pseo_decision_types').select('*');
+  if (error) throw error;
+  return data;
+}
+
+export async function getPSEORoles() {
+  const supabase = getSupabaseClient();
+  const { data, error } = await supabase.from('pseo_roles').select('*');
+  if (error) throw error;
+  return data;
+}
