@@ -11,17 +11,18 @@ interface Props {
   }>;
 }
 
-export const dynamic = "force-static";
+export const dynamicParams = true;
 export const revalidate = 86400; // 24 hours
 
 export async function generateStaticParams() {
   try {
     const supabase = getSupabaseAdmin();
     
+    // Only pre-render high-intent pages to avoid build timeouts
     const [frameworksRes, decisionsRes, industriesRes] = await Promise.all([
-      supabase.from('pseo_frameworks').select('slug'),
-      supabase.from('pseo_decision_types').select('slug'),
-      supabase.from('pseo_industries').select('slug'),
+      supabase.from('pseo_frameworks').select('slug').in('slug', ['soc-2', 'iso-27001', 'hipaa', 'gdpr']),
+      supabase.from('pseo_decision_types').select('slug').limit(10),
+      supabase.from('pseo_industries').select('slug').in('slug', ['saas', 'fintech', 'healthcare', 'ai-ml', 'ecommerce']),
     ]);
 
     if (!frameworksRes.data || !decisionsRes.data || !industriesRes.data) return [];
@@ -35,7 +36,6 @@ export async function generateStaticParams() {
             slug: d.slug,
             industry: i.slug
           });
-          // Also handle the framework-prefixed slugs often used
           params.push({
             framework: f.slug,
             slug: `${f.slug}-${d.slug}`,

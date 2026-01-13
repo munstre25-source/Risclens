@@ -20,7 +20,7 @@ interface Props {
   params: Promise<{ framework: string, slug: string }>;
 }
 
-export const dynamic = "force-static";
+export const dynamicParams = true;
 export const revalidate = 86400; // 24 hours
 
 export async function generateStaticParams() {
@@ -34,15 +34,16 @@ export async function generateStaticParams() {
 
     if (!frameworks) return [];
 
-    // Get all pages for these frameworks
+    // Only pre-render the top 20 pages total for this route to avoid build timeouts
     const { data: pages } = await supabase
       .from('pseo_pages')
       .select('slug, framework_id')
-      .in('framework_id', frameworks.map(f => f.id));
+      .in('framework_id', frameworks.map(f => f.id))
+      .limit(20);
 
     if (!pages) return [];
 
-    return pages.map(page => {
+    return pages.filter(p => !p.slug.includes('/')).map(page => {
       const framework = frameworks.find(f => f.id === page.framework_id);
       return {
         framework: framework?.slug || 'unknown',

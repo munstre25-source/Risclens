@@ -13,6 +13,41 @@ interface Props {
   }>;
 }
 
+export const dynamicParams = true;
+export const revalidate = 86400; // 24 hours
+
+export async function generateStaticParams() {
+  try {
+    const supabase = getSupabaseAdmin();
+    
+    // Pre-render high-intent roles and industries for top frameworks
+    const [frameworksRes, rolesRes, industriesRes] = await Promise.all([
+      supabase.from('pseo_frameworks').select('slug').in('slug', ['soc-2', 'iso-27001']),
+      supabase.from('pseo_roles').select('slug').in('slug', ['cto', 'ciso', 'ceo', 'founder', 'legal-counsel']),
+      supabase.from('pseo_industries').select('slug').in('slug', ['saas', 'fintech', 'healthcare', 'ai-ml']),
+    ]);
+
+    if (!frameworksRes.data || !rolesRes.data || !industriesRes.data) return [];
+
+    const params = [];
+    for (const f of frameworksRes.data) {
+      for (const r of rolesRes.data) {
+        for (const i of industriesRes.data) {
+          params.push({
+            framework: f.slug,
+            role: r.slug,
+            industry: i.slug
+          });
+        }
+      }
+    }
+    return params;
+  } catch (err) {
+    console.error('[generateStaticParams] Failed for [framework]/for/[role]/[industry]:', err);
+    return [];
+  }
+}
+
 async function getMatrixData(frameworkSlug: string, roleSlug: string, industrySlug: string) {
   const supabase = getSupabaseAdmin();
   
