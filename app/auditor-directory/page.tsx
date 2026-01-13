@@ -4,15 +4,56 @@ import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { Search, MapPin, ExternalLink, ShieldCheck, Sparkles, Star, ChevronRight, ArrowRight } from 'lucide-react';
 import { getPSEOLocations } from '@/lib/pseo';
-import { auditors, SPECIALTIES } from '@/src/content/auditors';
+import { auditors as fallbackAuditors, SPECIALTIES, AuditorFirm } from '@/src/content/auditors';
+import { getSupabaseClient } from '@/lib/supabase';
 
 export const metadata: Metadata = {
   title: 'Verified Auditor Directory | SOC 2 & ISO 42001 Partners',
   description: 'Find vetted CPA firms and security auditors specializing in SOC 2, ISO 27001, and ISO 42001 (AI Management) for startups.',
 };
 
+async function getAuditors(): Promise<AuditorFirm[]> {
+  try {
+    const supabase = getSupabaseClient();
+    const { data, error } = await supabase
+      .from('auditors')
+      .select('*')
+      .order('is_vetted', { ascending: false })
+      .order('rating', { ascending: false });
+
+    if (error) throw error;
+    if (!data || data.length === 0) return fallbackAuditors;
+
+    return data.map((row: any) => ({
+      id: row.id,
+      name: row.name,
+      slug: row.slug,
+      specialty: row.specialty,
+      location: row.location,
+      description: row.description,
+      website: row.website,
+      isNew: row.is_new,
+      isVetted: row.is_vetted,
+      specialties: row.specialties || [],
+      industries: row.industries || [],
+      teamSize: row.team_size || [],
+      frameworks: row.frameworks || [],
+      highlights: row.highlights || [],
+      reviewCount: row.review_count || 0,
+      rating: parseFloat(row.rating) || 0,
+    }));
+  } catch (error) {
+    console.error('Error fetching auditors:', error);
+    return fallbackAuditors;
+  }
+}
+
 export default async function AuditorDirectoryPage() {
-  const locations = await getPSEOLocations();
+  const [locations, auditors] = await Promise.all([
+    getPSEOLocations(),
+    getAuditors()
+  ]);
+  
   const sortedLocations = [...locations].sort((a, b) => a.name.localeCompare(b.name));
 
   return (
