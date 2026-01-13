@@ -5,6 +5,8 @@ import Footer from '@/components/Footer';
 import { AuthorBio } from '@/components/AuthorBio';
 import { GeneralPageSchema } from '@/components/GeneralPageSchema';
 import { RelatedPseoPages } from '@/components/seo/RelatedPseoPages';
+import { RiskClassifier } from '@/components/ai-governance/tools/RiskClassifier';
+import { VendorRiskQuestionnaire } from '@/components/ai-governance/tools/VendorRiskQuestionnaire';
 import { constructMetadata } from '@/lib/seo';
 import { getSupabaseAdmin } from '@/lib/supabase';
 import { 
@@ -89,79 +91,86 @@ export default async function AiGovernanceProgrammaticPage({ params }: Props) {
           </div>
         </section>
 
-        <section className="py-20 max-w-4xl mx-auto px-4">
-          <div className="prose prose-slate prose-lg max-w-none">
-            <h2 className="text-3xl font-bold mb-6">Strategic Overview</h2>
-            <p className="text-slate-600 mb-8 leading-relaxed">
-              Implementing {page.title} is no longer optional for high-growth AI startups. 
-              Enterprise buyers and regulators now require clear evidence of model transparency, 
-              risk mitigation, and compliance with emerging standards like ISO 42001 and the EU AI Act.
-            </p>
+          <section className="py-20 max-w-4xl mx-auto px-4">
+            {page.category === 'classification' ? (
+              <RiskClassifier />
+            ) : page.category === 'risk-assessment' ? (
+              <VendorRiskQuestionnaire />
+            ) : (
+              <div className="prose prose-slate prose-lg max-w-none text-left">
+                <h2 className="text-3xl font-bold mb-6">Strategic Overview</h2>
+                <p className="text-slate-600 mb-8 leading-relaxed">
+                  Implementing {page.title} is no longer optional for high-growth AI startups. 
+                  Enterprise buyers and regulators now require clear evidence of model transparency, 
+                  risk mitigation, and compliance with emerging standards like ISO 42001 and the EU AI Act.
+                </p>
 
-            <div className="grid md:grid-cols-2 gap-8 my-12">
-              <div className="bg-slate-50 p-8 rounded-2xl border border-slate-100">
-                <Shield className="w-10 h-10 text-brand-500 mb-6" />
-                <h3 className="text-xl font-bold mb-3">Core Requirements</h3>
-                <ul className="space-y-3">
-                  <li className="flex gap-2 text-sm text-slate-600 italic">
-                    <CheckCircle className="w-5 h-5 text-brand-500 flex-shrink-0" />
-                    Algorithmic Impact Assessments
-                  </li>
-                  <li className="flex gap-2 text-sm text-slate-600 italic">
-                    <CheckCircle className="w-5 h-5 text-brand-500 flex-shrink-0" />
-                    Data Provenance Tracking
-                  </li>
-                  <li className="flex gap-2 text-sm text-slate-600 italic">
-                    <CheckCircle className="w-5 h-5 text-brand-500 flex-shrink-0" />
-                    Model Monitoring & Observability
-                  </li>
-                </ul>
-              </div>
-              <div className="bg-brand-50 p-8 rounded-2xl border border-brand-100">
-                <Zap className="w-10 h-10 text-brand-500 mb-6" />
-                <h3 className="text-xl font-bold mb-3">Quick Implementation</h3>
-                <ul className="space-y-3">
-                  <li className="flex gap-2 text-sm text-brand-800 italic">
-                    <CheckCircle className="w-5 h-5 text-brand-500 flex-shrink-0" />
-                    Automated Evidence Collection
-                  </li>
-                  <li className="flex gap-2 text-sm text-brand-800 italic">
-                    <CheckCircle className="w-5 h-5 text-brand-500 flex-shrink-0" />
-                    Policy Template Generation
-                  </li>
-                  <li className="flex gap-2 text-sm text-brand-800 italic">
-                    <CheckCircle className="w-5 h-5 text-brand-500 flex-shrink-0" />
-                    Real-time Gap Analysis
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <h2 className="text-3xl font-bold mb-6">Execution Roadmap</h2>
-            <p className="text-slate-600 mb-8 leading-relaxed">
-              To successfully navigate {page.title}, organizations must move beyond manual checklists. 
-              The programmatic approach involves integrating governance directly into the CI/CD pipeline and model training workflows.
-            </p>
-
-            <div className="space-y-6 my-12">
-              {[
-                { step: 'Phase 1: Discovery', desc: 'Identify all AI assets and classify them based on risk level (Low, Medium, High, Unacceptable).' },
-                { step: 'Phase 2: Gap Analysis', desc: 'Compare existing controls against the specific requirements of the chosen framework.' },
-                { step: 'Phase 3: Remediation', desc: 'Implement missing technical and administrative controls with automated evidence capture.' },
-                { step: 'Phase 4: Continuous Monitoring', desc: 'Set up real-time alerts for model drift, bias detection, and compliance violations.' }
-              ].map((phase, idx) => (
-                <div key={idx} className="flex gap-6 p-6 rounded-xl border border-slate-100 hover:bg-slate-50 transition-all">
-                  <div className="w-12 h-12 rounded-full bg-brand-500 text-white flex items-center justify-center font-black flex-shrink-0 shadow-lg shadow-brand-500/20">
-                    {idx + 1}
+                <div className="grid md:grid-cols-2 gap-8 my-12">
+                  <div className="bg-slate-50 p-8 rounded-2xl border border-slate-100">
+                    <Shield className="w-10 h-10 text-brand-500 mb-6" />
+                    <h3 className="text-xl font-bold mb-3">Core Requirements</h3>
+                    <ul className="space-y-3">
+                      <li className="flex gap-2 text-sm text-slate-600 italic">
+                        <CheckCircle className="w-5 h-5 text-brand-500 flex-shrink-0" />
+                        Algorithmic Impact Assessments
+                      </li>
+                      <li className="flex gap-2 text-sm text-slate-600 italic">
+                        <CheckCircle className="w-5 h-5 text-brand-500 flex-shrink-0" />
+                        Data Provenance Tracking
+                      </li>
+                      <li className="flex gap-2 text-sm text-slate-600 italic">
+                        <CheckCircle className="w-5 h-5 text-brand-500 flex-shrink-0" />
+                        Model Monitoring & Observability
+                      </li>
+                    </ul>
                   </div>
-                  <div>
-                    <h4 className="font-bold text-slate-900 mb-1">{phase.step}</h4>
-                    <p className="text-sm text-slate-600">{phase.desc}</p>
+                  <div className="bg-brand-50 p-8 rounded-2xl border border-brand-100">
+                    <Zap className="w-10 h-10 text-brand-500 mb-6" />
+                    <h3 className="text-xl font-bold mb-3">Quick Implementation</h3>
+                    <ul className="space-y-3">
+                      <li className="flex gap-2 text-sm text-brand-800 italic">
+                        <CheckCircle className="w-5 h-5 text-brand-500 flex-shrink-0" />
+                        Automated Evidence Collection
+                      </li>
+                      <li className="flex gap-2 text-sm text-brand-800 italic">
+                        <CheckCircle className="w-5 h-5 text-brand-500 flex-shrink-0" />
+                        Policy Template Generation
+                      </li>
+                      <li className="flex gap-2 text-sm text-brand-800 italic">
+                        <CheckCircle className="w-5 h-5 text-brand-500 flex-shrink-0" />
+                        Real-time Gap Analysis
+                      </li>
+                    </ul>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
+
+                <h2 className="text-3xl font-bold mb-6">Execution Roadmap</h2>
+                <p className="text-slate-600 mb-8 leading-relaxed">
+                  To successfully navigate {page.title}, organizations must move beyond manual checklists. 
+                  The programmatic approach involves integrating governance directly into the CI/CD pipeline and model training workflows.
+                </p>
+
+                <div className="space-y-6 my-12">
+                  {[
+                    { step: 'Phase 1: Discovery', desc: 'Identify all AI assets and classify them based on risk level (Low, Medium, High, Unacceptable).' },
+                    { step: 'Phase 2: Gap Analysis', desc: 'Compare existing controls against the specific requirements of the chosen framework.' },
+                    { step: 'Phase 3: Remediation', desc: 'Implement missing technical and administrative controls with automated evidence capture.' },
+                    { step: 'Phase 4: Continuous Monitoring', desc: 'Set up real-time alerts for model drift, bias detection, and compliance violations.' }
+                  ].map((phase, idx) => (
+                    <div key={idx} className="flex gap-6 p-6 rounded-xl border border-slate-100 hover:bg-slate-50 transition-all">
+                      <div className="w-12 h-12 rounded-full bg-brand-500 text-white flex items-center justify-center font-black flex-shrink-0 shadow-lg shadow-brand-500/20">
+                        {idx + 1}
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-slate-900 mb-1">{phase.step}</h4>
+                        <p className="text-sm text-slate-600">{phase.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
 
           <RelatedPseoPages currentSlug={slug} category={page.category} />
 
