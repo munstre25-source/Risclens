@@ -104,14 +104,12 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     const toolSlug = slug.replace('-alternatives', '');
     const tools = await getAllTools();
     const tool = tools.find(t => t.slug === toolSlug);
-    
-    if (tool) {
-      return {
-        title: `Top ${tool.name} Alternatives & Competitors in 2026`,
-        description: `Looking for ${tool.name} alternatives? Compare the best compliance automation platforms including pricing, features, and expert recommendations.`,
-        alternates: { canonical: `https://risclens.com/compare/${slug}` },
-      };
-    }
+
+    return {
+      title: `Top ${(tool?.name || toolSlug.replace(/-/g, ' '))} Alternatives & Competitors in 2026`,
+      description: `Looking for ${(tool?.name || toolSlug.replace(/-/g, ' '))} alternatives? Compare the best compliance automation platforms including pricing, features, and expert recommendations.`,
+      alternates: { canonical: `https://risclens.com/compare/${slug}` },
+    };
   }
 
   return { title: 'Tool Comparison | RiscLens' };
@@ -234,14 +232,58 @@ async function ComparisonPageWrapper({ slug }: { slug: string }) {
   );
 }
 
+function makeFallbackTool(slug: string, name?: string) {
+  return {
+    id: `fallback-${slug}`,
+    slug,
+    name: name || slug.replace(/-/g, ' '),
+    tagline: '',
+    description: '',
+    logo_url: null,
+    website_url: null,
+    founded_year: null,
+    headquarters: null,
+    pricing_starting: null,
+    pricing_range: null,
+    pricing_model: null,
+    auditor_included: false,
+    hidden_costs: null,
+    integrations_count: null,
+    frameworks_supported: [],
+    frameworks_count: null,
+    automation_level: null,
+    key_features: [],
+    target_market: null,
+    company_size_fit: [],
+    industry_focus: [],
+    primary_value: null,
+    best_for: null,
+    limitations: [],
+    g2_rating: null,
+    g2_reviews_count: null,
+    capterra_rating: null,
+    customers_count: null,
+    notable_customers: [],
+    pros: [],
+    cons: [],
+    verdict: null,
+    is_active: true,
+    display_order: 0,
+    last_verified_at: '',
+    created_at: '',
+    updated_at: '',
+  };
+}
+
 async function AlternativesPage({ slug }: { slug: string }) {
   const toolSlug = slug.replace('-alternatives', '');
   const tools = await getAllTools();
-  const tool = tools.find(t => t.slug === toolSlug);
+  const tool = tools.find(t => t.slug === toolSlug) || makeFallbackTool(toolSlug);
 
-  if (!tool) notFound();
-
-  const alternatives = await getAlternativesFor(toolSlug);
+  let alternatives = await getAlternativesFor(tool.slug);
+  if (!alternatives.length) {
+    alternatives = tools.filter(t => t.slug !== tool.slug);
+  }
   const internalLinks = await getAlternativesInternalLinks(toolSlug);
   const breadcrumbs = getBreadcrumbs(`/compare/${slug}`);
   const breadcrumbSchema = generateSchemaOrgBreadcrumbs(breadcrumbs);
