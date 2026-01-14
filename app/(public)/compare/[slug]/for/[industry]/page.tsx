@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { Breadcrumbs, InternalLinks } from '@/components/InternalLinks';
 import Script from 'next/script';
 import {
   getToolsForComparison,
@@ -11,6 +12,8 @@ import {
   generateVerdict,
   getAllComparisonSlugs,
   getIndustryBySlug,
+  getAllTools,
+  getAlternativesFor,
 } from '@/lib/compliance-tools';
 import {
   getComparisonInternalLinks,
@@ -21,6 +24,7 @@ import {
 } from '@/lib/pseo-internal-links';
 import { getSupabaseAdmin } from '@/lib/supabase';
 import ComparisonView from '@/components/compliance/ComparisonView';
+import AlternativeCard from '@/components/AlternativeCard';
 
 export const dynamicParams = true;
 export const revalidate = 86400; // 24 hours
@@ -60,12 +64,30 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: { slug: string, industry: string } }): Promise<Metadata> {
   const { slug, industry: industrySlug } = params;
+  const industry = await getIndustryBySlug(industrySlug);
+
+  if (slug.endsWith('-alternatives')) {
+    const tools = await getAllTools();
+    const toolSlug = slug.replace('-alternatives', '');
+    const tool = tools.find(t => t.slug === toolSlug);
+    const toolName = tool?.name || toolSlug.replace(/-/g, ' ');
+    return {
+      title: `${toolName} Alternatives for ${industry?.name || industrySlug}`,
+      description: `Best ${toolName} alternatives for ${industry?.name || industrySlug} teams, including pricing and fit.`,
+      alternates: { canonical: `https://risclens.com/compare/${slug}/for/${industrySlug}` },
+      openGraph: {
+        title: `${toolName} Alternatives for ${industry?.name || industrySlug}`,
+        description: `Compare top compliance platforms that can replace ${toolName} for ${industry?.name || industrySlug} companies.`,
+        type: 'article',
+      },
+    };
+  }
+
   const parsed = parseComparisonSlug(slug);
   if (!parsed) return { title: 'Comparison | RiscLens' };
 
-  const [tools, industry] = await Promise.all([
+  const [tools] = await Promise.all([
     getToolsForComparison(parsed.toolASlug, parsed.toolBSlug),
-    getIndustryBySlug(industrySlug)
   ]);
 
   const { toolA, toolB } = tools;
@@ -88,6 +110,9 @@ export async function generateMetadata({ params }: { params: { slug: string, ind
 
 export default async function IndustryComparisonPage({ params }: { params: { slug: string, industry: string } }) {
   const { slug, industry: industrySlug } = params;
+  if (slug.endsWith('-alternatives')) {
+    return <AlternativesIndustryPage slug={slug} industrySlug={industrySlug} />;
+  }
   const parsed = parseComparisonSlug(slug);
   if (!parsed) notFound();
 
@@ -145,6 +170,114 @@ export default async function IndustryComparisonPage({ params }: { params: { slu
         breadcrumbs={breadcrumbs}
         industry={industry}
       />
+      <Footer />
+    </>
+  );
+}
+
+function makeFallbackTool(slug: string, name?: string) {
+  return {
+    id: `fallback-${slug}`,
+    slug,
+    name: name || slug.replace(/-/g, ' '),
+    tagline: '',
+    description: '',
+    logo_url: null,
+    website_url: null,
+    founded_year: null,
+    headquarters: null,
+    pricing_starting: null,
+    pricing_range: null,
+    pricing_model: null,
+    auditor_included: false,
+    hidden_costs: null,
+    integrations_count: null,
+    frameworks_supported: [],
+    frameworks_count: null,
+    automation_level: null,
+    key_features: [],
+    target_market: null,
+    company_size_fit: [],
+    industry_focus: [],
+    primary_value: null,
+    best_for: null,
+    limitations: [],
+    g2_rating: null,
+    g2_reviews_count: null,
+    capterra_rating: null,
+    customers_count: null,
+    notable_customers: [],
+    pros: [],
+    cons: [],
+    verdict: null,
+    is_active: true,
+    display_order: 0,
+    last_verified_at: '',
+    created_at: '',
+    updated_at: '',
+  };
+}
+
+async function AlternativesIndustryPage({ slug, industrySlug }: { slug: string; industrySlug: string }) {
+  const toolSlug = slug.replace('-alternatives', '');
+  const [tools, industry] = await Promise.all([
+    getAllTools(),
+    getIndustryBySlug(industrySlug)
+  ]);
+
+  if (!industry) notFound();
+
+  const tool = tools.find(t => t.slug === toolSlug) || makeFallbackTool(toolSlug);
+  let alternatives = await getAlternativesFor(tool.slug);
+  if (!alternatives.length) {
+    alternatives = tools.filter(t => t.slug !== tool.slug);
+  }
+  const internalLinks = await getComparisonInternalLinks(tool.slug, tool.slug);
+  const breadcrumbs = [
+    { label: 'Home', href: '/' },
+    { label: 'Compare', href: '/compare' },
+    { label: `${tool.name} alternatives`, href: `/compare/${slug}` },
+    { label: `For ${industry.name}`, href: `/compare/${slug}/for/${industrySlug}` },
+  ];
+
+  const breadcrumbSchema = generateSchemaOrgBreadcrumbs(breadcrumbs);
+
+  return (
+    <>
+      <Script id="breadcrumb-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <Header />
+      <main className="min-h-screen bg-slate-50">
+        <div className="max-w-7xl mx-auto px-4 pt-8">
+          <Breadcrumbs items={breadcrumbs} />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <div className="lg:col-span-3">
+              <div className="text-center mb-12">
+                <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-6">
+                  Top {tool.name} Alternatives for {industry.name}
+                </h1>
+                <p className="text-xl text-slate-600 max-w-2xl mx-auto">
+                  Looking for alternatives to {tool.name}? Compare compliance platforms that serve {industry.name} teams.
+                </p>
+              </div>
+
+              <div className="space-y-6">
+                {alternatives.map((alt, i) => (
+                  <AlternativeCard key={alt.slug} tool={alt} originalTool={tool} rank={i + 1} />
+                ))}
+              </div>
+            </div>
+
+            <div className="lg:col-span-1">
+              <div className="sticky top-8">
+                <InternalLinks clusters={internalLinks} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
       <Footer />
     </>
   );
