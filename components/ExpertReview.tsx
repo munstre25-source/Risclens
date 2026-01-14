@@ -5,17 +5,27 @@ import { authors } from '@/lib/authors';
 interface ExpertReviewProps {
   authorId: keyof typeof authors;
   date: string;
+  title?: string;
+  url?: string;
 }
 
-export default function ExpertReview({ authorId, date }: ExpertReviewProps) {
+export default function ExpertReview({ authorId, date, title, url }: ExpertReviewProps) {
   const author = authors[authorId];
   if (!author) return null;
 
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://risclens.com';
+  const reviewUrl = url
+    ? (url.startsWith('http') ? url : `${baseUrl}${url}`)
+    : undefined;
+
+  const itemTitle = title || 'RiscLens Compliance Guide';
   const reviewSchema = {
     "@context": "https://schema.org",
     "@type": "Review",
     "itemReviewed": {
       "@type": "Article",
+      "name": itemTitle,
+      "url": reviewUrl,
       "dateModified": date,
     },
     "author": {
