@@ -81,10 +81,6 @@ async function getFullDynamicRoutes() {
         for (const d of decisions) {
           for (const i of industries) {
             dynamicRoutes.push(`/${f.slug}/${d.slug}/${i.slug}`);
-            // Add framework-prefixed slug variant for better SEO mapping
-            if (!d.slug.startsWith(f.slug)) {
-              dynamicRoutes.push(`/${f.slug}/${f.slug}-${d.slug}/${i.slug}`);
-            }
           }
         }
       }
