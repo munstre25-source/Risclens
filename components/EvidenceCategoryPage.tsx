@@ -80,7 +80,12 @@ export default function EvidenceCategoryPage({
       {/* Requirements Section */}
       <section className="py-16 lg:py-24">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <ExpertReview authorId="kevin" date={lastUpdated} />
+          <ExpertReview
+            authorId="kevin"
+            date={lastUpdated}
+            title={pageTitle}
+            url={pageUrl}
+          />
           
           <h2 className="text-2xl font-bold text-slate-900 mb-12 flex items-center gap-3 mt-12">
             <CheckSquare className="w-8 h-8 text-brand-600" />

@@ -17,7 +17,6 @@ export const authors: Record<string, Author> = {
     credentials: ['CPA', 'CISA', 'ISO 27001 Lead Auditor'],
     bio: 'Raphael leads go-to-market compliance strategy for high-growth SaaS and AI teams. With over a decade of experience across Big Four firms and fintech startups, he specializes in translating complex SOC 2 requirements into automated, engineering-friendly workflows.',
     avatar: 'RN',
-    linkedIn: 'https://linkedin.com/in/raphael-ngare',
     reddit: 'https://www.reddit.com/user/raphael-risclens',
   },
   kevin: {
