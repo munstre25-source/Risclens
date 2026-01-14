@@ -313,7 +313,12 @@ export default function Soc2CostPage() {
 
           <section className="py-20 bg-slate-50">
             <div className="max-w-4xl mx-auto px-4 sm:px-6">
-              <ExpertReview authorId="raphael" date="January 10, 2026" />
+              <ExpertReview
+                authorId="raphael"
+                date="January 10, 2026"
+                title="SOC 2 Cost Guide 2026"
+                url="/soc-2-cost"
+              />
               
               <div className="mt-16 prose prose-slate max-w-none">
                 <h2 className="text-3xl font-bold text-slate-900 mb-8">What Shapes Your Final Quote?</h2>

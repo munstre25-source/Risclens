@@ -82,7 +82,12 @@ export default function ToolAlternativePage({
       {/* Alternatives List */}
       <section className="py-16 lg:py-24">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <ExpertReview authorId="raphael" date={lastUpdated} />
+          <ExpertReview
+            authorId="raphael"
+            date={lastUpdated}
+            title={`Top ${toolName} Alternatives in 2026`}
+            url={`/compare/${toolSlug}-alternatives`}
+          />
           
           <div className="grid gap-8 mt-12">
             {alternatives.map((alt, idx) => (

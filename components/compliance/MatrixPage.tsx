@@ -127,7 +127,12 @@ export default async function MatrixPage({
       {/* Content Section */}
       <section className="py-16 lg:py-24 bg-white border-t border-slate-200">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
-          <ExpertReview authorId="raphael" date={lastUpdated} />
+          <ExpertReview
+            authorId="raphael"
+            date={lastUpdated}
+            title={pageTitle}
+            url={pageUrl}
+          />
           
           <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-6 mt-8">
             Strategic Priorities for {industry?.name} {role?.name || 'Leaders'}
