@@ -35,7 +35,7 @@ import { AuthorBio } from '@/components/AuthorBio';
 import { getSupabaseAdmin } from '@/lib/supabase';
 import ToolPricingPageContent from '@/components/ToolPricingPage';
 
-export const dynamic = 'force-static';
+export const dynamicParams = true;
 export const revalidate = 86400; // 24 hours
 
 interface PageProps {
@@ -692,4 +692,3 @@ export default async function ToolPricingPage({ params }: PageProps) {
       </main>
     );
   }
-
