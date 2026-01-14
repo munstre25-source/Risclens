@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import MatrixPage from '@/components/compliance/MatrixPage';
 import { getSupabaseAdmin } from '@/lib/supabase';
 
@@ -34,11 +34,6 @@ export async function generateStaticParams() {
           params.push({
             framework: f.slug,
             slug: d.slug,
-            industry: i.slug
-          });
-          params.push({
-            framework: f.slug,
-            slug: `${f.slug}-${d.slug}`,
             industry: i.slug
           });
         }
@@ -100,7 +95,12 @@ async function getMatrixData(frameworkSlug: string, decisionSlug: string, indust
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { framework, slug, industry } = await params;
-  const data = await getMatrixData(framework, slug, industry);
+
+  const normalizedSlug = slug.startsWith(`${framework}-`)
+    ? slug.slice(framework.length + 1)
+    : slug;
+
+  const data = await getMatrixData(framework, normalizedSlug, industry);
 
   if (!data) return { title: 'Not Found' };
 
@@ -111,14 +111,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description,
     alternates: {
-      canonical: `https://risclens.com/${framework}/${slug}/${industry}`,
+      canonical: `https://risclens.com/${framework}/${normalizedSlug}/${industry}`,
     },
   };
 }
 
 export default async function FrameworkDecisionIndustryPage({ params }: Props) {
   const { framework, slug, industry } = await params;
-  const data = await getMatrixData(framework, slug, industry);
+
+  // Redirect prefixed variants to canonical to avoid duplicate URLs
+  if (slug.startsWith(`${framework}-`)) {
+    const canonicalSlug = slug.slice(framework.length + 1);
+    redirect(`/${framework}/${canonicalSlug}/${industry}`);
+  }
+
+  const decisionSlug = slug.startsWith(`${framework}-`)
+    ? slug.slice(framework.length + 1)
+    : slug;
+
+  const data = await getMatrixData(framework, decisionSlug, industry);
 
   if (!data) notFound();
 
