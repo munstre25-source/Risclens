@@ -18,21 +18,32 @@ export default function ExpertReview({ authorId, date, title, url }: ExpertRevie
     ? (url.startsWith('http') ? url : `${baseUrl}${url}`)
     : undefined;
 
+  // Normalize date to YYYY-MM-DD for schema.org
+  const parsedDate = new Date(date);
+  const dateIso = isNaN(parsedDate.getTime())
+    ? undefined
+    : parsedDate.toISOString().split('T')[0];
+
   const itemTitle = title || 'RiscLens Compliance Guide';
   const reviewSchema = {
     "@context": "https://schema.org",
     "@type": "Review",
     "itemReviewed": {
-      "@type": "Article",
+      "@type": "Service",
       "name": itemTitle,
+      "headline": itemTitle,
       "url": reviewUrl,
-      "dateModified": date,
+      "dateModified": dateIso,
+      "provider": {
+        "@type": "Organization",
+        "name": "RiscLens",
+        "url": baseUrl,
+      },
     },
     "author": {
       "@type": "Person",
       "name": author.name,
       "jobTitle": author.role,
-      "sameAs": author.linkedIn || undefined
     },
     "reviewAspect": "Technical Accuracy and Compliance Alignment"
   };
