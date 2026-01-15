@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: 'SOC 2 Continuous Monitoring After Type II | RiscLens',
   description:
     'Keep SOC 2 controls and evidence fresh after your Type II: monitoring cadence, ownership, and quick wins to avoid gaps in the next audit.',
-  alternates: { canonical: '/soc-2/continuous-monitoring' },
+  alternates: { canonical: 'https://risclens.com/soc-2/continuous-monitoring' },
 };
 
 const practices = [

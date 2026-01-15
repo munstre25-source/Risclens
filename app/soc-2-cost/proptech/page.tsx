@@ -67,7 +67,7 @@ const content: CostIndustryContent = {
 export const metadata: Metadata = {
   title: 'SOC 2 Cost for PropTech | RiscLens',
   description: 'SOC 2 budget guidance for PropTech: tenant data handling, payment integrations, and property management compliance costs.',
-  alternates: { canonical: '/soc-2-cost/proptech' },
+  alternates: { canonical: 'https://risclens.com/soc-2-cost/proptech' },
   openGraph: {
     type: 'website',
     url: 'https://risclens.com/soc-2-cost/proptech',

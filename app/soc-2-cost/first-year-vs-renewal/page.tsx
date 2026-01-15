@@ -52,7 +52,7 @@ export const metadata: Metadata = {
   title: 'SOC 2 Cost: First Year vs Renewal (2026 Guide) | RiscLens',
   description: 'Compare first-year SOC 2 costs vs renewal costs. See where budget decreases in year two and how to plan for ongoing compliance spending.',
   alternates: {
-    canonical: '/soc-2-cost/first-year-vs-renewal',
+    canonical: 'https://risclens.com/soc-2-cost/first-year-vs-renewal',
   },
   openGraph: {
     type: 'article',

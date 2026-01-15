@@ -66,7 +66,7 @@ const content: CostIndustryContent = {
 export const metadata: Metadata = {
   title: 'SOC 2 Cost for Startups | RiscLens',
   description: 'Lean SOC 2 budget guidance for startups: audit fees, tooling, and internal effort with realistic timelines and scope.',
-  alternates: { canonical: '/soc-2-cost/startups' },
+  alternates: { canonical: 'https://risclens.com/soc-2-cost/startups' },
   openGraph: {
     type: 'website',
     url: 'https://risclens.com/soc-2-cost/startups',

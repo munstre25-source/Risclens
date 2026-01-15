@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   title: 'Penetration Testing Cost Estimator | RiscLens',
   description:
     'Market-aligned pentest pricing based on scope, auth complexity, environments, retests, and timelines. Built for SOC 2 and enterprise security reviews.',
-  alternates: { canonical: '/penetration-testing/cost-estimator' },
+  alternates: { canonical: 'https://risclens.com/penetration-testing/cost-estimator' },
   openGraph: {
     title: 'Penetration Testing Cost Estimator | RiscLens',
     description:

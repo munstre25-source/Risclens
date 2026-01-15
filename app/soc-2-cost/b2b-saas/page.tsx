@@ -58,7 +58,7 @@ const content: CostIndustryContent = {
 export const metadata: Metadata = {
   title: 'SOC 2 Cost for B2B SaaS | RiscLens',
   description: 'SOC 2 budget guidance for B2B SaaS: tenant isolation, SSO/SCIM, admin RBAC, and enterprise buyer expectations.',
-  alternates: { canonical: '/soc-2-cost/b2b-saas' },
+  alternates: { canonical: 'https://risclens.com/soc-2-cost/b2b-saas' },
   openGraph: {
     type: 'website',
     url: 'https://risclens.com/soc-2-cost/b2b-saas',

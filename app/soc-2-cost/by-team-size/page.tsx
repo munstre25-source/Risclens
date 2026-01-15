@@ -109,7 +109,7 @@ export const metadata: Metadata = {
   title: 'SOC 2 Cost by Team Size (2026): 10, 50, 100, 250+ Employees | RiscLens',
   description: 'See how SOC 2 costs scale with company size. Budget guidance for startups (10-25), growth stage (50), scaling (100), and enterprise (250+) teams.',
   alternates: {
-    canonical: '/soc-2-cost/by-team-size',
+    canonical: 'https://risclens.com/soc-2-cost/by-team-size',
   },
   openGraph: {
     type: 'article',

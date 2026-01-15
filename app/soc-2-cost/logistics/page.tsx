@@ -67,7 +67,7 @@ const content: CostIndustryContent = {
 export const metadata: Metadata = {
   title: 'SOC 2 Cost for Logistics | RiscLens',
   description: 'SOC 2 budget guidance for Logistics: carrier integrations, data integrity, and supply chain compliance costs.',
-  alternates: { canonical: '/soc-2-cost/logistics' },
+  alternates: { canonical: 'https://risclens.com/soc-2-cost/logistics' },
   openGraph: {
     type: 'website',
     url: 'https://risclens.com/soc-2-cost/logistics',

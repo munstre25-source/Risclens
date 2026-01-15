@@ -67,7 +67,7 @@ const content: CostIndustryContent = {
 export const metadata: Metadata = {
   title: 'SOC 2 Cost for Fintech | RiscLens',
   description: 'SOC 2 budget guidance for fintech: payments/PII scope, vendor risk, pentest remediation, and observation timelines.',
-  alternates: { canonical: '/soc-2-cost/fintech' },
+  alternates: { canonical: 'https://risclens.com/soc-2-cost/fintech' },
   openGraph: {
     type: 'website',
     url: 'https://risclens.com/soc-2-cost/fintech',

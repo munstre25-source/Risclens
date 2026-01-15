@@ -44,7 +44,7 @@ export const metadata: Metadata = {
   title: 'Vendor Risk Assessment Triage Tool | RiscLens',
   description:
     'Score vendor risk, get evidence requirements, and set monitoring cadence in minutes. Built for SOC 2 vendor management teams.',
-  alternates: { canonical: '/vendor-risk-assessment/triage' },
+  alternates: { canonical: 'https://risclens.com/vendor-risk-assessment/triage' },
   openGraph: {
     title: 'Vendor Risk Assessment Triage Tool | RiscLens',
     description:

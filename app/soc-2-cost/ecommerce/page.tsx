@@ -66,7 +66,7 @@ const content: CostIndustryContent = {
 export const metadata: Metadata = {
   title: 'SOC 2 Cost for E-commerce | RiscLens',
   description: 'SOC 2 budget guidance for e-commerce: payments, customer data, vendor integrations, and realistic timelines.',
-  alternates: { canonical: '/soc-2-cost/ecommerce' },
+  alternates: { canonical: 'https://risclens.com/soc-2-cost/ecommerce' },
   openGraph: {
     type: 'website',
     url: 'https://risclens.com/soc-2-cost/ecommerce',

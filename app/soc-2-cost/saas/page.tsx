@@ -66,7 +66,7 @@ const content: CostIndustryContent = {
 export const metadata: Metadata = {
   title: 'SOC 2 Cost for SaaS | RiscLens',
   description: 'SOC 2 budget guidance for SaaS: auditor fees, tooling, and internal effort with multi-tenant scope and CI/CD considerations.',
-  alternates: { canonical: '/soc-2-cost/saas' },
+  alternates: { canonical: 'https://risclens.com/soc-2-cost/saas' },
   openGraph: {
     type: 'website',
     url: 'https://risclens.com/soc-2-cost/saas',

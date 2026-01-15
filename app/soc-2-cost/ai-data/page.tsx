@@ -66,7 +66,7 @@ const content: CostIndustryContent = {
 export const metadata: Metadata = {
   title: 'SOC 2 Cost for AI/Data | RiscLens',
   description: 'SOC 2 budget guidance for AI/data platforms: data pipelines, model deployments, vendor/data sources, and timelines.',
-  alternates: { canonical: '/soc-2-cost/ai-data' },
+  alternates: { canonical: 'https://risclens.com/soc-2-cost/ai-data' },
   openGraph: {
     type: 'website',
     url: 'https://risclens.com/soc-2-cost/ai-data',

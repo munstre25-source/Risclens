@@ -9,7 +9,7 @@ import { costGuides, timelineGuides, readinessGuides, salesGuides } from '@/lib/
 export const metadata: Metadata = {
   title: 'SOC 2 Guides Hub | RiscLens',
   description: 'All SOC 2 guides in one place: costs, timelines, readiness controls, sales enablement, and industry-specific advice.',
-  alternates: { canonical: '/soc-2/guides' },
+  alternates: { canonical: 'https://risclens.com/soc-2/guides' },
   openGraph: {
     title: 'SOC 2 Guides Hub | RiscLens',
     description: 'All SOC 2 guides in one place: costs, timelines, readiness controls, sales enablement, and industry-specific advice.',

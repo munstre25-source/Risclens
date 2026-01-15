@@ -122,7 +122,7 @@ export const COMMERCIAL_ROUTES = [
     ...salesGuides.map(g => `${g.parent}/${g.slug}`),
     ...industryGuides.map(g => `/soc-2/industries/${g.slug}`),
     ...pentestPages.map(p => `/penetration-testing/${p.slug}`),
-    ...comparisonPages.map(c => `/compare/${c.slug}`),
+    ...comparisonPages.map(c => `/soc-2-vs-iso-27001/${c.slug}`),
     ...evidenceGuides.map(e => `/soc-2-evidence/${e.slug}`),
     ...generateComparisonRoutes(),
     ...generateAlternativesRoutes(),

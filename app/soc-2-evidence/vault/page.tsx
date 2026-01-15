@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: 'SOC 2 Evidence Vault: How to Store Audit Evidence | RiscLens',
   description:
     'Build a simple SOC 2 evidence vault with consistent storage, ownership, and retention so auditors can verify quickly. What to store, how to structure, and how to keep it current.',
-  alternates: { canonical: '/soc-2-evidence/vault' },
+  alternates: { canonical: 'https://risclens.com/soc-2-evidence/vault' },
 };
 
 const buckets = [

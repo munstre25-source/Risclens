@@ -75,7 +75,7 @@ export const metadata: Metadata = {
   description:
     'Estimate SOC 2 cost based on scope, timeline, tooling, and starting readiness. Use this guide to anchor your budget—then validate with the readiness assessment.',
   alternates: {
-    canonical: '/soc-2-cost',
+    canonical: 'https://risclens.com/soc-2-cost',
   },
   openGraph: {
     type: 'website',

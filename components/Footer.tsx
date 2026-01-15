@@ -88,8 +88,44 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom Section */}
+        {/* Crawl Discovery Section - Helps search engines find all pSEO pages */}
         <div className="border-t border-slate-800 mt-16 pt-8">
+          <div className="mb-8">
+            <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Quick Access: Frameworks × Industries</p>
+            <div className="flex flex-wrap gap-2 text-xs">
+              {[
+                { href: '/soc-2/readiness-checklist/fintech', label: 'SOC 2 Fintech' },
+                { href: '/soc-2/readiness-checklist/healthcare', label: 'SOC 2 Healthcare' },
+                { href: '/soc-2/readiness-checklist/saas', label: 'SOC 2 SaaS' },
+                { href: '/iso-27001/certification-timeline/fintech', label: 'ISO 27001 Fintech' },
+                { href: '/hipaa/compliance-checklist/healthcare', label: 'HIPAA Healthcare' },
+                { href: '/pci-dss/certification-roadmap/ecommerce', label: 'PCI DSS E-commerce' },
+                { href: '/ai-governance/risk-assessment/ai-data', label: 'AI Gov Risk' },
+                { href: '/compare/vanta-vs-drata', label: 'Vanta vs Drata' },
+                { href: '/compare/secureframe-alternatives', label: 'Secureframe Alternatives' },
+                { href: '/pricing/vanta', label: 'Vanta Pricing' },
+                { href: '/pricing/drata', label: 'Drata Pricing' },
+                { href: '/auditor-directory/new-york', label: 'NYC Auditors' },
+                { href: '/auditor-directory/san-francisco', label: 'SF Auditors' },
+                { href: '/soc-2-vs-iso-27001/cost-comparison', label: 'SOC 2 vs ISO Cost' },
+              ].map((link) => (
+                <Link 
+                  key={link.href} 
+                  href={link.href} 
+                  className="px-2 py-1 bg-slate-800 hover:bg-slate-700 rounded text-slate-400 hover:text-white transition-colors"
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <Link href="/tools" className="px-2 py-1 bg-brand-600/20 hover:bg-brand-600/30 rounded text-brand-400 hover:text-brand-300 transition-colors font-semibold">
+                View All 25,000+ Pages →
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Section */}
+        <div className="border-t border-slate-800 mt-8 pt-8">
           <div className="grid gap-8 lg:grid-cols-[2fr_1fr]">
             <div className="space-y-4">
               <p className="text-xs font-bold text-white uppercase tracking-widest">Regulatory Disclaimer</p>

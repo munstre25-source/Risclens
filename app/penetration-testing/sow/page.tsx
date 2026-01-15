@@ -7,7 +7,7 @@ import { PentestSOWBuilder } from '@/components/pentest/PentestSOWBuilder';
 export const metadata: Metadata = {
   title: 'Penetration Testing SOW Template | RiscLens',
   description: 'Download a standardized Statement of Work (SOW) template for SOC 2 penetration testing. Lock in scope, deliverables, and rules of engagement.',
-  alternates: { canonical: '/penetration-testing/sow' },
+  alternates: { canonical: 'https://risclens.com/penetration-testing/sow' },
 };
 
 const sections = [

@@ -9,7 +9,7 @@ import { Database, Shield, Lock, Activity, RefreshCw, Truck, HardDrive } from 'l
 export const metadata: Metadata = {
   title: 'SOC 2 Evidence Hub: Guide to Audit Artifacts | RiscLens',
   description: 'Master SOC 2 evidence collection. Browse category-specific guides for access control, change management, and more. Access the Evidence Vault.',
-  alternates: { canonical: '/soc-2-evidence' },
+  alternates: { canonical: 'https://risclens.com/soc-2-evidence' },
 };
 
 const iconMap: Record<string, any> = {

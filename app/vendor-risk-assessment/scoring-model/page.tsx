@@ -7,7 +7,7 @@ import VendorRiskLeadMagnet from '@/components/vendor-risk/VendorRiskLeadMagnet'
 export const metadata: Metadata = {
   title: 'Vendor Risk Assessment Scoring Model | RiscLens',
   description: 'Deterministic vendor risk scoring that maps inputs to Low, Medium, or High tiers with clear evidence asks.',
-  alternates: { canonical: '/vendor-risk-assessment/scoring-model' },
+  alternates: { canonical: 'https://risclens.com/vendor-risk-assessment/scoring-model' },
   openGraph: {
     title: 'Vendor Risk Assessment Scoring Model | RiscLens',
     description: 'Deterministic vendor risk scoring that maps inputs to Low, Medium, or High tiers with clear evidence asks.',

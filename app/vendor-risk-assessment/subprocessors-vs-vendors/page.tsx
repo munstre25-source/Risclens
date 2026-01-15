@@ -6,7 +6,7 @@ import { VendorRiskRelatedLinks } from '@/components/vendor-risk/VendorRiskRelat
 export const metadata: Metadata = {
   title: 'Subprocessors vs Vendors in SOC 2 | RiscLens',
   description: 'Differentiate subprocessors from vendors, track chains of custody, and set the right evidence expectations.',
-  alternates: { canonical: '/vendor-risk-assessment/subprocessors-vs-vendors' },
+  alternates: { canonical: 'https://risclens.com/vendor-risk-assessment/subprocessors-vs-vendors' },
   openGraph: {
     title: 'Subprocessors vs Vendors in SOC 2 | RiscLens',
     description: 'Differentiate subprocessors from vendors, track chains of custody, and set the right evidence expectations.',

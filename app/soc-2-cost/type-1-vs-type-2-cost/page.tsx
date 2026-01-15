@@ -51,7 +51,7 @@ export const metadata: Metadata = {
   title: 'SOC 2 Type I vs Type II Cost Breakdown (2026) | RiscLens',
   description: 'Compare SOC 2 Type I vs Type II costs. See audit fees, timeline differences, and total budget breakdown for each audit type.',
   alternates: {
-    canonical: '/soc-2-cost/type-1-vs-type-2-cost',
+    canonical: 'https://risclens.com/soc-2-cost/type-1-vs-type-2-cost',
   },
   openGraph: {
     type: 'article',
