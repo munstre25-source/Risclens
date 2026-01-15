@@ -63,18 +63,21 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const pseoData = await getPseoPricingData(slug);
   if (pseoData?.content_json) {
     const { toolName, heroDescription } = pseoData.content_json;
-    return {
-      title: `${toolName} Pricing Guide 2026 | Verified Tiers & Hidden Costs`,
-      description: heroDescription || `Expert breakdown of ${toolName} pricing. See starting costs, tiers, and negotiation tips. Verified by RiscLens.`,
-      alternates: {
-        canonical: `https://risclens.com/pricing/${slug}`,
-      }
-    };
+    // Only use pSEO data if toolName exists
+    if (toolName && toolName.trim() !== '') {
+      return {
+        title: `${toolName} Pricing Guide 2026 | Verified Tiers & Hidden Costs`,
+        description: heroDescription || `Expert breakdown of ${toolName} pricing. See starting costs, tiers, and negotiation tips. Verified by RiscLens.`,
+        alternates: {
+          canonical: `https://risclens.com/pricing/${slug}`,
+        }
+      };
+    }
   }
 
   // Fallback to static content
   const tool = toolPricing.find(t => t.slug === slug);
-  if (!tool) return { title: 'Pricing Not Found' };
+  if (!tool) return { title: 'Pricing Not Found', robots: { index: false } };
 
   return {
     title: `${tool.name} Pricing Guide 2026 | Verified Tiers & Hidden Costs`,
@@ -87,12 +90,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   export async function generateStaticParams() {
     const supabase = getSupabaseAdmin();
+    // Only fetch pSEO pages that have valid content_json with toolName
     const { data: pseoPages } = await supabase
       .from('pseo_pages')
-      .select('slug')
+      .select('slug, content_json')
       .eq('category', 'pricing');
 
-    const pseoSlugs = pseoPages?.filter(p => p.slug).map(p => ({ slug: p.slug })) || [];
+    // Filter out pSEO pages with missing or empty toolName
+    const pseoSlugs = pseoPages
+      ?.filter(p => p.slug && p.content_json?.toolName && p.content_json.toolName.trim() !== '')
+      .map(p => ({ slug: p.slug })) || [];
+    
     const staticSlugs = toolPricing.filter(t => t.slug).map((tool) => ({
       slug: tool.slug,
     }));
@@ -116,17 +124,24 @@ export default async function ToolPricingPage({ params }: PageProps) {
   const pseoData = await getPseoPricingData(slug);
   if (pseoData?.content_json) {
     const content = pseoData.content_json;
-    return (
-      <ToolPricingPageContent 
-        toolName={content.toolName}
-        toolSlug={slug}
-        heroDescription={content.heroDescription}
-        pricingTiers={content.pricingTiers}
-        hiddenCosts={content.hiddenCosts}
-        negotiationTips={content.negotiationTips}
-        comparisonLinks={content.comparisonLinks || []}
-      />
-    );
+    
+    // Validate required fields exist - prevent "undefined" pages
+    if (!content.toolName || content.toolName.trim() === '') {
+      console.warn(`[Pricing] Missing toolName for slug: ${slug}`);
+      // Fall through to static content or 404
+    } else {
+      return (
+        <ToolPricingPageContent 
+          toolName={content.toolName}
+          toolSlug={slug}
+          heroDescription={content.heroDescription || `Expert breakdown of ${content.toolName} pricing, tiers, and negotiation tips.`}
+          pricingTiers={content.pricingTiers || []}
+          hiddenCosts={content.hiddenCosts || []}
+          negotiationTips={content.negotiationTips || []}
+          comparisonLinks={content.comparisonLinks || []}
+        />
+      );
+    }
   }
 
   // 2. Fallback to static content
