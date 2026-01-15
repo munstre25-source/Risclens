@@ -67,7 +67,7 @@ const content: CostIndustryContent = {
 export const metadata: Metadata = {
   title: 'SOC 2 Cost for Healthcare | RiscLens',
   description: 'SOC 2 budget guidance for healthcare and healthtech teams handling PHI: logging, vendor BAAs, pentests, and timelines.',
-  alternates: { canonical: '/soc-2-cost/healthcare' },
+  alternates: { canonical: 'https://risclens.com/soc-2-cost/healthcare' },
   openGraph: {
     type: 'website',
     url: 'https://risclens.com/soc-2-cost/healthcare',

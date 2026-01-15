@@ -6,7 +6,7 @@ import { VendorRiskRelatedLinks } from '@/components/vendor-risk/VendorRiskRelat
 export const metadata: Metadata = {
   title: 'Vendor Risk Contract Clauses | RiscLens',
   description: 'Security addenda and DPA clauses that align with vendor risk tier—breach notice, audit rights, and control expectations.',
-  alternates: { canonical: '/vendor-risk-assessment/contract-clauses' },
+  alternates: { canonical: 'https://risclens.com/vendor-risk-assessment/contract-clauses' },
   openGraph: {
     title: 'Vendor Risk Contract Clauses | RiscLens',
     description: 'Security addenda and DPA clauses that align with vendor risk tier—breach notice, audit rights, and control expectations.',

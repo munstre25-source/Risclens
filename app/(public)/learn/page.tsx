@@ -6,7 +6,7 @@ import Footer from '@/components/Footer';
 export const metadata: Metadata = {
   title: 'Education Hub | Compliance & Security Learning Center | RiscLens',
   description: 'Master SOC 2, ISO 27001, and Penetration Testing. Operational guides and resources for startups closing enterprise deals.',
-  alternates: { canonical: '/learn' },
+  alternates: { canonical: 'https://risclens.com/learn' },
 };
 
 const learningPaths = [

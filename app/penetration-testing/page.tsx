@@ -53,7 +53,7 @@ const clusterLinks = [
 export const metadata: Metadata = {
   title: 'SOC 2 Pentest Hub | Penetration Testing for Compliance | RiscLens',
   description: 'Scope, estimate, and plan penetration tests that support SOC 2 and enterprise security reviews. Use our cost estimator and scoping tools.',
-  alternates: { canonical: '/penetration-testing' },
+  alternates: { canonical: 'https://risclens.com/penetration-testing' },
   openGraph: {
     title: 'SOC 2 Pentest Hub | Penetration Testing for Compliance | RiscLens',
     description: 'Scope, estimate, and plan penetration tests that support SOC 2 and enterprise security reviews.',

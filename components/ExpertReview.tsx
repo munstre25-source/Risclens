@@ -29,12 +29,12 @@ export default function ExpertReview({ authorId, date, title, url }: ExpertRevie
     "@context": "https://schema.org",
     "@type": "Review",
     "itemReviewed": {
-      "@type": "Service",
+      "@type": "Article",
       "name": itemTitle,
       "headline": itemTitle,
       "url": reviewUrl,
       "dateModified": dateIso,
-      "provider": {
+      "publisher": {
         "@type": "Organization",
         "name": "RiscLens",
         "url": baseUrl,

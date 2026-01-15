@@ -58,7 +58,7 @@ const content: CostIndustryContent = {
 export const metadata: Metadata = {
   title: 'SOC 2 Cost for Cloud Infrastructure | RiscLens',
   description: 'SOC 2 budget guidance for cloud infrastructure and platform teams: tenancy controls, DR, logging, and operator access.',
-  alternates: { canonical: '/soc-2-cost/cloud-infrastructure' },
+  alternates: { canonical: 'https://risclens.com/soc-2-cost/cloud-infrastructure' },
   openGraph: {
     type: 'website',
     url: 'https://risclens.com/soc-2-cost/cloud-infrastructure',

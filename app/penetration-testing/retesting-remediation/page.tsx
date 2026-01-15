@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: 'Penetration Testing Retesting & Remediation | RiscLens',
   description:
     'How to close pen test findings quickly: remediation playbook, evidence expectations, and retest best practices.',
-  alternates: { canonical: '/penetration-testing/retesting-remediation' },
+  alternates: { canonical: 'https://risclens.com/penetration-testing/retesting-remediation' },
 };
 
 const steps = [

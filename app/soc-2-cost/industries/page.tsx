@@ -7,7 +7,7 @@ import { industryCostLinks } from '@/lib/industryCostLinks';
 export const metadata: Metadata = {
   title: 'SOC 2 Cost by Industry | RiscLens',
   description: 'Browse SOC 2 cost guidance for each industry: scope hotspots, auditor focus areas, and links to readiness resources.',
-  alternates: { canonical: '/soc-2-cost/industries' },
+  alternates: { canonical: 'https://risclens.com/soc-2-cost/industries' },
   openGraph: {
     type: 'website',
     url: 'https://risclens.com/soc-2-cost/industries',

@@ -99,7 +99,7 @@ const SOC2_INDUSTRIES = [
 export const metadata: Metadata = {
   title: 'SOC 2 Readiness Hub | Audit Prep, Cost, & Timeline | RiscLens',
   description: 'The mission control for SOC 2 readiness. Use our gap assessment, cost estimator, and timeline tools to prepare for your audit with confidence.',
-  alternates: { canonical: '/soc-2' },
+  alternates: { canonical: 'https://risclens.com/soc-2' },
   openGraph: {
     title: 'SOC 2 Readiness Hub | Audit Prep, Cost, & Timeline | RiscLens',
     description: 'The mission control for SOC 2 readiness. Use our gap assessment, cost estimator, and timeline tools.',

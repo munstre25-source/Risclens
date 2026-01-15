@@ -63,7 +63,7 @@ const clusterLinks = [
 export const metadata: Metadata = {
   title: 'Right-size your vendor risk management for SOC 2 | RiscLens',
   description: 'Automate vendor risk tiering and review cycles to reduce third-party risk and save time. Validate your approach before the audit.',
-  alternates: { canonical: '/vendor-risk-assessment' },
+  alternates: { canonical: 'https://risclens.com/vendor-risk-assessment' },
   openGraph: {
     title: 'Right-size your vendor risk management for SOC 2 | RiscLens',
     description: 'Automate vendor risk tiering and review cycles to reduce third-party risk and save time. Validate your approach before the audit.',

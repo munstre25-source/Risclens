@@ -58,7 +58,7 @@ const content: CostIndustryContent = {
 export const metadata: Metadata = {
   title: 'SOC 2 Cost for Payments | RiscLens',
   description: 'SOC 2 budget guidance for payments: PCI-adjacent controls, vendor diligence, pentest remediation, and fraud/alerting coverage.',
-  alternates: { canonical: '/soc-2-cost/payments' },
+  alternates: { canonical: 'https://risclens.com/soc-2-cost/payments' },
   openGraph: {
     type: 'website',
     url: 'https://risclens.com/soc-2-cost/payments',

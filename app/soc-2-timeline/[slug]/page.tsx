@@ -61,7 +61,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${page.title} | SOC 2 Timeline | RiscLens`,
     description: page.summary,
-    alternates: { canonical: `${page.parent}/${page.slug}` },
+    alternates: { canonical: `https://risclens.com${page.parent}/${page.slug}` },
     openGraph: {
       title: `${page.title} | SOC 2 Timeline | RiscLens`,
       description: page.summary,

@@ -66,7 +66,7 @@ const content: CostIndustryContent = {
 export const metadata: Metadata = {
   title: 'SOC 2 Cost for Marketplaces | RiscLens',
   description: 'SOC 2 budget guidance for marketplaces: vendor oversight, fraud monitoring, payment scope, and timelines.',
-  alternates: { canonical: '/soc-2-cost/marketplaces' },
+  alternates: { canonical: 'https://risclens.com/soc-2-cost/marketplaces' },
   openGraph: {
     type: 'website',
     url: 'https://risclens.com/soc-2-cost/marketplaces',

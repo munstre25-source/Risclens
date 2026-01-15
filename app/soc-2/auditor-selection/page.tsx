@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: 'How to Choose a SOC 2 Auditor | RiscLens',
   description:
     'Practical guide to selecting a SOC 2 auditor: scope fit, evidence expectations, pricing signals, and how to avoid rework.',
-  alternates: { canonical: '/soc-2/auditor-selection' },
+  alternates: { canonical: 'https://risclens.com/soc-2/auditor-selection' },
 };
 
 const criteria = [

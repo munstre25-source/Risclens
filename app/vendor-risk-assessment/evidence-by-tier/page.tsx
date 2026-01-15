@@ -31,7 +31,7 @@ const faqSchema = {
 export const metadata: Metadata = {
   title: 'Vendor Risk Assessment Evidence by Tier | RiscLens',
   description: 'Evidence requests for Low, Medium, and High vendor risk tiers so SOC 2 vendor management stays consistent.',
-  alternates: { canonical: '/vendor-risk-assessment/evidence-by-tier' },
+  alternates: { canonical: 'https://risclens.com/vendor-risk-assessment/evidence-by-tier' },
   openGraph: {
     title: 'Vendor Risk Assessment Evidence by Tier | RiscLens',
     description: 'Evidence requests for Low, Medium, and High vendor risk tiers so SOC 2 vendor management stays consistent.',

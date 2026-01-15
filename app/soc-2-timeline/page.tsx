@@ -51,7 +51,7 @@ export const metadata: Metadata = {
   description:
     'Learn exactly how long SOC 2 takes. From readiness to the final report, understand the phases, observation windows, and how to avoid common delays.',
   alternates: {
-    canonical: '/soc-2-timeline',
+    canonical: 'https://risclens.com/soc-2-timeline',
   },
   openGraph: {
     type: 'website',

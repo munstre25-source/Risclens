@@ -58,7 +58,7 @@ const content: CostIndustryContent = {
 export const metadata: Metadata = {
   title: 'SOC 2 Cost for EdTech | RiscLens',
   description: 'SOC 2 budget guidance for EdTech: student data privacy, consent evidence, and vendor diligence with schools/districts.',
-  alternates: { canonical: '/soc-2-cost/edtech' },
+  alternates: { canonical: 'https://risclens.com/soc-2-cost/edtech' },
   openGraph: {
     type: 'website',
     url: 'https://risclens.com/soc-2-cost/edtech',

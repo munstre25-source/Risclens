@@ -122,62 +122,102 @@ async function getFullDynamicRoutes() {
   }
 }
 
+/**
+ * Priority tiers for sitemap - helps Google understand page importance
+ * Higher priority = crawled more frequently
+ */
+function getUrlPriority(path: string): { priority: number; changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency'] } {
+  // Tier 1: High-intent conversion pages (priority 1.0)
+  const tier1Paths = [
+    '/',
+    '/soc-2-readiness-index',
+    '/soc-2-readiness-calculator',
+    '/soc-2-cost',
+    '/soc-2-cost-calculator',
+    '/soc-2-timeline',
+    '/auditor-match',
+    '/iso-42001-calculator',
+    '/ai-governance-readiness-index',
+    '/compliance-roi-calculator',
+    '/pci-dss-readiness-calculator',
+  ];
+  
+  if (tier1Paths.includes(path)) {
+    return { priority: 1.0, changeFrequency: 'daily' };
+  }
+
+  // Tier 2: Main hubs and comparison pages (priority 0.9)
+  if (
+    path === '/soc-2' ||
+    path === '/penetration-testing' ||
+    path === '/vendor-risk-assessment' ||
+    path === '/compare' ||
+    path === '/tools' ||
+    path === '/ai-governance' ||
+    path === '/ai-compliance' ||
+    path.match(/^\/compare\/[^/]+-vs-[^/]+$/) || // Direct comparisons
+    path.match(/^\/compare\/[^/]+-alternatives$/) // Alternatives pages
+  ) {
+    return { priority: 0.9, changeFrequency: 'weekly' };
+  }
+
+  // Tier 3: Industry-specific high-intent pages (priority 0.85)
+  if (
+    path.includes('/soc-2/industries/') ||
+    path.includes('/pricing/') ||
+    path.includes('/compliance/migrate/') ||
+    path.match(/^\/soc-2-cost\/(fintech|saas|healthcare|startups)$/)
+  ) {
+    return { priority: 0.85, changeFrequency: 'weekly' };
+  }
+
+  // Tier 4: Matrix pages - framework/decision/industry (priority 0.8)
+  if (
+    path.match(/^\/(soc-2|iso-27001|hipaa|gdpr|pci-dss)\/[^/]+\/[^/]+$/) ||
+    path.includes('/for/') ||
+    path.includes('/auditor-directory/')
+  ) {
+    return { priority: 0.8, changeFrequency: 'weekly' };
+  }
+
+  // Tier 5: Company directory and evidence pages (priority 0.75)
+  if (
+    path.includes('/compliance/directory/') ||
+    path.includes('/soc-2-evidence/')
+  ) {
+    return { priority: 0.75, changeFrequency: 'weekly' };
+  }
+
+  // Tier 6: Learn content (priority 0.7)
+  if (path.includes('/learn/') || path.includes('/glossary/')) {
+    return { priority: 0.7, changeFrequency: 'monthly' };
+  }
+
+  // Tier 7: Legal pages (priority 0.3)
+  if (path === '/privacy' || path === '/terms') {
+    return { priority: 0.3, changeFrequency: 'monthly' };
+  }
+
+  // Default for all other pSEO pages
+  return { priority: 0.7, changeFrequency: 'weekly' };
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const dynamicRoutes = await getFullDynamicRoutes();
   const allRoutes = Array.from(new Set([...ROUTES, ...dynamicRoutes]));
 
-  const entries = allRoutes.map((path) => {
-    const bucket = getRouteBucket(path);
-    
-    // Priority logic per bucket
-    let priority = 0.7; // Default fallback
-    let changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency'] = 'monthly';
-
-    if (path.startsWith('/compliance/directory/')) {
-      priority = 0.75;
-      changeFrequency = 'weekly';
-    } else if (path.startsWith('/compliance/migrate/')) {
-      priority = 0.85;
-      changeFrequency = 'weekly';
-    } else if (path.includes('/for/') || path.includes('/pricing/') || path.includes('/compare/')) {
-      priority = 0.8;
-      changeFrequency = 'weekly';
-    } else {
-      switch (bucket) {
-        case 'flagship':
-          priority = 1.0;
-          changeFrequency = 'weekly';
-          break;
-        case 'calculator':
-          priority = 0.95;
-          changeFrequency = 'weekly';
-          break;
-        case 'hub':
-          priority = 0.9;
-          changeFrequency = 'weekly';
-          break;
-        case 'commercial':
-          priority = 0.8;
-          changeFrequency = 'weekly';
-          break;
-        case 'learn':
-          priority = 0.7;
-          changeFrequency = 'monthly';
-          break;
-        case 'legal':
-          priority = 0.4;
-          changeFrequency = 'monthly';
-          break;
-      }
-    }
-
-    return {
-      url: `${baseUrl}${path === '/' ? '' : path}`,
-      lastModified: BUILD_DATE,
-      changeFrequency,
-      priority,
-    };
-  });
+  // Sort routes by priority so high-value pages appear first in sitemap
+  const entries = allRoutes
+    .map((path) => {
+      const { priority, changeFrequency } = getUrlPriority(path);
+      return {
+        url: `${baseUrl}${path === '/' ? '' : path}`,
+        lastModified: BUILD_DATE,
+        changeFrequency,
+        priority,
+      };
+    })
+    .sort((a, b) => b.priority - a.priority); // High priority first
 
   return entries;
 }

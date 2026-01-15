@@ -6,7 +6,7 @@ import { VendorRiskRelatedLinks } from '@/components/vendor-risk/VendorRiskRelat
 export const metadata: Metadata = {
   title: 'Vendor Monitoring Cadence by Risk Tier | RiscLens',
   description: 'Align vendor monitoring cadence with risk tiers—annual attestations, quarterly reviews, or semiannual deep dives.',
-  alternates: { canonical: '/vendor-risk-assessment/monitoring-cadence' },
+  alternates: { canonical: 'https://risclens.com/vendor-risk-assessment/monitoring-cadence' },
   openGraph: {
     title: 'Vendor Monitoring Cadence by Risk Tier | RiscLens',
     description: 'Align vendor monitoring cadence with risk tiers—annual attestations, quarterly reviews, or semiannual deep dives.',

@@ -58,7 +58,7 @@ const content: CostIndustryContent = {
 export const metadata: Metadata = {
   title: 'SOC 2 Cost for DevTools | RiscLens',
   description: 'SOC 2 budget guidance for developer tooling: CI/CD integrations, secrets, and software supply chain expectations.',
-  alternates: { canonical: '/soc-2-cost/devtools' },
+  alternates: { canonical: 'https://risclens.com/soc-2-cost/devtools' },
   openGraph: {
     type: 'website',
     url: 'https://risclens.com/soc-2-cost/devtools',

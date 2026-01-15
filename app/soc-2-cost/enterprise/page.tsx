@@ -67,7 +67,7 @@ const content: CostIndustryContent = {
 export const metadata: Metadata = {
   title: 'SOC 2 Cost for Enterprise | RiscLens',
   description: 'Enterprise SOC 2 budgets: multi-team scope, sampling, vendor oversight, and observation planning with realistic timelines.',
-  alternates: { canonical: '/soc-2-cost/enterprise' },
+  alternates: { canonical: 'https://risclens.com/soc-2-cost/enterprise' },
   openGraph: {
     type: 'website',
     url: 'https://risclens.com/soc-2-cost/enterprise',

@@ -15,7 +15,9 @@
     "check:links": "tsx scripts/check-learn-more-links.ts",
     "check:sitemap": "tsx scripts/check-sitemap.ts",
     "check:sitemap-doc": "tsx scripts/check-sitemap-vs-doc.ts",
-    "generate-pseo": "tsx scripts/generate-pseo-content.ts"
+    "generate-pseo": "tsx scripts/generate-pseo-content.ts",
+    "indexnow": "tsx scripts/submit-indexnow.ts",
+    "postdeploy": "tsx scripts/submit-indexnow.ts"
   },
     "dependencies": {
       "@sendgrid/mail": "^8.1.0",
@@ -63,6 +65,6 @@
     "zod": "^3.25.76"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": "20.x"
   }
 }

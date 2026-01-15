@@ -8,7 +8,7 @@ import AssessmentCTA from '@/components/AssessmentCTA';
 export const metadata: Metadata = {
   title: 'SOC 2 for Sales & Operations | RiscLens',
   description: 'How to use your SOC 2 report to accelerate sales, handle security questionnaires, and manage post-audit obligations.',
-  alternates: { canonical: '/soc-2-sales' },
+  alternates: { canonical: 'https://risclens.com/soc-2-sales' },
   openGraph: {
     title: 'SOC 2 for Sales & Operations | RiscLens',
     description: 'How to use your SOC 2 report to accelerate sales, handle security questionnaires, and manage post-audit obligations.',

@@ -5,7 +5,7 @@ import DefinitionCallout from '@/components/DefinitionCallout';
 export const metadata = {
   title: 'SOC 2 Readiness Controls | RiscLens',
   description: 'SOC 2 readiness controls hub: access, change, logging, incident response, vendors, and more—each with guidance and evidence expectations.',
-  alternates: { canonical: '/learn/soc-2-readiness' },
+  alternates: { canonical: 'https://risclens.com/learn/soc-2-readiness' },
 };
 
 export default function LearnSoc2ReadinessPage() {

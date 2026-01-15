@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: 'Pentest Scoping Worksheet | RiscLens',
   description:
     'Define your penetration testing scope for Web Apps, APIs, Mobile, and Networks. Generate a professional scoping document for vendor quotes and SOC 2 audits.',
-  alternates: { canonical: '/penetration-testing/scoping' },
+  alternates: { canonical: 'https://risclens.com/penetration-testing/scoping' },
 };
 
 export default function ScopingPage() {
