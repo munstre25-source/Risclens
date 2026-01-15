@@ -25,6 +25,7 @@ import {
   generateSchemaOrgBreadcrumbs,
 } from '@/lib/pseo-internal-links';
 import { getSupabaseAdmin } from '@/lib/supabase';
+import { validatePseoContent, getString, getArray, getObject } from '@/lib/pseo-validation';
 import ComparisonView from '@/components/compliance/ComparisonView';
 import FrameworkComparisonView from '@/components/compliance/FrameworkComparisonView';
 import { InternalLinks, Breadcrumbs } from '@/components/InternalLinks';
@@ -121,49 +122,53 @@ export default async function DynamicComparisonPage({ params }: { params: { slug
   // Check if it's a pSEO page first (handles framework_comparison and alternatives)
   const page = await getPseoPage(slug);
   
-    if (page) {
-      if (page.category === 'framework_comparison') {
-        const { 
-          title = '', 
-          description = '', 
-          frameworkA = { name: '', slug: '' }, 
-          frameworkB = { name: '', slug: '' }, 
-          tableRows = [], 
-          decisions = [], 
-          faqs = [] 
-        } = page.content_json || {};
-
+  if (page && page.content_json) {
+    const content = page.content_json;
+    const validation = validatePseoContent(content, page.category);
+    
+    if (page.category === 'framework_comparison' && validation.isValid) {
+      const frameworkA = getObject(content, 'frameworkA', { name: '', slug: '' });
+      const frameworkB = getObject(content, 'frameworkB', { name: '', slug: '' });
+      
+      // Additional validation: ensure frameworks have names
+      if (!frameworkA.name || !frameworkB.name) {
+        // Fall through to other handlers or 404
+      } else {
         return (
           <>
             <Header />
             <FrameworkComparisonView
-              title={title}
-              description={description}
+              title={getString(content, 'title', `${frameworkA.name} vs ${frameworkB.name}`)}
+              description={getString(content, 'description', '')}
               frameworkA={frameworkA}
               frameworkB={frameworkB}
-              tableRows={tableRows}
-              decisions={decisions}
-              faqs={faqs}
+              tableRows={getArray(content, 'tableRows', [])}
+              decisions={getArray(content, 'decisions', [])}
+              faqs={getArray(content, 'faqs', [])}
               lastUpdated={new Date(page.updated_at || page.created_at).toISOString().split('T')[0]}
             />
             <Footer />
           </>
         );
       }
+    }
 
-      if (page.category === 'alternatives') {
-        const { toolName = '', heroDescription = '', alternatives = [], comparisonFactors = [] } = page.content_json || {};
+    if (page.category === 'alternatives') {
+      const toolName = getString(content, 'toolName', '');
+      // Only render if toolName is valid
+      if (toolName) {
         return (
           <ToolAlternativePage
             toolName={toolName}
             toolSlug={slug.replace('-alternatives', '')}
-            heroDescription={heroDescription}
-            alternatives={alternatives}
-            comparisonFactors={comparisonFactors}
+            heroDescription={getString(content, 'heroDescription', `Compare the best ${toolName} alternatives.`)}
+            alternatives={getArray(content, 'alternatives', [])}
+            comparisonFactors={getArray(content, 'comparisonFactors', [])}
           />
         );
       }
     }
+  }
 
   if (slug.includes('-vs-')) {
     return <ComparisonPageWrapper slug={slug} />;

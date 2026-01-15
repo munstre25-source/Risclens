@@ -2,6 +2,13 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import RoleSOC2Page from '@/components/RoleSOC2Page';
 import { getSupabaseAdmin } from '@/lib/supabase';
+import { 
+  getValidPseoSlugs, 
+  getString, 
+  getArray,
+  generateFallbackTitle,
+  generateFallbackDescription 
+} from '@/lib/pseo-validation';
 
 interface Props {
   params: Promise<{ role: string }>;
@@ -11,18 +18,8 @@ export const dynamicParams = true;
 export const revalidate = 86400; // 24 hours
 
 export async function generateStaticParams() {
-  try {
-    const supabase = getSupabaseAdmin();
-    const { data } = await supabase
-      .from('pseo_pages')
-      .select('slug')
-      .eq('category', 'role');
-    
-    return data?.map(p => ({ role: p.slug })) || [];
-  } catch (err) {
-    console.error('[generateStaticParams] Failed to generate params for soc-2/for/[role]:', err);
-    return [];
-  }
+  // Only generate pages with valid content (has roleName)
+  return getValidPseoSlugs('role', 'role');
 }
 
 async function getRolePage(role: string) {
@@ -53,15 +50,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { role } = await params;
   const page = await getRolePage(role);
 
-  if (!page) {
+  // Validate page has required roleName
+  const roleName = page?.content_json?.roleName;
+  if (!page || !roleName) {
     return {
       title: 'Page Not Found | RiscLens',
+      robots: { index: false },
     };
   }
 
   return {
-    title: page.title,
-    description: page.meta_description,
+    title: page.title || generateFallbackTitle(role, 'role'),
+    description: page.meta_description || generateFallbackDescription(role, 'role'),
     alternates: {
       canonical: `https://risclens.com/soc-2/for/${role}`,
     },
@@ -72,17 +72,22 @@ export default async function DynamicRolePage({ params }: Props) {
   const { role } = await params;
   const page = await getRolePage(role);
 
-  if (!page) {
+  // Validate page has required roleName
+  if (!page || !page.content_json?.roleName) {
     notFound();
   }
 
-  const allRolesData = await getAllRoles();
-  const allRoles = allRolesData.map(r => ({
-    name: r.content_json.roleName,
-    slug: r.slug
-  }));
-
   const content = page.content_json;
+  const roleName = getString(content, 'roleName', role.charAt(0).toUpperCase() + role.slice(1));
+
+  // Only include roles that have valid roleName
+  const allRolesData = await getAllRoles();
+  const allRoles = allRolesData
+    .filter(r => r.content_json?.roleName)
+    .map(r => ({
+      name: r.content_json.roleName,
+      slug: r.slug
+    }));
 
   // Fallback content for thin pSEO pages
   const fallbackKeyPriorities = [
@@ -100,11 +105,11 @@ export default async function DynamicRolePage({ params }: Props) {
 
   return (
     <RoleSOC2Page
-      roleName={content.roleName || role.charAt(0).toUpperCase() + role.slice(1)}
+      roleName={roleName}
       roleSlug={role}
-      heroDescription={content.heroDescription || `A comprehensive guide for ${content.roleName || role}s on navigating SOC 2 compliance requirements and best practices.`}
-      keyPriorities={content.keyPriorities && content.keyPriorities.length > 0 ? content.keyPriorities : fallbackKeyPriorities}
-      faqs={content.faqs && content.faqs.length > 0 ? content.faqs : fallbackFaqs}
+      heroDescription={getString(content, 'heroDescription', `A comprehensive guide for ${roleName}s on navigating SOC 2 compliance requirements and best practices.`)}
+      keyPriorities={getArray(content, 'keyPriorities', fallbackKeyPriorities)}
+      faqs={getArray(content, 'faqs', fallbackFaqs)}
       relatedLinks={content.relatedLinks}
       allRoles={allRoles}
     />
