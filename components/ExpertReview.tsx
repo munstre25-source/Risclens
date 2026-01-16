@@ -14,46 +14,55 @@ export default function ExpertReview({ authorId, date, title, url }: ExpertRevie
   if (!author) return null;
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://risclens.com';
-  const reviewUrl = url
+  const articleUrl = url
     ? (url.startsWith('http') ? url : `${baseUrl}${url}`)
-    : undefined;
+    : baseUrl;
 
   // Normalize date to YYYY-MM-DD for schema.org
   const parsedDate = new Date(date);
   const dateIso = isNaN(parsedDate.getTime())
-    ? undefined
+    ? new Date().toISOString().split('T')[0]
     : parsedDate.toISOString().split('T')[0];
 
   const itemTitle = title || 'RiscLens Compliance Guide';
-  const reviewSchema = {
+  
+  // Use Article schema instead of Review schema
+  // Review schema requires Product/Service/Book etc as itemReviewed, not Article
+  const articleSchema = {
     "@context": "https://schema.org",
-    "@type": "Review",
-    "itemReviewed": {
-      "@type": "Article",
-      "name": itemTitle,
-      "headline": itemTitle,
-      "url": reviewUrl,
-      "dateModified": dateIso,
-      "publisher": {
-        "@type": "Organization",
-        "name": "RiscLens",
-        "url": baseUrl,
-      },
-    },
+    "@type": "Article",
+    "headline": itemTitle,
+    "name": itemTitle,
+    "url": articleUrl,
+    "dateModified": dateIso,
+    "datePublished": dateIso,
     "author": {
       "@type": "Person",
       "name": author.name,
       "jobTitle": author.role,
+      ...(author.linkedIn && { "sameAs": author.linkedIn }),
     },
-    "reviewAspect": "Technical Accuracy and Compliance Alignment"
+    "publisher": {
+      "@type": "Organization",
+      "name": "RiscLens",
+      "url": baseUrl,
+      "logo": {
+        "@type": "ImageObject",
+        "url": `${baseUrl}/logo.png`
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": articleUrl
+    }
   };
 
   return (
     <>
       <Script
-        id={`review-schema-${authorId}`}
+        id={`article-schema-${authorId}`}
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
       <div className="flex flex-col sm:flex-row sm:items-center gap-4 py-8 border-y border-slate-100 my-10 bg-slate-50/50 px-6 rounded-lg">
         <div className="flex items-center gap-4">
