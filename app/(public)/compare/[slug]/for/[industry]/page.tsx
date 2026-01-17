@@ -25,29 +25,31 @@ import {
 import { getSupabaseAdmin } from '@/lib/supabase';
 import ComparisonView from '@/components/compliance/ComparisonView';
 import AlternativeCard from '@/components/AlternativeCard';
+import { BUILD_CONFIG, limitStaticParams, isPriorityTool } from '@/lib/build-config';
 
 export const dynamicParams = true;
-export const revalidate = 86400; // 24 hours
+export const revalidate = BUILD_CONFIG.REVALIDATE_SECONDS;
 
 export async function generateStaticParams() {
   try {
     const comparisonSlugs = await getAllComparisonSlugs();
-    const { data: industries } = await getSupabaseAdmin().from('pseo_industries').select('slug');
-    
+    const { data: industries } = await getSupabaseAdmin()
+      .from('pseo_industries')
+      .select('slug')
+      .in('slug', BUILD_CONFIG.PRIORITY_INDUSTRIES);
+
     if (!industries) return [];
 
     const params: { slug: string; industry: string }[] = [];
-    
-    // We'll only generate for top comparisons to save build time
-    // For others, dynamicParams=true will handle it
-    const topTools = ['vanta', 'drata', 'secureframe', 'sprinto'];
-    
+
+    // Only generate for top tool comparisons to limit build time
     for (const slug of comparisonSlugs) {
       const parts = parseComparisonSlug(slug);
       if (!parts) continue;
-      
-      const isTop = topTools.includes(parts.toolASlug) && topTools.includes(parts.toolBSlug);
-      
+
+      // Only pre-render if both tools are priority tools
+      const isTop = isPriorityTool(parts.toolASlug) && isPriorityTool(parts.toolBSlug);
+
       if (isTop) {
         for (const ind of industries) {
           params.push({ slug, industry: ind.slug });
@@ -55,7 +57,7 @@ export async function generateStaticParams() {
       }
     }
 
-    return params;
+    return limitStaticParams(params, BUILD_CONFIG.ROUTE_LIMITS.compareIndustry);
   } catch (err) {
     console.error('[generateStaticParams] Failed to generate industry comparison params:', err);
     return [];
@@ -126,19 +128,19 @@ export default async function IndustryComparisonPage({ params }: { params: { slu
 
   const specializedData = await getToolComparisonBySlug(slug);
   const generatedData = generateComparisonData(toolA, toolB, industry);
-  
-  const { comparisonRows, pricingComparison, faqs } = specializedData 
-    ? { 
-        comparisonRows: specializedData.comparison_rows || generatedData.comparisonRows, 
-        pricingComparison: specializedData.pricing_comparison || generatedData.pricingComparison, 
-        faqs: specializedData.faqs || generatedData.faqs 
-      }
+
+  const { comparisonRows, pricingComparison, faqs } = specializedData
+    ? {
+      comparisonRows: specializedData.comparison_rows || generatedData.comparisonRows,
+      pricingComparison: specializedData.pricing_comparison || generatedData.pricingComparison,
+      faqs: specializedData.faqs || generatedData.faqs
+    }
     : generatedData;
 
   const verdict = specializedData?.verdict || generateVerdict(toolA, toolB);
   const title = `${toolA.name} vs ${toolB.name} for ${industry.name}`;
   const description = `Head-to-head comparison of ${toolA.name} and ${toolB.name} tailored for the ${industry.name} sector.`;
-  
+
   const internalLinks = await getComparisonInternalLinks(toolA.slug, toolB.slug);
   const breadcrumbs = [
     { label: 'Home', href: '/' },
