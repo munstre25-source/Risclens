@@ -67,13 +67,27 @@ async function getMatrixData(frameworkSlug: string, decisionSlug: string, indust
     .single();
 
   if (!decision) {
-    const genericSlug = decisionSlug.replace(/^(soc-2|iso-27001|pci-dss|hipaa|gdpr|ai-governance|iso-42001|eu-ai-act|nist-ai-rmf)-/, '');
-    const { data: genericDecision } = await supabase
-      .from('pseo_decision_types')
-      .select('*')
-      .eq('slug', genericSlug)
-      .single();
-    decision = genericDecision;
+    // Try multiple fallback patterns:
+    // 1. Remove framework prefix (e.g., "soc-2-timeline" -> "timeline")
+    // 2. Remove common word prefixes (e.g., "certification-timeline" -> "timeline")
+    const fallbackPatterns = [
+      decisionSlug.replace(/^(soc-2|iso-27001|pci-dss|hipaa|gdpr|ai-governance|iso-42001|eu-ai-act|nist-ai-rmf)-/, ''),
+      decisionSlug.replace(/^(certification|compliance|audit|security|implementation|gap|risk)-/, ''),
+      decisionSlug.replace(/.*-/, ''), // Last resort: just the last part
+    ];
+
+    for (const fallbackSlug of fallbackPatterns) {
+      if (fallbackSlug === decisionSlug) continue; // Skip if no change
+      const { data: fallbackDecision } = await supabase
+        .from('pseo_decision_types')
+        .select('*')
+        .eq('slug', fallbackSlug)
+        .single();
+      if (fallbackDecision) {
+        decision = fallbackDecision;
+        break;
+      }
+    }
   }
 
   if (!decision) return null;
