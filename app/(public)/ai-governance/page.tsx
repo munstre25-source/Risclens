@@ -5,9 +5,9 @@ import Footer from '@/components/Footer';
 import { AuthorBio } from '@/components/AuthorBio';
 import { GeneralPageSchema } from '@/components/GeneralPageSchema';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
-import { 
-  Shield, 
-  ArrowRight, 
+import {
+  Shield,
+  ArrowRight,
   FileCheck,
   Brain,
   Zap,
@@ -83,7 +83,7 @@ export default function AIGovernanceHub() {
           { name: 'AI Governance', item: 'https://risclens.com/ai-governance' },
         ]}
       />
-      
+
       <main className="flex-grow">
         <section className="bg-gradient-to-b from-indigo-950 via-indigo-900 to-indigo-800 text-white py-20 lg:py-28">
           <div className="max-w-5xl mx-auto px-4">
@@ -97,10 +97,10 @@ export default function AIGovernanceHub() {
                 <span className="text-indigo-300">Command Center</span>
               </h1>
               <p className="text-xl text-indigo-100 leading-relaxed mb-8">
-                Move beyond static checklists. Use programmatic market intelligence to automate AI vendor risk, 
+                Move beyond static checklists. Use programmatic market intelligence to automate AI vendor risk,
                 classify regulatory tiers, and bridge the gap between Security and AI Governance.
               </p>
-              
+
               <div className="flex flex-wrap gap-4">
                 <Link
                   href="/ai-governance/risk-classifier"
@@ -128,7 +128,7 @@ export default function AIGovernanceHub() {
                 Interactive tools and deep-dive resources designed for legal, security, and product teams.
               </p>
             </div>
-            
+
             <div className="grid md:grid-cols-3 gap-8">
               {highIntentTools.map((tool) => {
                 const Icon = tool.icon;
@@ -169,8 +169,8 @@ export default function AIGovernanceHub() {
                 </p>
                 <div className="grid grid-cols-2 gap-4">
                   {techStackCompliance.map((stack) => (
-                    <Link 
-                      key={stack.name} 
+                    <Link
+                      key={stack.name}
                       href={stack.href}
                       className="flex items-center gap-3 p-4 bg-white border border-slate-200 rounded-xl hover:border-indigo-500 hover:shadow-md transition-all"
                     >
@@ -187,7 +187,7 @@ export default function AIGovernanceHub() {
                   <p className="text-indigo-100 mb-6 leading-relaxed">
                     Already have a SOC 2 Report? You are likely 60% of the way to AI compliance. Our mapping tool shows you exactly which SOC 2 controls satisfy AI requirements.
                   </p>
-                  <Link 
+                  <Link
                     href="/ai-compliance/compare/soc-2-vs-iso-42001"
                     className="inline-flex items-center gap-2 px-6 py-3 bg-white text-indigo-900 font-bold rounded-xl hover:bg-indigo-50 transition-all"
                   >
@@ -195,6 +195,149 @@ export default function AIGovernanceHub() {
                     <Layers className="w-4 h-4" />
                   </Link>
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* AI Governance Resources Section */}
+        <section className="py-20 bg-white">
+          <div className="max-w-6xl mx-auto px-4">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">AI Governance Resources</h2>
+              <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+                Comprehensive guides, cost breakdowns, and implementation roadmaps for AI compliance frameworks.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* ISO 42001 Column */}
+              <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200">
+                <div className="flex items-center gap-2 mb-4">
+                  <FileCheck className="w-5 h-5 text-indigo-600" />
+                  <h3 className="font-bold text-slate-900">ISO 42001</h3>
+                </div>
+                <ul className="space-y-3">
+                  <li><Link href="/iso-42001/certification-cost" className="text-sm text-slate-600 hover:text-indigo-600 transition-colors">Certification Cost Guide</Link></li>
+                  <li><Link href="/iso-42001/certification-timeline" className="text-sm text-slate-600 hover:text-indigo-600 transition-colors">Timeline Expectations</Link></li>
+                  <li><Link href="/iso-42001/implementation-guide" className="text-sm text-slate-600 hover:text-indigo-600 transition-colors">Implementation Guide</Link></li>
+                  <li><Link href="/iso-42001/gap-analysis-template" className="text-sm text-slate-600 hover:text-indigo-600 transition-colors">Gap Analysis Template</Link></li>
+                  <li><Link href="/iso-42001/controls-list" className="text-sm text-slate-600 hover:text-indigo-600 transition-colors">Controls List</Link></li>
+                  <li><Link href="/iso-42001/audit-preparation" className="text-sm text-slate-600 hover:text-indigo-600 transition-colors">Audit Preparation</Link></li>
+                </ul>
+              </div>
+
+              {/* EU AI Act Column */}
+              <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200">
+                <div className="flex items-center gap-2 mb-4">
+                  <Scale className="w-5 h-5 text-indigo-600" />
+                  <h3 className="font-bold text-slate-900">EU AI Act</h3>
+                </div>
+                <ul className="space-y-3">
+                  <li><Link href="/eu-ai-act/compliance-checklist" className="text-sm text-slate-600 hover:text-indigo-600 transition-colors">Compliance Checklist</Link></li>
+                  <li><Link href="/eu-ai-act/high-risk-ai-systems" className="text-sm text-slate-600 hover:text-indigo-600 transition-colors">High-Risk AI Systems</Link></li>
+                  <li><Link href="/eu-ai-act/implementation-timeline" className="text-sm text-slate-600 hover:text-indigo-600 transition-colors">Implementation Timeline</Link></li>
+                  <li><Link href="/eu-ai-act/penalties-fines" className="text-sm text-slate-600 hover:text-indigo-600 transition-colors">Penalties & Fines</Link></li>
+                  <li><Link href="/eu-ai-act/conformity-assessment" className="text-sm text-slate-600 hover:text-indigo-600 transition-colors">Conformity Assessment</Link></li>
+                  <li><Link href="/eu-ai-act/general-purpose-ai" className="text-sm text-slate-600 hover:text-indigo-600 transition-colors">GPAI Requirements</Link></li>
+                </ul>
+              </div>
+
+              {/* NIST AI RMF Column */}
+              <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200">
+                <div className="flex items-center gap-2 mb-4">
+                  <Shield className="w-5 h-5 text-indigo-600" />
+                  <h3 className="font-bold text-slate-900">NIST AI RMF</h3>
+                </div>
+                <ul className="space-y-3">
+                  <li><Link href="/nist-ai-rmf/implementation" className="text-sm text-slate-600 hover:text-indigo-600 transition-colors">Implementation Guide</Link></li>
+                  <li><Link href="/nist-ai-rmf/playbook" className="text-sm text-slate-600 hover:text-indigo-600 transition-colors">Complete Playbook</Link></li>
+                  <li><Link href="/nist-ai-rmf/govern-function" className="text-sm text-slate-600 hover:text-indigo-600 transition-colors">Govern Function</Link></li>
+                  <li><Link href="/nist-ai-rmf/map-function" className="text-sm text-slate-600 hover:text-indigo-600 transition-colors">Map Function</Link></li>
+                  <li><Link href="/nist-ai-rmf/measure-function" className="text-sm text-slate-600 hover:text-indigo-600 transition-colors">Measure Function</Link></li>
+                  <li><Link href="/nist-ai-rmf/manage-function" className="text-sm text-slate-600 hover:text-indigo-600 transition-colors">Manage Function</Link></li>
+                </ul>
+              </div>
+
+              {/* AI Governance General Column */}
+              <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200">
+                <div className="flex items-center gap-2 mb-4">
+                  <Brain className="w-5 h-5 text-indigo-600" />
+                  <h3 className="font-bold text-slate-900">AI Governance</h3>
+                </div>
+                <ul className="space-y-3">
+                  <li><Link href="/ai-governance/framework" className="text-sm text-slate-600 hover:text-indigo-600 transition-colors">Framework Guide</Link></li>
+                  <li><Link href="/ai-governance/policy-template" className="text-sm text-slate-600 hover:text-indigo-600 transition-colors">Policy Template</Link></li>
+                  <li><Link href="/ai-governance/committee" className="text-sm text-slate-600 hover:text-indigo-600 transition-colors">Committee Structure</Link></li>
+                  <li><Link href="/ai-governance/best-practices" className="text-sm text-slate-600 hover:text-indigo-600 transition-colors">Best Practices</Link></li>
+                  <li><Link href="/ai-governance/tools" className="text-sm text-slate-600 hover:text-indigo-600 transition-colors">Tools Comparison</Link></li>
+                  <li><Link href="/ai-governance/roadmap" className="text-sm text-slate-600 hover:text-indigo-600 transition-colors">Implementation Roadmap</Link></li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Additional Resource Categories */}
+            <div className="grid md:grid-cols-3 gap-6 mt-8">
+              {/* AI Vendor Risk */}
+              <div className="bg-indigo-50 rounded-2xl p-6 border border-indigo-100">
+                <h3 className="font-bold text-indigo-900 mb-4 flex items-center gap-2">
+                  <Users className="w-5 h-5" />
+                  AI Vendor Risk
+                </h3>
+                <ul className="space-y-2">
+                  <li><Link href="/ai-governance/ai-vendor-risk-assessment" className="text-sm text-indigo-700 hover:text-indigo-900 transition-colors">Vendor Assessment Framework</Link></li>
+                  <li><Link href="/ai-governance/ai-vendor-due-diligence" className="text-sm text-indigo-700 hover:text-indigo-900 transition-colors">Due Diligence Checklist</Link></li>
+                  <li><Link href="/ai-governance/ai-third-party-risk" className="text-sm text-indigo-700 hover:text-indigo-900 transition-colors">Third-Party Risk Guide</Link></li>
+                </ul>
+              </div>
+
+              {/* AI Ethics & Responsible AI */}
+              <div className="bg-green-50 rounded-2xl p-6 border border-green-100">
+                <h3 className="font-bold text-green-900 mb-4 flex items-center gap-2">
+                  <Lock className="w-5 h-5" />
+                  Responsible AI
+                </h3>
+                <ul className="space-y-2">
+                  <li><Link href="/ai-governance/responsible-ai-framework" className="text-sm text-green-700 hover:text-green-900 transition-colors">Responsible AI Framework</Link></li>
+                  <li><Link href="/ai-governance/ai-bias-detection" className="text-sm text-green-700 hover:text-green-900 transition-colors">Bias Detection Guide</Link></li>
+                  <li><Link href="/ai-governance/ai-explainability" className="text-sm text-green-700 hover:text-green-900 transition-colors">Explainability Requirements</Link></li>
+                </ul>
+              </div>
+
+              {/* LLM & GenAI Governance */}
+              <div className="bg-purple-50 rounded-2xl p-6 border border-purple-100">
+                <h3 className="font-bold text-purple-900 mb-4 flex items-center gap-2">
+                  <Brain className="w-5 h-5" />
+                  LLM Governance
+                </h3>
+                <ul className="space-y-2">
+                  <li><Link href="/ai-governance/llm-governance-framework" className="text-sm text-purple-700 hover:text-purple-900 transition-colors">LLM Framework</Link></li>
+                  <li><Link href="/ai-governance/chatgpt-enterprise-governance" className="text-sm text-purple-700 hover:text-purple-900 transition-colors">ChatGPT Enterprise</Link></li>
+                  <li><Link href="/ai-governance/copilot-governance" className="text-sm text-purple-700 hover:text-purple-900 transition-colors">Microsoft Copilot</Link></li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Role-Based Guides Row */}
+            <div className="mt-8 bg-slate-900 rounded-2xl p-8">
+              <h3 className="font-bold text-white text-xl mb-6">AI Governance by Role</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <Link href="/ai-governance/ai-governance-for-ciso" className="bg-white/10 hover:bg-white/20 text-white p-4 rounded-xl text-center transition-colors">
+                  <span className="block text-2xl mb-1">🛡️</span>
+                  <span className="text-sm font-bold">For CISOs</span>
+                </Link>
+                <Link href="/ai-governance/ai-governance-for-cto" className="bg-white/10 hover:bg-white/20 text-white p-4 rounded-xl text-center transition-colors">
+                  <span className="block text-2xl mb-1">⚙️</span>
+                  <span className="text-sm font-bold">For CTOs</span>
+                </Link>
+                <Link href="/ai-governance/ai-governance-for-legal" className="bg-white/10 hover:bg-white/20 text-white p-4 rounded-xl text-center transition-colors">
+                  <span className="block text-2xl mb-1">⚖️</span>
+                  <span className="text-sm font-bold">For Legal</span>
+                </Link>
+                <Link href="/ai-governance/ai-governance-for-boards" className="bg-white/10 hover:bg-white/20 text-white p-4 rounded-xl text-center transition-colors">
+                  <span className="block text-2xl mb-1">📊</span>
+                  <span className="text-sm font-bold">For Boards</span>
+                </Link>
               </div>
             </div>
           </div>

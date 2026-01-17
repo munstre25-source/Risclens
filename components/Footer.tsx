@@ -18,27 +18,27 @@ export default function Footer() {
             </p>
             <div className="flex gap-4">
               <a href="https://linkedin.com/company/risclens" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-white transition-colors">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.761 0 5-2.239 5-5v-14c0-2.761-2.239-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.761 0 5-2.239 5-5v-14c0-2.761-2.239-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" /></svg>
               </a>
               <a href="https://twitter.com/risclens" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-white transition-colors">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.84 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.84 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" /></svg>
               </a>
             </div>
           </div>
 
           {/* Tools Zone */}
-            <div className="space-y-4">
-              <h4 className="text-sm font-bold text-white uppercase tracking-wider">Calculators & Tools</h4>
-              <ul className="space-y-2 text-sm">
-                <li><Link href="/soc-2-readiness-index" className="hover:text-white transition-colors font-bold text-brand-400">Readiness Index →</Link></li>
-                <li><Link href="/soc-2-cost-calculator" className="hover:text-white transition-colors">SOC 2 Cost Estimator</Link></li>
-                <li><Link href="/soc-2-timeline/estimator" className="hover:text-white transition-colors">Audit Timeline Planner</Link></li>
-                <li><Link href="/compliance-roi-calculator" className="hover:text-white transition-colors">Compliance ROI Model</Link></li>
-                <li><Link href="/evidence-gap-analyzer" className="hover:text-white transition-colors">Evidence Gap Analyzer</Link></li>
-                <li><Link href="/pci-dss-readiness-calculator" className="hover:text-white transition-colors">PCI-DSS Cost Tool</Link></li>
-                <li><Link href="/ai-governance-readiness-index" className="hover:text-white transition-colors">AI Governance Index</Link></li>
-              </ul>
-            </div>
+          <div className="space-y-4">
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider">Calculators & Tools</h4>
+            <ul className="space-y-2 text-sm">
+              <li><Link href="/soc-2-readiness-index" className="hover:text-white transition-colors font-bold text-brand-400">Readiness Index →</Link></li>
+              <li><Link href="/soc-2-cost-calculator" className="hover:text-white transition-colors">SOC 2 Cost Estimator</Link></li>
+              <li><Link href="/soc-2-timeline/estimator" className="hover:text-white transition-colors">Audit Timeline Planner</Link></li>
+              <li><Link href="/compliance-roi-calculator" className="hover:text-white transition-colors">Compliance ROI Model</Link></li>
+              <li><Link href="/evidence-gap-analyzer" className="hover:text-white transition-colors">Evidence Gap Analyzer</Link></li>
+              <li><Link href="/pci-dss-readiness-calculator" className="hover:text-white transition-colors">PCI-DSS Cost Tool</Link></li>
+              <li><Link href="/ai-governance-readiness-index" className="hover:text-white transition-colors">AI Governance Index</Link></li>
+            </ul>
+          </div>
 
           {/* Intelligence Zone */}
           <div className="space-y-4">
@@ -109,17 +109,14 @@ export default function Footer() {
                 { href: '/auditor-directory/san-francisco', label: 'SF Auditors' },
                 { href: '/soc-2-vs-iso-27001/cost-comparison', label: 'SOC 2 vs ISO Cost' },
               ].map((link) => (
-                <Link 
-                  key={link.href} 
-                  href={link.href} 
+                <Link
+                  key={link.href}
+                  href={link.href}
                   className="px-2 py-1 bg-slate-800 hover:bg-slate-700 rounded text-slate-400 hover:text-white transition-colors"
                 >
                   {link.label}
                 </Link>
               ))}
-              <Link href="/tools" className="px-2 py-1 bg-brand-600/20 hover:bg-brand-600/30 rounded text-brand-400 hover:text-brand-300 transition-colors font-semibold">
-                View All 25,000+ Pages →
-              </Link>
             </div>
           </div>
         </div>
@@ -130,9 +127,9 @@ export default function Footer() {
             <div className="space-y-4">
               <p className="text-xs font-bold text-white uppercase tracking-widest">Regulatory Disclaimer</p>
               <p className="text-xs text-slate-400 leading-relaxed">
-                RiscLens provides compliance intelligence, informational estimates, and readiness tools. We are not a CPA firm, law firm, or accredited SOC 2 auditor. 
-                We do not provide legal advice, audit services, or formal SOC 2 attestations. All results are based on market data and self-reported inputs 
-                and should be used for internal planning and budgeting purposes only. For formal compliance guidance or a SOC 2 report, 
+                RiscLens provides compliance intelligence, informational estimates, and readiness tools. We are not a CPA firm, law firm, or accredited SOC 2 auditor.
+                We do not provide legal advice, audit services, or formal SOC 2 attestations. All results are based on market data and self-reported inputs
+                and should be used for internal planning and budgeting purposes only. For formal compliance guidance or a SOC 2 report,
                 always consult a qualified independent CPA auditor.
               </p>
             </div>
