@@ -51,3 +51,12 @@ coverage/
 *.pid.lock
 
 .venv/
+
+# Google Search Console data exports
+risclens.com-Coverage/
+risclens.com-Performance/
+*.xlsx
+*.xlsx:Zone.Identifier
+
+# Windows Zone.Identifier files (metadata)
+*:Zone.Identifier

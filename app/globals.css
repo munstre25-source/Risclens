@@ -44,7 +44,19 @@
 
   /* Improved typography defaults */
   h1, h2, h3, h4, h5, h6 {
-    @apply text-slate-900 font-medium leading-snug tracking-tight;
+    @apply text-slate-900 font-display font-bold leading-snug tracking-tight;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl font-extrabold;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl font-bold;
+  }
+
+  h3 {
+    @apply text-xl md:text-2xl font-semibold;
   }
 
   p {
@@ -157,16 +169,92 @@
 
 /* Utility styles */
 @layer utilities {
-  /* Gradient text */
+  /* Gradient text - Indigo to brand */
   .gradient-text {
-    @apply bg-gradient-to-r from-brand-600 to-brand-800 
+    @apply bg-gradient-to-r from-brand-600 via-brand-500 to-brand-700 
            bg-clip-text text-transparent;
+  }
+
+  /* Gradient text - warm accent */
+  .gradient-text-warm {
+    @apply bg-gradient-to-r from-accent-500 via-coral-500 to-brand-500 
+           bg-clip-text text-transparent;
+  }
+
+  /* Mesh gradient backgrounds */
+  .bg-mesh-gradient {
+    background: 
+      radial-gradient(at 40% 20%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+      radial-gradient(at 80% 0%, rgba(245, 158, 11, 0.1) 0px, transparent 50%),
+      radial-gradient(at 0% 50%, rgba(16, 185, 129, 0.1) 0px, transparent 50%),
+      radial-gradient(at 80% 50%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, rgba(245, 158, 11, 0.08) 0px, transparent 50%);
+  }
+
+  /* Dark mesh gradient for dark sections */
+  .bg-mesh-dark {
+    background: 
+      radial-gradient(at 40% 20%, rgba(99, 102, 241, 0.25) 0px, transparent 50%),
+      radial-gradient(at 80% 0%, rgba(79, 70, 229, 0.15) 0px, transparent 50%),
+      radial-gradient(at 0% 80%, rgba(16, 185, 129, 0.15) 0px, transparent 50%);
+  }
+
+  /* Glassmorphism */
+  .glass {
+    @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-xl;
+  }
+
+  .glass-dark {
+    @apply bg-slate-900/80 backdrop-blur-xl border border-slate-700/50;
   }
 
   /* Fade in animation */
   .animate-fade-in {
     animation: fadeIn 0.5s ease-out forwards;
   }
+
+  /* Staggered fade in - use with animation-delay */
+  .animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+    opacity: 0;
+  }
+
+  /* Slide in from left */
+  .animate-slide-in-left {
+    animation: slideInLeft 0.5s ease-out forwards;
+  }
+
+  /* Slide in from right */
+  .animate-slide-in-right {
+    animation: slideInRight 0.5s ease-out forwards;
+  }
+
+  /* Scale up on hover (for cards) */
+  .hover-lift {
+    @apply transition-all duration-300 ease-out;
+  }
+  .hover-lift:hover {
+    @apply -translate-y-1 shadow-xl;
+  }
+
+  /* Glow effect for buttons */
+  .glow-brand {
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+  }
+
+  .glow-accent {
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+  }
+
+  /* Animation delays for staggered effects */
+  .delay-100 { animation-delay: 100ms; }
+  .delay-200 { animation-delay: 200ms; }
+  .delay-300 { animation-delay: 300ms; }
+  .delay-400 { animation-delay: 400ms; }
+  .delay-500 { animation-delay: 500ms; }
+  .delay-600 { animation-delay: 600ms; }
+  .delay-700 { animation-delay: 700ms; }
+  .delay-800 { animation-delay: 800ms; }
 
   @keyframes fadeIn {
     from {
@@ -179,8 +267,68 @@
     }
   }
 
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* Subtle float animation for decorative elements */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
   /* Skeleton loading */
   .skeleton {
     @apply bg-slate-200 animate-pulse rounded;
+  }
+
+  /* Shimmer effect for loading states */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.5) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
   }
 }

@@ -34,6 +34,11 @@ import { toolPricing } from '@/src/content/pricing';
 import { AuthorBio } from '@/components/AuthorBio';
 import { getSupabaseAdmin } from '@/lib/supabase';
 import ToolPricingPageContent from '@/components/ToolPricingPage';
+import {
+  generatePricingTitleOptimized,
+  generatePricingDescriptionOptimized,
+  CURRENT_YEAR,
+} from '@/lib/seo-enhancements';
 
 export const dynamicParams = true;
 export const revalidate = 86400; // 24 hours
@@ -62,12 +67,23 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   // Try pSEO database first
   const pseoData = await getPseoPricingData(slug);
   if (pseoData?.content_json) {
-    const { toolName, heroDescription } = pseoData.content_json;
+    const { toolName, heroDescription, pricingTiers } = pseoData.content_json;
     // Only use pSEO data if toolName exists
     if (toolName && toolName.trim() !== '') {
+      const startingPrice = pricingTiers?.[0]?.estimatedPrice;
+      const title = generatePricingTitleOptimized(toolName, startingPrice);
+      const description = generatePricingDescriptionOptimized(toolName, startingPrice);
+      
       return {
-        title: `${toolName} Pricing Guide 2026 | Verified Tiers & Hidden Costs`,
-        description: heroDescription || `Expert breakdown of ${toolName} pricing. See starting costs, tiers, and negotiation tips. Verified by RiscLens.`,
+        title,
+        description: heroDescription || description,
+        keywords: [
+          `${toolName} pricing`,
+          `${toolName} pricing ${CURRENT_YEAR}`,
+          `${toolName} cost`,
+          `how much does ${toolName} cost`,
+          'compliance software pricing',
+        ],
         alternates: {
           canonical: `https://risclens.com/pricing/${slug}`,
         }
@@ -79,9 +95,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const tool = toolPricing.find(t => t.slug === slug);
   if (!tool) return { title: 'Pricing Not Found', robots: { index: false } };
 
+  // Use CTR-optimized title and description
+  const title = generatePricingTitleOptimized(tool.name, tool.startingPrice);
+  const description = generatePricingDescriptionOptimized(tool.name, tool.startingPrice, tool.targetMarket);
+
   return {
-    title: `${tool.name} Pricing Guide 2026 | Verified Tiers & Hidden Costs`,
-    description: `Expert breakdown of ${tool.name} pricing. See starting costs for ${tool.bestFor}, tiers, and negotiation tips. Verified by RiscLens.`,
+    title,
+    description,
+    keywords: [
+      `${tool.name} pricing`,
+      `${tool.name} pricing ${CURRENT_YEAR}`,
+      `${tool.name} cost`,
+      `how much does ${tool.name} cost`,
+      `${tool.name} plans`,
+    ],
     alternates: {
       canonical: `https://risclens.com/pricing/${slug}`,
     }

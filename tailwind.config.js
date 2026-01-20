@@ -13,25 +13,26 @@ module.exports = {
       light: '300',
       normal: '400',
       medium: '500',
-      semibold: '500',
-      bold: '500',
-      extrabold: '600',
-      black: '700',
+      semibold: '600',
+      bold: '700',
+      extrabold: '800',
+      black: '900',
     },
     extend: {
       colors: {
-        // Brand colors - Primary blue (used sparingly for CTAs)
+        // Brand colors - Deep Indigo (distinctive, premium feel)
         brand: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          200: '#bae6fd',
-          300: '#7dd3fc',
-          400: '#38bdf8',
-          500: '#0ea5e9',
-          600: '#0284c7',
-          700: '#0369a1',
-          800: '#075985',
-          900: '#0c4a6e',
+          50: '#eef2ff',
+          100: '#e0e7ff',
+          200: '#c7d2fe',
+          300: '#a5b4fc',
+          400: '#818cf8',
+          500: '#6366f1',
+          600: '#4f46e5',
+          700: '#4338ca',
+          800: '#3730a3',
+          900: '#312e81',
+          950: '#1e1b4b',
         },
         // Slate - Enterprise-grade neutral for backgrounds, borders, metadata
         slate: {
@@ -49,14 +50,40 @@ module.exports = {
           900: '#0f172a',
           950: '#0a0f1a', // Extra dark for deep footer
         },
-        // Trust/security accent (green - used minimally)
+        // Trust/security accent (emerald - professional, trust-building)
         trust: {
-          500: '#18b2a2',
-          600: '#0f9c8c',
+          50: '#ecfdf5',
+          100: '#d1fae5',
+          400: '#34d399',
+          500: '#10b981',
+          600: '#059669',
+          700: '#047857',
+        },
+        // Accent color - Warm Amber (CTAs that pop, urgency)
+        accent: {
+          50: '#fffbeb',
+          100: '#fef3c7',
+          200: '#fde68a',
+          300: '#fcd34d',
+          400: '#fbbf24',
+          500: '#f59e0b',
+          600: '#d97706',
+          700: '#b45309',
+        },
+        // Coral accent for special highlights
+        coral: {
+          400: '#fb7185',
+          500: '#f43f5e',
+          600: '#e11d48',
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        // Headline font - Outfit (modern geometric)
+        display: ['var(--font-outfit)', 'system-ui', 'sans-serif'],
+        // Body font - Source Sans 3 (highly readable)
+        sans: ['var(--font-source-sans)', 'system-ui', 'sans-serif'],
+        // Mono for code snippets
+        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
       },
       spacing: {
         '18': '4.5rem',

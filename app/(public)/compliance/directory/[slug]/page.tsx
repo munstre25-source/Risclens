@@ -14,6 +14,10 @@ import { AuthorByline, EditorialPolicyBadge } from '@/components/compliance/Auth
 import Link from 'next/link';
 import { Users, CheckCircle } from 'lucide-react';
 import { BUILD_CONFIG, limitStaticParams } from '@/lib/build-config';
+import { 
+  generateDirectoryTitle, 
+  generateDirectoryDescription 
+} from '@/lib/seo-enhancements';
 
 interface Props {
   params: { slug: string };
@@ -79,15 +83,32 @@ export async function generateMetadata(
     return { title: 'Company Not Found' };
   }
 
+  // Use CTR-optimized title and description
+  const title = generateDirectoryTitle(company.name);
+  const description = generateDirectoryDescription(company.name);
+
   return {
-    title: `${company.name} Security & SOC 2 Signals | Public Security Profile`,
-    description: `View ${company.name}'s public SOC 2 and security signals: trust center, security page, disclosures, and transparency markers.`,
+    title,
+    description,
+    keywords: [
+      `${company.name} SOC 2`,
+      `${company.name} security`,
+      `${company.name} compliance`,
+      'SOC 2 compliance check',
+      'vendor security assessment',
+    ],
     robots: {
       index: company.indexable ? true : false,
       follow: true,
     },
     alternates: {
       canonical: `https://risclens.com/compliance/directory/${params.slug}`,
+    },
+    openGraph: {
+      title,
+      description,
+      type: 'website',
+      siteName: 'RiscLens',
     },
   };
 }
