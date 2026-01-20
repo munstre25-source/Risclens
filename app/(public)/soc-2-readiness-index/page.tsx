@@ -6,6 +6,8 @@ import CalculatorForm from '@/components/CalculatorForm';
 import { HowItWorksAccordion } from '@/components/HowItWorksAccordion';
 import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
 import { SoftwareApplicationSchema } from '@/components/SoftwareApplicationSchema';
+import { ExitIntentModal } from '@/components/LeadCaptureCTA';
+import { ProofCounter } from '@/components/TrustBadges';
 
 export const metadata: Metadata = {
   title: 'SOC 2 Readiness Index | RiscLens',
@@ -56,14 +58,16 @@ export default function CalculatorPage() {
           category="SecurityApplication"
         />
         
-        <section className="bg-white border-b border-slate-200">
-          <div className="max-w-5xl mx-auto px-4 py-12 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4 tracking-tight">
+        <section className="bg-white border-b border-slate-200 relative overflow-hidden">
+          <div className="absolute inset-0 bg-mesh-gradient opacity-50" />
+          <div className="max-w-5xl mx-auto px-4 py-12 text-center relative">
+            <h1 className="text-4xl md:text-5xl font-display font-extrabold text-slate-900 mb-4 tracking-tight">
               SOC 2 Readiness Index
             </h1>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-4">
               Benchmark your security posture against the Trust Services Criteria (TSC) in under 2 minutes.
             </p>
+            <ProofCounter count={523} action="assessments completed" period="this month" />
           </div>
         </section>
 
@@ -165,6 +169,13 @@ export default function CalculatorPage() {
         </section>
       </main>
       <Footer />
+      
+      {/* Exit Intent Modal */}
+      <ExitIntentModal 
+        variant="calculator"
+        title="Get Your Custom PDF Roadmap"
+        description="Don't leave without your personalized SOC 2 readiness report. Complete the assessment to unlock your roadmap."
+      />
     </>
   );
 }

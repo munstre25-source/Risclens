@@ -3,7 +3,7 @@
  * Full IP and all rights belong to Risclens.
  */
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Outfit, Source_Sans_3 } from 'next/font/google';
 import './globals.css';
 import Script from "next/script";
 import { ThemeProvider } from '@/components/ThemeProvider';
@@ -14,10 +14,20 @@ import { Suspense } from 'react';
 
 // import ComplianceCopilot from '@/components/ComplianceCopilot';
 
-const inter = Inter({
+// Outfit - Modern geometric sans for headlines (distinctive, professional)
+const outfit = Outfit({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-inter',
+  variable: '--font-outfit',
+  weight: ['400', '500', '600', '700', '800'],
+});
+
+// Source Sans 3 - Highly readable body text
+const sourceSans = Source_Sans_3({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-source-sans',
+  weight: ['400', '500', '600', '700'],
 });
 
 export const metadata: Metadata = {
@@ -90,7 +100,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.variable} suppressHydrationWarning>
+    <html lang="en" className={`${outfit.variable} ${sourceSans.variable}`} suppressHydrationWarning>
         <head>
           <link rel="preload" href="/favicon.ico" as="image" />
           <Script

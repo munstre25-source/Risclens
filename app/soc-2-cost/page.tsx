@@ -12,6 +12,7 @@ import { ContextualSignals } from '@/components/compliance/ContextualSignals';
 import { StickyCTA } from '@/components/StickyCTA';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { Soc2CostCalculator } from '@/components/calculators/Soc2CostCalculator';
+import { ExitIntentModal } from '@/components/LeadCaptureCTA';
 
 const costTiers = [
   {
@@ -409,6 +410,13 @@ export default function Soc2CostPage() {
           <StickyCTA />
         </main>
         <Footer />
+        
+        {/* Exit Intent Modal for Cost Page */}
+        <ExitIntentModal 
+          variant="calculator"
+          title="Get Your Personalized SOC 2 Cost Estimate"
+          description="Take our 2-minute assessment to get a customized cost breakdown based on your company size, industry, and timeline."
+        />
       </>
   );
 }

@@ -1,21 +1,33 @@
 'use client';
 
 import Link from 'next/link';
+import { ArrowRight, Layers, BookOpen, Calculator, Users } from 'lucide-react';
 
 /**
- * TopicalClusterLinks - Internal linking component for pSEO pages
- * Improves crawl discovery and distributes link equity to related pages
+ * TopicalClusterLinks - Hub-and-Spoke Internal Linking Component
+ * 
+ * Implements topical clusters for improved SEO:
+ * - Hubs: Core content pages (e.g., /soc-2/, /pricing/)
+ * - Spokes: Supporting content that links back to hubs
+ * 
+ * Benefits:
+ * - Improves crawl discovery
+ * - Distributes link equity
+ * - Establishes topical authority
  */
 
 interface LinkCluster {
   title: string;
-  links: { href: string; label: string }[];
+  icon?: React.ReactNode;
+  links: { href: string; label: string; description?: string }[];
 }
 
 interface TopicalClusterLinksProps {
   framework?: 'soc-2' | 'iso-27001' | 'pci-dss' | 'hipaa' | 'gdpr' | 'ai-governance';
   industry?: string;
   currentPath?: string;
+  pageType?: 'pricing' | 'comparison' | 'directory' | 'guide' | 'calculator';
+  variant?: 'sidebar' | 'inline' | 'footer';
 }
 
 // Pre-defined clusters for different page types
@@ -120,12 +132,84 @@ const industryClusters: Record<string, LinkCluster[]> = {
   ],
 };
 
+// Page type specific clusters
+const pageTypeClusters: Record<string, LinkCluster[]> = {
+  'pricing': [
+    {
+      title: 'Compare Pricing',
+      icon: <Layers className="w-4 h-4" />,
+      links: [
+        { href: '/compare/vanta-vs-drata', label: 'Vanta vs Drata' },
+        { href: '/compare/secureframe-vs-thoropass', label: 'Secureframe vs Thoropass' },
+        { href: '/compare/market-intelligence', label: 'All Comparisons' },
+      ],
+    },
+    {
+      title: 'Calculate Costs',
+      icon: <Calculator className="w-4 h-4" />,
+      links: [
+        { href: '/soc-2-cost-calculator', label: 'SOC 2 Cost Calculator' },
+        { href: '/soc-2-cost-breakdown', label: 'Cost Breakdown Guide' },
+        { href: '/auditor-match', label: 'Find an Auditor' },
+      ],
+    },
+  ],
+  'comparison': [
+    {
+      title: 'Pricing Guides',
+      icon: <BookOpen className="w-4 h-4" />,
+      links: [
+        { href: '/pricing/vanta', label: 'Vanta Pricing' },
+        { href: '/pricing/drata', label: 'Drata Pricing' },
+        { href: '/pricing/secureframe', label: 'Secureframe Pricing' },
+        { href: '/pricing/thoropass', label: 'Thoropass Pricing' },
+      ],
+    },
+    {
+      title: 'Alternatives',
+      icon: <Users className="w-4 h-4" />,
+      links: [
+        { href: '/compare/vanta-alternatives', label: 'Vanta Alternatives' },
+        { href: '/compare/drata-alternatives', label: 'Drata Alternatives' },
+        { href: '/compare/onetrust-alternatives', label: 'OneTrust Alternatives' },
+      ],
+    },
+  ],
+  'directory': [
+    {
+      title: 'Role-Specific Guides',
+      icon: <Users className="w-4 h-4" />,
+      links: [
+        { href: '/soc-2/for/founders', label: 'SOC 2 for Founders' },
+        { href: '/soc-2/for/cto', label: 'SOC 2 for CTOs' },
+        { href: '/soc-2/for/ciso', label: 'SOC 2 for CISOs' },
+      ],
+    },
+    {
+      title: 'Compliance Tools',
+      icon: <Layers className="w-4 h-4" />,
+      links: [
+        { href: '/pricing/vanta', label: 'Vanta Pricing' },
+        { href: '/pricing/drata', label: 'Drata Pricing' },
+        { href: '/compare', label: 'Compare All Tools' },
+      ],
+    },
+  ],
+};
+
 export default function TopicalClusterLinks({ 
   framework, 
   industry, 
-  currentPath 
+  currentPath,
+  pageType,
+  variant = 'inline'
 }: TopicalClusterLinksProps) {
   const clusters: LinkCluster[] = [];
+
+  // Add page type specific clusters first (highest priority)
+  if (pageType && pageTypeClusters[pageType]) {
+    clusters.push(...pageTypeClusters[pageType]);
+  }
 
   // Add framework-specific clusters
   if (framework && frameworkClusters[framework]) {
@@ -141,6 +225,7 @@ export default function TopicalClusterLinks({
   if (clusters.length === 0) {
     clusters.push({
       title: 'Start Here',
+      icon: <Calculator className="w-4 h-4" />,
       links: [
         { href: '/soc-2-readiness-index', label: 'SOC 2 Readiness Assessment' },
         { href: '/iso-42001-calculator', label: 'ISO 42001 Calculator' },
@@ -158,6 +243,70 @@ export default function TopicalClusterLinks({
 
   if (filteredClusters.length === 0) return null;
 
+  // Sidebar variant
+  if (variant === 'sidebar') {
+    return (
+      <aside className="space-y-6">
+        {filteredClusters.slice(0, 4).map((cluster) => (
+          <div key={cluster.title} className="bg-white border border-slate-200 rounded-xl p-5">
+            <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+              {cluster.icon}
+              {cluster.title}
+            </h4>
+            <ul className="space-y-2">
+              {cluster.links.slice(0, 5).map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-brand-600 hover:text-brand-700 hover:underline flex items-center gap-1 group"
+                  >
+                    {link.label}
+                    <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </aside>
+    );
+  }
+
+  // Footer variant - more prominent, full-width
+  if (variant === 'footer') {
+    return (
+      <section className="mt-16 pt-12 border-t border-slate-200">
+        <h3 className="text-2xl font-bold text-slate-900 mb-8">
+          Continue Your Research
+        </h3>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {filteredClusters.slice(0, 4).map((cluster) => (
+            <div key={cluster.title} className="bg-white border border-slate-200 rounded-xl p-6 hover:border-brand-300 transition-colors">
+              <h4 className="text-sm font-bold text-slate-700 mb-4 flex items-center gap-2">
+                {cluster.icon}
+                {cluster.title}
+              </h4>
+              <ul className="space-y-3">
+                {cluster.links.slice(0, 4).map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="text-sm text-slate-600 hover:text-brand-600 hover:underline flex items-center gap-1 group"
+                    >
+                      {link.label}
+                      <ArrowRight className="w-3 h-3 text-slate-300 group-hover:text-brand-500 group-hover:translate-x-1 transition-all" />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
+  // Default inline variant
   return (
     <aside className="bg-slate-50 border border-slate-200 rounded-xl p-6 my-8">
       <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">
@@ -166,7 +315,10 @@ export default function TopicalClusterLinks({
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredClusters.slice(0, 3).map((cluster) => (
           <div key={cluster.title}>
-            <h4 className="text-sm font-semibold text-slate-700 mb-2">{cluster.title}</h4>
+            <h4 className="text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
+              {cluster.icon}
+              {cluster.title}
+            </h4>
             <ul className="space-y-1">
               {cluster.links.slice(0, 4).map((link) => (
                 <li key={link.href}>

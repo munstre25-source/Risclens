@@ -1,10 +1,27 @@
+import { Metadata } from 'next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { Shield, Zap, Target, Lock, TrendingUp, AlertCircle, ChevronRight, Check, X, ArrowRight } from 'lucide-react';
 import { getSupabaseAdmin } from '@/lib/supabase';
 import FrameworkComparisonView from '@/components/compliance/FrameworkComparisonView';
+
+// URLs to redirect to canonical /compare/* versions (tool comparisons)
+const REDIRECT_TO_COMPARE = [
+  'vanta-vs-drata',
+  'vanta-vs-secureframe', 
+  'drata-vs-secureframe',
+  'drata-vs-thoropass',
+  'vanta-vs-thoropass',
+  'secureframe-vs-thoropass',
+  'vanta-vs-sprinto',
+  'drata-vs-sprinto',
+  'secureframe-vs-sprinto',
+  'thoropass-vs-strike-graph',
+  'drata-vs-laika',
+  'vanta-vs-onetrust',
+];
 
 export const dynamicParams = true;
 export const revalidate = 86400; // 24 hours
@@ -35,8 +52,50 @@ async function getPseoPage(slug: string) {
   return data;
 }
 
+/**
+ * Generate metadata with canonical pointing to /compare/* for tool comparisons
+ */
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const { slug } = params;
+  
+  // If it's a tool comparison, canonical should point to /compare/*
+  if (slug.includes('-vs-') && !slug.includes('hipaa') && !slug.includes('gdpr') && !slug.includes('pci') && !slug.includes('iso') && !slug.includes('soc')) {
+    return {
+      title: `${formatSlug(slug)} Comparison | RiscLens`,
+      alternates: {
+        canonical: `https://risclens.com/compare/${slug}`,
+      },
+      robots: {
+        index: false, // Don't index duplicate URLs
+        follow: true,
+      }
+    };
+  }
+  
+  // Framework comparisons stay at /compliance/compare/*
+  return {
+    title: `${formatSlug(slug)} | Compliance Framework Comparison`,
+    alternates: {
+      canonical: `https://risclens.com/compliance/compare/${slug}`,
+    }
+  };
+}
+
+function formatSlug(slug: string): string {
+  return slug
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+    .replace(' Vs ', ' vs ');
+}
+
 export default async function ComparisonPage({ params }: { params: { slug: string } }) {
   const { slug } = params;
+  
+  // Redirect tool comparisons to canonical /compare/* URL
+  if (REDIRECT_TO_COMPARE.includes(slug)) {
+    redirect(`/compare/${slug}`);
+  }
   
   const page = await getPseoPage(slug);
   

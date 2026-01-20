@@ -31,6 +31,14 @@ import FrameworkComparisonView from '@/components/compliance/FrameworkComparison
 import { InternalLinks, Breadcrumbs } from '@/components/InternalLinks';
 import AlternativeCard from '@/components/AlternativeCard';
 import ToolAlternativePage from '@/components/ToolAlternativePage';
+import {
+  generateComparisonTitleOptimized,
+  generateComparisonDescriptionOptimized,
+  generateAlternativesTitleOptimized,
+  generateAlternativesDescriptionOptimized,
+  CURRENT_YEAR,
+} from '@/lib/seo-enhancements';
+import { ExitIntentModal } from '@/components/LeadCaptureCTA';
 
 export const dynamicParams = true;
 export const revalidate = 86400; // 24 hours
@@ -89,13 +97,24 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     const { toolA, toolB } = await getToolsForComparison(parsed.toolASlug, parsed.toolBSlug);
     if (!toolA || !toolB) return { title: 'Comparison | RiscLens' };
 
+    // Use CTR-optimized title and description
+    const title = generateComparisonTitleOptimized(toolA, toolB);
+    const description = generateComparisonDescriptionOptimized(toolA, toolB);
+
     return {
-      title: generateComparisonTitle(toolA, toolB),
-      description: generateComparisonDescription(toolA, toolB),
+      title,
+      description,
+      keywords: [
+        `${toolA.name} vs ${toolB.name}`,
+        `${toolA.name} vs ${toolB.name} ${CURRENT_YEAR}`,
+        `${toolA.name} comparison`,
+        `${toolB.name} comparison`,
+        'compliance automation comparison',
+      ],
       alternates: { canonical: `https://risclens.com/compare/${slug}` },
       openGraph: {
-        title: generateComparisonTitle(toolA, toolB),
-        description: generateComparisonDescription(toolA, toolB),
+        title,
+        description,
         type: 'article',
       },
     };
@@ -105,10 +124,23 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     const toolSlug = slug.replace('-alternatives', '');
     const tools = await getAllTools();
     const tool = tools.find(t => t.slug === toolSlug);
+    const alternatives = tool ? await getAlternativesFor(tool.slug) : [];
+    const toolName = tool?.name || toolSlug.replace(/-/g, ' ');
+
+    // Use CTR-optimized title and description
+    const title = generateAlternativesTitleOptimized(toolName, alternatives.length || 10);
+    const description = generateAlternativesDescriptionOptimized(toolName, alternatives);
 
     return {
-      title: `Top ${(tool?.name || toolSlug.replace(/-/g, ' '))} Alternatives & Competitors in 2026`,
-      description: `Looking for ${(tool?.name || toolSlug.replace(/-/g, ' '))} alternatives? Compare the best compliance automation platforms including pricing, features, and expert recommendations.`,
+      title,
+      description,
+      keywords: [
+        `${toolName} alternatives`,
+        `${toolName} competitors`,
+        `${toolName} alternatives ${CURRENT_YEAR}`,
+        'compliance software alternatives',
+        'SOC 2 automation tools',
+      ],
       alternates: { canonical: `https://risclens.com/compare/${slug}` },
     };
   }
@@ -341,6 +373,13 @@ async function AlternativesPage({ slug }: { slug: string }) {
         </div>
       </main>
       <Footer />
+      
+      {/* Exit Intent Modal for Comparison Pages */}
+      <ExitIntentModal 
+        variant="comparison"
+        title="Still Deciding? Get the Full Comparison Matrix"
+        description="Download our detailed PDF comparing all major compliance platforms with pricing, features, and recommendations."
+      />
     </>
   );
 }

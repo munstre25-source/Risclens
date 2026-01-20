@@ -12,6 +12,8 @@ import { Check, Info, TrendingDown, DollarSign, Clock, ArrowRight } from 'lucide
 import { getAlternativesHref } from '@/lib/pseo-links';
 import { ContextualLinks } from '@/components/compliance/ContextualLinks';
 import { EditorialPolicyBadge } from '@/components/compliance/AuthorByline';
+import { ExitIntentModal, InlineCTA } from '@/components/LeadCaptureCTA';
+import TopicalClusterLinks from '@/components/TopicalClusterLinks';
 
 interface PricingTier {
   name: string;
@@ -213,12 +215,34 @@ export default function ToolPricingPage({
 
               <ContextualLinks currentPageType="pricing" currentSlug={toolSlug} />
 
+              {/* Enhanced CTA Section */}
+              <InlineCTA 
+                variant="calculator" 
+                context={toolName} 
+                className="mt-16" 
+              />
+
+              {/* Topical cluster links for internal linking */}
+              <TopicalClusterLinks 
+                pageType="pricing" 
+                currentPath={`/pricing/${toolSlug}`}
+                variant="footer"
+              />
+
           </div>
         </section>
 
       <AboutSection />
 
       <Footer />
+      
+      {/* Exit Intent Modal for lead capture */}
+      <ExitIntentModal 
+        variant="calculator"
+        title={`Before you go: Calculate your ${toolName} costs`}
+        description={`See exactly what ${toolName} will cost your organization, including hidden fees and auditor costs.`}
+      />
+      
       <StickyCTA 
         label={`Calculate Total SOC 2 Cost with ${toolName}`} 
         targetHref="/soc-2-cost-calculator" 

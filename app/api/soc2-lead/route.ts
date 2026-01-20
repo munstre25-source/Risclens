@@ -7,6 +7,15 @@ import { createLead } from '@/lib/leads';
 import { enrichLead } from '@/lib/enrichment';
 import { triggerBuyerWebhooks } from '@/lib/webhooks';
 
+// Debug logger for lead pipeline
+const DEBUG = process.env.NODE_ENV === 'development' || process.env.LEAD_DEBUG === 'true';
+
+function debugLog(stage: string, data: Record<string, unknown>) {
+  if (DEBUG) {
+    console.log(`[LEAD_PIPELINE] ${stage}:`, JSON.stringify(data, null, 2));
+  }
+}
+
 const redis =
   process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
     ? new Redis({
@@ -83,11 +92,17 @@ export async function POST(request: NextRequest) {
 
   const parsed = leadSchema.safeParse(body);
   if (!parsed.success) {
+    debugLog('validation_failed', { 
+      errors: parsed.error.flatten(),
+      receivedBody: body 
+    });
     return NextResponse.json(
       { ok: false, error: 'validation_error', details: parsed.error.flatten() },
       { status: 400 }
     );
   }
+  
+  debugLog('validation_passed', { payload: parsed.data });
 
   const { website, ...payload } = parsed.data;
   if (website && website.trim().length > 0) {
@@ -122,6 +137,13 @@ export async function POST(request: NextRequest) {
 
   const scoringResult = calculateLeadScore(scoringInput, settings || undefined);
   const recommendations = generateRecommendations(scoringInput, scoringResult);
+  
+  debugLog('scoring_complete', {
+    readinessScore: scoringResult.readiness_score,
+    leadScore: scoringResult.lead_score,
+    estimatedCost: `$${scoringResult.estimated_cost_low} - $${scoringResult.estimated_cost_high}`,
+    recommendationCount: recommendations.length,
+  });
 
   try {
     const leadPayload = {
@@ -155,11 +177,17 @@ export async function POST(request: NextRequest) {
     });
 
     if (!leadResult.ok) {
+      debugLog('lead_insert_failed', { error: leadResult.error });
       return NextResponse.json(
         { ok: false, error: 'insert_failed' },
         { status: 500 }
       );
     }
+    
+    debugLog('lead_created', { 
+      leadId: leadResult.id,
+      hasEmail: !!payload.email 
+    });
 
     // Trigger enrichment and webhooks in background
     if (leadResult.id) {

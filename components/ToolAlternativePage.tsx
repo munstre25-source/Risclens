@@ -9,6 +9,8 @@ import ExpertReview from '@/components/ExpertReview';
 import { GeneralPageSchema } from '@/components/GeneralPageSchema';
 import { ArrowRight, Star, Shield, Zap, TrendingUp, DollarSign } from 'lucide-react';
 import { getPricingHref } from '@/lib/pseo-links';
+import { ExitIntentModal, CTABanner } from '@/components/LeadCaptureCTA';
+import TopicalClusterLinks from '@/components/TopicalClusterLinks';
 
 interface Alternative {
   name: string;
@@ -204,9 +206,26 @@ export default function ToolAlternativePage({
         </div>
       </section>
 
+      {/* Topical cluster links for internal linking */}
+      <section className="py-12 px-4 max-w-5xl mx-auto">
+        <TopicalClusterLinks 
+          pageType="comparison" 
+          currentPath={`/compare/${toolSlug}-alternatives`}
+          variant="footer"
+        />
+      </section>
+
       <AboutSection />
 
       <Footer />
+      
+      {/* Exit Intent Modal */}
+      <ExitIntentModal 
+        variant="comparison"
+        title={`Need help choosing a ${toolName} alternative?`}
+        description="Our readiness assessment analyzes your tech stack and recommends the best-fit platform."
+      />
+      
       <StickyCTA 
         label={`Compare ${toolName} to the Market`} 
         targetHref="/soc-2-cost-calculator" 
