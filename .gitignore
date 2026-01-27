@@ -57,6 +57,7 @@ risclens.com-Coverage/
 risclens.com-Performance/
 *.xlsx
 *.xlsx:Zone.Identifier
+gsc data/
 
 # Windows Zone.Identifier files (metadata)
 *:Zone.Identifier

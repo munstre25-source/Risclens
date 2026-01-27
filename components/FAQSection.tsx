@@ -15,6 +15,7 @@ interface FAQSectionProps {
   faqs: FAQ[];
   className?: string;
   showSchema?: boolean;
+  id?: string;
 }
 
 function generateFAQSchema(faqs: FAQ[]) {
@@ -32,7 +33,7 @@ function generateFAQSchema(faqs: FAQ[]) {
   };
 }
 
-export default function FAQSection({ 
+export function FAQSection({ 
   title = "Frequently Asked Questions",
   faqs,
   className = "",
