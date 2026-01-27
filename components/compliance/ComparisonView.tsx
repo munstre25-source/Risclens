@@ -1,9 +1,11 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import Script from 'next/script';
 import { Check, X, ArrowRight } from 'lucide-react';
 import { ComplianceTool, ComparisonRow, PricingComparison, FAQ } from '@/lib/compliance-tools';
 import { EEATSignals, ExpertAuthorBox, TrustSignals } from '@/components/EEATSignals';
 import { InternalLinks, Breadcrumbs, InternalLinksInline } from '@/components/InternalLinks';
+import { generateComparisonFAQs, generateEnhancedFAQSchema } from '@/lib/seo-enhancements';
 
 interface ComparisonViewProps {
   toolA: ComplianceTool;
@@ -19,6 +21,56 @@ interface ComparisonViewProps {
   industry?: any;
   alternativesA?: ComplianceTool[];
   alternativesB?: ComplianceTool[];
+}
+
+/**
+ * Above-fold Quick Summary Component
+ * Clean, professional design following Vanta/Drata style
+ */
+function QuickSummary({ 
+  toolA, 
+  toolB, 
+  pricingComparison 
+}: { 
+  toolA: ComplianceTool; 
+  toolB: ComplianceTool;
+  pricingComparison: PricingComparison;
+}) {
+  const priceA = pricingComparison?.tool_a_starting || toolA.pricing_starting;
+  const priceB = pricingComparison?.tool_b_starting || toolB.pricing_starting;
+  const currentMonth = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  
+  return (
+    <div className="bg-slate-50 rounded-lg border border-slate-200 p-6 mb-8">
+      <div className="flex items-baseline justify-between mb-4">
+        <h2 className="text-lg font-semibold text-slate-900">Summary</h2>
+        <span className="text-xs text-slate-500">Updated {currentMonth}</span>
+      </div>
+      
+      <p className="text-slate-700 mb-6">
+        Both {toolA.name} and {toolB.name} are established compliance automation platforms. 
+        Your choice depends on team size, budget, and compliance scope.
+      </p>
+      
+      <div className="grid sm:grid-cols-2 gap-6">
+        <div>
+          <h3 className="font-medium text-slate-900 mb-3">{toolA.name}</h3>
+          <ul className="text-sm text-slate-600 space-y-2">
+            {priceA && <li>Starting at {priceA}</li>}
+            <li>Best for: {toolA.best_for || 'Growing teams'}</li>
+          </ul>
+        </div>
+        
+        <div>
+          <h3 className="font-medium text-slate-900 mb-3">{toolB.name}</h3>
+          <ul className="text-sm text-slate-600 space-y-2">
+            {priceB && <li>Starting at {priceB}</li>}
+            <li>Best for: {toolB.best_for || 'Enterprise organizations'}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default function ComparisonView({
@@ -37,9 +89,26 @@ export default function ComparisonView({
   alternativesB = []
 }: ComparisonViewProps) {
   const totalReviews = (toolA.g2_reviews_count || 0) + (toolB.g2_reviews_count || 0);
+  
+  // Generate FAQs with schema for rich snippets
+  const allFaqs = faqs && faqs.length > 0 ? faqs : generateComparisonFAQs(
+    toolA.name,
+    toolB.name,
+    toolA.pricing_starting || undefined,
+    toolB.pricing_starting || undefined
+  );
+  
+  const faqSchema = generateEnhancedFAQSchema(allFaqs);
 
   return (
     <main className="min-h-screen bg-slate-50">
+      {/* FAQ Schema for Rich Snippets */}
+      <Script
+        id="faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      
       <div className="max-w-7xl mx-auto px-4 pt-8">
         <Breadcrumbs items={breadcrumbs} />
       </div>
@@ -47,7 +116,7 @@ export default function ComparisonView({
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <div className="lg:col-span-3">
-            <div className="text-center mb-12">
+            <div className="text-center mb-8">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 mb-6">
                 <span className="flex h-2 w-2 rounded-full bg-blue-600 animate-pulse" />
                 <span className="text-xs font-bold text-blue-700 uppercase tracking-wider">Independent Analysis {industry ? `for ${industry.name}` : ''}</span>
@@ -59,6 +128,9 @@ export default function ComparisonView({
                 {description}
               </p>
             </div>
+
+            {/* Above-fold Quick Summary - Answers query intent immediately */}
+            <QuickSummary toolA={toolA} toolB={toolB} pricingComparison={pricingComparison} />
 
             <EEATSignals
               lastVerified={toolA.last_verified_at}
@@ -158,13 +230,22 @@ export default function ComparisonView({
               </div>
             </div>
 
+            {/* FAQ Section with Schema Markup for Rich Snippets */}
             <div className="bg-white rounded-2xl border border-slate-200 p-8 my-8">
               <h2 className="text-2xl font-bold text-slate-900 mb-6">Frequently Asked Questions</h2>
               <div className="space-y-6">
-                {(faqs || []).map((faq, i) => (
-                  <div key={i} className="border-b border-slate-100 pb-4 last:border-0">
-                    <h3 className="font-semibold text-slate-900 mb-2">{faq.question}</h3>
-                    <p className="text-slate-600 text-sm">{faq.answer}</p>
+                {/* Use provided FAQs or generate defaults */}
+                {(faqs && faqs.length > 0 ? faqs : generateComparisonFAQs(
+                  toolA.name,
+                  toolB.name,
+                  toolA.pricing_starting || undefined,
+                  toolB.pricing_starting || undefined
+                )).map((faq, i) => (
+                  <div key={i} className="border-b border-slate-100 pb-4 last:border-0" itemScope itemProp="mainEntity" itemType="https://schema.org/Question">
+                    <h3 className="font-semibold text-slate-900 mb-2" itemProp="name">{faq.question}</h3>
+                    <div itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
+                      <p className="text-slate-600 text-sm" itemProp="text">{faq.answer}</p>
+                    </div>
                   </div>
                 ))}
               </div>

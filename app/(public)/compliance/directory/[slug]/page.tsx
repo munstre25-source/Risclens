@@ -16,8 +16,127 @@ import { Users, CheckCircle } from 'lucide-react';
 import { BUILD_CONFIG, limitStaticParams } from '@/lib/build-config';
 import { 
   generateDirectoryTitle, 
-  generateDirectoryDescription 
+  generateDirectoryDescription,
+  generateDirectoryFAQs,
+  generateEnhancedFAQSchema
 } from '@/lib/seo-enhancements';
+import Script from 'next/script';
+
+/**
+ * Quick Answer Component for Directory Pages
+ * Clean, professional design following Vanta/Drata style
+ */
+function QuickAnswer({ 
+  companyName, 
+  mentionsSOC2, 
+  hasTrustPage,
+  hasSecurityPage,
+  signalScore,
+  trustCenterUrl,
+  updatedAt
+}: { 
+  companyName: string;
+  mentionsSOC2: boolean;
+  hasTrustPage: boolean;
+  hasSecurityPage: boolean;
+  signalScore: number;
+  trustCenterUrl?: string;
+  updatedAt?: string;
+}) {
+  const hasStrongSignals = mentionsSOC2 && (hasTrustPage || hasSecurityPage);
+  const hasModerateSignals = hasTrustPage || hasSecurityPage || signalScore >= 50;
+  
+  let statusText = 'Not publicly confirmed';
+  let summaryText = `Based on publicly available information, we could not confirm ${companyName}'s SOC 2 compliance status. Contact them directly for documentation.`;
+  
+  if (hasStrongSignals) {
+    statusText = 'Public signals indicate compliance';
+    summaryText = `${companyName} publicly references SOC 2 compliance and maintains security documentation. Request their SOC 2 Type II report for verification.`;
+  } else if (hasModerateSignals) {
+    statusText = 'Security presence detected';
+    summaryText = `${companyName} maintains public security documentation, but SOC 2 status is not explicitly confirmed. Check their trust center or request compliance documentation.`;
+  }
+  
+  const lastUpdated = updatedAt 
+    ? new Date(updatedAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+    : new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+  
+  return (
+    <div className="bg-slate-50 border border-slate-200 rounded-lg p-6 mb-8">
+      <div className="flex items-baseline justify-between mb-4">
+        <h2 className="text-lg font-semibold text-slate-900">
+          Is {companyName} SOC 2 Compliant?
+        </h2>
+        <span className="text-xs text-slate-500">Last checked {lastUpdated}</span>
+      </div>
+      
+      <p className="text-sm font-medium text-slate-700 mb-2">{statusText}</p>
+      <p className="text-slate-600 mb-4">{summaryText}</p>
+      
+      {trustCenterUrl && (
+        <a 
+          href={trustCenterUrl} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
+        >
+          View trust center →
+        </a>
+      )}
+    </div>
+  );
+}
+
+/**
+ * FAQ Section Component for Directory Pages
+ * Implements schema.org markup for rich snippets
+ */
+function DirectoryFAQSection({
+  companyName,
+  hasSOC2,
+  hasTrustCenter
+}: {
+  companyName: string;
+  hasSOC2: boolean;
+  hasTrustCenter: boolean;
+}) {
+  const faqs = generateDirectoryFAQs(companyName, hasSOC2, hasTrustCenter);
+  const faqSchema = generateEnhancedFAQSchema(faqs);
+
+  return (
+    <>
+      <Script
+        id="directory-faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      
+      <section className="mt-8">
+        <h2 className="text-lg font-semibold text-gray-900 mb-6">Frequently Asked Questions</h2>
+        <div className="space-y-5">
+          {faqs.map((faq, index) => (
+            <div 
+              key={index} 
+              className="border-b border-gray-100 pb-5 last:border-0 last:pb-0"
+              itemScope 
+              itemProp="mainEntity" 
+              itemType="https://schema.org/Question"
+            >
+              <h3 className="font-medium text-gray-900 mb-2" itemProp="name">
+                {faq.question}
+              </h3>
+              <div itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
+                <p className="text-gray-600 text-sm leading-relaxed" itemProp="text">
+                  {faq.answer}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </>
+  );
+}
 
 interface Props {
   params: { slug: string };
@@ -289,6 +408,17 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
         {/* Content Section */}
         <div className="container mx-auto px-4 py-12 max-w-4xl">
+          {/* Above-fold Quick Answer - Immediately answers "Is X SOC 2 compliant?" */}
+          <QuickAnswer 
+            companyName={company.name}
+            mentionsSOC2={signals.mentions_soc2}
+            hasTrustPage={signals.has_trust_page}
+            hasSecurityPage={signals.has_security_page}
+            signalScore={company.signal_score}
+            trustCenterUrl={company.trust_center_url}
+            updatedAt={company.updated_at}
+          />
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
 
             {/* Main Content */}
@@ -340,6 +470,13 @@ export default async function Page({ params }: { params: { slug: string } }) {
               <EditorialPolicyBadge variant="footer" />
 
               <SOC2ReadinessSignals companyName={company.name} />
+
+              {/* FAQ Section with Schema for Rich Snippets */}
+              <DirectoryFAQSection 
+                companyName={company.name}
+                hasSOC2={signals.mentions_soc2}
+                hasTrustCenter={signals.has_trust_page}
+              />
 
               {/* CTA */}
               <section className="text-center py-8">
