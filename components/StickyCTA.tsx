@@ -52,19 +52,19 @@ export function StickyCTA({
         isVisible ? 'translate-y-0' : 'translate-y-full'
       }`}
     >
-      <div className="bg-gradient-to-r from-brand-700 to-brand-800 border-t border-brand-600 shadow-2xl">
+      <div className="bg-slate-900 border-t border-slate-800 shadow-lg">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-3 sm:py-4">
             <div className="flex items-center justify-between gap-4">
               <div className="hidden sm:block">
                 <p className="text-white font-semibold text-sm">{description}</p>
-                <p className="text-brand-200 text-xs">{subDescription}</p>
+                <p className="text-slate-400 text-xs">{subDescription}</p>
               </div>
 
             <div className="flex items-center gap-3 w-full sm:w-auto">
               <Link
                 href={destination}
                 onClick={() => trackEvent('sticky_cta_click', { cta_label: label, destination })}
-                className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 bg-white text-brand-700 font-bold text-sm px-6 py-3 rounded-lg shadow-lg hover:bg-brand-50 transition-all"
+                className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 bg-white text-slate-900 font-semibold text-sm px-6 py-3 rounded-lg shadow-sm hover:bg-slate-50 transition-all"
               >
                 {label}
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

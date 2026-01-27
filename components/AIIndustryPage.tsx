@@ -122,14 +122,14 @@ export default function AIIndustryPage({
           <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-10">
             <div className="lg:max-w-2xl">
               <div className="flex items-center gap-3 mb-6">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-50 border border-brand-100 text-brand-700 text-xs font-bold uppercase tracking-wider">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-slate-100 border border-slate-200 text-slate-600 text-xs font-medium uppercase tracking-wide">
                   <Brain className="w-3.5 h-3.5" />
                   AI Governance Guide
                 </div>
                 <VerifiedBy authorId="kevin" />
               </div>
-              <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 mb-6 leading-[1.1] tracking-tight">
-                AI Compliance for <span className="text-brand-600">{industryName}</span>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mb-6 leading-tight tracking-tight">
+                AI Compliance for <span className="text-brand-700">{industryName}</span>
               </h1>
               <p className="text-lg text-slate-600 leading-relaxed mb-6">
                 {heroDescription}
@@ -145,14 +145,14 @@ export default function AIIndustryPage({
               <div className="flex flex-wrap gap-4">
                 <Link 
                   href="/ai-governance-readiness-index"
-                  className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-brand-500/20 transition-all"
+                  className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-medium px-6 py-3 rounded-lg transition-all"
                 >
                   Get AI Readiness Score
                   <ArrowRight className="w-4 h-4" />
                 </Link>
                 <Link 
                   href="/ai-compliance/eu-ai-act"
-                  className="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 font-bold px-6 py-3.5 rounded-xl border border-slate-200 transition-all"
+                  className="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 font-medium px-6 py-3 rounded-lg border border-slate-300 transition-all"
                 >
                   <Gavel className="w-4 h-4" />
                   EU AI Act Guide
@@ -160,8 +160,8 @@ export default function AIIndustryPage({
               </div>
             </div>
             
-            <div className="w-28 h-28 bg-brand-50 border-2 border-brand-200 rounded-3xl flex items-center justify-center shadow-lg shrink-0">
-              <Icon className="w-14 h-14 text-brand-600" />
+            <div className="w-28 h-28 bg-slate-100 border border-slate-200 rounded-xl flex items-center justify-center shadow-sm shrink-0">
+              <Icon className="w-14 h-14 text-slate-600" />
             </div>
           </div>
         </div>
@@ -196,7 +196,7 @@ export default function AIIndustryPage({
 
                 <div 
                   key={idx} 
-                  className={`${categoryColors.bg} border-2 ${categoryColors.border} rounded-2xl p-6`}
+                  className={`${categoryColors.bg} border ${categoryColors.border} rounded-lg p-6`}
                 >
                   <div className="flex items-center gap-3 mb-4">
                     <CategoryIcon className={`w-6 h-6 ${categoryColors.text}`} />

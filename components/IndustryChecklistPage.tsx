@@ -76,19 +76,19 @@ export default function IndustryChecklistPage({
                     { label: industryName }
                   ]} 
                 />
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-700 text-xs font-bold uppercase tracking-wider mb-4">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-slate-100 border border-slate-200 text-slate-600 text-xs font-medium uppercase tracking-wide mb-4">
                   Industry-Specific Checklist
                 </div>
                 <VerifiedBy authorId="raphael" />
               </div>
-              <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 mb-6 leading-tight">
-                SOC 2 Checklist for <span className="text-brand-600">{industryName}</span>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mb-6 leading-tight">
+                SOC 2 Checklist for <span className="text-brand-700">{industryName}</span>
               </h1>
               <p className="text-lg text-slate-600 mb-8 leading-relaxed">
                 {heroDescription}
               </p>
               
-              <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 mb-8">
+              <div className="bg-slate-50 border border-slate-200 rounded-lg p-6 mb-8">
                 <h3 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4 text-brand-600" />
                   Critical {industrySlug.toUpperCase()} Controls
@@ -124,7 +124,7 @@ export default function IndustryChecklistPage({
             
             <div className="grid sm:grid-cols-3 gap-6">
               {getRecommendedTools(industrySlug).map((tool) => (
-                <div key={tool.slug} className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all group">
+                <div key={tool.slug} className="bg-white border border-slate-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-all group">
                   <h4 className="text-lg font-bold text-slate-900 mb-4 group-hover:text-brand-600 transition-colors">{tool.name}</h4>
                   <div className="flex flex-col gap-3">
                     <Link 
@@ -159,7 +159,7 @@ export default function IndustryChecklistPage({
 
           <div className="space-y-8">
             {checklistData.map((category, idx) => (
-              <div key={idx} className="bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-sm">
+              <div key={idx} className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm">
                 <div className="bg-slate-900 px-8 py-4 flex items-center justify-between">
                   <h3 className="text-white font-bold">{category.category}</h3>
                   <ClipboardCheck className="w-5 h-5 text-brand-400" />
@@ -185,18 +185,18 @@ export default function IndustryChecklistPage({
       {/* Pitfalls Section */}
       <section className="py-16 lg:py-24 bg-white border-y border-slate-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <div className="bg-amber-50 border-2 border-amber-100 rounded-3xl p-8 sm:p-12">
-            <h2 className="text-2xl font-bold text-amber-900 mb-6 flex items-center gap-3">
-              <AlertTriangle className="w-8 h-8 text-amber-600" />
+          <div className="bg-slate-100 border border-slate-200 rounded-lg p-8 sm:p-12">
+            <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
+              <AlertTriangle className="w-6 h-6 text-slate-500" />
               Common {industryName} Pitfalls
             </h2>
             <div className="grid sm:grid-cols-2 gap-6">
               {commonPitfalls.map((pitfall, idx) => (
                 <div key={idx} className="flex gap-4 items-start">
-                  <div className="flex-shrink-0 w-6 h-6 bg-amber-200 text-amber-700 rounded-full flex items-center justify-center font-bold text-xs mt-1">
+                  <div className="flex-shrink-0 w-6 h-6 bg-slate-200 text-slate-600 rounded-full flex items-center justify-center font-semibold text-xs mt-1">
                     !
                   </div>
-                  <p className="text-amber-800 text-sm leading-relaxed">
+                  <p className="text-slate-600 text-sm leading-relaxed">
                     {pitfall}
                   </p>
                 </div>

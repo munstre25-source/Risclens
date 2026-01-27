@@ -77,14 +77,14 @@ export default function RoleSOC2Page({
                 { label: `For ${roleName}s` }
               ]} 
             />
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 border border-brand-100 text-brand-700 text-xs font-semibold mb-4 uppercase tracking-wider">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-slate-100 border border-slate-200 text-slate-600 text-xs font-medium mb-4 uppercase tracking-wide">
               Role-Specific Guide
             </div>
             <VerifiedBy authorId="raphael" />
           </div>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mb-6 leading-tight tracking-tight">
             <span className="block">SOC 2 Compliance</span>
-            <span className="block text-brand-600 font-extrabold italic">for {roleName}s</span>
+            <span className="block text-brand-700">for {roleName}s</span>
           </h1>
             <p className="text-lg text-slate-700 max-w-2xl mx-auto mb-8 leading-relaxed">
               {heroDescription}
@@ -93,7 +93,7 @@ export default function RoleSOC2Page({
             <div className="flex flex-col items-center gap-4 mb-8">
               <Link
                 href="/soc-2-cost-calculator"
-                className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
+                className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-medium px-6 py-3 rounded-lg transition-all"
               >
                 Calculate Your SOC 2 Cost
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

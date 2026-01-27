@@ -6,7 +6,7 @@ import AboutSection from '@/components/AboutSection';
 import ComplianceHub from '@/components/ComplianceHub';
 import { ChevronRight, ArrowRight } from 'lucide-react';
 import { AdvancedSchema } from '@/components/AdvancedSchema';
-import { TestimonialCarousel } from '@/components/TestimonialCarousel';
+
 import { TrustBadges, SecurityBadgeBar } from '@/components/TrustBadges';
 
 export const metadata: Metadata = {
@@ -52,7 +52,7 @@ export default function HomePage() {
           {/* Hero Section - Clean, Professional */}
           <section className="bg-white border-b border-slate-200">
               <div className="max-w-5xl mx-auto px-4 pt-16 pb-20 sm:pt-24 sm:pb-28 text-center">
-                  <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold text-slate-900 leading-tight tracking-tight mb-6">
+                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight tracking-tight mb-6">
                     Get SOC 2 and AI audit-ready, faster.
                   </h1>
                   
@@ -225,14 +225,6 @@ export default function HomePage() {
             </div>
           </section>
 
-
-          {/* Testimonials */}
-          <section className="py-16 bg-slate-50 border-t border-slate-200">
-            <div className="max-w-4xl mx-auto px-4">
-              <h2 className="text-xl font-bold text-slate-900 mb-8 text-center">What teams are saying</h2>
-              <TestimonialCarousel variant="featured" />
-            </div>
-          </section>
 
           {/* Frameworks */}
           <section className="py-12 bg-white border-t border-slate-200">
