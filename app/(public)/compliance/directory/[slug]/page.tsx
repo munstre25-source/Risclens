@@ -78,7 +78,7 @@ function QuickAnswer({
           href={trustCenterUrl} 
           target="_blank" 
           rel="noopener noreferrer"
-          className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
+          className="text-sm text-slate-700 hover:text-slate-900 hover:underline"
         >
           View trust center →
         </a>
@@ -354,6 +354,13 @@ export default async function Page({ params }: { params: { slug: string } }) {
     { label: 'Responsible disclosure / bug bounty', value: signals.has_responsible_disclosure },
     { label: 'Security contact email or page', value: signals.has_security_contact },
   ];
+  const followUpItems = [
+    !signals.has_trust_page && 'Request a trust center or compliance overview',
+    !signals.mentions_soc2 && 'Ask for current SOC 2 report status and scope',
+    !signals.has_security_page && 'Request a public security page or security summary',
+    !signals.has_responsible_disclosure && 'Confirm vulnerability disclosure policy',
+    !signals.has_security_contact && 'Ask for a dedicated security contact channel'
+  ].filter(Boolean) as string[];
 
   const TOP_PLATFORMS = ['vanta', 'drata', 'secureframe', 'thoropass', 'laika', 'strike-graph'];
   const isComparisonPlatform = TOP_PLATFORMS.includes(params.slug);
@@ -385,7 +392,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
                     {company.name} Public Security Profile
                   </h1>
                   {company.is_verified && (
-                    <div className="flex items-center gap-1.5 px-3 py-1 bg-blue-600 text-white rounded-full text-xs font-black shadow-sm" title="RiscLens Verified Profile">
+                    <div className="flex items-center gap-1.5 px-3 py-1 bg-slate-900 text-white rounded-md text-xs font-semibold shadow-sm" title="RiscLens Verified Profile">
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                       </svg>
@@ -399,7 +406,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
               </div>
 
 
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex-shrink-0">
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-slate-200 flex-shrink-0">
                 <SignalScore score={company.signal_score} size="md" />
               </div>
             </div>
@@ -449,17 +456,31 @@ export default async function Page({ params }: { params: { slug: string } }) {
                 </div>
               </section>
 
+              {followUpItems.length > 0 && (
+                <section className="bg-white rounded-lg border border-slate-200 p-6">
+                  <h3 className="text-lg font-semibold text-slate-900 mb-4">What to request in procurement</h3>
+                  <ul className="space-y-2 text-sm text-slate-600">
+                    {followUpItems.map((item, idx) => (
+                      <li key={idx} className="flex gap-2">
+                        <span className="text-slate-400">•</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
+
               {/* Educational Context */}
-              <section className="bg-blue-50 rounded-xl p-8 border border-blue-100">
-                <h3 className="text-xl font-bold text-blue-900 mb-4">About Public Disclosures</h3>
-                <div className="prose prose-blue text-blue-800">
+              <section className="bg-slate-50 rounded-lg p-8 border border-slate-200">
+                <h3 className="text-xl font-semibold text-slate-900 mb-4">About Public Disclosures</h3>
+                <div className="prose prose-slate text-slate-700">
                   <p>
-                    Public disclosures help with <Link href="/vendor-risk-assessment" className="underline font-bold">vendor risk reviews</Link> by providing a baseline of transparency.
+                    Public disclosures help with <Link href="/vendor-risk-assessment" className="underline font-medium text-slate-700 hover:text-slate-900">vendor risk reviews</Link> by providing a baseline of transparency.
                     A lack of public disclosure does not necessarily indicate a lack of security controls,
                     but it may require more direct inquiry during a procurement process.
                   </p>
                   <p className="mt-4">
-                    Many companies use automation platforms like <Link href="/pricing/vanta" className="underline">Vanta</Link> or <Link href="/pricing/drata" className="underline">Drata</Link> to maintain their <Link href="/soc-2" className="underline font-bold">SOC 2 compliance</Link> and generate these public-facing trust pages.
+                    Many companies use automation platforms like <Link href="/pricing/vanta" className="underline text-slate-700 hover:text-slate-900">Vanta</Link> or <Link href="/pricing/drata" className="underline text-slate-700 hover:text-slate-900">Drata</Link> to maintain their <Link href="/soc-2" className="underline font-medium text-slate-700 hover:text-slate-900">SOC 2 compliance</Link> and generate these public-facing trust pages.
                   </p>
                   <p className="mt-4 font-medium italic">
                     Note: This profile is based only on publicly observable data and automated discovery.
@@ -482,7 +503,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
               <section className="text-center py-8">
                 <Link
                   href="/readiness-review"
-                  className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-xl shadow-lg transition-all transform hover:-translate-y-1"
+                  className="inline-block bg-slate-900 hover:bg-slate-800 text-white font-medium py-3 px-6 rounded-lg transition-colors"
                 >
                   Request a SOC 2 readiness review
                 </Link>
@@ -497,14 +518,14 @@ export default async function Page({ params }: { params: { slug: string } }) {
             <div className="space-y-8">
               {/* Platform Comparison Sidebar Section */}
               {isComparisonPlatform && (
-                <div className="p-6 bg-brand-50 rounded-2xl border border-brand-100 shadow-sm">
-                  <h4 className="font-bold text-brand-900 mb-4 uppercase text-xs tracking-wider flex items-center gap-2">
-                    <svg className="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="p-6 bg-white rounded-lg border border-slate-200 shadow-sm">
+                  <h4 className="font-semibold text-slate-900 mb-4 uppercase text-xs tracking-wider flex items-center gap-2">
+                    <svg className="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                     </svg>
                     Platform Comparisons
                   </h4>
-                  <p className="text-xs text-brand-800 mb-4">
+                  <p className="text-xs text-slate-600 mb-4">
                     Compare {company.name} against other leading compliance automation platforms.
                   </p>
                   <div className="space-y-2">
@@ -517,10 +538,10 @@ export default async function Page({ params }: { params: { slug: string } }) {
                         <Link
                           key={slug}
                           href={`/compliance/compare/${slug}`}
-                          className="flex items-center justify-between p-3 bg-white rounded-xl border border-brand-100 hover:border-brand-300 transition-all group"
+                          className="flex items-center justify-between p-3 bg-white rounded-lg border border-slate-200 hover:border-slate-300 transition-colors group"
                         >
-                          <span className="text-sm font-bold text-slate-700 group-hover:text-brand-700">vs {otherName}</span>
-                          <svg className="w-4 h-4 text-brand-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <span className="text-sm font-semibold text-slate-700 group-hover:text-slate-900">vs {otherName}</span>
+                          <svg className="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                           </svg>
                         </Link>
@@ -528,7 +549,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
                     })}
                     <Link
                       href="/compare"
-                      className="block text-center text-xs font-bold text-brand-600 hover:text-brand-700 pt-2"
+                      className="block text-center text-xs font-semibold text-slate-600 hover:text-slate-900 pt-2"
                     >
                       View all 24+ comparisons →
                     </Link>
@@ -536,9 +557,9 @@ export default async function Page({ params }: { params: { slug: string } }) {
                 </div>
               )}
 
-              <div className="p-6 bg-slate-50 rounded-2xl border border-slate-200 shadow-sm">
-                <h4 className="font-bold text-slate-900 mb-4 uppercase text-xs tracking-wider flex items-center gap-2">
-                  <Users className="w-4 h-4 text-brand-600" />
+              <div className="p-6 bg-white rounded-lg border border-slate-200 shadow-sm">
+                <h4 className="font-semibold text-slate-900 mb-4 uppercase text-xs tracking-wider flex items-center gap-2">
+                  <Users className="w-4 h-4 text-slate-500" />
                   Role-Specific Guides
                 </h4>
                 <p className="text-xs text-slate-600 mb-4">
@@ -554,7 +575,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
                     <Link
                       key={role.slug}
                       href={`/soc-2/for/${role.slug}`}
-                      className="flex items-center justify-center p-2 bg-white rounded-lg border border-slate-200 hover:border-brand-300 hover:text-brand-600 transition-all text-[11px] font-bold text-slate-700"
+                      className="flex items-center justify-center p-2 bg-white rounded-lg border border-slate-200 hover:border-slate-300 transition-colors text-[11px] font-semibold text-slate-700 hover:text-slate-900"
                     >
                       {role.name}
                     </Link>
@@ -562,13 +583,13 @@ export default async function Page({ params }: { params: { slug: string } }) {
                 </div>
                 <Link
                   href="/soc-2/guides"
-                  className="block text-center text-[10px] font-bold text-brand-600 hover:text-brand-700 pt-3 uppercase tracking-tighter"
+                  className="block text-center text-[10px] font-semibold text-slate-600 hover:text-slate-900 pt-3 uppercase tracking-tighter"
                 >
                   View all 50+ role guides →
                 </Link>
               </div>
 
-              <div className="p-6 bg-white rounded-2xl shadow-sm border border-gray-100">
+              <div className="p-6 bg-white rounded-lg shadow-sm border border-slate-200">
 
 
                 <h4 className="font-bold text-gray-900 mb-6 uppercase text-xs tracking-wider">Intelligence Actions</h4>
@@ -579,22 +600,22 @@ export default async function Page({ params }: { params: { slug: string } }) {
                 />
               </div>
 
-              <div className="p-6 bg-gray-50 rounded-xl border border-gray-100">
-                <h4 className="font-bold text-gray-900 mb-4 uppercase text-xs tracking-wider">Company Details</h4>
+              <div className="p-6 bg-white rounded-lg border border-slate-200">
+                <h4 className="font-semibold text-slate-900 mb-4 uppercase text-xs tracking-wider">Company Details</h4>
                 <div className="space-y-4">
                   <div>
-                    <label className="text-xs text-gray-400 block uppercase">Legal Name</label>
-                    <span className="font-medium text-gray-900">{company.name}</span>
+                    <label className="text-xs text-slate-400 block uppercase">Legal Name</label>
+                    <span className="font-medium text-slate-900">{company.name}</span>
                   </div>
                   <div>
-                    <label className="text-xs text-gray-400 block uppercase">Domain</label>
-                    <a href={`https://${company.domain}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline break-all">
+                    <label className="text-xs text-slate-400 block uppercase">Domain</label>
+                    <a href={`https://${company.domain}`} target="_blank" rel="noopener noreferrer" className="text-slate-700 hover:underline break-all">
                       {company.domain}
                     </a>
                   </div>
                   <div>
-                    <label className="text-xs text-gray-400 block uppercase">Last Updated</label>
-                    <span className="text-gray-600 text-sm flex items-center gap-1.5">
+                    <label className="text-xs text-slate-400 block uppercase">Last Updated</label>
+                    <span className="text-slate-600 text-sm flex items-center gap-1.5">
                       {new Date(company.updated_at).toLocaleDateString()}
                       <span className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-green-50 text-green-700 rounded border border-green-100 text-[10px] font-bold uppercase">
                         <CheckCircle className="w-2.5 h-2.5" />
@@ -605,9 +626,9 @@ export default async function Page({ params }: { params: { slug: string } }) {
                 </div>
               </div>
 
-              <div className="p-6 bg-yellow-50 rounded-xl border border-yellow-100">
-                <h4 className="font-bold text-yellow-900 mb-2 text-sm">Disclaimer</h4>
-                <p className="text-xs text-yellow-800 leading-relaxed">
+              <div className="p-6 bg-slate-50 rounded-lg border border-slate-200">
+                <h4 className="font-semibold text-slate-900 mb-2 text-sm">Disclaimer</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
                   The "Public Security Signals Score" reflects publicly visible security disclosures only.
                   It is not an audit, a security rating, or a confirmation of compliance status.
                   Information is discovered automatically and may be incomplete.

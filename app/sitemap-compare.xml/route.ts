@@ -7,6 +7,7 @@ import {
 } from '@/lib/sitemap-utils';
 import { getSupabaseAdmin } from '@/lib/supabase';
 import { COMMERCIAL_ROUTES } from '@/src/seo/routes';
+import { BUILD_CONFIG } from '@/lib/build-config';
 
 /**
  * Compare & Alternatives Sitemap
@@ -40,17 +41,18 @@ export async function GET() {
             const supabase = getSupabaseAdmin();
 
             const [
-                { data: companies },
+                { data: tools },
                 { data: industries }
             ] = await Promise.all([
-                supabase.from('company_signals').select('slug').eq('indexable', true),
-                supabase.from('pseo_industries').select('slug')
+                supabase.from('compliance_tools').select('slug').eq('is_active', true).order('display_order', { ascending: true }),
+                supabase.from('pseo_industries').select('slug').in('slug', BUILD_CONFIG.PRIORITY_INDUSTRIES)
             ]);
 
-            const topTools = ['vanta', 'drata', 'secureframe', 'sprinto', 'thoropass'];
+            const topTools = BUILD_CONFIG.PRIORITY_TOOLS;
 
-            if (companies && industries) {
-                for (const c of companies) {
+            if (tools && industries) {
+                const prioritizedTools = tools.filter(t => topTools.includes(t.slug));
+                for (const c of prioritizedTools) {
                     for (const i of industries) {
                         // /compare/[company]-alternatives/for/[industry]
                         const altPath = `/compare/${c.slug}-alternatives/for/${i.slug}`;
@@ -63,18 +65,16 @@ export async function GET() {
                         });
 
                         // Add cross-comparisons for top tools
-                        if (topTools.includes(c.slug)) {
-                            for (const t2 of topTools) {
-                                if (c.slug !== t2) {
-                                    const vsPath = `/compare/${c.slug}-vs-${t2}/for/${i.slug}`;
-                                    const vsMeta = getUrlPriority(vsPath);
-                                    entries.push({
-                                        url: `${baseUrl}${vsPath}`,
-                                        lastmod: BUILD_DATE.toISOString().split('T')[0],
-                                        priority: vsMeta.priority,
-                                        changefreq: vsMeta.changeFrequency || 'weekly',
-                                    });
-                                }
+                        for (const t2 of topTools) {
+                            if (c.slug !== t2) {
+                                const vsPath = `/compare/${c.slug}-vs-${t2}/for/${i.slug}`;
+                                const vsMeta = getUrlPriority(vsPath);
+                                entries.push({
+                                    url: `${baseUrl}${vsPath}`,
+                                    lastmod: BUILD_DATE.toISOString().split('T')[0],
+                                    priority: vsMeta.priority,
+                                    changefreq: vsMeta.changeFrequency || 'weekly',
+                                });
                             }
                         }
                     }

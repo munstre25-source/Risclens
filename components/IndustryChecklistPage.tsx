@@ -48,6 +48,19 @@ export default function IndustryChecklistPage({
   const pageUrl = `https://risclens.com/soc-2-readiness-checklist/${industrySlug}`;
   const pageTitle = `SOC 2 Checklist for ${industryName} | RiscLens`;
   const lastUpdated = "January 10, 2026";
+  const evidencePack = [
+    'Access review records with approvals',
+    'Change management tickets with reviewers',
+    'Incident response runbooks and recent drills',
+    'Vendor risk assessment summaries',
+    'System inventory and data flow diagrams'
+  ];
+  const auditTimeline = [
+    'Week 1–2: Define scope and control owners',
+    'Week 3–5: Implement evidence collection workflows',
+    'Week 6–8: Run internal readiness review',
+    'Week 9–12: Complete auditor fieldwork and remediation'
+  ];
 
   return (
     <main className="min-h-screen flex flex-col bg-slate-50">
@@ -82,21 +95,21 @@ export default function IndustryChecklistPage({
                 <VerifiedBy authorId="raphael" />
               </div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mb-6 leading-tight">
-                SOC 2 Checklist for <span className="text-brand-700">{industryName}</span>
+                SOC 2 Checklist for <span className="text-slate-900">{industryName}</span>
               </h1>
               <p className="text-lg text-slate-600 mb-8 leading-relaxed">
                 {heroDescription}
               </p>
               
               <div className="bg-slate-50 border border-slate-200 rounded-lg p-6 mb-8">
-                <h3 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-brand-600" />
+                <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 text-slate-500" />
                   Critical {industrySlug.toUpperCase()} Controls
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {criticalControls.map((control, idx) => (
                     <div key={idx} className="flex items-center gap-2 text-slate-700 text-sm font-medium">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                      <CheckCircle2 className="w-4 h-4 text-slate-400" />
                       {control}
                     </div>
                   ))}
@@ -116,7 +129,7 @@ export default function IndustryChecklistPage({
                 <h2 className="text-2xl font-bold text-slate-900 mb-2">Recommended Automation for {industryName}</h2>
                 <p className="text-slate-500 font-medium">Top-rated platforms to automate your {industryName} compliance roadmap.</p>
               </div>
-              <Link href="/pricing" className="text-brand-600 font-bold flex items-center gap-2 hover:underline">
+              <Link href="/pricing" className="text-slate-600 font-semibold flex items-center gap-2 hover:underline">
                 View All Tool Pricing
                 <ArrowRight className="w-4 h-4" />
               </Link>
@@ -124,19 +137,19 @@ export default function IndustryChecklistPage({
             
             <div className="grid sm:grid-cols-3 gap-6">
               {getRecommendedTools(industrySlug).map((tool) => (
-                <div key={tool.slug} className="bg-white border border-slate-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-all group">
-                  <h4 className="text-lg font-bold text-slate-900 mb-4 group-hover:text-brand-600 transition-colors">{tool.name}</h4>
+                <div key={tool.slug} className="bg-white border border-slate-200 rounded-lg p-6 shadow-sm transition-colors group">
+                  <h4 className="text-lg font-semibold text-slate-900 mb-4">{tool.name}</h4>
                   <div className="flex flex-col gap-3">
                     <Link 
                       href={`/pricing/${tool.slug}`}
-                      className="flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-brand-600 transition-colors"
+                      className="flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors"
                     >
                       <DollarSign className="w-4 h-4" />
                       View 2026 Pricing
                     </Link>
                     <Link 
                       href={`/compare/${tool.slug}-alternatives`}
-                      className="flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-brand-600 transition-colors"
+                      className="flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors"
                     >
                       <BarChart3 className="w-4 h-4" />
                       Compare Alternatives
@@ -162,7 +175,7 @@ export default function IndustryChecklistPage({
               <div key={idx} className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm">
                 <div className="bg-slate-900 px-8 py-4 flex items-center justify-between">
                   <h3 className="text-white font-bold">{category.category}</h3>
-                  <ClipboardCheck className="w-5 h-5 text-brand-400" />
+                  <ClipboardCheck className="w-5 h-5 text-slate-300" />
                 </div>
                 <div className="p-8">
                   <ul className="space-y-4">
@@ -178,6 +191,35 @@ export default function IndustryChecklistPage({
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 bg-white border-t border-slate-200">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <div className="grid lg:grid-cols-2 gap-10">
+            <div className="bg-white border border-slate-200 rounded-lg p-6">
+              <h2 className="text-lg font-semibold text-slate-900 mb-4">Evidence pack to prepare</h2>
+              <ul className="space-y-2 text-sm text-slate-600">
+                {evidencePack.map((item, idx) => (
+                  <li key={idx} className="flex gap-2">
+                    <span className="text-slate-400">•</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="bg-white border border-slate-200 rounded-lg p-6">
+              <h2 className="text-lg font-semibold text-slate-900 mb-4">{industryName} audit timeline</h2>
+              <ol className="space-y-2 text-sm text-slate-600">
+                {auditTimeline.map((item, idx) => (
+                  <li key={idx} className="flex gap-3">
+                    <span className="text-slate-400 font-medium">{idx + 1}.</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
           </div>
         </div>
       </section>

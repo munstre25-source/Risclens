@@ -37,6 +37,18 @@ export default function ToolAlternativePage({
   const pageUrl = `https://risclens.com/compare/${toolSlug}-alternatives`;
   const pageTitle = `Top ${toolName} Alternatives for 2026 | RiscLens Report`;
   const lastUpdated = "January 10, 2026";
+  const selectionChecklist = (comparisonFactors.length > 0 ? comparisonFactors : [
+    'Audit readiness depth and evidence coverage',
+    'Integration coverage for your stack',
+    'Pricing transparency and contract flexibility',
+    'Implementation time and support model',
+    'Reporting and auditor collaboration workflow'
+  ]).slice(0, 6);
+  const switchSignals = alternatives.slice(0, 4).map((alt) => ({
+    name: alt.name,
+    bestFor: alt.bestFor,
+    keyStrength: alt.keyStrength,
+  }));
 
   return (
     <main className="min-h-screen flex flex-col bg-slate-50">
@@ -154,6 +166,39 @@ export default function ToolAlternativePage({
           </div>
         </div>
       </section>
+
+      <section className="py-12 bg-white border-t border-slate-200">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <h2 className="text-lg font-semibold text-slate-900 mb-6">Selection checklist</h2>
+          <ol className="space-y-3 text-sm text-slate-700">
+            {selectionChecklist.map((factor, idx) => (
+              <li key={idx} className="flex gap-3">
+                <span className="text-slate-400 font-medium">{idx + 1}.</span>
+                <span>{factor}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {switchSignals.length > 0 && (
+        <section className="py-12 bg-slate-50 border-t border-slate-200">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6">
+            <h2 className="text-lg font-semibold text-slate-900 mb-6">Why teams switch from {toolName}</h2>
+            <div className="grid sm:grid-cols-2 gap-6">
+              {switchSignals.map((alt) => (
+                <div key={alt.name} className="bg-white border border-slate-200 rounded-lg p-5">
+                  <h3 className="font-semibold text-slate-900 mb-2">{alt.name}</h3>
+                  <div className="text-sm text-slate-600 space-y-2">
+                    <p>Best for: {alt.bestFor}</p>
+                    <p>Key strength: {alt.keyStrength}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* How to Evaluate */}
       {comparisonFactors.length > 0 && (

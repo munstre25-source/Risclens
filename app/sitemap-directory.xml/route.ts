@@ -2,8 +2,10 @@ import { NextResponse } from 'next/server';
 import {
     baseUrl,
     getUrlPriority,
-    getDirectoryData
+    getDirectoryData,
+    hasSupabaseAdmin
 } from '@/lib/sitemap-utils';
+import { getValidPseoSlugs } from '@/lib/pseo-validation';
 
 /**
  * Directory Sitemap
@@ -43,17 +45,16 @@ export async function GET() {
         }
     }
 
-    if (data?.locations) {
-        for (const l of data.locations) {
-            const path = `/auditor-directory/${l.slug}`;
-            const { priority, changeFrequency } = getUrlPriority(path);
-            entries.push({
-                url: `${baseUrl}${path}`,
-                lastmod: new Date().toISOString().split('T')[0],
-                priority,
-                changefreq: changeFrequency || 'weekly',
-            });
-        }
+    const locationPages = hasSupabaseAdmin ? await getValidPseoSlugs('directory', 'slug') : [];
+    for (const l of locationPages) {
+        const path = `/auditor-directory/${l.slug}`;
+        const { priority, changeFrequency } = getUrlPriority(path);
+        entries.push({
+            url: `${baseUrl}${path}`,
+            lastmod: new Date().toISOString().split('T')[0],
+            priority,
+            changefreq: changeFrequency || 'weekly',
+        });
     }
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>

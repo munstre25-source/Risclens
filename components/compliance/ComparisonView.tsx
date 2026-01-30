@@ -117,10 +117,10 @@ export default function ComparisonView({
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <div className="lg:col-span-3">
             <div className="text-center mb-8">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 mb-6">
-                <span className="flex h-2 w-2 rounded-full bg-blue-600 animate-pulse" />
-                <span className="text-xs font-bold text-blue-700 uppercase tracking-wider">Independent Analysis {industry ? `for ${industry.name}` : ''}</span>
-              </div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-slate-100 border border-slate-200 mb-6">
+              <span className="flex h-2 w-2 rounded-full bg-slate-700" />
+              <span className="text-xs font-semibold text-slate-700 uppercase tracking-wider">Independent Analysis {industry ? `for ${industry.name}` : ''}</span>
+            </div>
               <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-6 tracking-tight">
                 {title}
               </h1>
@@ -140,17 +140,17 @@ export default function ComparisonView({
 
             <TrustSignals />
 
-            <div className="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden my-8">
+            <div className="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden my-8">
               <div className="grid grid-cols-3 border-b border-slate-100">
                 <div className="p-4 bg-slate-50 border-r border-slate-100 font-bold text-slate-500 text-xs uppercase tracking-wider">Feature</div>
-                <div className="p-4 font-bold text-slate-900 text-center bg-blue-50">{toolA.name}</div>
+                <div className="p-4 font-semibold text-slate-900 text-center bg-slate-50">{toolA.name}</div>
                 <div className="p-4 font-bold text-slate-900 text-center">{toolB.name}</div>
               </div>
 
               {comparisonRows.map((row, i) => (
                 <div key={i} className={`grid grid-cols-3 border-b border-slate-50 ${i % 2 === 0 ? 'bg-white' : 'bg-slate-50/30'}`}>
                   <div className="p-4 border-r border-slate-100 text-sm font-semibold text-slate-700">{row.feature}</div>
-                  <div className="p-4 flex items-center justify-center text-sm text-center bg-blue-50/30">
+                  <div className="p-4 flex items-center justify-center text-sm text-center bg-slate-50/60">
                     {renderValue(row.tool_a_value)}
                   </div>
                   <div className="p-4 flex items-center justify-center text-sm text-center">
@@ -160,7 +160,7 @@ export default function ComparisonView({
               ))}
             </div>
 
-            <div className="bg-white rounded-2xl border border-slate-200 p-8 my-8">
+            <div className="bg-white rounded-lg border border-slate-200 p-8 my-8">
               <h2 className="text-2xl font-bold text-slate-900 mb-6">Pricing Comparison</h2>
               <div className="grid md:grid-cols-2 gap-6">
                 <PricingCard tool={toolA} pricing={pricingComparison} side="a" />
@@ -169,12 +169,12 @@ export default function ComparisonView({
               <p className="mt-6 text-slate-600 text-sm">{pricingComparison.summary}</p>
             </div>
 
-            <div className="bg-slate-900 rounded-2xl p-8 my-8 text-white">
+            <div className="bg-slate-900 rounded-lg p-8 my-8 text-white">
               <h2 className="text-2xl font-bold mb-4">Our Verdict</h2>
               <div className="prose prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: verdict.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n\n/g, '<br/><br/>') }} />
             </div>
 
-            <div className="bg-white rounded-2xl border border-slate-200 p-8 my-8">
+            <div className="bg-white rounded-lg border border-slate-200 p-8 my-8">
               <h2 className="text-2xl font-bold text-slate-900 mb-6">{toolA.name} Pros & Cons</h2>
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
@@ -202,7 +202,7 @@ export default function ComparisonView({
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl border border-slate-200 p-8 my-8">
+            <div className="bg-white rounded-lg border border-slate-200 p-8 my-8">
               <h2 className="text-2xl font-bold text-slate-900 mb-6">{toolB.name} Pros & Cons</h2>
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
@@ -230,8 +230,27 @@ export default function ComparisonView({
               </div>
             </div>
 
+            <div className="bg-white rounded-lg border border-slate-200 p-8 my-8">
+              <h2 className="text-2xl font-bold text-slate-900 mb-6">Best-fit snapshot</h2>
+              <div className="grid md:grid-cols-2 gap-6">
+                {[{ tool: toolA, label: toolA.name }, { tool: toolB, label: toolB.name }].map(({ tool, label }) => (
+                  <div key={tool.slug} className="rounded-lg border border-slate-200 p-5">
+                    <h3 className="text-lg font-semibold text-slate-900 mb-3">{label}</h3>
+                    <ul className="space-y-2 text-sm text-slate-600">
+                      {getFitPoints(tool).map((point, idx) => (
+                        <li key={idx} className="flex gap-2">
+                          <span className="text-slate-400">•</span>
+                          <span>{point}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* FAQ Section with Schema Markup for Rich Snippets */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-8 my-8">
+            <div className="bg-white rounded-lg border border-slate-200 p-8 my-8">
               <h2 className="text-2xl font-bold text-slate-900 mb-6">Frequently Asked Questions</h2>
               <div className="space-y-6">
                 {/* Use provided FAQs or generate defaults */}
@@ -251,14 +270,14 @@ export default function ComparisonView({
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl border border-slate-200 p-8 my-8">
+            <div className="bg-white rounded-lg border border-slate-200 p-8 my-8">
               <h2 className="text-2xl font-bold text-slate-900 mb-6">Alternatives to Consider</h2>
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
                   <h3 className="font-bold text-slate-800 mb-4">Top 3 Alternatives to {toolA.name}</h3>
                   <div className="space-y-4">
                     {(alternativesA || []).map(alt => (
-                      <Link key={alt.slug} href={`/compare/${alt.slug}-alternatives`} className="block p-4 rounded-xl border border-slate-100 hover:border-blue-200 hover:bg-blue-50 transition-all">
+                      <Link key={alt.slug} href={`/compare/${alt.slug}-alternatives`} className="block p-4 rounded-lg border border-slate-200 hover:border-slate-300 transition-colors">
                         <div className="font-bold text-slate-900">{alt.name}</div>
                         <div className="text-sm text-slate-500 line-clamp-1">{alt.tagline}</div>
                       </Link>
@@ -269,7 +288,7 @@ export default function ComparisonView({
                   <h3 className="font-bold text-slate-800 mb-4">Top 3 Alternatives to {toolB.name}</h3>
                   <div className="space-y-4">
                     {(alternativesB || []).map(alt => (
-                      <Link key={alt.slug} href={`/compare/${alt.slug}-alternatives`} className="block p-4 rounded-xl border border-slate-100 hover:border-blue-200 hover:bg-blue-50 transition-all">
+                      <Link key={alt.slug} href={`/compare/${alt.slug}-alternatives`} className="block p-4 rounded-lg border border-slate-200 hover:border-slate-300 transition-colors">
                         <div className="font-bold text-slate-900">{alt.name}</div>
                         <div className="text-sm text-slate-500 line-clamp-1">{alt.tagline}</div>
                       </Link>
@@ -282,10 +301,10 @@ export default function ComparisonView({
             <ExpertAuthorBox />
             <InternalLinksInline clusters={internalLinks} />
 
-            <div className="bg-blue-600 rounded-2xl p-8 text-white text-center my-8">
+            <div className="bg-slate-900 rounded-lg p-8 text-white text-center my-8">
               <h2 className="text-2xl font-bold mb-4">Still deciding?</h2>
-              <p className="text-blue-100 mb-6">Use our SOC 2 Cost Calculator to estimate your total compliance investment.</p>
-              <Link href="/soc-2-cost-calculator" className="inline-flex items-center gap-2 bg-white text-blue-600 font-bold px-6 py-3 rounded-lg hover:bg-blue-50 transition-colors">
+              <p className="text-slate-100 mb-6">Use our SOC 2 Cost Calculator to estimate your total compliance investment.</p>
+              <Link href="/soc-2-cost-calculator" className="inline-flex items-center gap-2 bg-white text-slate-900 font-semibold px-6 py-3 rounded-lg hover:bg-slate-100 transition-colors">
                 Calculate Your Costs <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -302,6 +321,20 @@ export default function ComparisonView({
   );
 }
 
+function getFitPoints(tool: ComplianceTool) {
+  const points = [
+    tool.best_for ? `Best fit: ${tool.best_for}` : 'Best fit: teams prioritizing audit readiness and faster implementations.',
+    tool.frameworks_supported && tool.frameworks_supported.length > 0
+      ? `Frameworks: ${tool.frameworks_supported.slice(0, 4).join(', ')}`
+      : 'Framework coverage varies by plan and auditor requirements.',
+    typeof tool.integrations_count === 'number' && tool.integrations_count > 0
+      ? `Integrations: ${tool.integrations_count}+ supported systems`
+      : 'Integration depth varies by data source and plan.',
+    tool.target_market ? `Target market: ${tool.target_market}` : 'Commonly used by growth-stage B2B teams.',
+  ];
+  return points.slice(0, 4);
+}
+
 function renderValue(value: string) {
   if (value === 'Yes') return <Check className="w-5 h-5 text-green-500" />;
   if (value === 'No') return <X className="w-5 h-5 text-red-400" />;
@@ -315,7 +348,7 @@ function PricingCard({ tool, pricing, side }: { tool: ComplianceTool; pricing: a
   const auditorIncluded = side === 'a' ? pricing.tool_a_auditor_included : pricing.tool_b_auditor_included;
 
   return (
-    <div className="border border-slate-200 rounded-xl p-6">
+    <div className="border border-slate-200 rounded-lg p-6">
       <h3 className="font-bold text-slate-900 text-lg mb-4">{tool.name}</h3>
       <div className="space-y-3 text-sm">
         <div className="flex justify-between">
@@ -341,7 +374,7 @@ function PricingCard({ tool, pricing, side }: { tool: ComplianceTool; pricing: a
       </div>
       <Link
         href={`/pricing/${tool.slug}`}
-        className="mt-4 block text-center text-sm text-blue-600 hover:text-blue-800 font-medium"
+        className="mt-4 block text-center text-sm text-slate-700 hover:text-slate-900 font-medium"
       >
         Full Pricing Guide →
       </Link>

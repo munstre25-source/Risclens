@@ -52,6 +52,20 @@ export default async function MatrixPage({
   if (industry) dimensions.push(industry.slug);
   
   const pageUrl = `https://risclens.com/${dimensions.join('/')}`;
+  const auditChecklist = [
+    `Define scope and evidence owners for ${framework.name} ${decision?.name || 'readiness'}`,
+    `Map controls to your ${industry?.name || 'industry'} workflows`,
+    'Confirm evidence cadence and review approvals',
+    'Document exceptions and compensating controls',
+    'Validate auditor expectations before kickoff'
+  ];
+  const evidenceExamples = framework.slug === 'soc-2'
+    ? ['Access reviews', 'Change management approvals', 'Incident response logs', 'Vendor risk assessments']
+    : framework.slug === 'iso-27001'
+      ? ['ISMS policy and scope', 'Risk register updates', 'Statement of Applicability', 'Internal audit records']
+      : framework.slug === 'pci-dss'
+        ? ['Network segmentation evidence', 'Vulnerability scan reports', 'Access control logs', 'Security awareness training']
+        : ['Policy ownership records', 'Control testing results', 'Risk assessments', 'Monitoring evidence'];
   
   let pageTitle = content.heroTitle;
   if (!pageTitle) {
@@ -280,6 +294,31 @@ export default async function MatrixPage({
                   View Full Directory
                 </Link>
               </div>
+            </div>
+          </div>
+
+          <div className="mt-16 grid lg:grid-cols-2 gap-8">
+            <div className="bg-white border border-slate-200 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-slate-900 mb-4">Audit readiness checklist</h3>
+              <ul className="space-y-2 text-sm text-slate-600">
+                {auditChecklist.map((item, idx) => (
+                  <li key={idx} className="flex gap-2">
+                    <span className="text-slate-400">•</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="bg-white border border-slate-200 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-slate-900 mb-4">Evidence to prepare</h3>
+              <ul className="space-y-2 text-sm text-slate-600">
+                {evidenceExamples.map((item, idx) => (
+                  <li key={idx} className="flex gap-2">
+                    <span className="text-slate-400">•</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>

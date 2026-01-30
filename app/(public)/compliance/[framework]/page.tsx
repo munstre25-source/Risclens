@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${framework.name} Compliance Hub | RiscLens`,
     description: `Complete guides and resources for ${framework.name} compliance across various industries.`,
-    alternates: { canonical: `/compliance/${params.framework}` },
+    alternates: { canonical: `https://risclens.com/compliance/${params.framework}` },
   };
 }
 

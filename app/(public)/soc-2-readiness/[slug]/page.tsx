@@ -13,6 +13,7 @@ import { AuthorBio, VerifiedBy } from '@/components/AuthorBio';
 import { authors } from '@/lib/authors';
 import { getContentPage } from '@/lib/content';
 import { LastVerifiedBadge, AccuracyDisclaimer } from '@/components/AccuracyGuards';
+import { ContextualLinks } from '@/components/compliance/ContextualLinks';
 
 interface PageProps {
   params: { slug: string };
@@ -63,7 +64,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${page.title} | SOC 2 Readiness Guide | RiscLens`,
     description: page.summary,
-    alternates: { canonical: `/soc-2-readiness/${page.slug}` },
+    alternates: { canonical: `https://risclens.com/soc-2-readiness/${page.slug}` },
     openGraph: {
       title: `${page.title} | SOC 2 Readiness Guide | RiscLens`,
       description: page.summary,
@@ -254,6 +255,8 @@ export default async function Soc2ReadinessGuidePage({ params }: PageProps) {
                 </Link>
               </div>
             </div>
+
+            <ContextualLinks currentPageType="framework" variant="footer" />
             
             <AccuracyDisclaimer />
           </div>

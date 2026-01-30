@@ -11,6 +11,7 @@ import {
   ArrowRight,
   Sparkles
 } from 'lucide-react';
+import { uiTokens } from '@/components/ui/uiTokens';
 
 type LinkCategory = 'framework' | 'pricing' | 'alternatives' | 'role' | 'directory' | 'evidence' | 'checklist' | 'stack';
 
@@ -100,20 +101,6 @@ const getCategoryIcon = (category: LinkCategory) => {
   }
 };
 
-const getCategoryColor = (category: LinkCategory) => {
-  switch (category) {
-    case 'framework': return 'bg-blue-50 text-blue-600 border-blue-100';
-    case 'pricing': return 'bg-green-50 text-green-600 border-green-100';
-    case 'alternatives': return 'bg-purple-50 text-purple-600 border-purple-100';
-    case 'role': return 'bg-amber-50 text-amber-600 border-amber-100';
-    case 'directory': return 'bg-indigo-50 text-indigo-600 border-indigo-100';
-    case 'evidence': return 'bg-cyan-50 text-cyan-600 border-cyan-100';
-    case 'checklist': return 'bg-orange-50 text-orange-600 border-orange-100';
-    case 'stack': return 'bg-teal-50 text-teal-600 border-teal-100';
-    default: return 'bg-slate-50 text-slate-600 border-slate-100';
-  }
-};
-
 export function ContextualLinks({
   currentPageType,
   currentSlug,
@@ -126,19 +113,18 @@ export function ContextualLinks({
 
   if (variant === 'inline') {
     return (
-      <div className="my-8 p-6 bg-slate-50 rounded-2xl border border-slate-200">
+      <div className={`my-8 ${uiTokens.card} p-6`}>
         <div className="flex items-center gap-2 mb-4">
-          <Sparkles className="w-4 h-4 text-brand-600" />
-          <span className="text-xs font-black text-slate-500 uppercase tracking-widest">Related Intelligence</span>
+          <span className={uiTokens.badge}>Related resources</span>
         </div>
         <div className="flex flex-wrap gap-2">
           {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-700 hover:border-brand-300 hover:text-brand-600 transition-all"
+              className="inline-flex items-center gap-2 px-3 py-1.5 border border-slate-200 rounded-md text-sm font-medium text-slate-700 hover:border-slate-300 hover:text-slate-900 transition-colors"
             >
-              {getCategoryIcon(link.category)}
+              <span className="text-slate-500">{getCategoryIcon(link.category)}</span>
               {link.label}
             </Link>
           ))}
@@ -149,9 +135,9 @@ export function ContextualLinks({
 
   if (variant === 'sidebar') {
     return (
-      <div className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm">
-        <h4 className="font-bold text-slate-900 mb-4 uppercase text-xs tracking-wider flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-brand-600" />
+      <div className={`${uiTokens.card} p-6`}>
+        <h4 className="font-semibold text-slate-900 mb-4 uppercase text-xs tracking-wider flex items-center gap-2">
+          <Sparkles className="w-4 h-4 text-slate-500" />
           Related Resources
         </h4>
         <div className="space-y-3">
@@ -159,20 +145,20 @@ export function ContextualLinks({
             <Link
               key={link.href}
               href={link.href}
-              className="flex items-start gap-3 p-3 -mx-3 rounded-xl hover:bg-slate-50 transition-colors group"
+              className="flex items-start gap-3 p-3 -mx-3 rounded-lg hover:bg-slate-50 transition-colors group"
             >
-              <div className={`p-2 rounded-lg ${getCategoryColor(link.category)}`}>
+              <div className="p-2 rounded-md border border-slate-200 bg-slate-100 text-slate-600">
                 {getCategoryIcon(link.category)}
               </div>
               <div className="flex-grow min-w-0">
-                <div className="text-sm font-bold text-slate-800 group-hover:text-brand-600 transition-colors">
+                <div className="text-sm font-semibold text-slate-800 group-hover:text-slate-900 transition-colors">
                   {link.label}
                 </div>
                 {link.description && (
                   <div className="text-xs text-slate-500 mt-0.5">{link.description}</div>
                 )}
               </div>
-              <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-brand-500 group-hover:translate-x-0.5 transition-all flex-shrink-0 mt-1" />
+              <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-slate-500 group-hover:translate-x-0.5 transition-all flex-shrink-0 mt-1" />
             </Link>
           ))}
         </div>
@@ -189,7 +175,7 @@ export function ContextualLinks({
         </div>
         <Link 
           href="/compliance"
-          className="hidden sm:flex items-center gap-2 text-sm font-bold text-brand-600 hover:text-brand-700 transition-colors"
+          className="hidden sm:flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
         >
           View All Resources
           <ArrowRight className="w-4 h-4" />
@@ -201,18 +187,18 @@ export function ContextualLinks({
           <Link
             key={link.href}
             href={link.href}
-            className="group p-5 bg-white rounded-2xl border border-slate-200 hover:border-brand-300 hover:shadow-lg transition-all"
+            className={`group p-5 ${uiTokens.card} hover:border-slate-300 transition-colors`}
           >
-            <div className={`inline-flex p-2 rounded-lg mb-4 ${getCategoryColor(link.category)}`}>
+            <div className="inline-flex p-2 rounded-md border border-slate-200 bg-slate-100 text-slate-600 mb-4">
               {getCategoryIcon(link.category)}
             </div>
-            <h3 className="font-bold text-slate-900 group-hover:text-brand-600 transition-colors mb-1">
+            <h3 className="font-semibold text-slate-900 group-hover:text-slate-900 transition-colors mb-1">
               {link.label}
             </h3>
             {link.description && (
               <p className="text-sm text-slate-500">{link.description}</p>
             )}
-            <div className="flex items-center gap-1 mt-4 text-xs font-bold text-brand-600 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="flex items-center gap-1 mt-4 text-xs font-semibold text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity">
               <span>Explore</span>
               <ChevronRight className="w-3 h-3" />
             </div>
@@ -223,7 +209,7 @@ export function ContextualLinks({
       <div className="mt-6 sm:hidden text-center">
         <Link 
           href="/compliance"
-          className="inline-flex items-center gap-2 text-sm font-bold text-brand-600"
+          className="inline-flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
         >
           View All Resources
           <ArrowRight className="w-4 h-4" />
@@ -245,7 +231,7 @@ export function InlineContextLink({
   return (
     <Link 
       href={href} 
-      className="text-brand-600 font-semibold hover:text-brand-700 underline decoration-brand-200 hover:decoration-brand-400 underline-offset-2 transition-colors"
+      className={uiTokens.link}
       title={title}
     >
       {children}
@@ -265,18 +251,18 @@ export function TopicClusterNav({
   currentSlug?: string;
 }) {
   return (
-    <nav className="my-8 p-6 bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl border border-slate-200" aria-label="Topic cluster navigation">
+    <nav className={`my-8 ${uiTokens.card} p-6`} aria-label="Topic cluster navigation">
       <div className="flex items-center gap-2 mb-4">
-        <Shield className="w-5 h-5 text-brand-600" />
-        <span className="text-sm font-black text-slate-700">Topic Cluster</span>
+        <Shield className="w-5 h-5 text-slate-500" />
+        <span className="text-sm font-semibold text-slate-700">Topic Cluster</span>
       </div>
       
       <Link 
         href={pillarPage}
-        className="block p-4 bg-white rounded-xl border border-slate-200 hover:border-brand-300 mb-4 group transition-all"
+        className="block p-4 bg-white rounded-lg border border-slate-200 hover:border-slate-300 mb-4 group transition-colors"
       >
-        <div className="text-[10px] font-black text-brand-600 uppercase tracking-widest mb-1">Pillar Page</div>
-        <div className="text-lg font-bold text-slate-900 group-hover:text-brand-600 transition-colors">{pillarLabel}</div>
+        <div className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">Pillar Page</div>
+        <div className="text-lg font-semibold text-slate-900 group-hover:text-slate-900 transition-colors">{pillarLabel}</div>
       </Link>
       
       <div className="grid grid-cols-2 gap-2">
@@ -284,10 +270,10 @@ export function TopicClusterNav({
           <Link
             key={page.href}
             href={page.href}
-            className={`p-3 rounded-lg text-sm font-medium transition-all ${
+            className={`p-3 rounded-lg text-sm font-medium transition-colors border ${
               currentSlug && page.href.includes(currentSlug)
-                ? 'bg-brand-600 text-white'
-                : 'bg-white border border-slate-200 text-slate-700 hover:border-brand-300 hover:text-brand-600'
+                ? 'bg-slate-100 text-slate-900 border-slate-200'
+                : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:text-slate-900'
             }`}
           >
             {page.label}

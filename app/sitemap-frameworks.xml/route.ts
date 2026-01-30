@@ -5,6 +5,7 @@ import {
     getUrlPriority,
     getFrameworkData
 } from '@/lib/sitemap-utils';
+import { BUILD_CONFIG } from '@/lib/build-config';
 
 /**
  * Framework Matrix Sitemap
@@ -17,12 +18,14 @@ export async function GET() {
     const entries: Array<{ url: string; lastmod: string; priority: number; changefreq: string }> = [];
 
     if (data?.frameworks && data?.decisions && data?.industries) {
-        const matrixFrameworks = ['soc-2', 'iso-27001', 'hipaa', 'gdpr', 'pci-dss', 'ai-governance', 'iso-42001', 'eu-ai-act', 'nist-ai-rmf'];
+        const matrixFrameworks = BUILD_CONFIG.PRIORITY_FRAMEWORKS;
+        const limitedDecisions = data.decisions.slice(0, BUILD_CONFIG.DECISIONS_PER_FRAMEWORK);
+        const limitedIndustries = data.industries.filter(i => BUILD_CONFIG.PRIORITY_INDUSTRIES.includes(i.slug));
 
         for (const f of data.frameworks) {
             if (!matrixFrameworks.includes(f.slug)) continue;
-            for (const d of data.decisions) {
-                for (const i of data.industries) {
+            for (const d of limitedDecisions) {
+                for (const i of limitedIndustries) {
                     const path = `/${f.slug}/${d.slug}/${i.slug}`;
                     const { priority, changeFrequency } = getUrlPriority(path);
                     entries.push({
