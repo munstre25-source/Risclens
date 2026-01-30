@@ -47,7 +47,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${page.title} | Penetration Testing | RiscLens`,
     description: page.description,
-    alternates: { canonical: `/penetration-testing/${page.slug}` },
+    alternates: { canonical: `https://risclens.com/penetration-testing/${page.slug}` },
     openGraph: {
       title: `${page.title} | Penetration Testing | RiscLens`,
       description: page.description,

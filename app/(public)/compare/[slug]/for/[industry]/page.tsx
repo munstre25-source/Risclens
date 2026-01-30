@@ -25,7 +25,7 @@ import {
 import { getSupabaseAdmin } from '@/lib/supabase';
 import ComparisonView from '@/components/compliance/ComparisonView';
 import AlternativeCard from '@/components/AlternativeCard';
-import { BUILD_CONFIG, limitStaticParams, isPriorityTool } from '@/lib/build-config';
+import { BUILD_CONFIG, limitStaticParams, isPriorityTool, isPriorityIndustry } from '@/lib/build-config';
 
 export const dynamicParams = true;
 export const revalidate = BUILD_CONFIG.REVALIDATE_SECONDS;
@@ -67,16 +67,22 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { slug: string, industry: string } }): Promise<Metadata> {
   const { slug, industry: industrySlug } = params;
   const industry = await getIndustryBySlug(industrySlug);
+  const isPriorityInd = isPriorityIndustry(industrySlug);
 
   if (slug.endsWith('-alternatives')) {
     const tools = await getAllTools();
     const toolSlug = slug.replace('-alternatives', '');
     const tool = tools.find(t => t.slug === toolSlug);
     const toolName = tool?.name || toolSlug.replace(/-/g, ' ');
+    const isPriority = isPriorityTool(toolSlug) && isPriorityInd;
     return {
       title: `${toolName} Alternatives for ${industry?.name || industrySlug}`,
       description: `Best ${toolName} alternatives for ${industry?.name || industrySlug} teams, including pricing and fit.`,
       alternates: { canonical: `https://risclens.com/compare/${slug}/for/${industrySlug}` },
+      robots: {
+        index: isPriority,
+        follow: true,
+      },
       openGraph: {
         title: `${toolName} Alternatives for ${industry?.name || industrySlug}`,
         description: `Compare top compliance platforms that can replace ${toolName} for ${industry?.name || industrySlug} companies.`,
@@ -97,11 +103,16 @@ export async function generateMetadata({ params }: { params: { slug: string, ind
 
   const title = `${toolA.name} vs ${toolB.name} for ${industry.name}: Best Compliance Platform for ${industry.name}`;
   const description = `Comparing ${toolA.name} vs ${toolB.name} specifically for ${industry.name} companies. See industry-specific features, pricing, and which is better for your ${industry.name} startup.`;
+  const isPriority = isPriorityTool(toolA.slug) && isPriorityTool(toolB.slug) && isPriorityInd;
 
   return {
     title,
     description,
     alternates: { canonical: `https://risclens.com/compare/${slug}/for/${industrySlug}` },
+    robots: {
+      index: isPriority,
+      follow: true,
+    },
     openGraph: {
       title,
       description,

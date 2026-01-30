@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${page.title} | RiscLens`,
     description: page.description,
-    alternates: { canonical: `/soc-2-vs-iso-27001/${page.slug}` },
+    alternates: { canonical: `https://risclens.com/soc-2-vs-iso-27001/${page.slug}` },
     openGraph: {
       title: `${page.title} | RiscLens`,
       description: page.description,

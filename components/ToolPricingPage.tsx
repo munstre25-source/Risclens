@@ -43,6 +43,20 @@ export default function ToolPricingPage({
   const pageUrl = `https://risclens.com/pricing/${toolSlug}`;
   const pageTitle = `${toolName} Pricing Breakdown 2026 | RiscLens`;
   const lastUpdated = "January 10, 2026";
+  const pricingDrivers = [
+    `${toolName} pricing scales with team size and audit scope`,
+    'Number of frameworks and evidence sources connected',
+    'Automation depth for controls, evidence, and monitoring',
+    'Level of implementation support and audit guidance',
+    'Contract length and multi-year discounts'
+  ];
+  const buyerChecklist = [
+    'Confirm which frameworks are included at each tier',
+    'Ask for a full list of integrations in your stack',
+    'Validate the evidence collection cadence and audit readiness workflow',
+    'Clarify implementation timelines and support availability',
+    'Request a written breakdown of add-ons and services'
+  ];
 
   return (
     <main className="min-h-screen flex flex-col bg-slate-50">
@@ -123,6 +137,35 @@ export default function ToolPricingPage({
                 </ul>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-12 bg-white border-t border-slate-200">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <div className="grid lg:grid-cols-2 gap-12">
+            <div>
+              <h2 className="text-lg font-semibold text-slate-900 mb-4">What changes the price</h2>
+              <ul className="space-y-3 text-sm text-slate-600">
+                {pricingDrivers.map((driver, idx) => (
+                  <li key={idx} className="flex gap-2">
+                    <span className="text-slate-400">•</span>
+                    <span>{driver}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold text-slate-900 mb-4">Buyer checklist</h2>
+              <ol className="space-y-3 text-sm text-slate-600">
+                {buyerChecklist.map((item, idx) => (
+                  <li key={idx} className="flex gap-3">
+                    <span className="text-slate-400 font-medium">{idx + 1}.</span>
+                    {item}
+                  </li>
+                ))}
+              </ol>
+            </div>
           </div>
         </div>
       </section>

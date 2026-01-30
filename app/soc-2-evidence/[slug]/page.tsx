@@ -9,6 +9,7 @@ import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { evidenceGuides, getEvidenceGuide } from '@/lib/soc2Evidence';
 import { getContentPage } from '@/lib/content';
 import { LastVerifiedBadge, AccuracyDisclaimer } from '@/components/AccuracyGuards';
+import { ContextualLinks } from '@/components/compliance/ContextualLinks';
 
 interface PageProps {
   params: { slug: string };
@@ -25,7 +26,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${guide.title} | RiscLens`,
     description: guide.description,
-    alternates: { canonical: `/soc-2-evidence/${guide.slug}` },
+    alternates: { canonical: `https://risclens.com/soc-2-evidence/${guide.slug}` },
     openGraph: {
       title: `${guide.title} | RiscLens`,
       description: guide.description,
@@ -166,6 +167,8 @@ export default async function EvidencePage({ params }: PageProps) {
                 <Link href="/soc-2/guides" className="px-3 py-1.5 rounded-full border border-slate-200 text-brand-700 hover:border-brand-200">SOC 2 Guides</Link>
               </div>
             </div>
+
+            <ContextualLinks currentPageType="evidence" variant="footer" />
 
             <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-4">
               <h3 className="text-lg font-semibold text-slate-900">FAQ</h3>

@@ -6,6 +6,7 @@ import {
     hasSupabaseAdmin
 } from '@/lib/sitemap-utils';
 import { getSupabaseAdmin } from '@/lib/supabase';
+import { BUILD_CONFIG } from '@/lib/build-config';
 
 /**
  * Roles & Industry Matrix Sitemap
@@ -73,12 +74,14 @@ export async function GET() {
 
         // Generate role/industry matrix: /[framework]/for/[role]/[industry]
         if (frameworks && roles && industries) {
-            const roleFrameworks = ['soc-2', 'iso-27001', 'pci-dss', 'hipaa', 'gdpr'];
+            const roleFrameworks = BUILD_CONFIG.PRIORITY_FRAMEWORKS;
+            const limitedRoles = roles.slice(0, BUILD_CONFIG.ROLES_LIMIT);
+            const limitedIndustries = industries.filter(i => BUILD_CONFIG.PRIORITY_INDUSTRIES.includes(i.slug));
 
             for (const f of frameworks) {
                 if (!roleFrameworks.includes(f.slug)) continue;
-                for (const r of roles) {
-                    for (const i of industries) {
+                for (const r of limitedRoles) {
+                    for (const i of limitedIndustries) {
                         const path = `/${f.slug}/for/${r.slug}/${i.slug}`;
                         const { priority, changeFrequency } = getUrlPriority(path);
                         entries.push({

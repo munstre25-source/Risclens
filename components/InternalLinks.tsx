@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { LinkCluster } from '@/lib/pseo-internal-links';
+import { uiTokens } from '@/components/ui/uiTokens';
 
 interface InternalLinksProps {
   clusters: LinkCluster[];
@@ -10,7 +11,7 @@ export function InternalLinks({ clusters, className = '' }: InternalLinksProps) 
   return (
     <aside className={`space-y-6 ${className}`}>
       {clusters.map((cluster, idx) => (
-        <div key={idx} className="bg-white border border-slate-200 rounded-lg p-4">
+        <div key={idx} className={`${uiTokens.card} p-4`}>
           <h3 className="font-semibold text-slate-900 mb-3 text-sm uppercase tracking-wide">
             {cluster.title}
           </h3>
@@ -21,7 +22,7 @@ export function InternalLinks({ clusters, className = '' }: InternalLinksProps) 
                   href={link.href}
                   className={`block text-sm hover:underline ${
                     link.priority === 'high' 
-                      ? 'text-blue-600 font-medium' 
+                      ? 'text-slate-900 font-medium' 
                       : 'text-slate-600'
                   }`}
                   title={link.title}
@@ -48,7 +49,7 @@ export function InternalLinksInline({ clusters }: InternalLinksProps) {
           <Link
             key={idx}
             href={link.href}
-            className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
+            className="text-sm text-slate-700 hover:text-slate-900 hover:underline"
           >
             {link.text}
           </Link>
@@ -72,7 +73,7 @@ export function Breadcrumbs({
             {idx === items.length - 1 ? (
               <span className="text-slate-700 font-medium">{item.label}</span>
             ) : (
-              <Link href={item.href} className="hover:text-blue-600 hover:underline">
+              <Link href={item.href} className="hover:text-slate-900 hover:underline">
                 {item.label}
               </Link>
             )}
@@ -98,14 +99,14 @@ export function RelatedToolsGrid({
         <Link
           key={tool.slug}
           href={`/pricing/${tool.slug}`}
-          className="block p-4 bg-white border border-slate-200 rounded-lg hover:border-blue-300 hover:shadow-sm transition-all"
+          className="block p-4 bg-white border border-slate-200 rounded-lg hover:border-slate-300 hover:shadow-sm transition-all"
         >
           <h4 className="font-semibold text-slate-900">{tool.name}</h4>
           {tool.tagline && (
             <p className="text-sm text-slate-500 mt-1 line-clamp-1">{tool.tagline}</p>
           )}
           {tool.pricing_starting && (
-            <p className="text-sm font-medium text-blue-600 mt-2">
+            <p className="text-sm font-medium text-slate-700 mt-2">
               From {tool.pricing_starting}
             </p>
           )}

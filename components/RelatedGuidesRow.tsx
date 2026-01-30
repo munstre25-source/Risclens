@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getContextualLinks, ContextualTopic } from '@/lib/contextual-linking';
+import { uiTokens } from '@/components/ui/uiTokens';
 
 type GuideLink = { href: string; label: string };
 
@@ -20,14 +21,14 @@ export function RelatedGuidesRow({ links = [], topics = [], title = 'Related gui
   if (!uniqueLinks.length) return null;
   
   return (
-    <div className={`border border-slate-200 rounded-xl bg-white p-6 ${className}`}>
+    <div className={`${uiTokens.card} p-6 ${className}`}>
       <p className="text-sm font-semibold text-slate-900 mb-4">{title}</p>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {uniqueLinks.map((link) => (
           <Link 
             key={link.href} 
             href={link.href} 
-            className="flex items-center p-3 rounded-lg border border-slate-100 hover:border-brand-200 hover:bg-brand-50 transition-all text-sm text-brand-700 font-medium group"
+            className="flex items-center p-3 rounded-lg border border-slate-200 hover:border-slate-300 transition-colors text-sm text-slate-700 font-medium group"
           >
             <span className="group-hover:translate-x-1 transition-transform">
               {link.label}

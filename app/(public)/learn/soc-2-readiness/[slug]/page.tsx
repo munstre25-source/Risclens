@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   return {
     title: `${control.title} | SOC 2 Readiness Control | RiscLens`,
     description: control.summary,
-    alternates: { canonical: `/learn/soc-2-readiness/${control.slug}` },
+    alternates: { canonical: `https://risclens.com/learn/soc-2-readiness/${control.slug}` },
     openGraph: {
       title: `${control.title} | SOC 2 Readiness Control | RiscLens`,
       description: control.summary,
