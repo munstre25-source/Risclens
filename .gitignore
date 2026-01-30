@@ -51,6 +51,7 @@ coverage/
 *.pid.lock
 
 .venv/
+.venv-gsc/
 
 # Google Search Console data exports
 risclens.com-Coverage/
@@ -58,6 +59,15 @@ risclens.com-Performance/
 *.xlsx
 *.xlsx:Zone.Identifier
 gsc data/
+*.csv
+gsc_url_inspection.csv
+content_uniqueness_report.csv
+credentials.json
+token.json
+Table.csv
+infor/
+infora/
+inforas/
 
 # Windows Zone.Identifier files (metadata)
 *:Zone.Identifier
