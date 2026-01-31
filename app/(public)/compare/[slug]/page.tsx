@@ -31,11 +31,13 @@ import FrameworkComparisonView from '@/components/compliance/FrameworkComparison
 import { InternalLinks, Breadcrumbs } from '@/components/InternalLinks';
 import AlternativeCard from '@/components/AlternativeCard';
 import ToolAlternativePage from '@/components/ToolAlternativePage';
+import { FAQSection } from '@/components/FAQSection';
 import {
   generateComparisonTitleOptimized,
   generateComparisonDescriptionOptimized,
   generateAlternativesTitleOptimized,
   generateAlternativesDescriptionOptimized,
+  generateAlternativesFAQs,
   CURRENT_YEAR,
 } from '@/lib/seo-enhancements';
 import { ExitIntentModal } from '@/components/LeadCaptureCTA';
@@ -357,22 +359,27 @@ async function AlternativesPage({ slug }: { slug: string }) {
                 </div>
               </div>
 
-              <div className="space-y-6">
-                {alternatives.map((alt, i) => (
-                  <AlternativeCard key={alt.slug} tool={alt} originalTool={tool} rank={i + 1} />
-                ))}
+                <div className="space-y-6">
+                  {alternatives.map((alt, i) => (
+                    <AlternativeCard key={alt.slug} tool={alt} originalTool={tool} rank={i + 1} />
+                  ))}
+                </div>
               </div>
-            </div>
 
-            <div className="lg:col-span-1">
-              <div className="sticky top-8">
-                <InternalLinks clusters={internalLinks} />
+              <div className="lg:col-span-1">
+                <div className="sticky top-8">
+                  <InternalLinks clusters={internalLinks} />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </main>
-      <Footer />
+        </main>
+
+        <FAQSection 
+          faqs={generateAlternativesFAQs(tool.name, alternatives.length, alternatives.map(a => a.name))}
+        />
+
+        <Footer />
       
       {/* Exit Intent Modal for Comparison Pages */}
       <ExitIntentModal 

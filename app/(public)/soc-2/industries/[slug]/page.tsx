@@ -4,9 +4,11 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { FAQSection } from '@/components/FAQSection';
 import { industryCostLinks } from '@/lib/industryCostLinks';
 import AssessmentCTA from '@/components/AssessmentCTA';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
+import { generateGuideFAQs } from '@/lib/seo-enhancements';
 
 interface PageProps {
   params: { slug: string };
@@ -34,6 +36,8 @@ export default function IndustryDetailPage({ params }: PageProps) {
   if (!industry) {
     notFound();
   }
+
+  const faqs = generateGuideFAQs(`SOC 2 Compliance for ${industry.label}`, 'SOC 2');
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -179,6 +183,8 @@ export default function IndustryDetailPage({ params }: PageProps) {
             </div>
           </div>
         </section>
+
+        <FAQSection title={`SOC 2 for ${industry.label} FAQs`} faqs={faqs} />
 
         {/* Secondary Navigation */}
         <section className="py-20 bg-slate-100">

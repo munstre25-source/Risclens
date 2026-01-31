@@ -6,7 +6,9 @@ import AboutSection from '@/components/AboutSection';
 import StickyCTA from '@/components/StickyCTA';
 import { VerifiedBy } from '@/components/AuthorBio';
 import { GeneralPageSchema } from '@/components/GeneralPageSchema';
+import { FAQSection } from '@/components/FAQSection';
 import { getAllMigrations, getFrameworkDisplayName, getDifficultyColor, getDifficultyLabel } from '@/lib/migrations';
+import { generateHubFAQs } from '@/lib/seo-enhancements';
 import { 
   ArrowRight, 
   ArrowRightLeft, 
@@ -72,6 +74,7 @@ export default async function MigrationHubPage() {
         title="Compliance Migration Hub"
         description="Expert guides for migrating between compliance frameworks. Leverage control overlap to achieve dual certification efficiently."
         url={pageUrl}
+        faqs={generateHubFAQs('Compliance Migration Hub', 'compliance framework migration')}
         breadcrumbs={[
           { name: 'Home', item: 'https://risclens.com' },
           { name: 'Compliance', item: 'https://risclens.com/compliance' },
@@ -435,6 +438,10 @@ export default async function MigrationHubPage() {
         </div>
       </section>
 
+      <FAQSection
+        title="Compliance Migration FAQs"
+        faqs={generateHubFAQs('Compliance Migration Hub', 'compliance framework migration')}
+      />
       <AboutSection />
       <Footer />
       

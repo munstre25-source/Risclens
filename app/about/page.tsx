@@ -2,6 +2,8 @@ import { Metadata } from 'next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AboutSection from '@/components/AboutSection';
+import { FAQSection } from '@/components/FAQSection';
+import { generateHubFAQs } from '@/lib/seo-enhancements';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
@@ -155,6 +157,11 @@ export default function AboutPage() {
 
         {/* Reuse the AboutSection for consistency */}
         <AboutSection />
+
+        <FAQSection
+          title="About RiscLens FAQs"
+          faqs={generateHubFAQs('About RiscLens', 'RiscLens and SOC 2 readiness planning')}
+        />
 
         {/* Final CTA */}
         <section className="py-20 bg-brand-600 text-white text-center">

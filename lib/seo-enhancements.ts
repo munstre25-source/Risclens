@@ -815,6 +815,60 @@ export function generateGuideFAQs(
 }
 
 /**
+ * Generate contextual FAQs for hub/static pages (directory, about, methodology, etc.).
+ * Use for any page that doesn't have tool-specific or comparison-specific FAQ data.
+ */
+export function generateHubFAQs(
+  pageTitle: string,
+  topic: string
+): { question: string; answer: string }[] {
+  const base = [
+    {
+      question: `What is ${topic}?`,
+      answer: `${topic} helps organizations understand and demonstrate their security and compliance posture. RiscLens provides data-driven insights, benchmarks, and guidance so you can plan audits and vendor due diligence with confidence.`
+    },
+    {
+      question: `How does RiscLens use data for ${pageTitle}?`,
+      answer: `We analyze public security signals, trust centers, and disclosed certifications to give you an objective view. Our methodology is transparent and deterministic—scores and recommendations are based on explicit criteria, not black-box algorithms.`
+    },
+    {
+      question: `Is the information on this page updated?`,
+      answer: `We refresh our data regularly and surface "Updated" or "Last verified" where relevant. For the most current compliance status of a specific vendor, always confirm with their trust center or security team.`
+    },
+    {
+      question: `Who is ${pageTitle} for?`,
+      answer: `This resource is for founders, security leads, and procurement teams who need to benchmark compliance, compare options, or conduct vendor due diligence. We focus on practical, actionable guidance without sales pressure.`
+    }
+  ];
+  return base;
+}
+
+/**
+ * Generate contextual FAQs for auditor-directory location pages (e.g. SOC 2 Auditors in Austin).
+ * Use when pSEO content has no faqs array so every programmatic location page has FAQs + schema.
+ */
+export function generateLocationFAQs(cityName: string): { question: string; answer: string }[] {
+  return [
+    {
+      question: `How do I find SOC 2 auditors in ${cityName}?`,
+      answer: `RiscLens lists vetted CPA firms and security auditors who serve ${cityName} and the surrounding area. Use our directory to compare specialties, reviews, and typical engagement scope. Many firms offer remote and hybrid options.`
+    },
+    {
+      question: `Do ${cityName} auditors offer remote SOC 2 audits?`,
+      answer: `Yes. Most SOC 2 audits can be conducted remotely. ${cityName}-based firms often support hybrid or fully remote engagements, which can reduce cost and scheduling friction. Confirm remote options when requesting quotes.`
+    },
+    {
+      question: `What should I look for when choosing an auditor in ${cityName}?`,
+      answer: `Look for experience with your industry (e.g. SaaS, fintech), familiarity with compliance automation tools (Vanta, Drata), and clear communication on timeline and scope. Check our directory for ratings and focus areas.`
+    },
+    {
+      question: `How much does a SOC 2 audit cost in ${cityName}?`,
+      answer: `Costs vary by firm size, audit type (Type I vs Type II), and scope. Use our SOC 2 Cost Calculator for ballpark estimates. Getting quotes from 2–3 ${cityName} auditors is recommended.`
+    }
+  ];
+}
+
+/**
  * Generate "Updated" date badge text
  */
 export function getUpdatedBadgeText(date?: Date | string): string {

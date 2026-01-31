@@ -4,7 +4,9 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { AuthorBio } from '@/components/AuthorBio';
 import { GeneralPageSchema } from '@/components/GeneralPageSchema';
+import { FAQSection } from '@/components/FAQSection';
 import { RelatedPseoPages } from '@/components/seo/RelatedPseoPages';
+import { generateGuideFAQs } from '@/lib/seo-enhancements';
 import { RiskClassifier } from '@/components/ai-governance/tools/RiskClassifier';
 import { VendorRiskQuestionnaire } from '@/components/ai-governance/tools/VendorRiskQuestionnaire';
 import { constructMetadata } from '@/lib/seo';
@@ -54,6 +56,8 @@ export default async function AiGovernanceProgrammaticPage({ params }: Props) {
 
   if (!page) notFound();
 
+  const faqs = generateGuideFAQs(page.title, 'AI Governance');
+
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <Header />
@@ -61,6 +65,7 @@ export default async function AiGovernanceProgrammaticPage({ params }: Props) {
         title={page.title}
         description={page.meta_description || `Strategic guide for ${page.title}.`}
         url={`https://risclens.com/ai-governance/${slug}`}
+        faqs={faqs}
         breadcrumbs={[
           { name: 'Home', item: 'https://risclens.com' },
           { name: 'AI Governance Hub', item: 'https://risclens.com/ai-governance' },
@@ -179,6 +184,7 @@ export default async function AiGovernanceProgrammaticPage({ params }: Props) {
           </div>
         </section>
 
+        <FAQSection title={`${page.title} FAQs`} faqs={faqs} />
         <section className="py-20 bg-slate-900 text-white">
           <div className="max-w-4xl mx-auto px-4 text-center">
             <h2 className="text-3xl font-bold mb-6">Need a custom roadmap for {page.title}?</h2>

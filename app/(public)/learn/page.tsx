@@ -2,6 +2,8 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { FAQSection } from '@/components/FAQSection';
+import { generateHubFAQs } from '@/lib/seo-enhancements';
 
 export const metadata: Metadata = {
   title: 'Education Hub | Compliance & Security Learning Center | RiscLens',
@@ -174,6 +176,11 @@ export default function EducationHubPage() {
           </div>
         </div>
       </section>
+
+      <FAQSection
+        title="Education Hub FAQs"
+        faqs={generateHubFAQs('Education Hub | Compliance & Security Learning Center', 'compliance and security learning')}
+      />
 
       <Footer />
     </main>

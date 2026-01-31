@@ -1,7 +1,9 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { FAQSection } from '@/components/FAQSection';
 import { Metadata } from 'next';
 import Link from 'next/link';
+import { generateHubFAQs } from '@/lib/seo-enhancements';
 
 export const metadata: Metadata = {
   title: 'Methodology & Assumptions | RiscLens',
@@ -100,6 +102,10 @@ export default function MethodologyPage() {
         </div>
       </section>
 
+      <FAQSection
+        title="Methodology FAQs"
+        faqs={generateHubFAQs('Methodology & Assumptions', 'RiscLens methodology and scoring')}
+      />
       <Footer />
     </main>
   );

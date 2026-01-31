@@ -1,8 +1,10 @@
 import { Metadata } from 'next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { FAQSection } from '@/components/FAQSection';
 import Link from 'next/link';
 import { AuthorBio, VerifiedBy } from '@/components/AuthorBio';
+import { generateHubFAQs } from '@/lib/seo-enhancements';
 
 export const metadata: Metadata = {
   title: 'SOC 2 & Cybersecurity Glossary | Compliance Terms Explained',
@@ -126,6 +128,11 @@ export default function GlossaryPage() {
 
           </div>
         </section>
+
+        <FAQSection
+          title="Glossary FAQs"
+          faqs={generateHubFAQs('SOC 2 & Cybersecurity Glossary', 'compliance and security terms')}
+        />
       </div>
 
       <Footer />

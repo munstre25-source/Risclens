@@ -4,6 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AboutSection from '@/components/AboutSection';
 import ComplianceHub from '@/components/ComplianceHub';
+import { FAQSection } from '@/components/FAQSection';
 import { ChevronRight, ArrowRight } from 'lucide-react';
 import { AdvancedSchema } from '@/components/AdvancedSchema';
 
@@ -40,6 +41,14 @@ export default function HomePage() {
     {
       question: "How does the SOC 2 Readiness Assessment work?",
       answer: "Our assessment analyzes your current security stack and team size to provide a readiness score and estimated compliance budget in under 2 minutes."
+    },
+    {
+      question: "Is RiscLens an auditor or compliance platform?",
+      answer: "No. RiscLens is an independent planning and intelligence tool. We help you benchmark readiness, compare vendors, and find auditors—we don't sell audits or compliance software."
+    },
+    {
+      question: "Who is RiscLens for?",
+      answer: "Founders, security leads, and procurement teams at B2B startups who need to get SOC 2 or AI governance audit-ready. We focus on practical roadmaps and cost clarity without sales pressure."
     }
   ];
 
@@ -235,6 +244,7 @@ export default function HomePage() {
           </section>
 
           <ComplianceHub />
+          <FAQSection title="Frequently Asked Questions" faqs={faqItems} showSchema={false} />
           <AboutSection />
 
         <Footer />
