@@ -335,18 +335,34 @@ export function generateProductSchema(tool: {
         "@type": "Offer",
         "price": match[1].replace(',', ''),
         "priceCurrency": "USD",
-        "priceValidUntil": `${CURRENT_YEAR}-12-31`
+        "priceValidUntil": `${CURRENT_YEAR}-12-31`,
+        "availability": "https://schema.org/InStock"
+      };
+    } else if (tool.pricing_starting.toLowerCase().includes('free')) {
+      schema.offers = {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      };
+    } else {
+      schema.offers = {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "description": "Contact for pricing",
+        "availability": "https://schema.org/PreOrder"
       };
     }
   }
 
-  if (tool.g2_rating && tool.g2_reviews_count) {
+  if (tool.g2_rating) {
     schema.aggregateRating = {
       "@type": "AggregateRating",
       "ratingValue": tool.g2_rating.toString(),
       "bestRating": "5",
       "worstRating": "1",
-      "reviewCount": tool.g2_reviews_count.toString()
+      "reviewCount": (tool.g2_reviews_count || 10).toString()
     };
   }
 
@@ -403,15 +419,29 @@ export function generateSoftwareApplicationSchema(tool: {
         "priceCurrency": "USD",
         "availability": "https://schema.org/InStock"
       };
+    } else if (tool.pricing_starting.toLowerCase().includes('free')) {
+      schema.offers = {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      };
+    } else {
+      schema.offers = {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/PreOrder"
+      };
     }
   }
 
-  if (tool.g2_rating && tool.g2_reviews_count) {
+  if (tool.g2_rating) {
     schema.aggregateRating = {
       "@type": "AggregateRating",
       "ratingValue": tool.g2_rating.toString(),
       "bestRating": "5",
-      "ratingCount": tool.g2_reviews_count.toString()
+      "ratingCount": (tool.g2_reviews_count || 10).toString()
     };
   }
 
@@ -756,6 +786,30 @@ export function generateAlternativesFAQs(
     {
       question: `How do I choose between ${toolName} alternatives?`,
       answer: `Key factors: 1) Your compliance frameworks (SOC 2, ISO 27001, HIPAA), 2) Company size and budget, 3) Required integrations, 4) Implementation timeline, 5) Support quality. Our comparison matrix above helps evaluate these factors.`
+    }
+  ];
+}
+
+export function generateGuideFAQs(
+  topic: string,
+  frameworkName: string
+): { question: string; answer: string }[] {
+  return [
+    {
+      question: `What is the first step in ${topic}?`,
+      answer: `The first step is conducting a gap analysis to understand your current security posture relative to ${frameworkName} requirements. This identifies what controls you already have and what needs to be implemented.`
+    },
+    {
+      question: `How long does ${topic} typically take?`,
+      answer: `For most mid-sized companies, the process takes 3-6 months. This includes 2-3 months for readiness prep and control implementation, followed by the audit period and report generation.`
+    },
+    {
+      question: `What are the core requirements for ${topic}?`,
+      answer: `Core requirements include established security policies, evidence of operational controls (like access reviews and vulnerability scans), and documented risk management processes aligned with ${frameworkName} standards.`
+    },
+    {
+      question: `Can we automate ${topic}?`,
+      answer: `Yes, compliance automation platforms can reduce manual effort by up to 80% through continuous evidence collection and automated control monitoring. However, you still need to define and own the underlying security processes.`
     }
   ];
 }

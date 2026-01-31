@@ -3,6 +3,7 @@ import Footer from '@/components/Footer';
 import Link from 'next/link';
 import Script from 'next/script';
 import AssessmentCTA from '@/components/AssessmentCTA';
+import { FAQSection } from '@/components/FAQSection';
 
 interface FAQ {
   question: string;
@@ -102,56 +103,48 @@ export default function FrameworkComparisonView({
             </div>
           </div>
 
-          {/* Decision Guide */}
-          <div className="bg-slate-900 rounded-3xl p-8 sm:p-12 text-white relative overflow-hidden">
-            <div className="relative z-10 space-y-6">
-              <h2 className="text-3xl font-bold">Which one should you choose?</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-4">
-                  <h3 className="text-brand-400 font-bold uppercase tracking-wider text-sm">Strategic Guidance</h3>
-                  <ul className="space-y-4">
-                    {decisions.map((item, idx) => (
-                      <li key={idx} className="flex gap-3">
-                        <span className="flex-shrink-0 w-6 h-6 rounded-full bg-brand-600/20 flex items-center justify-center text-brand-400 text-xs font-bold">
-                          {idx + 1}
-                        </span>
-                        <span className="text-slate-300">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="bg-white/5 rounded-2xl p-6 border border-white/10 space-y-4">
-                  <h3 className="text-white font-bold">Speed to Compliance</h3>
-                  <p className="text-slate-400 text-sm leading-relaxed">
-                    The fastest way to compliance is often through automated evidence collection. 
-                    Depending on your tech stack, one framework may be significantly easier to automate than the other.
-                  </p>
-                  <Link 
-                    href="/soc-2-readiness-index" 
-                    className="inline-flex items-center gap-2 text-brand-400 font-bold hover:text-brand-300 transition-colors"
-                  >
-                    Check your readiness index →
-                  </Link>
+            {/* Decision Guide */}
+            <div className="bg-slate-900 rounded-lg p-8 sm:p-12 text-white relative overflow-hidden">
+              <div className="relative z-10 space-y-6">
+                <h2 className="text-3xl font-bold">Which one should you choose?</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-4">
+                    <h3 className="text-brand-400 font-bold uppercase tracking-wider text-sm">Strategic Guidance</h3>
+                    <ul className="space-y-4">
+                      {decisions.map((item, idx) => (
+                        <li key={idx} className="flex gap-3">
+                          <span className="flex-shrink-0 w-6 h-6 rounded-full bg-brand-600/20 flex items-center justify-center text-brand-400 text-xs font-bold">
+                            {idx + 1}
+                          </span>
+                          <span className="text-slate-300">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="bg-white/5 rounded-lg p-6 border border-white/10 space-y-4">
+                    <h3 className="text-white font-bold">Speed to Compliance</h3>
+                    <p className="text-slate-400 text-sm leading-relaxed">
+                      The fastest way to compliance is often through automated evidence collection. 
+                      Depending on your tech stack, one framework may be significantly easier to automate than the other.
+                    </p>
+                    <Link 
+                      href="/soc-2-readiness-index" 
+                      className="inline-flex items-center gap-2 text-brand-400 font-bold hover:text-brand-300 transition-colors"
+                    >
+                      Check your readiness index →
+                    </Link>
+                  </div>
                 </div>
               </div>
+              <div className="absolute -right-24 -bottom-24 w-64 h-64 bg-brand-600/10 rounded-full blur-3xl" />
             </div>
-            <div className="absolute -right-24 -bottom-24 w-64 h-64 bg-brand-600/10 rounded-full blur-3xl" />
-          </div>
 
-          {/* FAQ Section */}
-          <div className="space-y-8">
-            <h3 className="text-2xl font-bold text-slate-900">Frequently Asked Questions</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {faqs.map((faq) => (
-                <div key={faq.question} className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <p className="font-bold text-slate-900 mb-3">{faq.question}</p>
-                  <p className="text-sm text-slate-600 leading-relaxed">{faq.answer}</p>
-                </div>
-              ))}
-            </div>
-          </div>
 
-          {/* Related Resources */}
+            <FAQSection 
+              faqs={faqs}
+            />
+
+            {/* Related Resources */}
           <div className="border-t border-slate-200 pt-12">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div className="space-y-1">

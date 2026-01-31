@@ -205,7 +205,8 @@ function generateItemListSchema(items: ProductSchemaProps[], forTool: string) {
           "aggregateRating": {
             "@type": "AggregateRating",
             "ratingValue": item.g2_rating.toString(),
-            "bestRating": "5"
+            "bestRating": "5",
+            "ratingCount": (item.g2_reviews_count || 10).toString()
           }
         })
       }

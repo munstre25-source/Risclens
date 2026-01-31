@@ -11,6 +11,7 @@ import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { CompanyActionButtons } from '@/components/compliance/CompanyActionButtons';
 import { ContextualLinks } from '@/components/compliance/ContextualLinks';
 import { AuthorByline, EditorialPolicyBadge } from '@/components/compliance/AuthorByline';
+import { FAQSection } from '@/components/FAQSection';
 import Link from 'next/link';
 import { Users, CheckCircle } from 'lucide-react';
 import { BUILD_CONFIG, limitStaticParams } from '@/lib/build-config';
@@ -490,16 +491,15 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
               <EditorialPolicyBadge variant="footer" />
 
-              <SOC2ReadinessSignals companyName={company.name} />
+                <SOC2ReadinessSignals companyName={company.name} />
 
-              {/* FAQ Section with Schema for Rich Snippets */}
-              <DirectoryFAQSection 
-                companyName={company.name}
-                hasSOC2={signals.mentions_soc2}
-                hasTrustCenter={signals.has_trust_page}
-              />
+                {/* FAQ Section with Schema for Rich Snippets */}
+                <FAQSection 
+                  faqs={generateDirectoryFAQs(company.name, signals.mentions_soc2, signals.has_trust_page)}
+                />
 
-              {/* CTA */}
+                {/* CTA */}
+
               <section className="text-center py-8">
                 <Link
                   href="/readiness-review"

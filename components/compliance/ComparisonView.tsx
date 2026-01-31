@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Script from 'next/script';
 import { Check, X, ArrowRight } from 'lucide-react';
 import { ComplianceTool, ComparisonRow, PricingComparison, FAQ } from '@/lib/compliance-tools';
+import { FAQSection } from '@/components/FAQSection';
 import { EEATSignals, ExpertAuthorBox, TrustSignals } from '@/components/EEATSignals';
 import { InternalLinks, Breadcrumbs, InternalLinksInline } from '@/components/InternalLinks';
 import { generateComparisonFAQs, generateEnhancedFAQSchema } from '@/lib/seo-enhancements';
@@ -249,26 +250,9 @@ export default function ComparisonView({
               </div>
             </div>
 
-            {/* FAQ Section with Schema Markup for Rich Snippets */}
-            <div className="bg-white rounded-lg border border-slate-200 p-8 my-8">
-              <h2 className="text-2xl font-bold text-slate-900 mb-6">Frequently Asked Questions</h2>
-              <div className="space-y-6">
-                {/* Use provided FAQs or generate defaults */}
-                {(faqs && faqs.length > 0 ? faqs : generateComparisonFAQs(
-                  toolA.name,
-                  toolB.name,
-                  toolA.pricing_starting || undefined,
-                  toolB.pricing_starting || undefined
-                )).map((faq, i) => (
-                  <div key={i} className="border-b border-slate-100 pb-4 last:border-0" itemScope itemProp="mainEntity" itemType="https://schema.org/Question">
-                    <h3 className="font-semibold text-slate-900 mb-2" itemProp="name">{faq.question}</h3>
-                    <div itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
-                      <p className="text-slate-600 text-sm" itemProp="text">{faq.answer}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <FAQSection 
+              faqs={allFaqs}
+            />
 
             <div className="bg-white rounded-lg border border-slate-200 p-8 my-8">
               <h2 className="text-2xl font-bold text-slate-900 mb-6">Alternatives to Consider</h2>

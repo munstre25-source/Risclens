@@ -3,12 +3,14 @@ import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { AuthorBio } from '@/components/AuthorBio';
+import { FAQSection } from '@/components/FAQSection';
 import { GeneralPageSchema } from '@/components/GeneralPageSchema';
 import { RelatedPseoPages } from '@/components/seo/RelatedPseoPages';
 import { RiskClassifier } from '@/components/ai-governance/tools/RiskClassifier';
 import { VendorRiskQuestionnaire } from '@/components/ai-governance/tools/VendorRiskQuestionnaire';
 import { constructMetadata } from '@/lib/seo';
 import { getSupabaseAdmin } from '@/lib/supabase';
+import { generateGuideFAQs } from '@/lib/seo-enhancements';
 import { 
   Shield, 
   ArrowRight, 
@@ -103,6 +105,7 @@ export default async function ProgrammaticPage({ params }: Props) {
   if (!data) notFound();
 
   const { page, framework } = data;
+  const faqs = generateGuideFAQs(page.title, framework.name);
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -218,11 +221,14 @@ export default async function ProgrammaticPage({ params }: Props) {
                     </div>
                   ))}
                 </div>
-              </div>
-            )}
+                </div>
+              )}
 
 
-          <RelatedPseoPages currentSlug={slug} category={page.category} frameworkId={page.framework_id} />
+            <FAQSection faqs={faqs} />
+
+            <RelatedPseoPages currentSlug={slug} category={page.category} frameworkId={page.framework_id} />
+
 
           <div className="mt-20">
             <AuthorBio authorId="kevin" />
