@@ -3,7 +3,9 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { FAQSection } from '@/components/FAQSection';
 import { getPSEOFrameworks } from '@/lib/pseo';
+import { generateHubFAQs } from '@/lib/seo-enhancements';
 import { getSupabaseAdmin } from '@/lib/supabase';
 import { IntelligenceHub } from '@/components/compliance/IntelligenceHub';
 import { AuthorByline, EditorialPolicyBadge, generateArticleJsonLd } from '@/components/compliance/AuthorByline';
@@ -141,6 +143,11 @@ export default async function IntelligenceHubPage({
         <section className="max-w-4xl mx-auto px-4 pb-12">
           <EditorialPolicyBadge variant="footer" />
         </section>
+
+        <FAQSection
+          title="Intelligence Hub FAQs"
+          faqs={generateHubFAQs('RiscLens Intelligence Hub', 'the intelligence hub and compliance data')}
+        />
       </main>
 
       <Footer />

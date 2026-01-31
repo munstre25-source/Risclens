@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import Script from 'next/script';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AssessmentCTA from '@/components/AssessmentCTA';
@@ -11,6 +12,7 @@ import { InternalLinks, InternalLinksInline } from '@/components/InternalLinks';
 import { getSupabaseAdmin } from '@/lib/supabase';
 import { SmartContent } from '@/components/seo/SmartContent';
 import { getAllTools } from '@/lib/compliance-tools';
+import { generateGuideFAQs, generateEnhancedFAQSchema } from '@/lib/seo-enhancements';
 
 export const dynamicParams = true;
 export const revalidate = 86400; // 24 hours
@@ -66,9 +68,13 @@ export default async function PSEOCompliancePage({ params }: PageProps) {
   const { content_json: content } = page;
   const internalLinks = await getIndustryGuideClusters(params.framework, params.slug);
   const tools = await getAllTools();
+  const frameworkName = page.pseo_frameworks?.name || 'Compliance';
+  const faqs = content?.faqs?.length ? content.faqs : generateGuideFAQs(page.title, frameworkName);
+  const faqSchema = generateEnhancedFAQSchema(faqs);
 
   return (
     <main className="min-h-screen flex flex-col bg-slate-100">
+      <Script id="compliance-faq-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <Header />
       <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100 border-b border-slate-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8">
@@ -128,11 +134,11 @@ export default async function PSEOCompliancePage({ params }: PageProps) {
                 <div className="absolute top-0 right-0 w-64 h-64 bg-brand-800 rounded-full -mr-32 -mt-32 opacity-50" />
               </div>
 
-              {content?.faqs && content.faqs.length > 0 && (
+              {faqs.length > 0 && (
                 <div className="space-y-8">
                   <h2 className="text-3xl font-bold text-slate-900">Frequently Asked Questions</h2>
                   <div className="grid gap-6">
-                    {content.faqs.map((faq: any, idx: number) => (
+                    {faqs.map((faq: { question: string; answer: string }, idx: number) => (
                       <div key={idx} className="border-b border-slate-200 pb-6 last:border-0">
                         <h3 className="text-xl font-semibold text-slate-900 mb-3">{faq.question}</h3>
                         <p className="text-slate-600 leading-relaxed">{faq.answer}</p>

@@ -1,9 +1,11 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { FAQSection } from '@/components/FAQSection';
 import Link from 'next/link';
 import { Shield, Target, Building2, Globe, ChevronRight, Zap } from 'lucide-react';
 import { getPSEOFrameworks, getPSEOIndustries, getPSEORoles, getPSEODecisionTypes } from '@/lib/pseo';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
+import { generateHubFAQs } from '@/lib/seo-enhancements';
 
 export const metadata = {
   title: 'Compliance Matrix Directory | RiscLens',
@@ -157,6 +159,10 @@ export default async function ComplianceMatrixDirectoryPage() {
             </div>
         </section>
 
+        <FAQSection
+          title="Compliance Matrix FAQs"
+          faqs={generateHubFAQs('Compliance Matrix Directory', 'the compliance matrix and compliance roadmaps')}
+        />
       </div>
 
       <Footer />

@@ -109,6 +109,7 @@ export default function AIIndustryPage({
         title={pageTitle}
         description={heroDescription}
         url={pageUrl}
+        faqs={faqs?.length ? faqs.map((f) => ({ question: f.question, answer: typeof f.answer === 'string' ? f.answer : 'See page for full details.' })) : undefined}
         breadcrumbs={[
           { name: 'Home', item: 'https://risclens.com' },
           { name: 'AI Compliance Hub', item: 'https://risclens.com/ai-compliance' },

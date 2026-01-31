@@ -1,8 +1,10 @@
 import { Metadata } from 'next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { FAQSection } from '@/components/FAQSection';
 import Link from 'next/link';
 import { Search, MapPin, ExternalLink, ShieldCheck, Sparkles, Star, ChevronRight, ArrowRight } from 'lucide-react';
+import { generateHubFAQs } from '@/lib/seo-enhancements';
 import { getPSEOLocations } from '@/lib/pseo';
 import { auditors as fallbackAuditors, SPECIALTIES, AuditorFirm } from '@/src/content/auditors';
 import { getSupabaseClient } from '@/lib/supabase';
@@ -260,6 +262,11 @@ export default async function AuditorDirectoryPage() {
               </div>
             </div>
           </section>
+
+          <FAQSection
+            title="Auditor Directory FAQs"
+            faqs={generateHubFAQs('Verified Auditor Directory', 'the auditor directory and SOC 2 auditors')}
+          />
       </div>
 
       <Footer />

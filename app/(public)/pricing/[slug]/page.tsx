@@ -37,8 +37,11 @@ import ToolPricingPageContent from '@/components/ToolPricingPage';
 import {
   generatePricingTitleOptimized,
   generatePricingDescriptionOptimized,
+  generatePricingFAQs,
   CURRENT_YEAR,
 } from '@/lib/seo-enhancements';
+import { FAQSection } from '@/components/FAQSection';
+import { GeneralPageSchema } from '@/components/GeneralPageSchema';
 
 export const dynamicParams = true;
 export const revalidate = 86400; // 24 hours
@@ -235,6 +238,17 @@ export default async function ToolPricingPage({ params }: PageProps) {
       return (
       <main className="min-h-screen flex flex-col bg-white">
         <Header />
+        <GeneralPageSchema
+          title={generatePricingTitleOptimized(tool.name, tool.startingPrice)}
+          description={generatePricingDescriptionOptimized(tool.name, tool.startingPrice, tool.targetMarket)}
+          url={`https://risclens.com/pricing/${slug}`}
+          breadcrumbs={[
+            { name: 'Home', item: 'https://risclens.com' },
+            { name: 'Pricing Intelligence', item: 'https://risclens.com/pricing' },
+            { name: `${tool.name} Pricing`, item: `https://risclens.com/pricing/${slug}` },
+          ]}
+          faqs={generatePricingFAQs(tool.name, tool.startingPrice)}
+        />
         
         <div className="flex-grow">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
@@ -725,12 +739,18 @@ export default async function ToolPricingPage({ params }: PageProps) {
                     </div>
                   </div>
 
-                </div>
+                  </div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <Footer />
-      </main>
-    );
-  }
+          <FAQSection 
+            faqs={generatePricingFAQs(tool.name, tool.startingPrice)}
+            showSchema={false}
+          />
+
+          <Footer />
+        </main>
+      );
+    }
+  

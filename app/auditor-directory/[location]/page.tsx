@@ -9,6 +9,7 @@ import {
   generateFallbackTitle,
   generateFallbackDescription 
 } from '@/lib/pseo-validation';
+import { generateLocationFAQs } from '@/lib/seo-enhancements';
 
 export const dynamicParams = true;
 export const revalidate = 86400; // 24 hours
@@ -53,6 +54,8 @@ export default async function DynamicCityAuditorPage({ params }: PageProps) {
 
   const content = page.content_json;
   const cityName = getString(content, 'cityName', params.location);
+  const contentFaqs = getArray(content, 'faqs', []);
+  const faqs = contentFaqs.length > 0 ? contentFaqs : generateLocationFAQs(cityName);
 
   return (
     <CityAuditorPage
@@ -66,7 +69,7 @@ export default async function DynamicCityAuditorPage({ params }: PageProps) {
       remoteVsOnsiteText={getString(content, 'remoteVsOnsiteText', 'Remote audits are increasingly common and can reduce costs.')}
       firmReputationText={getString(content, 'firmReputationText', 'Check references and verify credentials before selecting an auditor.')}
       automationText={getString(content, 'automationText', 'Many firms now use compliance automation tools to streamline the audit process.')}
-      faqs={getArray(content, 'faqs', [])}
+      faqs={faqs}
       nearbyCities={getArray(content, 'nearbyCities', []).map((c: any) => 
         typeof c === 'string' ? { name: c, href: `/auditor-directory/${c.toLowerCase().replace(/\s+/g, '-')}` } : c
       )}

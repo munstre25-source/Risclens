@@ -9,6 +9,8 @@ import { DirectoryUsageGuide } from '@/components/compliance/DirectoryUsageGuide
 import { RelatedProfiles } from '@/components/compliance/RelatedProfiles';
 import { DirectoryIntelligence } from '@/components/compliance/DirectoryIntelligence';
 import { MarketIntelligenceStats } from '@/components/compliance/MarketIntelligenceStats';
+import { FAQSection } from '@/components/FAQSection';
+import { generateHubFAQs } from '@/lib/seo-enhancements';
 
 const hasSupabaseAdmin = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
 
@@ -174,6 +176,11 @@ export default async function DirectoryPage() {
           </div>
 
           <DirectoryUsageGuide />
+
+          <FAQSection
+            title="Compliance Directory FAQs"
+            faqs={generateHubFAQs('Compliance & Security Intelligence Directory', 'the compliance directory')}
+          />
         </section>
       </main>
 

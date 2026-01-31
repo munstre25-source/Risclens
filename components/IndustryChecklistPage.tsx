@@ -10,6 +10,8 @@ import ExpertReview from '@/components/ExpertReview';
 import { GeneralPageSchema } from '@/components/GeneralPageSchema';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import GapAnalyzerCTA from '@/components/GapAnalyzerCTA';
+import { FAQSection } from '@/components/FAQSection';
+import { generateGuideFAQs } from '@/lib/seo-enhancements';
 import { 
   ShieldCheck, 
   CheckCircle2, 
@@ -253,6 +255,10 @@ export default function IndustryChecklistPage({
           <AuthorBio authorId="raphael" />
         </div>
       </section>
+
+      <FAQSection 
+        faqs={generateGuideFAQs(`SOC 2 Checklist for ${industryName}`, 'SOC 2')}
+      />
 
       <AboutSection />
 

@@ -37,24 +37,8 @@ export default function FrameworkComparisonView({
   faqs = [],
   lastUpdated,
 }: FrameworkComparisonViewProps) {
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: (faqs || []).map((faq) => ({
-      '@type': 'Question',
-      name: faq.question,
-      acceptedAnswer: { '@type': 'Answer', text: faq.answer },
-    })),
-  };
-
   return (
     <main className="min-h-screen flex flex-col bg-slate-50">
-      <Script
-        id="faq-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
-      
       <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-14 lg:py-20 text-center space-y-4">
           <p className="text-sm font-semibold uppercase tracking-wide text-brand-700">

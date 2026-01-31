@@ -11,7 +11,9 @@ import {
 } from 'lucide-react';
 import { toolPricing } from '@/src/content/pricing';
 import { GeneralPageSchema } from '@/components/GeneralPageSchema';
+import { FAQSection } from '@/components/FAQSection';
 import { getSupabaseAdmin } from '@/lib/supabase';
+import { generateHubFAQs } from '@/lib/seo-enhancements';
 
 export const metadata: Metadata = {
   title: 'Compliance Pricing Intelligence | RiscLens',
@@ -73,6 +75,7 @@ export default async function PricingHubPage() {
         title="Compliance Pricing Intelligence"
         description="Access verified pricing data, platform comparisons, and cost calculators to budget your SOC 2 journey with confidence."
         url="https://risclens.com/pricing"
+        faqs={generateHubFAQs('Compliance Pricing Intelligence', 'compliance pricing and SOC 2 budgeting')}
       />
       
       <div className="flex-grow">
@@ -188,6 +191,11 @@ export default async function PricingHubPage() {
             </div>
           </div>
         </section>
+
+        <FAQSection
+          title="Pricing Intelligence FAQs"
+          faqs={generateHubFAQs('Compliance Pricing Intelligence', 'compliance pricing and SOC 2 budgeting')}
+        />
       </div>
 
       <Footer />

@@ -10,6 +10,8 @@ import { GeneralPageSchema } from '@/components/GeneralPageSchema';
 import { ArrowRight } from 'lucide-react';
 import { getPricingHref } from '@/lib/pseo-links';
 import TopicalClusterLinks from '@/components/TopicalClusterLinks';
+import { FAQSection } from '@/components/FAQSection';
+import { generateAlternativesFAQs } from '@/lib/seo-enhancements';
 
 interface Alternative {
   name: string;
@@ -243,6 +245,10 @@ export default function ToolAlternativePage({
           />
         </div>
       </section>
+
+      <FAQSection 
+        faqs={generateAlternativesFAQs(toolName, alternatives.length, alternatives.map(a => a.name))}
+      />
 
       <AboutSection />
 
