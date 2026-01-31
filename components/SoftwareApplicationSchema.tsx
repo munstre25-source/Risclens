@@ -25,6 +25,7 @@ export function SoftwareApplicationSchema({
       '@type': 'Offer',
       price: '0',
       priceCurrency: 'USD',
+      availability: 'https://schema.org/InStock'
     },
   }
 

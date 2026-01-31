@@ -53,16 +53,18 @@ export function FAQSection({
         />
       )}
 
-      <section className={`${className}`}>
-        <h2 className="text-xl font-semibold text-slate-900 mb-6">{title}</h2>
-        
-        <div className="space-y-6">
-          {faqs.map((faq, index) => (
-            <div key={index} className="border-b border-slate-100 pb-5 last:border-0 last:pb-0">
-              <h3 className="font-medium text-slate-900 mb-2">{faq.question}</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">{faq.answer}</p>
-            </div>
-          ))}
+      <section className={`py-16 lg:py-20 bg-white ${className}`}>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-12 text-center">{title}</h2>
+          
+          <div className="space-y-8 max-w-3xl mx-auto">
+            {faqs.map((faq, index) => (
+              <div key={index} className="border-b border-slate-100 pb-8 last:border-0 last:pb-0">
+                <h3 className="text-lg font-semibold text-slate-900 mb-3">{faq.question}</h3>
+                <p className="text-slate-600 leading-relaxed">{faq.answer}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </>

@@ -13,6 +13,8 @@ import { getAlternativesHref } from '@/lib/pseo-links';
 import { ContextualLinks } from '@/components/compliance/ContextualLinks';
 import { EditorialPolicyBadge } from '@/components/compliance/AuthorByline';
 import TopicalClusterLinks from '@/components/TopicalClusterLinks';
+import { FAQSection } from '@/components/FAQSection';
+import { generatePricingFAQs } from '@/lib/seo-enhancements';
 
 interface PricingTier {
   name: string;
@@ -204,6 +206,10 @@ export default function ToolPricingPage({
           </div>
         </div>
       </section>
+
+      <FAQSection 
+        faqs={generatePricingFAQs(toolName, pricingTiers?.[0]?.estimatedPrice)}
+      />
 
       {/* Related Section */}
       <section className="py-12 bg-white border-t border-slate-200">

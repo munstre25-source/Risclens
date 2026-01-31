@@ -5,6 +5,7 @@ import StickyCTA from '@/components/StickyCTA';
 import { AuthorBio, VerifiedBy } from '@/components/AuthorBio';
 import ExpertReview from '@/components/ExpertReview';
 import { GeneralPageSchema } from '@/components/GeneralPageSchema';
+import { FAQSection } from '@/components/FAQSection';
 import { Breadcrumb, BreadcrumbItem } from '@/components/ui/Breadcrumb';
 import { ContextualLinks } from '@/components/compliance/ContextualLinks';
 import { EditorialPolicyBadge } from '@/components/compliance/AuthorByline';
@@ -326,26 +327,9 @@ export default async function MatrixPage({
 
 
       {/* FAQs Section */}
-      <section className="py-16 lg:py-24 bg-slate-50 border-t border-slate-200">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6">
-          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-12 text-center">
-            Frequently Asked Questions
-          </h2>
-            <div className="space-y-6">
-              {(content.faqs || []).map((faq, idx) => (
-              <div key={idx} className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
-                <h3 className="text-lg font-bold text-slate-900 mb-3 flex gap-3">
-                  <span className="text-brand-600">Q:</span>
-                  {faq.question}
-                </h3>
-                <p className="text-slate-600 leading-relaxed pl-7 border-l-2 border-slate-100 ml-3">
-                  {faq.answer}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <FAQSection 
+        faqs={content.faqs || []}
+      />
 
       <AboutSection />
       <Footer />
