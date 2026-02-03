@@ -105,7 +105,7 @@ export default function AIVendorAuditTemplate() {
               Use our scoring-based rubric to audit AI vendors with enterprise rigor.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button className="w-full sm:w-auto bg-indigo-600 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:bg-indigo-500 transition-all flex items-center justify-center gap-2">
+              <button className="w-full sm:w-auto bg-slate-900 text-white font-bold px-8 py-4 rounded-xl shadow-sm hover:bg-slate-800 transition-all flex items-center justify-center gap-2">
                 <FileCheck className="w-5 h-5" />
                 Download Audit Rubric (PDF)
               </button>
@@ -125,7 +125,7 @@ export default function AIVendorAuditTemplate() {
               {auditPhases.map((phase) => {
                 const Icon = phase.icon;
                 return (
-                  <div key={phase.title} className="bg-slate-50 border border-slate-200 rounded-2xl p-8 flex flex-col h-full">
+                  <div key={phase.title} className="bg-slate-50 border border-slate-200 rounded-lg p-8 flex flex-col h-full">
                     <div className="w-14 h-14 bg-white border border-slate-200 rounded-xl flex items-center justify-center mb-6 shadow-sm">
                       <Icon className="w-7 h-7 text-indigo-600" />
                     </div>
@@ -147,7 +147,7 @@ export default function AIVendorAuditTemplate() {
 
         <section className="py-20 bg-slate-50 border-y border-slate-200">
           <div className="max-w-4xl mx-auto px-4">
-            <div className="bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-slate-200 relative overflow-hidden">
+            <div className="bg-white rounded-xl p-8 md:p-12 shadow-sm border border-slate-200 relative overflow-hidden">
               <div className="absolute top-0 right-0 p-8">
                 <Shield className="w-24 h-24 text-slate-50" />
               </div>
@@ -157,7 +157,7 @@ export default function AIVendorAuditTemplate() {
                   Request these specific documents to verify the vendor's AI governance maturity.
                 </p>
                 <div className="grid sm:grid-cols-2 gap-6">
-                  <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100">
+                  <div className="p-6 bg-slate-50 rounded-lg border border-slate-100">
                     <h4 className="font-bold text-slate-800 mb-2">Technical Evidence</h4>
                     <ul className="text-sm text-slate-600 space-y-2">
                       <li>• Penetration Test Report (AI infrastructure)</li>
@@ -165,7 +165,7 @@ export default function AIVendorAuditTemplate() {
                       <li>• Vulnerability Scan Results (Models)</li>
                     </ul>
                   </div>
-                  <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100">
+                  <div className="p-6 bg-slate-50 rounded-lg border border-slate-100">
                     <h4 className="font-bold text-slate-800 mb-2">Governance Evidence</h4>
                     <ul className="text-sm text-slate-600 space-y-2">
                       <li>• Ethical AI Usage Policy</li>
@@ -186,12 +186,12 @@ export default function AIVendorAuditTemplate() {
               Automate the "pre-audit" phase by extracting signals from the vendor's domain.
             </p>
             <div className="grid md:grid-cols-2 gap-8 text-left">
-              <div className="p-8 bg-indigo-900 rounded-2xl text-white">
+              <div className="p-8 bg-indigo-900 rounded-xl text-white">
                 <Zap className="w-10 h-10 text-indigo-400 mb-4" />
                 <h4 className="text-xl font-bold mb-2">Instant Stack Detection</h4>
                 <p className="text-indigo-200 text-sm">Our engine detects which AI APIs (OpenAI, Anthropic, Bedrock) a vendor is using under the hood.</p>
               </div>
-              <div className="p-8 bg-slate-900 rounded-2xl text-white">
+              <div className="p-8 bg-slate-900 rounded-xl text-white">
                 <Users className="w-10 h-10 text-indigo-400 mb-4" />
                 <h4 className="text-xl font-bold mb-2">Peer Benchmarking</h4>
                 <p className="text-slate-400 text-sm">Compare a vendor's risk profile against 5,000+ other AI companies in our database.</p>

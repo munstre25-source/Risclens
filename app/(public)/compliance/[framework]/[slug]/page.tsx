@@ -123,13 +123,13 @@ export default async function PSEOCompliancePage({ params }: PageProps) {
                 </div>
               )}
 
-              <div className="bg-brand-900 rounded-2xl p-8 lg:p-12 text-white relative overflow-hidden">
+              <div className="bg-slate-900 rounded-xl p-8 lg:p-12 text-white relative overflow-hidden">
                 <div className="relative z-10">
                   <h2 className="text-3xl font-bold mb-4">Ready to accelerate your {page.pseo_frameworks?.name} journey?</h2>
-                  <p className="text-brand-100 text-lg mb-8 max-w-2xl">
+                  <p className="text-slate-300 text-lg mb-8 max-w-2xl">
                     Our experts help {page.pseo_industries?.name} companies navigate compliance 3x faster with automated evidence collection and pre-built control mapping.
                   </p>
-                  <AssessmentCTA variant="outline" className="bg-white text-brand-900 hover:bg-brand-50 border-none" />
+                  <AssessmentCTA variant="outline" className="bg-white text-slate-900 hover:bg-slate-50 border-none" />
                 </div>
                 <div className="absolute top-0 right-0 w-64 h-64 bg-brand-800 rounded-full -mr-32 -mt-32 opacity-50" />
               </div>

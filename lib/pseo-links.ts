@@ -8,6 +8,13 @@ export interface RelatedLink {
   category: string;
 }
 
+export const HIGH_INTENT_TOOLS = [
+  { href: '/soc-2-readiness-index', label: 'Get Readiness Score', description: 'Free SOC 2 readiness assessment' },
+  { href: '/soc-2-cost', label: 'SOC 2 Cost Guide', description: 'Estimate audit and tooling costs' },
+  { href: '/penetration-testing/cost-estimator', label: 'Pentest Cost Estimator', description: 'Scope and estimate pentest costs' },
+  { href: '/vendor-risk-assessment/triage', label: 'VRA Triage', description: 'Score vendor risk in minutes' },
+] as const;
+
 /**
  * Maps a tool slug to its alternatives slug
  */

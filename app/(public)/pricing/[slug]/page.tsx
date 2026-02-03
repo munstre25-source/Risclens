@@ -303,7 +303,7 @@ export default async function ToolPricingPage({ params }: PageProps) {
                     </div>
 
                   {/* Hero Pricing Card */}
-                  <div className="bg-[#0A1628] rounded-2xl p-8 lg:p-12 text-white mb-8">
+                  <div className="bg-[#0A1628] rounded-xl p-8 lg:p-12 text-white mb-8">
                     <div className="text-slate-400 text-sm font-medium mb-2">Starting at</div>
                     <div className="text-6xl lg:text-7xl font-black tracking-tighter mb-0">
                       {tool.startingPrice}/year
@@ -382,7 +382,7 @@ export default async function ToolPricingPage({ params }: PageProps) {
 
                     {/* Negotiation Tips */}
                     {tool.negotiationTips && tool.negotiationTips.length > 0 && (
-                      <div className="mb-20 bg-[#F0F7FF] rounded-2xl p-8 lg:p-10">
+                      <div className="mb-20 bg-[#F0F7FF] rounded-xl p-8 lg:p-10">
                         <div className="flex items-center gap-4 mb-10">
                           <div className="w-10 h-10 rounded-lg bg-[#0070B8] flex items-center justify-center text-white">
                             <Lightbulb className="w-6 h-6" />
@@ -423,7 +423,7 @@ export default async function ToolPricingPage({ params }: PageProps) {
                     </div>
 
                     {/* Hidden Costs to Watch For */}
-                    <div className="mb-20 bg-[#FFFBEB] rounded-2xl p-8 lg:p-10 border border-amber-100">
+                    <div className="mb-20 bg-[#FFFBEB] rounded-xl p-8 lg:p-10 border border-amber-100">
                       <div className="flex items-center gap-4 mb-8">
                         <div className="w-10 h-10 rounded-lg bg-amber-500 flex items-center justify-center text-white">
                           <Info className="w-6 h-6" />
@@ -488,7 +488,7 @@ export default async function ToolPricingPage({ params }: PageProps) {
 
 
                   {/* Verdict Card */}
-                  <div className="bg-[#0A1628] rounded-2xl p-10 text-white mb-20">
+                  <div className="bg-[#0A1628] rounded-xl p-10 text-white mb-20">
                     <p className="text-lg font-medium leading-relaxed mb-6">
                       {tool.risclensVerdict}
                     </p>
@@ -550,7 +550,7 @@ export default async function ToolPricingPage({ params }: PageProps) {
                   </div>
 
                     {/* Research Team Box */}
-                    <div id="research-team" className="bg-slate-50 rounded-2xl p-8 border border-slate-100 mb-10 scroll-mt-20">
+                    <div id="research-team" className="bg-slate-50 rounded-xl p-8 border border-slate-100 mb-10 scroll-mt-20">
                     <div className="flex items-start gap-6">
                       <div className="w-14 h-14 rounded-full bg-[#2563EB] flex items-center justify-center text-white text-xl font-black shrink-0">
                         R
@@ -600,14 +600,14 @@ export default async function ToolPricingPage({ params }: PageProps) {
 
                   {/* Cost Estimate CTA */}
                   <div className="mb-24">
-                    <div className="bg-[#2563EB] rounded-[2.5rem] p-12 lg:p-16 text-center text-white shadow-2xl shadow-blue-200/50">
+                    <div className="bg-slate-900 rounded-xl p-12 lg:p-16 text-center text-white shadow-sm">
                       <h2 className="text-3xl lg:text-4xl font-black mb-6 tracking-tight">Get a Full Cost Estimate</h2>
-                      <p className="text-blue-100 text-lg mb-12 max-w-2xl mx-auto leading-relaxed">
+                      <p className="text-slate-300 text-lg mb-12 max-w-2xl mx-auto leading-relaxed">
                         Our SOC 2 Cost Calculator factors in platform costs, auditor fees, and your specific requirements.
                       </p>
                       <Link 
                         href="/soc-2-cost-calculator" 
-                        className="inline-flex items-center gap-3 bg-white text-[#2563EB] px-12 py-5 rounded-2xl font-black hover:bg-slate-50 transition-all shadow-xl text-lg group"
+                        className="inline-flex items-center gap-3 bg-white text-slate-900 px-12 py-5 rounded-lg font-black hover:bg-slate-50 transition-all shadow-sm text-lg group"
                       >
                         Calculate Total Costs <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
                       </Link>
@@ -625,7 +625,7 @@ export default async function ToolPricingPage({ params }: PageProps) {
                               <Link 
                                 key={guide.slug}
                                 href={`/pricing/${guide.slug}`}
-                                className="group p-8 bg-white border border-slate-100 rounded-2xl hover:border-[#2563EB] hover:shadow-xl hover:shadow-blue-500/5 transition-all flex flex-col h-full"
+                                className="group p-8 bg-white border border-slate-100 rounded-lg hover:border-slate-300 hover:shadow-sm transition-all flex flex-col h-full"
                               >
                                 <h4 className="text-slate-900 font-black text-lg mb-2 group-hover:text-[#2563EB] transition-colors">{guide.name}</h4>
 
@@ -649,7 +649,7 @@ export default async function ToolPricingPage({ params }: PageProps) {
 
                 {/* Sidebar (Right) */}
                 <div className="lg:w-[30%] space-y-8">
-                  <div className="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm">
+                  <div className="bg-white rounded-xl p-8 border border-slate-100 shadow-sm">
                     <h3 className="text-[11px] font-black text-[#002B49] uppercase tracking-[0.2em] mb-8">COMPARE PRICING</h3>
                     <div className="space-y-5">
                       {comparisons.slice(0, 8).map((comp) => (
@@ -664,7 +664,7 @@ export default async function ToolPricingPage({ params }: PageProps) {
                     </div>
                   </div>
 
-                      <div className="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm">
+                      <div className="bg-white rounded-xl p-8 border border-slate-100 shadow-sm">
                         <h3 className="text-[11px] font-black text-[#002B49] uppercase tracking-[0.2em] mb-8">OTHER PRICING GUIDES</h3>
                         <div className="space-y-5">
                           {otherGuides.map((guide) => {
@@ -682,7 +682,7 @@ export default async function ToolPricingPage({ params }: PageProps) {
                       </div>
 
 
-                  <div className="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm">
+                  <div className="bg-white rounded-xl p-8 border border-slate-100 shadow-sm">
                     <h3 className="text-[11px] font-black text-[#002B49] uppercase tracking-[0.2em] mb-8">COMPLIANCE BY INDUSTRY</h3>
                     <div className="space-y-5">
                       <Link href="/soc-2-readiness/healthcare" className="block text-[14px] font-bold text-slate-500 hover:text-[#2563EB] leading-snug">
@@ -706,7 +706,7 @@ export default async function ToolPricingPage({ params }: PageProps) {
                     </div>
                   </div>
 
-                  <div className="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm">
+                  <div className="bg-white rounded-xl p-8 border border-slate-100 shadow-sm">
                     <h3 className="text-[11px] font-black text-[#002B49] uppercase tracking-[0.2em] mb-8">RELATED RESOURCES</h3>
                     <div className="space-y-5">
                       <Link href={`/compare/${tool.slug}-alternatives`} className="block text-[14px] font-bold text-[#2563EB] hover:underline leading-tight">
@@ -724,7 +724,7 @@ export default async function ToolPricingPage({ params }: PageProps) {
                     </div>
                   </div>
 
-                  <div className="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm">
+                  <div className="bg-white rounded-xl p-8 border border-slate-100 shadow-sm">
                     <h3 className="text-[11px] font-black text-[#002B49] uppercase tracking-[0.2em] mb-8">Quick Links</h3>
                     <div className="space-y-5">
                       <Link href={`/compare/${tool.slug}-alternatives`} className="block text-[14px] font-bold text-[#2563EB] hover:underline leading-tight">

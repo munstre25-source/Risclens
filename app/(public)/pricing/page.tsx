@@ -91,7 +91,7 @@ export default async function PricingHubPage() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link 
                 href="/soc-2-cost-calculator"
-                className="w-full sm:w-auto px-8 py-4 bg-[#0070B8] text-white font-bold rounded-lg hover:bg-[#005a96] transition-colors flex items-center justify-center gap-2 shadow-lg shadow-blue-900/10"
+                className="w-full sm:w-auto px-8 py-4 bg-slate-900 text-white font-bold rounded-lg hover:bg-slate-800 transition-colors flex items-center justify-center gap-2 shadow-sm"
               >
                 Calculate My SOC 2 Cost
                 <Calculator className="w-4 h-4" />
@@ -113,7 +113,7 @@ export default async function PricingHubPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-start">
               
               {/* Tool Pricing Column */}
-              <div className="bg-[#F8FAFC] rounded-3xl p-8 border border-slate-100 shadow-sm">
+              <div className="bg-[#F8FAFC] rounded-xl p-8 border border-slate-100 shadow-sm">
                 <div className="flex items-center gap-3 mb-10">
                   <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-[#0070B8]">
                     <DollarSign className="w-5 h-5" />
@@ -135,7 +135,7 @@ export default async function PricingHubPage() {
               </div>
 
               {/* Calculators Column */}
-              <div className="bg-[#F8FAFC] rounded-3xl p-8 border border-slate-100 shadow-sm">
+              <div className="bg-[#F8FAFC] rounded-xl p-8 border border-slate-100 shadow-sm">
                 <div className="flex items-center gap-3 mb-10">
                   <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-[#0070B8]">
                     <Calculator className="w-5 h-5" />
@@ -160,7 +160,7 @@ export default async function PricingHubPage() {
               </div>
 
               {/* Market Intel Column */}
-              <div className="bg-[#F8FAFC] rounded-3xl p-8 border border-slate-100 shadow-sm sticky top-8">
+              <div className="bg-[#F8FAFC] rounded-xl p-8 border border-slate-100 shadow-sm sticky top-8">
                 <div className="flex items-center gap-3 mb-10">
                   <div className="w-10 h-10 rounded-xl bg-[#E0F9F1] flex items-center justify-center text-[#10B981]">
                     <TrendingUp className="w-5 h-5" />

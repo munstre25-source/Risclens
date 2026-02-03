@@ -8,6 +8,7 @@ import DefinitionCallout from '@/components/DefinitionCallout';
 import CommonForIndustries from '@/components/CommonForIndustries';
 import { HowItWorksButton } from '@/components/HowItWorksButton';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
+import { StickyCTA } from '@/components/StickyCTA';
 
 import { messaging } from '@/src/content/messaging';
 
@@ -261,6 +262,12 @@ export default function VendorRiskAssessmentHubPage() {
         </div>
       </section>
       <Footer />
+      <StickyCTA
+        label="Run VRA Triage"
+        description="Score vendor risk in minutes."
+        subDescription="Free · No signup · Instant results"
+        href="/vendor-risk-assessment/triage"
+      />
     </main>
   );
 }

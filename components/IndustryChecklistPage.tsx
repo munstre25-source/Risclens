@@ -80,7 +80,7 @@ export default function IndustryChecklistPage({
 
       {/* Hero Section */}
       <section className="bg-white border-b border-slate-200">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 lg:py-20">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 lg:py-20">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
               <div className="flex flex-col items-start mb-6">

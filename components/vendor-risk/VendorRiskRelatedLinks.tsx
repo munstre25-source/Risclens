@@ -2,13 +2,13 @@ import Link from 'next/link';
 
 export function VendorRiskRelatedLinks() {
     const links = [
-      { href: '/vendor-risk-assessment', label: 'VRA Hub' },
       { href: '/vendor-risk-assessment/triage', label: 'Run VRA Triage' },
+      { href: '/vendor-risk-assessment', label: 'VRA Hub' },
       { href: '/vendor-risk-assessment/roi-calculator', label: 'VRA ROI Calculator' },
+      { href: '/soc-2-readiness-index', label: 'Get Readiness Score' },
       { href: '/soc-2', label: 'SOC 2 Hub' },
-      { href: '/soc-2-readiness-checklist', label: 'SOC 2 Checklist' },
       { href: '/soc-2-cost', label: 'SOC 2 Cost Guide' },
-      { href: '/penetration-testing', label: 'Pentest Hub' },
+      { href: '/penetration-testing/cost-estimator', label: 'Pentest Cost Estimator' },
     ];
 
   return (

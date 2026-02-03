@@ -11,20 +11,20 @@ import { AdvancedSchema } from '@/components/AdvancedSchema';
 import { TrustBadges, SecurityBadgeBar } from '@/components/TrustBadges';
 
 export const metadata: Metadata = {
-  title: 'The Intelligence Layer for Enterprise Trust | RiscLens',
+  title: 'Get SOC 2 and AI Audit-Ready Faster (2026) | RiscLens',
   description:
-    'RiscLens provides deterministic compliance infrastructure, auditor directories, and the world\'s first ISO 42001 (AI) roadmap for B2B startups.',
+    'Free readiness score and cost estimate in under 2 minutes. Deterministic roadmaps, auditor directories, and ISO 42001 (AI) guidance for B2B startups.',
   openGraph: {
-    title: 'The Intelligence Layer for Enterprise Trust | RiscLens',
+    title: 'Get SOC 2 and AI Audit-Ready Faster (2026) | RiscLens',
     description:
-      'Deterministic compliance infrastructure, auditor directories, and the world\'s first ISO 42001 (AI) roadmap for B2B startups.',
+      'Free readiness score and cost estimate in under 2 minutes. Deterministic roadmaps and auditor matching for B2B startups.',
     images: [{ url: '/og-home.png', width: 1200, height: 630, alt: 'RiscLens' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'The Intelligence Layer for Enterprise Trust | RiscLens',
+    title: 'Get SOC 2 and AI Audit-Ready Faster (2026) | RiscLens',
     description:
-      'Deterministic compliance infrastructure, auditor directories, and the world\'s first ISO 42001 (AI) roadmap for B2B startups.',
+      'Free readiness score and cost estimate in under 2 minutes. Deterministic roadmaps and auditor matching for B2B startups.',
     images: ['/og-home.png'],
   },
   alternates: {
@@ -69,7 +69,10 @@ export default function HomePage() {
                     Compliance intelligence for B2B teams. Roadmaps, cost calculators, and auditor matching.
                   </p>
                   
-                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+                  <p className="text-sm text-slate-500 mb-6">
+                    Free · No signup · 2 min · <Link href="/methodology" className="text-slate-600 hover:text-slate-900 underline">Deterministic scoring</Link>
+                  </p>
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-4">
                     <Link
                       href="/soc-2-readiness-index"
                       className="w-full sm:w-auto bg-slate-900 text-white font-semibold px-8 py-4 rounded-lg hover:bg-slate-800 transition-colors"
@@ -84,6 +87,7 @@ export default function HomePage() {
                       View All Tools
                     </Link>
                   </div>
+                  <p className="text-sm text-slate-500 mb-10">Join 500+ teams who got their score</p>
 
                   {/* Stats - Simple text-based */}
                   <div className="flex flex-wrap justify-center gap-x-12 gap-y-4 text-sm text-slate-500 border-t border-slate-100 pt-10">

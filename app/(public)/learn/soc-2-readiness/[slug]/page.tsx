@@ -74,7 +74,7 @@ export default function ReadinessControlPage({ params }: { params: { slug: strin
           <div className="mt-6">
             <Link
               href="/soc-2-readiness-calculator"
-              className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-5 py-3 rounded-lg shadow-sm transition"
+              className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold px-5 py-3 rounded-lg shadow-sm transition"
             >
               Get Readiness Score
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -22,7 +22,7 @@ export default function PricingNotFound() {
           <div className="space-y-4">
             <Link 
               href="/pricing"
-              className="flex items-center justify-center gap-2 w-full bg-brand-600 text-white font-bold py-4 rounded-xl hover:bg-brand-700 transition-all shadow-lg"
+              className="flex items-center justify-center gap-2 w-full bg-slate-900 text-white font-bold py-4 rounded-xl hover:bg-slate-800 transition-all shadow-sm"
             >
               <ArrowLeft className="w-5 h-5" />
               Back to Pricing Hub

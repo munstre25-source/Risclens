@@ -8,6 +8,7 @@ import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
 import { SoftwareApplicationSchema } from '@/components/SoftwareApplicationSchema';
 import { ExitIntentModal } from '@/components/LeadCaptureCTA';
 import { ProofCounter } from '@/components/TrustBadges';
+import { StickyCTA } from '@/components/StickyCTA';
 
 export const metadata: Metadata = {
   title: 'SOC 2 Readiness Index | RiscLens',
@@ -50,7 +51,7 @@ export default function CalculatorPage() {
   return (
     <>
       <Header />
-      <main className="bg-gray-50 min-h-screen">
+      <main className="bg-gray-50 min-h-screen relative">
         <SoftwareApplicationSchema
           name="SOC 2 Readiness Index"
           description="Get an instant SOC 2 readiness score and gap analysis."
@@ -169,7 +170,12 @@ export default function CalculatorPage() {
         </section>
       </main>
       <Footer />
-      
+      <StickyCTA
+        label="Get Your Readiness Score"
+        description="Know your SOC 2 readiness in under 2 minutes."
+        subDescription="Free · No signup · Instant results"
+        href="/soc-2-readiness-index"
+      />
       {/* Exit Intent Modal */}
       <ExitIntentModal 
         variant="calculator"

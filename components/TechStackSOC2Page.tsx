@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Script from 'next/script';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AboutSection from '@/components/AboutSection';
@@ -6,6 +7,8 @@ import StickyCTA from '@/components/StickyCTA';
 import { AuthorBio, VerifiedBy } from '@/components/AuthorBio';
 import { GeneralPageSchema } from '@/components/GeneralPageSchema';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { FAQSection } from '@/components/FAQSection';
+import { generateStackFAQs, generateEnhancedFAQSchema } from '@/lib/seo-enhancements';
 import { 
   Cloud, 
   Server, 
@@ -37,6 +40,7 @@ interface TechStackSOC2PageProps {
   heroDescription: string;
   keyControls: TechControl[];
   bestPractices: string[];
+  faqs?: { question: string; answer: string }[];
 }
 
 const platformIcons: Record<string, typeof Cloud> = {
@@ -87,10 +91,13 @@ export default function TechStackSOC2Page({
   heroDescription,
   keyControls,
   bestPractices,
+  faqs,
 }: TechStackSOC2PageProps) {
   const pageUrl = `https://risclens.com/soc-2/stack/${platformSlug}`;
   const pageTitle = `SOC 2 Compliance for ${platformName} | RiscLens Guide`;
-  
+  const faqItems = faqs?.length ? faqs : generateStackFAQs(platformName);
+  const faqSchema = generateEnhancedFAQSchema(faqItems);
+
   const Icon = platformIcons[platformSlug] || Cloud;
   const colors = platformColors[platformSlug] || platformColors.aws;
 
@@ -104,6 +111,12 @@ export default function TechStackSOC2Page({
     <main className="min-h-screen flex flex-col bg-slate-50">
       <Header />
       <Breadcrumbs items={breadcrumbItems} />
+      <Script
+        id={`stack-faq-${platformSlug}`}
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <GeneralPageSchema
         title={pageTitle}
         description={heroDescription}
@@ -137,7 +150,7 @@ export default function TechStackSOC2Page({
               <div className="flex flex-wrap gap-4">
                 <Link 
                   href="/soc-2-readiness-index"
-                  className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-brand-500/20 transition-all"
+                  className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-medium px-6 py-3 rounded-lg transition-all"
                 >
                   Get {platformName} Audit Quote
                   <ArrowRight className="w-4 h-4" />
@@ -152,7 +165,7 @@ export default function TechStackSOC2Page({
               </div>
             </div>
             
-            <div className={`w-28 h-28 ${colors.bg} border-2 ${colors.border} rounded-3xl flex items-center justify-center shadow-lg shrink-0`}>
+            <div className={`w-28 h-28 ${colors.bg} border-2 ${colors.border} rounded-xl flex items-center justify-center shadow-sm shrink-0`}>
               <Icon className={`w-14 h-14 ${colors.text}`} />
             </div>
           </div>
@@ -172,7 +185,7 @@ export default function TechStackSOC2Page({
             {keyControls.map((control, idx) => (
               <div 
                 key={idx} 
-                className="bg-slate-50 border-2 border-slate-200 rounded-2xl p-6 hover:border-brand-200 hover:shadow-lg transition-all"
+                className="bg-slate-50 border border-slate-200 rounded-lg p-6 hover:border-slate-300 shadow-sm transition-all"
               >
                 <div className="flex items-start gap-4">
                   <div className="w-8 h-8 bg-brand-100 rounded-lg flex items-center justify-center shrink-0">
@@ -211,7 +224,7 @@ export default function TechStackSOC2Page({
               </div>
             </div>
             
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm">
+            <div className="bg-white/5 border border-white/10 rounded-xl p-8 backdrop-blur-sm">
               <div className="flex items-center gap-3 mb-6">
                 <Shield className="w-10 h-10 text-brand-400" />
               </div>
@@ -281,11 +294,12 @@ export default function TechStackSOC2Page({
       </section>
 
       <section className="py-16 bg-white border-t border-slate-100">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <AuthorBio authorId="kevin" />
         </div>
       </section>
 
+      <FAQSection title={`SOC 2 and ${platformName} FAQs`} faqs={faqItems} />
       <AboutSection />
       <Footer />
       <StickyCTA 

@@ -135,7 +135,7 @@ export default async function MigrationHubPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link 
               href="/soc-2-cost-calculator"
-              className="bg-brand-600 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl hover:bg-brand-700 transition-all"
+              className="bg-slate-900 text-white font-bold px-8 py-4 rounded-xl shadow-sm hover:bg-slate-800 transition-all"
             >
               Get Multi-Framework Quote
             </Link>
@@ -163,7 +163,7 @@ export default async function MigrationHubPage() {
               <Link 
                 key={migration.slug}
                 href={`/compliance/migrate/${migration.slug}`}
-                className="bg-white border border-slate-200 rounded-2xl p-6 hover:border-brand-300 hover:shadow-lg transition-all group"
+                className="bg-white border border-slate-200 rounded-lg p-6 hover:border-brand-300 hover:shadow-sm transition-all group"
               >
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600">
@@ -413,17 +413,17 @@ export default async function MigrationHubPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 lg:py-20 bg-brand-600 text-white">
+      <section className="py-16 lg:py-20 bg-slate-900 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
           <h2 className="text-2xl sm:text-3xl font-bold mb-4">Ready to Expand Your Compliance Portfolio?</h2>
-          <p className="text-brand-100 mb-8 max-w-2xl mx-auto">
+          <p className="text-slate-300 mb-8 max-w-2xl mx-auto">
             Get a personalized quote for multi-framework compliance. Our experts will map your 
             existing controls and identify the fastest path to your next certification.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link 
               href="/auditor-match"
-              className="inline-flex items-center justify-center gap-2 bg-white text-brand-600 font-bold px-8 py-4 rounded-xl hover:bg-brand-50 transition-all"
+              className="inline-flex items-center justify-center gap-2 bg-white text-slate-900 font-bold px-8 py-4 rounded-xl hover:bg-slate-50 transition-all"
             >
               Speak to an Expert
               <ArrowRight className="w-4 h-4" />

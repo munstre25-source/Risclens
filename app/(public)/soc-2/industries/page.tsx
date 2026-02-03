@@ -64,13 +64,13 @@ export default function IndustriesHubPage() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link 
                 href="/soc-2-readiness-calculator"
-                className="w-full sm:w-auto px-8 py-4 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-2xl shadow-lg transition-all"
+                className="w-full sm:w-auto px-8 py-4 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-lg shadow-sm transition-all"
               >
                 Start Readiness Check
               </Link>
               <Link 
                 href="/pricing"
-                className="w-full sm:w-auto px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-bold rounded-2xl transition-all"
+                className="w-full sm:w-auto px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-bold rounded-lg transition-all"
               >
                 Compare Platform Pricing
               </Link>
@@ -90,7 +90,7 @@ function IndustryCard({ industry, isTop = false }: { industry: any, isTop?: bool
   return (
     <Link 
       href={industry.hubHref}
-      className={`group flex flex-col p-6 bg-white border border-slate-200 rounded-3xl hover:border-brand-500 hover:shadow-xl transition-all duration-300 ${isTop ? 'md:p-8' : 'p-6'}`}
+      className={`group flex flex-col p-6 bg-white border border-slate-200 rounded-xl hover:border-brand-500 hover:shadow-sm transition-all duration-300 ${isTop ? 'md:p-8' : 'p-6'}`}
     >
       <div className="flex items-start justify-between mb-4">
         <h3 className={`font-bold text-slate-900 group-hover:text-brand-600 transition-colors ${isTop ? 'text-2xl' : 'text-lg'}`}>

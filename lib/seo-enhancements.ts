@@ -868,6 +868,69 @@ export function generateLocationFAQs(cityName: string): { question: string; answ
   ];
 }
 
+export function generateStackFAQs(platformName: string): { question: string; answer: string }[] {
+  return [
+    {
+      question: `How does ${platformName} support SOC 2 compliance?`,
+      answer: `${platformName} provides native security controls (IAM, logging, encryption) that map to SOC 2 Trust Service Criteria. Proper configuration and evidence collection from ${platformName} can satisfy a significant portion of technical control requirements.`
+    },
+    {
+      question: `What SOC 2 controls map to ${platformName}?`,
+      answer: `Common mappings include: access control (IAM/users and roles), change management (audit logs and deployment pipelines), logical access (MFA and least privilege), and monitoring (logging and alerting). See our implementation guide above for platform-specific control mapping.`
+    },
+    {
+      question: `How do we collect evidence from ${platformName} for our audit?`,
+      answer: `Evidence from ${platformName} typically includes: configuration exports, access review reports, audit/activity logs, and encryption settings. Compliance automation tools can pull evidence continuously; otherwise, export and store evidence per your auditor's requirements.`
+    },
+    {
+      question: `Does ${platformName} integrate with compliance automation (Vanta, Drata)?`,
+      answer: `Most major cloud and SaaS platforms, including ${platformName}, offer integrations or APIs used by compliance automation tools. Check your automation provider's integration list and enable the ${platformName} connector for continuous evidence collection.`
+    }
+  ];
+}
+
+export function generateAuditorFAQs(auditorName: string): { question: string; answer: string }[] {
+  return [
+    {
+      question: `What does ${auditorName} specialize in?`,
+      answer: `${auditorName} focuses on SOC 2 and related compliance audits for technology and service organizations. See the firm profile above for certifications, industries served, and typical engagement scope.`
+    },
+    {
+      question: `Does ${auditorName} offer remote SOC 2 audits?`,
+      answer: `Most SOC 2 audits can be conducted remotely. ${auditorName} typically supports hybrid or fully remote engagements. Confirm remote options and timeline when requesting a quote.`
+    },
+    {
+      question: `How do I request a quote from ${auditorName}?`,
+      answer: `Use the contact details in the profile above or visit our Auditor Match tool to get matched with vetted firms. Provide your company size, scope (Type I/II, criteria), and timeline for an accurate quote.`
+    },
+    {
+      question: `What should I prepare before engaging ${auditorName}?`,
+      answer: `Before fieldwork: complete a readiness assessment, document controls and evidence, and have a designated point of contact. Our Readiness Index and cost calculator can help you scope effort and budget.`
+    }
+  ];
+}
+
+export function generateMigrationFAQs(fromName: string, toName: string): { question: string; answer: string }[] {
+  return [
+    {
+      question: `How long does migrating from ${fromName} to ${toName} take?`,
+      answer: `Migration timeline depends on control overlap and existing documentation. Many organizations complete the mapping and gap closure in 4–12 weeks. Use the overlap and timeline metrics above to plan.`
+    },
+    {
+      question: `What controls carry over from ${fromName} to ${toName}?`,
+      answer: `Control overlap varies by framework pair. Our migration guide above outlines which ${fromName} controls map to ${toName} requirements and where net-new work is needed.`
+    },
+    {
+      question: `Do we need a new audit when adding ${toName}?`,
+      answer: `Adding ${toName} typically requires a new or expanded audit scope. Some auditors offer combined or stacked engagements; confirm with your audit firm and use our Auditor Directory to compare options.`
+    },
+    {
+      question: `Where do we start with ${fromName} to ${toName} migration?`,
+      answer: `Start with a gap analysis: map existing ${fromName} controls to ${toName} requirements, identify gaps, and prioritize remediation. Our migration roadmap above provides a structured approach.`
+    }
+  ];
+}
+
 /**
  * Generate "Updated" date badge text
  */

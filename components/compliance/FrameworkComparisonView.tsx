@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Script from 'next/script';
 import AssessmentCTA from '@/components/AssessmentCTA';
 import { FAQSection } from '@/components/FAQSection';
+import { generateGuideFAQs, generateEnhancedFAQSchema } from '@/lib/seo-enhancements';
 
 interface FAQ {
   question: string;
@@ -37,8 +38,11 @@ export default function FrameworkComparisonView({
   faqs = [],
   lastUpdated,
 }: FrameworkComparisonViewProps) {
+  const effectiveFaqs = faqs?.length ? faqs : generateGuideFAQs(`${frameworkA.name} vs ${frameworkB.name}`, 'compliance');
+  const faqSchema = generateEnhancedFAQSchema(effectiveFaqs);
   return (
     <main className="min-h-screen flex flex-col bg-slate-50">
+      <Script id="framework-comparison-faq" type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-14 lg:py-20 text-center space-y-4">
           <p className="text-sm font-semibold uppercase tracking-wide text-brand-700">
@@ -125,7 +129,7 @@ export default function FrameworkComparisonView({
 
 
             <FAQSection 
-              faqs={faqs}
+              faqs={effectiveFaqs}
             />
 
             {/* Related Resources */}
@@ -142,7 +146,7 @@ export default function FrameworkComparisonView({
                 <Link href={`/compliance/${frameworkB.slug}`} className="px-4 py-2 rounded-xl bg-white border border-slate-200 text-sm font-semibold text-slate-700 hover:border-brand-200 hover:text-brand-700 transition-all">
                   {frameworkB.name} Hub
                 </Link>
-                <Link href="/pricing" className="px-4 py-2 rounded-xl bg-brand-600 text-white text-sm font-semibold hover:bg-brand-700 transition-all shadow-sm">
+                <Link href="/pricing" className="px-4 py-2 rounded-lg bg-slate-900 text-white text-sm font-medium hover:bg-slate-800 transition-all shadow-sm">
                   View All Pricing
                 </Link>
               </div>

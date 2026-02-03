@@ -88,7 +88,7 @@ export default async function AiGovernanceProgrammaticPage({ params }: Props) {
               {page.meta_description || `Navigate the complexities of ${page.title} with our programmatic framework for modern AI organizations.`}
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link href="/ai-governance-readiness-index" className="bg-brand-500 hover:bg-brand-600 text-white font-bold px-8 py-4 rounded-xl flex items-center gap-2 transition-all">
+              <Link href="/ai-governance-readiness-index" className="bg-slate-900 hover:bg-slate-800 text-white font-bold px-8 py-4 rounded-xl flex items-center gap-2 transition-all shadow-sm">
                 <BarChart3 className="w-5 h-5" />
                 Start Readiness Index
               </Link>
@@ -111,7 +111,7 @@ export default async function AiGovernanceProgrammaticPage({ params }: Props) {
                 </p>
 
                 <div className="grid md:grid-cols-2 gap-8 my-12">
-                  <div className="bg-slate-50 p-8 rounded-2xl border border-slate-100">
+                  <div className="bg-slate-50 p-8 rounded-lg border border-slate-100">
                     <Shield className="w-10 h-10 text-brand-500 mb-6" />
                     <h3 className="text-xl font-bold mb-3">Core Requirements</h3>
                     <ul className="space-y-3">
@@ -129,7 +129,7 @@ export default async function AiGovernanceProgrammaticPage({ params }: Props) {
                       </li>
                     </ul>
                   </div>
-                  <div className="bg-brand-50 p-8 rounded-2xl border border-brand-100">
+                  <div className="bg-brand-50 p-8 rounded-lg border border-brand-100">
                     <Zap className="w-10 h-10 text-brand-500 mb-6" />
                     <h3 className="text-xl font-bold mb-3">Quick Implementation</h3>
                     <ul className="space-y-3">
@@ -163,7 +163,7 @@ export default async function AiGovernanceProgrammaticPage({ params }: Props) {
                     { step: 'Phase 4: Continuous Monitoring', desc: 'Set up real-time alerts for model drift, bias detection, and compliance violations.' }
                   ].map((phase, idx) => (
                     <div key={idx} className="flex gap-6 p-6 rounded-xl border border-slate-100 hover:bg-slate-50 transition-all">
-                      <div className="w-12 h-12 rounded-full bg-brand-500 text-white flex items-center justify-center font-black flex-shrink-0 shadow-lg shadow-brand-500/20">
+                      <div className="w-12 h-12 rounded-full bg-slate-900 text-white flex items-center justify-center font-black flex-shrink-0 shadow-sm">
                         {idx + 1}
                       </div>
                       <div>
@@ -190,7 +190,7 @@ export default async function AiGovernanceProgrammaticPage({ params }: Props) {
             <h2 className="text-3xl font-bold mb-6">Need a custom roadmap for {page.title}?</h2>
             <p className="text-slate-400 mb-10">Get expert guidance tailored to your specific AI architecture and industry risk profile.</p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Link href="/readiness-review" className="bg-brand-500 hover:bg-brand-600 text-white font-bold px-8 py-4 rounded-xl transition-all">
+              <Link href="/readiness-review" className="bg-slate-900 hover:bg-slate-800 text-white font-bold px-8 py-4 rounded-xl transition-all shadow-sm">
                 Book Expert Review
               </Link>
               <Link href="/ai-governance" className="bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold px-8 py-4 rounded-xl transition-all">

@@ -110,7 +110,7 @@ export default function AIVendorQuestionnaire() {
                 Use this programmatic template to audit LLM providers, GenAI startups, and SaaS vendors with AI features.
               </p>
               <div className="flex flex-wrap gap-4">
-                <button className="bg-white text-indigo-900 font-bold px-8 py-4 rounded-xl shadow-lg hover:bg-indigo-50 transition-all flex items-center gap-2">
+                <button className="bg-slate-900 text-white font-bold px-8 py-4 rounded-xl shadow-sm hover:bg-slate-800 transition-all flex items-center gap-2">
                   <FileCheck className="w-5 h-5" />
                   Download CSV Template
                 </button>
@@ -132,7 +132,7 @@ export default function AIVendorQuestionnaire() {
                 {questionnaireSections.map((section) => {
                   const Icon = section.icon;
                   return (
-                    <div key={section.title} className="bg-slate-50 border border-slate-200 rounded-2xl p-8 hover:border-indigo-500 transition-all shadow-sm">
+                    <div key={section.title} className="bg-slate-50 border border-slate-200 rounded-lg p-8 hover:border-indigo-500 transition-all shadow-sm">
                       <div className="flex items-center gap-4 mb-6">
                         <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
                           <Icon className="w-6 h-6 text-indigo-600" />
@@ -153,7 +153,7 @@ export default function AIVendorQuestionnaire() {
               </div>
 
               <div className="md:sticky md:top-8 h-fit space-y-8">
-                <div className="bg-indigo-50 rounded-2xl p-8 border border-indigo-100 shadow-sm">
+                <div className="bg-indigo-50 rounded-lg p-8 border border-indigo-100 shadow-sm">
                   <div className="flex items-center gap-3 text-indigo-700 font-bold mb-4">
                     <AlertTriangle className="w-5 h-5" />
                     Crucial Red Flag
@@ -167,7 +167,7 @@ export default function AIVendorQuestionnaire() {
                   </div>
                 </div>
 
-                <div className="bg-slate-900 rounded-2xl p-8 text-white">
+                <div className="bg-slate-900 rounded-xl p-8 text-white">
                   <h3 className="text-xl font-bold mb-4">Programmatic Enrichment</h3>
                   <p className="text-slate-300 mb-6 leading-relaxed">
                     Don't just trust their answers. Use RiscLens to scan their domain for:
@@ -186,7 +186,7 @@ export default function AIVendorQuestionnaire() {
                       Infrastructure provider (AWS vs Azure vs Anthropic)
                     </li>
                   </ul>
-                  <button className="w-full bg-indigo-600 text-white font-bold py-4 rounded-xl hover:bg-indigo-500 transition-all flex items-center justify-center gap-2">
+                  <button className="w-full bg-slate-900 text-white font-bold py-4 rounded-xl hover:bg-slate-800 transition-all flex items-center justify-center gap-2">
                     Enrich Vendor via Domain
                     <ArrowRight className="w-4 h-4" />
                   </button>
@@ -204,7 +204,7 @@ export default function AIVendorQuestionnaire() {
             </p>
             <Link
               href="/ai-governance/vendor-audit-template"
-              className="inline-flex items-center gap-2 bg-indigo-900 text-white font-bold px-10 py-5 rounded-xl hover:bg-slate-800 transition-all shadow-xl"
+              className="inline-flex items-center gap-2 bg-slate-900 text-white font-bold px-10 py-5 rounded-xl hover:bg-slate-800 transition-all shadow-sm"
             >
               Get Audit Template
               <ArrowRight className="w-5 h-5" />

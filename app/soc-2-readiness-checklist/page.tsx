@@ -4,6 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AssessmentCTA from '@/components/AssessmentCTA';
 import ChecklistDownloadForm from '@/components/ChecklistDownloadForm';
+import { StickyCTA } from '@/components/StickyCTA';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
 
@@ -42,8 +43,8 @@ export default function Soc2ReadinessChecklistPage() {
               A practical pre-audit checklist to spot gaps before you talk to an auditor.
             </p>
             <Link
-              href="/soc-2-readiness-calculator"
-              className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
+              href="/soc-2-readiness-index"
+              className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-lg px-8 py-4 rounded-lg transition-all"
             >
               Get Your Readiness Score →
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -171,12 +172,12 @@ export default function Soc2ReadinessChecklistPage() {
 
             <RelatedGuidesRow
               links={[
+                { href: '/soc-2-readiness-index', label: 'Get Readiness Score' },
                 { href: '/soc-2-cost', label: 'SOC 2 Cost' },
                 { href: '/soc-2-timeline', label: 'SOC 2 Timeline' },
                 { href: '/soc-2-type-i-vs-type-ii', label: 'Type I vs Type II' },
                 { href: '/soc-2-readiness/saas', label: 'SOC 2 for SaaS' },
-                { href: '/soc-2-readiness/fintech', label: 'SOC 2 for Fintech' },
-                { href: '/vendor-risk-assessment', label: 'Vendor Risk Hub' },
+                { href: '/vendor-risk-assessment/triage', label: 'VRA Triage' },
               ]}
             />
           </div>
@@ -184,6 +185,12 @@ export default function Soc2ReadinessChecklistPage() {
       </main>
       <AssessmentCTA />
       <Footer />
+      <StickyCTA
+        label="Get Readiness Score"
+        description="Know your SOC 2 readiness in under 2 minutes."
+        subDescription="Free · No signup · Instant results"
+        href="/soc-2-readiness-index"
+      />
     </>
   );
 }

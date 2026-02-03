@@ -111,7 +111,7 @@ export default async function DirectoryPage() {
             </div>
           </div>
 
-          <div className="hidden lg:block w-64 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm">
+          <div className="hidden lg:block w-64 p-4 bg-white rounded-lg border border-gray-100 shadow-sm">
             <div className="flex items-center gap-2 mb-2">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
               <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Live Analysis Active</span>
@@ -137,7 +137,7 @@ export default async function DirectoryPage() {
         <section className="mt-20 space-y-16">
           <RelatedProfiles mode="explore" limit={20} />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 bg-white p-12 rounded-3xl border border-gray-100 shadow-sm">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 bg-white p-12 rounded-xl border border-gray-100 shadow-sm">
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Why Market Intelligence?</h2>
               <p className="text-gray-600 leading-relaxed mb-6 font-medium">
@@ -161,7 +161,7 @@ export default async function DirectoryPage() {
                 ))}
               </div>
             </div>
-            <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100 flex flex-col justify-center">
+            <div className="bg-gray-50 rounded-lg p-8 border border-gray-100 flex flex-col justify-center">
               <h3 className="text-xl font-bold text-gray-900 mb-2">Want your profile updated?</h3>
               <p className="text-sm text-gray-500 mb-6">
                 Our AI engine rescans profiles every 30 days. To request an immediate refresh or update your security signals, contact our intelligence team.
