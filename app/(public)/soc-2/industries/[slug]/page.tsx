@@ -78,7 +78,7 @@ export default function IndustryDetailPage({ params }: PageProps) {
               </div>
               
               <div className="hidden lg:block">
-                <div className="bg-slate-900 rounded-[2rem] p-8 shadow-2xl relative overflow-hidden">
+                <div className="bg-slate-900 rounded-xl p-8 shadow-sm relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-64 h-64 bg-brand-500/10 rounded-full blur-3xl -mr-32 -mt-32" />
                   <div className="relative z-10 space-y-6">
                     <h3 className="text-xl font-bold text-white">Why {industry.label} needs SOC 2:</h3>
@@ -116,8 +116,8 @@ export default function IndustryDetailPage({ params }: PageProps) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {/* Readiness Card */}
-                  <div className="group p-8 bg-white border border-slate-200 rounded-[2rem] hover:border-brand-500 hover:shadow-xl transition-all duration-300 flex flex-col">
-                    <div className="w-14 h-14 bg-brand-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-brand-600 transition-colors">
+                  <div className="group p-8 bg-white border border-slate-200 rounded-xl hover:border-slate-300 shadow-sm transition-all duration-300 flex flex-col">
+                    <div className="w-14 h-14 bg-brand-50 rounded-lg flex items-center justify-center mb-6 group-hover:bg-slate-900 transition-colors">
                       <svg className="w-7 h-7 text-brand-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                       </svg>
@@ -129,7 +129,7 @@ export default function IndustryDetailPage({ params }: PageProps) {
                     <div className="mt-auto space-y-4">
                       <Link 
                         href={`/soc-2-readiness-checklist/${industry.slug}`}
-                        className="flex items-center justify-between w-full px-4 py-3 bg-brand-600 text-white rounded-xl font-bold hover:bg-brand-700 transition-colors"
+                        className="flex items-center justify-between w-full px-4 py-3 bg-slate-900 text-white rounded-lg font-medium hover:bg-slate-800 transition-colors"
                       >
                         <span>Explore Readiness Guide</span>
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -149,8 +149,8 @@ export default function IndustryDetailPage({ params }: PageProps) {
                   </div>
 
                   {/* Cost Calculator Card */}
-                  <div className="group p-8 bg-white border border-slate-200 rounded-[2rem] hover:border-brand-500 hover:shadow-xl transition-all duration-300 flex flex-col">
-                    <div className="w-14 h-14 bg-brand-50 rounded-2xl flex items-center justify-center mb-6">
+                  <div className="group p-8 bg-white border border-slate-200 rounded-xl hover:border-slate-300 shadow-sm transition-all duration-300 flex flex-col">
+                    <div className="w-14 h-14 bg-brand-50 rounded-lg flex items-center justify-center mb-6">
                       <svg className="w-7 h-7 text-brand-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                       </svg>
@@ -162,7 +162,7 @@ export default function IndustryDetailPage({ params }: PageProps) {
                       <div className="mt-auto space-y-3">
                         <Link 
                           href="/soc-2-cost-calculator"
-                          className="flex items-center justify-between w-full px-4 py-3 bg-brand-600 text-white rounded-xl font-bold hover:bg-brand-700 transition-colors"
+                          className="flex items-center justify-between w-full px-4 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-colors"
                         >
                           <span>Estimate My SOC 2 Cost</span>
                           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

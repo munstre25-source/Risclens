@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AssessmentCTA from '@/components/AssessmentCTA';
+import { StickyCTA } from '@/components/StickyCTA';
 
 export const metadata: Metadata = {
   title: 'When Do You Need SOC 2? (2026) | RiscLens',
@@ -28,7 +29,7 @@ export default function WhenDoYouNeedSoc2Page() {
       <Header />
       <main className="min-h-screen flex flex-col bg-slate-100">
         <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-16 lg:py-22 text-center">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16 lg:py-20 text-center">
             <h1 className="text-4xl sm:text-5xl font-semibold text-slate-900 mb-6 leading-tight tracking-tight">
               When Do You Need SOC 2? (2026)
             </h1>
@@ -36,8 +37,8 @@ export default function WhenDoYouNeedSoc2Page() {
               How to tell if SOC 2 is a must-have now, or something to plan for later.
             </p>
             <Link
-              href="/soc-2-readiness-calculator"
-              className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
+              href="/soc-2-readiness-index"
+              className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-lg px-8 py-4 rounded-lg transition-all"
             >
               Get Your Readiness Score →
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -101,8 +102,8 @@ export default function WhenDoYouNeedSoc2Page() {
                 Get your readiness band to see if SOC 2 is a must-have now or a planned milestone.
               </p>
               <Link
-                href="/soc-2-readiness-calculator"
-                className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
+                href="/soc-2-readiness-index"
+                className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-lg px-8 py-4 rounded-lg transition-all"
               >
                 Get Your Readiness Score →
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -146,6 +147,12 @@ export default function WhenDoYouNeedSoc2Page() {
       </main>
       <AssessmentCTA />
       <Footer />
+      <StickyCTA
+        label="Get Readiness Score"
+        description="Know your SOC 2 readiness in under 2 minutes."
+        subDescription="Free · No signup · Instant results"
+        href="/soc-2-readiness-index"
+      />
     </>
   );
 }

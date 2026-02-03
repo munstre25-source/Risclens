@@ -70,7 +70,7 @@ export default async function FrameworkHubPage({ params }: PageProps) {
               <Link 
                 key={industry.id}
                 href={`/compliance/${framework.slug}/${framework.slug}-compliance-for-${industry.slug}`}
-                className="group p-8 rounded-2xl bg-white border border-slate-200 hover:border-brand-200 hover:shadow-xl transition-all"
+                className="group p-8 rounded-lg bg-white border border-slate-200 hover:border-brand-200 hover:shadow-sm transition-all"
               >
                 <h3 className="text-xl font-bold text-slate-900 group-hover:text-brand-600 mb-3">
                   {framework.name} for {industry.name}

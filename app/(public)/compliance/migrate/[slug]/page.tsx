@@ -17,6 +17,8 @@ import {
   getSeverityColor,
   FrameworkMigration 
 } from '@/lib/migrations';
+import { FAQSection } from '@/components/FAQSection';
+import { generateMigrationFAQs, generateEnhancedFAQSchema } from '@/lib/seo-enhancements';
 import { 
   ArrowRightLeft, 
   ArrowRight, 
@@ -96,18 +98,8 @@ export default async function MigrationPage({ params }: PageProps) {
     ],
   };
 
-  const faqSchema = migration.faq && migration.faq.length > 0 ? {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: migration.faq.map(faq => ({
-      '@type': 'Question',
-      name: faq.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: faq.answer,
-      },
-    })),
-  } : null;
+  const migrationFaqs = migration.faq && migration.faq.length > 0 ? migration.faq : generateMigrationFAQs(fromName, toName);
+  const faqSchema = generateEnhancedFAQSchema(migrationFaqs);
 
   return (
     <main className="min-h-screen flex flex-col bg-slate-50">
@@ -117,12 +109,10 @@ export default async function MigrationPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      {faqSchema && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-        />
-      )}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       
       <GeneralPageSchema
         title={pageTitle}
@@ -165,11 +155,11 @@ export default async function MigrationPage({ params }: PageProps) {
           </div>
           
           <div className="flex items-center justify-center gap-4 sm:gap-8 mb-8">
-            <div className="bg-slate-50 border-2 border-slate-200 rounded-2xl p-4 sm:p-6 shadow-sm">
+            <div className="bg-slate-50 border-2 border-slate-200 rounded-xl p-4 sm:p-6 shadow-sm">
               <span className="text-lg sm:text-2xl font-black text-slate-900">{fromName}</span>
             </div>
             <ArrowRightLeft className="w-6 h-6 sm:w-8 sm:h-8 text-brand-600 animate-pulse" />
-            <div className="bg-brand-50 border-2 border-brand-200 rounded-2xl p-4 sm:p-6 shadow-md">
+            <div className="bg-brand-50 border-2 border-brand-200 rounded-xl p-4 sm:p-6 shadow-sm">
               <span className="text-lg sm:text-2xl font-black text-brand-700">{toName}</span>
             </div>
           </div>
@@ -184,7 +174,7 @@ export default async function MigrationPage({ params }: PageProps) {
 
           {/* Key Metrics */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl mx-auto mb-10">
-            <div className="bg-brand-600 rounded-xl p-4 text-center text-white">
+            <div className="bg-slate-900 rounded-xl p-4 text-center text-white">
               <div className="text-3xl sm:text-4xl font-black">{migration.overlap_percentage}%</div>
               <div className="text-xs sm:text-sm opacity-80 font-medium">Control Overlap</div>
             </div>
@@ -249,7 +239,7 @@ export default async function MigrationPage({ params }: PageProps) {
                   <div className="space-y-4">
                     {migration.migration_steps.map((step, idx) => (
                       <div key={idx} className="flex items-start gap-4 group">
-                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-sm group-hover:bg-brand-600 group-hover:text-white transition-colors">
+                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-sm group-hover:bg-slate-900 group-hover:text-white transition-colors">
                           {idx + 1}
                         </div>
                         <div className="bg-white border border-slate-200 rounded-xl p-4 flex-grow shadow-sm group-hover:border-brand-200 transition-colors">
@@ -263,7 +253,7 @@ export default async function MigrationPage({ params }: PageProps) {
 
               {/* Unique Requirements */}
               {migration.unique_requirements && migration.unique_requirements.length > 0 && (
-                <div className="bg-slate-900 rounded-2xl p-8 text-white">
+                <div className="bg-slate-900 rounded-xl p-8 text-white">
                   <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
                     <Shield className="w-6 h-6 text-brand-400" />
                     Unique {toName} Requirements
@@ -328,7 +318,7 @@ export default async function MigrationPage({ params }: PageProps) {
             <div className="space-y-8">
               {/* Related Migrations */}
               {relatedMigrations.length > 0 && (
-                <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm sticky top-8">
+                <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm sticky top-8">
                   <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
                     <ArrowRightLeft className="w-5 h-5 text-brand-600" />
                     Related Migrations
@@ -353,14 +343,14 @@ export default async function MigrationPage({ params }: PageProps) {
               )}
               
               {/* Quick Contact */}
-              <div className="bg-brand-50 border border-brand-100 rounded-2xl p-6">
+              <div className="bg-brand-50 border border-brand-100 rounded-xl p-6">
                 <h3 className="font-bold text-brand-900 mb-2">Need migration help?</h3>
                 <p className="text-sm text-brand-700 mb-4">
                   Talk to our compliance experts to map your controls efficiently.
                 </p>
                 <Link 
                   href="/auditor-match"
-                  className="block w-full text-center bg-brand-600 text-white font-bold py-3 rounded-xl hover:bg-brand-700 transition-all text-sm"
+                  className="block w-full text-center bg-slate-900 text-white font-medium py-3 rounded-lg hover:bg-slate-800 transition-all text-sm"
                 >
                   Consult an Expert
                 </Link>
@@ -417,7 +407,7 @@ export default async function MigrationPage({ params }: PageProps) {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 lg:py-20 bg-brand-600 text-white">
+      <section className="py-16 lg:py-20 bg-slate-900 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
           <h2 className="text-2xl sm:text-3xl font-bold mb-4">Ready to Expand Your Compliance?</h2>
           <p className="text-brand-100 mb-8 max-w-2xl mx-auto">
@@ -427,14 +417,14 @@ export default async function MigrationPage({ params }: PageProps) {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link 
               href="/auditor-match"
-              className="inline-flex items-center justify-center gap-2 bg-white text-brand-600 font-bold px-8 py-4 rounded-xl hover:bg-brand-50 transition-all"
+              className="inline-flex items-center justify-center gap-2 bg-white text-slate-900 font-bold px-8 py-4 rounded-xl hover:bg-slate-50 transition-all"
             >
               Speak to an Expert
               <ArrowRight className="w-4 h-4" />
             </Link>
             <Link 
               href="/soc-2-cost-calculator"
-              className="inline-flex items-center justify-center gap-2 bg-brand-700 text-white font-bold px-8 py-4 rounded-xl hover:bg-brand-800 transition-all"
+              className="inline-flex items-center justify-center gap-2 bg-slate-800 text-white font-bold px-8 py-4 rounded-xl hover:bg-slate-700 transition-all"
             >
               Get a Quote
             </Link>
@@ -442,6 +432,11 @@ export default async function MigrationPage({ params }: PageProps) {
         </div>
       </section>
 
+      <section className="py-16 bg-white border-t border-slate-200">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
+          <FAQSection title={`${fromName} to ${toName} Migration FAQs`} faqs={migrationFaqs} />
+        </div>
+      </section>
       <AboutSection />
       <Footer />
       

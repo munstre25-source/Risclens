@@ -148,7 +148,7 @@ export default function AIRiskClassifier() {
             </p>
           </div>
 
-          <div className="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden min-h-[400px] flex flex-col">
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden min-h-[400px] flex flex-col">
             {!result ? (
               <div className="p-8 md:p-12 flex flex-col h-full">
                 <div className="flex justify-between items-center mb-10">
@@ -170,7 +170,7 @@ export default function AIRiskClassifier() {
                       <button
                         key={option.label}
                         onClick={() => handleAnswer(option.value)}
-                        className="group flex items-center justify-between p-6 rounded-2xl border-2 border-slate-100 hover:border-indigo-600 hover:bg-indigo-50 transition-all text-left"
+                        className="group flex items-center justify-between p-6 rounded-lg border-2 border-slate-100 hover:border-indigo-600 hover:bg-indigo-50 transition-all text-left"
                       >
                         <span className="text-lg font-bold text-slate-700 group-hover:text-indigo-900">{option.label}</span>
                         <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-1 transition-all" />
@@ -186,7 +186,7 @@ export default function AIRiskClassifier() {
               </div>
             ) : (
               <div className="p-8 md:p-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <div className={`w-20 h-20 ${results[result].bgLight} rounded-3xl flex items-center justify-center mb-8`}>
+                <div className={`w-20 h-20 ${results[result].bgLight} rounded-xl flex items-center justify-center mb-8`}>
                   {ResultIcon && <ResultIcon className={`w-10 h-10 ${results[result].textColor}`} />}
                 </div>
                 
@@ -213,7 +213,7 @@ export default function AIRiskClassifier() {
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Link
                     href={result === 'high' ? '/ai-compliance/iso-42001' : '/ai-governance'}
-                    className="flex-1 bg-indigo-600 text-white font-bold py-4 rounded-xl text-center hover:bg-indigo-700 transition-all"
+                    className="flex-1 bg-slate-900 text-white font-bold py-4 rounded-xl text-center hover:bg-slate-800 transition-all"
                   >
                     Get Detailed Report
                   </Link>
@@ -229,7 +229,7 @@ export default function AIRiskClassifier() {
             )}
           </div>
 
-          <div className="mt-12 bg-indigo-900 rounded-2xl p-8 text-white">
+          <div className="mt-12 bg-indigo-900 rounded-xl p-8 text-white">
             <div className="flex items-center gap-3 mb-4">
               <Zap className="w-6 h-6 text-indigo-400" />
               <h3 className="text-xl font-bold">Why Tiering Matters</h3>

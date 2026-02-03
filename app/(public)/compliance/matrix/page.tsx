@@ -55,7 +55,7 @@ export default async function ComplianceMatrixDirectoryPage() {
               <Link 
                 key={f.slug} 
                 href={`/${f.slug}`}
-                className="p-6 bg-white border border-slate-200 rounded-2xl hover:border-brand-500 hover:shadow-lg transition-all group"
+                className="p-6 bg-white border border-slate-200 rounded-lg hover:border-brand-500 hover:shadow-sm transition-all group"
               >
                 <h3 className="font-bold text-slate-900 text-lg mb-2">{f.name}</h3>
                 <p className="text-sm text-slate-500 mb-4 line-clamp-2">{f.description}</p>
@@ -140,7 +140,7 @@ export default async function ComplianceMatrixDirectoryPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="bg-slate-900 rounded-3xl p-12 text-center text-white relative overflow-hidden shadow-2xl">
+        <section className="bg-slate-900 rounded-xl p-12 text-center text-white relative overflow-hidden shadow-sm">
             <div className="absolute top-0 right-0 w-96 h-96 bg-brand-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
             <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
             
@@ -151,7 +151,7 @@ export default async function ComplianceMatrixDirectoryPage() {
             <div className="flex flex-wrap justify-center gap-4 relative z-10">
                 <Link 
                     href="/compliance"
-                    className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-500 text-white font-bold px-10 py-5 rounded-2xl transition-all shadow-xl hover:scale-105"
+                    className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold px-10 py-5 rounded-lg transition-all shadow-sm"
                 >
                     Launch Matrix Explorer
                     <Zap className="w-6 h-6" />

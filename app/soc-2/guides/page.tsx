@@ -4,6 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { HowItWorksButton } from '@/components/HowItWorksButton';
 import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
+import { StickyCTA } from '@/components/StickyCTA';
 import { costGuides, timelineGuides, readinessGuides, salesGuides } from '@/lib/soc2Guides';
 
 export const metadata: Metadata = {
@@ -45,22 +46,19 @@ export default function Soc2GuidesPage() {
 
           <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
-              href="/soc-2-readiness-calculator"
-              className="w-full sm:w-auto inline-flex justify-center items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-8 py-4 rounded-lg shadow-md transition-all text-lg"
+              href="/soc-2-readiness-index"
+              className="w-full sm:w-auto inline-flex justify-center items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold px-8 py-4 rounded-lg transition-all text-lg"
             >
-              Start Readiness Assessment
+              Get Readiness Score
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
             </Link>
             <Link
-              href="/compliance-roi-calculator"
-              className="w-full sm:w-auto inline-flex justify-center items-center gap-2 bg-white hover:bg-slate-50 text-slate-900 border border-slate-200 font-semibold px-8 py-4 rounded-lg shadow-sm transition-all text-lg"
+              href="/soc-2-cost"
+              className="w-full sm:w-auto inline-flex justify-center items-center gap-2 border border-slate-300 hover:border-slate-400 text-slate-700 font-medium px-8 py-4 rounded-lg bg-white transition-all text-lg"
             >
-              Calculate Compliance ROI
-              <svg className="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+              SOC 2 Cost Guide
             </Link>
             <div className="hidden sm:block">
               <HowItWorksButton />
@@ -109,17 +107,23 @@ export default function Soc2GuidesPage() {
           <div className="pt-8 border-t border-slate-200">
             <RelatedGuidesRow
               links={[
-                { href: '/soc-2-readiness-calculator', label: 'Readiness Score' },
-                { href: '/soc-2-cost-calculator', label: 'SOC 2 Cost' },
-                { href: '/compliance-roi-calculator', label: 'Compliance ROI' },
-                { href: '/penetration-testing', label: 'Pentest Hub' },
-                { href: '/vendor-risk-assessment', label: 'Vendor Risk Hub' },
+                { href: '/soc-2-readiness-index', label: 'Get Readiness Score' },
+                { href: '/soc-2-cost', label: 'SOC 2 Cost Guide' },
+                { href: '/penetration-testing/cost-estimator', label: 'Pentest Cost Estimator' },
+                { href: '/vendor-risk-assessment/triage', label: 'VRA Triage' },
+                { href: '/compliance-roi-calculator', label: 'Compliance ROI Calculator' },
               ]}
             />
           </div>
         </div>
       </section>
       <Footer />
+      <StickyCTA
+        label="Get Readiness Score"
+        description="Know your SOC 2 readiness in under 2 minutes."
+        subDescription="Free · No signup · Instant results"
+        href="/soc-2-readiness-index"
+      />
     </main>
   );
 }

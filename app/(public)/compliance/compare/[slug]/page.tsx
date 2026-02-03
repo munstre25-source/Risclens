@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Script from 'next/script';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
@@ -6,6 +7,8 @@ import { notFound, redirect } from 'next/navigation';
 import { Shield, Zap, Target, Lock, TrendingUp, AlertCircle, ChevronRight, Check, X, ArrowRight } from 'lucide-react';
 import { getSupabaseAdmin } from '@/lib/supabase';
 import FrameworkComparisonView from '@/components/compliance/FrameworkComparisonView';
+import { FAQSection } from '@/components/FAQSection';
+import { generateGuideFAQs, generateEnhancedFAQSchema } from '@/lib/seo-enhancements';
 
 // URLs to redirect to canonical /compare/* versions (tool comparisons)
 const REDIRECT_TO_COMPARE = [
@@ -128,16 +131,17 @@ export default async function ComparisonPage({ params }: { params: { slug: strin
     );
   }
 
-  // Fallback to legacy static or other pSEO types
   const parts = slug.split('-vs-');
   const platformA = parts[0]?.charAt(0).toUpperCase() + parts[0]?.slice(1) || 'Platform A';
   const platformB = parts[1]?.charAt(0).toUpperCase() + parts[1]?.slice(1) || 'Platform B';
+  const legacyFaqs = generateGuideFAQs(`${platformA} vs ${platformB}`, 'compliance comparison');
+  const legacyFaqSchema = generateEnhancedFAQSchema(legacyFaqs);
 
   return (
     <main className="min-h-screen bg-slate-50">
       <Header />
-      
-      <div className="max-w-4xl mx-auto px-4 py-16 sm:py-24">
+      <Script id="compliance-compare-legacy-faq" type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(legacyFaqSchema) }} />
+      <div className="max-w-5xl mx-auto px-4 py-16 sm:py-24">
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 border border-brand-100 mb-6">
             <span className="flex h-2 w-2 rounded-full bg-brand-600 animate-pulse" />
@@ -151,7 +155,7 @@ export default async function ComparisonPage({ params }: { params: { slug: strin
           </p>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden mb-12">
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-12">
           <div className="grid grid-cols-3 border-b border-slate-100">
             <div className="p-6 bg-slate-50 border-r border-slate-100 font-bold text-slate-400 text-xs uppercase tracking-widest">Feature</div>
             <div className="p-6 font-bold text-slate-900 text-center">{platformA}</div>
@@ -177,7 +181,7 @@ export default async function ComparisonPage({ params }: { params: { slug: strin
           ))}
         </div>
 
-        <div className="bg-slate-900 rounded-3xl p-8 sm:p-12 text-white relative overflow-hidden">
+        <div className="bg-slate-900 rounded-xl p-8 sm:p-12 text-white relative overflow-hidden">
           <div className="relative z-10">
             <h2 className="text-3xl font-bold mb-6">Stop comparing features. <br /><span className="text-brand-400">Compare Readiness.</span></h2>
             <p className="text-slate-400 text-lg mb-8 max-w-xl">
@@ -186,7 +190,7 @@ export default async function ComparisonPage({ params }: { params: { slug: strin
             <div className="flex flex-col sm:flex-row gap-4">
               <Link 
                 href="/soc-2-readiness-index" 
-                className="bg-brand-600 text-white font-bold px-8 py-4 rounded-xl hover:bg-brand-700 transition-all flex items-center justify-center gap-2"
+                className="bg-slate-100 text-slate-900 font-medium px-8 py-4 rounded-lg hover:bg-white transition-all flex items-center justify-center gap-2"
               >
                 Start Readiness Index
                 <ArrowRight className="w-4 h-4" />
@@ -211,6 +215,8 @@ export default async function ComparisonPage({ params }: { params: { slug: strin
             RiscLens recommends using our <strong>Auditor Directory</strong> to find a firm that has experience with your chosen platform before you sign a contract. This can save you up to $5,000 in redundant evidence collection fees.
           </p>
         </div>
+
+        <FAQSection title={`${platformA} vs ${platformB} FAQs`} faqs={legacyFaqs} />
       </div>
 
       <Footer />

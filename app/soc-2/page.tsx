@@ -50,10 +50,10 @@ const SOC2_TOOLS = [
   },
   {
     id: 'readiness',
-    href: '/soc-2-readiness-calculator',
-    title: 'SOC 2 Readiness Calculator',
+    href: '/soc-2-readiness-index',
+    title: 'SOC 2 Readiness Index',
     summary: 'Flagship gap assessment tool to identify potential gaps for an audit.',
-    cta: 'Start Readiness Assessment'
+    cta: 'Get Readiness Score'
   },
     {
     id: 'cost',

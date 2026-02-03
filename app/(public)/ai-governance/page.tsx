@@ -104,7 +104,7 @@ export default function AIGovernanceHub() {
               <div className="flex flex-wrap gap-4">
                 <Link
                   href="/ai-governance/risk-classifier"
-                  className="bg-white text-indigo-900 font-bold px-6 py-3.5 rounded-xl shadow-lg hover:bg-indigo-50 transition-all flex items-center gap-2"
+                  className="bg-slate-900 text-white font-bold px-6 py-3.5 rounded-xl shadow-sm hover:bg-slate-800 transition-all flex items-center gap-2"
                 >
                   Run Risk Classifier
                   <ArrowRight className="w-5 h-5" />
@@ -134,7 +134,7 @@ export default function AIGovernanceHub() {
                 const Icon = tool.icon;
                 return (
                   <Link key={tool.title} href={tool.href} className="group">
-                    <div className="h-full bg-slate-50 border border-slate-200 rounded-2xl p-8 hover:border-indigo-500 hover:shadow-xl transition-all relative overflow-hidden">
+                    <div className="h-full bg-slate-50 border border-slate-200 rounded-lg p-8 hover:border-indigo-500 hover:shadow-sm transition-all relative overflow-hidden">
                       <div className="absolute top-4 right-4">
                         <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded bg-indigo-100 text-indigo-700">
                           {tool.tag}
@@ -180,7 +180,7 @@ export default function AIGovernanceHub() {
                   ))}
                 </div>
               </div>
-              <div className="flex-1 bg-indigo-900 rounded-2xl p-8 text-white relative overflow-hidden">
+              <div className="flex-1 bg-indigo-900 rounded-xl p-8 text-white relative overflow-hidden">
                 <div className="absolute -top-10 -right-10 w-40 h-40 bg-indigo-500/20 rounded-full blur-3xl"></div>
                 <div className="relative z-10">
                   <h3 className="text-2xl font-bold mb-4">The "SOC 2 Bridge"</h3>
@@ -212,7 +212,7 @@ export default function AIGovernanceHub() {
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {/* ISO 42001 Column */}
-              <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200">
+              <div className="bg-slate-50 rounded-lg p-6 border border-slate-200">
                 <div className="flex items-center gap-2 mb-4">
                   <FileCheck className="w-5 h-5 text-indigo-600" />
                   <h3 className="font-bold text-slate-900">ISO 42001</h3>
@@ -228,7 +228,7 @@ export default function AIGovernanceHub() {
               </div>
 
               {/* EU AI Act Column */}
-              <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200">
+              <div className="bg-slate-50 rounded-lg p-6 border border-slate-200">
                 <div className="flex items-center gap-2 mb-4">
                   <Scale className="w-5 h-5 text-indigo-600" />
                   <h3 className="font-bold text-slate-900">EU AI Act</h3>
@@ -244,7 +244,7 @@ export default function AIGovernanceHub() {
               </div>
 
               {/* NIST AI RMF Column */}
-              <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200">
+              <div className="bg-slate-50 rounded-lg p-6 border border-slate-200">
                 <div className="flex items-center gap-2 mb-4">
                   <Shield className="w-5 h-5 text-indigo-600" />
                   <h3 className="font-bold text-slate-900">NIST AI RMF</h3>
@@ -260,7 +260,7 @@ export default function AIGovernanceHub() {
               </div>
 
               {/* AI Governance General Column */}
-              <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200">
+              <div className="bg-slate-50 rounded-lg p-6 border border-slate-200">
                 <div className="flex items-center gap-2 mb-4">
                   <Brain className="w-5 h-5 text-indigo-600" />
                   <h3 className="font-bold text-slate-900">AI Governance</h3>
@@ -279,7 +279,7 @@ export default function AIGovernanceHub() {
             {/* Additional Resource Categories */}
             <div className="grid md:grid-cols-3 gap-6 mt-8">
               {/* AI Vendor Risk */}
-              <div className="bg-indigo-50 rounded-2xl p-6 border border-indigo-100">
+              <div className="bg-indigo-50 rounded-lg p-6 border border-indigo-100">
                 <h3 className="font-bold text-indigo-900 mb-4 flex items-center gap-2">
                   <Users className="w-5 h-5" />
                   AI Vendor Risk
@@ -292,7 +292,7 @@ export default function AIGovernanceHub() {
               </div>
 
               {/* AI Ethics & Responsible AI */}
-              <div className="bg-green-50 rounded-2xl p-6 border border-green-100">
+              <div className="bg-green-50 rounded-lg p-6 border border-green-100">
                 <h3 className="font-bold text-green-900 mb-4 flex items-center gap-2">
                   <Lock className="w-5 h-5" />
                   Responsible AI
@@ -305,7 +305,7 @@ export default function AIGovernanceHub() {
               </div>
 
               {/* LLM & GenAI Governance */}
-              <div className="bg-purple-50 rounded-2xl p-6 border border-purple-100">
+              <div className="bg-purple-50 rounded-lg p-6 border border-purple-100">
                 <h3 className="font-bold text-purple-900 mb-4 flex items-center gap-2">
                   <Brain className="w-5 h-5" />
                   LLM Governance
@@ -319,7 +319,7 @@ export default function AIGovernanceHub() {
             </div>
 
             {/* Role-Based Guides Row */}
-            <div className="mt-8 bg-slate-900 rounded-2xl p-8">
+            <div className="mt-8 bg-slate-900 rounded-xl p-8">
               <h3 className="font-bold text-white text-xl mb-6">AI Governance by Role</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <Link href="/ai-governance/ai-governance-for-ciso" className="bg-white/10 hover:bg-white/20 text-white p-4 rounded-xl text-center transition-colors">
@@ -373,7 +373,7 @@ export default function AIGovernanceHub() {
             </p>
             <Link
               href="/ai-governance/risk-classifier"
-              className="inline-flex items-center gap-2 bg-white text-indigo-950 font-bold px-10 py-5 rounded-xl hover:bg-indigo-50 transition-all shadow-xl"
+              className="inline-flex items-center gap-2 bg-slate-900 text-white font-bold px-10 py-5 rounded-xl hover:bg-slate-800 transition-all shadow-sm"
             >
               Get Started
               <ArrowRight className="w-5 h-5" />

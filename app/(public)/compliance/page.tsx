@@ -118,7 +118,7 @@ export default async function FrameworksHubPage() {
               <div className="flex flex-wrap gap-4">
                 <Link 
                   href="/intelligence-hub"
-                  className="inline-flex items-center gap-2 bg-slate-900 text-white font-bold px-8 py-4 rounded-xl hover:bg-slate-800 transition-all shadow-xl"
+                  className="inline-flex items-center gap-2 bg-slate-900 text-white font-bold px-8 py-4 rounded-xl hover:bg-slate-800 transition-all shadow-sm"
                 >
                   Enter Intelligence Hub
                   <ChevronRight className="w-5 h-5" />
@@ -141,7 +141,7 @@ export default async function FrameworksHubPage() {
                 <Link 
                   key={item.title}
                   href={item.href}
-                  className="p-6 bg-white border border-slate-200 rounded-2xl hover:border-brand-300 hover:shadow-lg transition-all group"
+                  className="p-6 bg-white border border-slate-200 rounded-lg hover:border-brand-300 hover:shadow-sm transition-all group"
                 >
                   <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 group-hover:bg-brand-50 group-hover:text-brand-600 transition-all mb-4">
                     {item.icon}

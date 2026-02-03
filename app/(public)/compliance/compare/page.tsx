@@ -73,7 +73,7 @@ export default async function ComparePage({ searchParams }: { searchParams: { sl
         </div>
 
         {comparisonData.length === 0 ? (
-          <div className="bg-white p-12 rounded-3xl border border-gray-100 shadow-sm text-center">
+          <div className="bg-white p-12 rounded-xl border border-gray-100 shadow-sm text-center">
             <h3 className="text-xl font-bold mb-4">No companies selected for comparison</h3>
             <p className="text-gray-500 mb-8">Go back to the directory to select companies you want to compare.</p>
             <Link href="/compliance/directory" className="btn-primary">
@@ -83,7 +83,7 @@ export default async function ComparePage({ searchParams }: { searchParams: { sl
         ) : (
           <div className="overflow-x-auto pb-8">
             <div className="inline-block min-w-full align-middle">
-              <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
+              <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
                 <table className="min-w-full divide-y divide-gray-100">
                   <thead className="bg-gray-50">
                     <tr>
@@ -164,16 +164,16 @@ export default async function ComparePage({ searchParams }: { searchParams: { sl
         )}
 
         <section className="mt-20">
-          <div className="bg-blue-600 rounded-3xl p-12 text-center text-white">
+          <div className="bg-slate-900 rounded-xl p-12 text-center text-white">
             <h2 className="text-3xl font-black mb-4">Accelerate Your Vendor Due Diligence</h2>
-            <p className="text-blue-100 max-w-2xl mx-auto mb-8 font-medium">
+            <p className="text-slate-300 max-w-2xl mx-auto mb-8 font-medium">
               RiscLens Peer Comparison helps you benchmark transparency signals instantly, saving hours of manual security review.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Link href="/readiness-review" className="bg-white text-blue-600 px-8 py-4 rounded-xl font-bold hover:bg-blue-50 transition-colors">
+              <Link href="/readiness-review" className="bg-white text-slate-900 px-8 py-4 rounded-xl font-bold hover:bg-slate-50 transition-colors shadow-sm">
                 Book Security Intelligence Review
               </Link>
-              <Link href="/compliance/directory" className="bg-blue-700 text-white px-8 py-4 rounded-xl font-bold hover:bg-blue-800 transition-colors border border-blue-500">
+              <Link href="/compliance/directory" className="bg-slate-800 text-white px-8 py-4 rounded-xl font-bold hover:bg-slate-700 transition-colors border border-slate-600">
                 Back to Directory
               </Link>
             </div>

@@ -114,7 +114,7 @@ export default async function IntelligenceHubPage({
 
         {/* Bottom CTA */}
         <section className="max-w-7xl mx-auto px-4 pb-24">
-          <div className="bg-brand-600 rounded-3xl p-8 sm:p-16 text-center text-white relative overflow-hidden shadow-2xl">
+          <div className="bg-slate-900 rounded-xl p-8 sm:p-16 text-center text-white relative overflow-hidden shadow-sm">
             <div className="absolute top-0 left-0 w-64 h-64 bg-white/10 rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl" />
             <div className="absolute bottom-0 right-0 w-64 h-64 bg-indigo-500/20 rounded-full translate-x-1/2 translate-y-1/2 blur-3xl" />
             
@@ -125,13 +125,13 @@ export default async function IntelligenceHubPage({
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 relative z-10">
               <Link 
                 href="/readiness-review"
-                className="w-full sm:w-auto px-10 py-5 bg-white text-brand-700 font-black rounded-2xl hover:bg-brand-50 transition-all shadow-xl"
+                className="w-full sm:w-auto px-10 py-5 bg-white text-slate-900 font-medium rounded-lg hover:bg-slate-50 transition-all shadow-sm"
               >
                 Request Custom Intel
               </Link>
               <Link 
                 href="/search"
-                className="w-full sm:w-auto px-10 py-5 bg-brand-500 text-white border border-brand-400 font-black rounded-2xl hover:bg-brand-400 transition-all shadow-xl"
+                className="w-full sm:w-auto px-10 py-5 border border-slate-300 text-white font-medium rounded-lg hover:bg-slate-800 transition-all shadow-sm bg-slate-800"
               >
                 Global Search Engine
               </Link>

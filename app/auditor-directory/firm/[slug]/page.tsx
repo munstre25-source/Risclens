@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Script from 'next/script';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
@@ -18,6 +19,8 @@ import {
 } from 'lucide-react';
 import { auditors } from '@/src/content/auditors';
 import { AuthorBio } from '@/components/AuthorBio';
+import { FAQSection } from '@/components/FAQSection';
+import { generateAuditorFAQs, generateEnhancedFAQSchema } from '@/lib/seo-enhancements';
 
 interface PageProps {
   params: Promise<{
@@ -51,9 +54,13 @@ export default async function AuditorProfilePage({ params }: PageProps) {
     notFound();
   }
 
+  const auditorFaqs = generateAuditorFAQs(auditor.name);
+  const auditorFaqSchema = generateEnhancedFAQSchema(auditorFaqs);
+
   return (
     <main className="min-h-screen flex flex-col bg-slate-50">
       <Header />
+      <Script id={`auditor-faq-${slug}`} type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(auditorFaqSchema) }} />
       
       <div className="flex-grow">
         {/* Breadcrumbs */}
@@ -110,7 +117,7 @@ export default async function AuditorProfilePage({ params }: PageProps) {
               </div>
 
               <div className="w-full md:w-80 flex-shrink-0">
-                <div className="bg-slate-900 rounded-3xl p-8 text-white shadow-xl">
+                <div className="bg-slate-900 rounded-xl p-8 text-white shadow-sm">
                   <h3 className="text-lg font-bold mb-6">Ready to start?</h3>
                   <Link 
                     href="/readiness-review"
@@ -177,12 +184,12 @@ export default async function AuditorProfilePage({ params }: PageProps) {
                 </div>
 
                 {/* Highlights */}
-                <div className="bg-blue-50/50 border border-blue-100 rounded-3xl p-8">
+                <div className="bg-blue-50/50 border border-blue-100 rounded-xl p-8">
                   <h2 className="text-2xl font-bold text-slate-900 mb-6">Why {auditor.name}?</h2>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {auditor.highlights.map((highlight, idx) => (
                       <div key={idx} className="text-center">
-                        <div className="w-12 h-12 rounded-2xl bg-white border border-blue-100 flex items-center justify-center mx-auto mb-4">
+                        <div className="w-12 h-12 rounded-lg bg-white border border-blue-100 flex items-center justify-center mx-auto mb-4">
                           <CheckCircle2 className="w-6 h-6 text-blue-600" />
                         </div>
                         <p className="font-bold text-slate-900">{highlight}</p>
@@ -197,7 +204,7 @@ export default async function AuditorProfilePage({ params }: PageProps) {
 
               {/* Right Column: Firm Stats */}
               <div className="space-y-8">
-                <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm">
+                <div className="bg-white border border-slate-200 rounded-xl p-8 shadow-sm">
                   <h3 className="text-lg font-bold text-slate-900 mb-6">Firm Profile</h3>
                   <div className="space-y-6">
                     <div className="flex items-center gap-4">
@@ -221,7 +228,7 @@ export default async function AuditorProfilePage({ params }: PageProps) {
                   </div>
                 </div>
 
-                <div className="bg-brand-600 rounded-3xl p-8 text-white">
+                <div className="bg-slate-800 rounded-xl p-8 text-white">
                   <h3 className="text-xl font-bold mb-4">Benchmarked Data</h3>
                   <p className="text-brand-100 mb-6 leading-relaxed">
                     Based on our data from 100+ audits with {auditor.name}, they score exceptionally well in:
@@ -244,6 +251,12 @@ export default async function AuditorProfilePage({ params }: PageProps) {
               </div>
 
             </div>
+          </div>
+        </section>
+
+        <section className="py-16 bg-white border-t border-slate-200">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6">
+            <FAQSection title={`${auditor.name} FAQs`} faqs={auditorFaqs} />
           </div>
         </section>
       </div>

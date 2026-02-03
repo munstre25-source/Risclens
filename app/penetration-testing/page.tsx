@@ -7,6 +7,7 @@ import DefinitionCallout from '@/components/DefinitionCallout';
 import CommonForIndustries from '@/components/CommonForIndustries';
 import { HowItWorksButton } from '@/components/HowItWorksButton';
 import { RelatedGuidesRow } from '@/components/RelatedGuidesRow';
+import { StickyCTA } from '@/components/StickyCTA';
 import { messaging } from '@/src/content/messaging';
 
 const lastUpdated = '2026-01-05';
@@ -249,6 +250,12 @@ export default function PentestHubPage() {
           </div>
         </section>
         <Footer />
+        <StickyCTA
+          label="Run Pentest Cost Estimator"
+          description="Get your pentest cost estimate in minutes."
+          subDescription="Free · No signup · Instant results"
+          href="/penetration-testing/cost-estimator"
+        />
       </main>
   );
 }

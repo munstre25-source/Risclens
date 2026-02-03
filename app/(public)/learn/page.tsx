@@ -77,7 +77,7 @@ export default function EducationHubPage() {
           <div className="mt-10 flex flex-wrap justify-center gap-4">
             <Link 
               href="/soc-2-readiness-calculator"
-              className="bg-brand-600 text-white px-8 py-4 rounded-full font-bold hover:bg-brand-700 transition-all shadow-lg shadow-brand-200/50"
+              className="bg-slate-900 text-white px-8 py-4 rounded-full font-bold hover:bg-slate-800 transition-all shadow-sm"
             >
               Start Free Assessment
             </Link>
@@ -104,9 +104,9 @@ export default function EducationHubPage() {
               <Link 
                 key={path.href}
                 href={path.href}
-                className="group flex flex-col sm:flex-row items-start gap-6 bg-white border border-slate-200 rounded-3xl p-8 transition-all hover:shadow-xl hover:border-brand-200 hover:-translate-y-1"
+                className="group flex flex-col sm:flex-row items-start gap-6 bg-white border border-slate-200 rounded-xl p-8 transition-all hover:shadow-sm hover:border-brand-200 hover:-translate-y-1"
               >
-                <div className="w-14 h-14 shrink-0 rounded-2xl bg-brand-50 flex items-center justify-center group-hover:bg-brand-100 transition-colors">
+                <div className="w-14 h-14 shrink-0 rounded-lg bg-brand-50 flex items-center justify-center group-hover:bg-brand-100 transition-colors">
                   {path.icon}
                 </div>
                 <div className="space-y-3">
@@ -133,7 +133,7 @@ export default function EducationHubPage() {
       {/* Popular Deep Dives */}
       <section className="pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="bg-slate-900 rounded-[3rem] p-8 lg:p-16 text-white overflow-hidden relative">
+          <div className="bg-slate-900 rounded-xl p-8 lg:p-16 text-white overflow-hidden relative">
             <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-96 h-96 bg-brand-500/10 rounded-full blur-[100px]"></div>
             
             <div className="relative z-10 grid lg:grid-cols-2 gap-12 items-center">
@@ -160,7 +160,7 @@ export default function EducationHubPage() {
                 </div>
               </div>
               
-              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-8 space-y-6">
+              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-8 space-y-6">
                 <h3 className="text-xl font-bold">New: AI Compliance Hub</h3>
                 <p className="text-slate-400 leading-relaxed">
                   We&apos;ve just launched our deep-dive into ISO 42001 and the EU AI Act. Learn how to prepare your LLM-based applications for enterprise security reviews.
