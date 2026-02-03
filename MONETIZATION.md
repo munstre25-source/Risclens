@@ -9,7 +9,7 @@ The primary monetization vehicle is **Lead Arbitrage**: capturing high-intent us
 
 ---
 
-## 2. Revenue Streams
+## 2. Revenue Streamses
 
 ### A. Lead Sales (Primary)
 *   **Mechanism**: Selling "High Intent" leads to vetted CPA firms and auditors.
