@@ -14,7 +14,7 @@ The primary monetization vehicle is **Lead Arbitrage**: capturing high-intent us
 ### A. Lead Sales (Primary)
 *   **Mechanism**: Selling "High Intent" leads to vetted CPA firms and auditors.
 *   **Unit Price**: $250 – $1,200 per lead (depending on company size and urgency).
-*   **PPC Chat Boost**: The Copilot increases conversion rates by 2-3x compared to static forms, significantly lowering the effective Cost Per Acquisition (CAC).
+*   **PPC Chat Boost**: The Copilotr increases conversion rates by 2-3x compared to static forms, significantly lowering the effective Cost Per Acquisition (CAC).
 
 ### B. Auditor Introductions (Referral Fees)
 *   **Mechanism**: Direct referral to a partner firm for a success fee (10-15% of the contract value).
