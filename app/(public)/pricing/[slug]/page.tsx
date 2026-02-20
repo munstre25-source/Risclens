@@ -42,6 +42,7 @@ import {
 } from '@/lib/seo-enhancements';
 import { FAQSection } from '@/components/FAQSection';
 import { GeneralPageSchema } from '@/components/GeneralPageSchema';
+import { getToolBySlug } from '@/lib/compliance-tools';
 
 export const dynamicParams = true;
 export const revalidate = 86400; // 24 hours
@@ -62,6 +63,73 @@ async function getPseoPricingData(slug: string) {
     .single();
   
   return data;
+}
+
+function buildFallbackPricingContent(tool: Awaited<ReturnType<typeof getToolBySlug>>, slug: string) {
+  const defaultTiers = [
+    {
+      name: 'Starter',
+      estimatedPrice: tool?.pricing_starting || 'Contact Sales',
+      targetAudience: tool?.target_market || 'Growth-stage teams',
+      features: [
+        `Frameworks supported: ${tool?.frameworks_supported?.slice(0, 3).join(', ') || 'SOC 2, ISO 27001, HIPAA'}`,
+        `Automation level: ${tool?.automation_level || 'Standard'}`,
+        `Integrations: ${tool?.integrations_count ? `${tool.integrations_count}+` : 'Core integrations'}`,
+      ],
+    },
+    {
+      name: 'Growth',
+      estimatedPrice: tool?.pricing_range || 'Custom pricing',
+      targetAudience: tool?.target_market || 'Scaling compliance programs',
+      features: [
+        'Expanded controls and evidence automation',
+        'Cross-framework mapping and monitoring',
+        'Dedicated onboarding and implementation support',
+      ],
+    },
+    {
+      name: 'Enterprise',
+      estimatedPrice: 'Custom Quote',
+      targetAudience: 'Complex multi-entity programs',
+      features: [
+        'Advanced governance and reporting',
+        'Custom workflows and integrations',
+        'Dedicated success and audit support',
+      ],
+    },
+  ];
+
+  const hiddenCosts = tool?.hidden_costs
+    ? tool.hidden_costs
+        .split(/;|,/)
+        .map((item) => item.trim())
+        .filter(Boolean)
+    : ['Ask for implementation, auditor, and module add-on pricing in writing.'];
+
+  const negotiationTips = [
+    `Ask ${tool?.name || 'the vendor'} to break down base license vs implementation fees.`,
+    'Request annual and multi-year pricing with all add-ons listed.',
+    'Confirm what evidence automation and audit support are included at each tier.',
+  ];
+
+  const comparisonLinks = [
+    { name: `${tool?.name || slug} Alternatives`, href: `/compare/${slug}-alternatives` },
+    { name: `${tool?.name || slug} vs Vanta`, href: `/compare/${[slug, 'vanta'].sort().join('-vs-')}` },
+    { name: `${tool?.name || slug} vs Drata`, href: `/compare/${[slug, 'drata'].sort().join('-vs-')}` },
+    { name: `${tool?.name || slug} vs Secureframe`, href: `/compare/${[slug, 'secureframe'].sort().join('-vs-')}` },
+  ];
+
+  return {
+    toolName: tool?.name || slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
+    toolSlug: slug,
+    heroDescription:
+      tool?.description ||
+      `Independent pricing analysis for ${tool?.name || slug}, including plan structure, cost drivers, and negotiation guidance.`,
+    pricingTiers: defaultTiers,
+    hiddenCosts,
+    negotiationTips,
+    comparisonLinks,
+  };
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -96,21 +164,44 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   // Fallback to static content
   const tool = toolPricing.find(t => t.slug === slug);
-  if (!tool) return { title: 'Pricing Not Found', robots: { index: false } };
+  if (tool) {
+    const title = generatePricingTitleOptimized(tool.name, tool.startingPrice);
+    const description = generatePricingDescriptionOptimized(tool.name, tool.startingPrice, tool.targetMarket);
 
-  // Use CTR-optimized title and description
-  const title = generatePricingTitleOptimized(tool.name, tool.startingPrice);
-  const description = generatePricingDescriptionOptimized(tool.name, tool.startingPrice, tool.targetMarket);
+    return {
+      title,
+      description,
+      keywords: [
+        `${tool.name} pricing`,
+        `${tool.name} pricing ${CURRENT_YEAR}`,
+        `${tool.name} cost`,
+        `how much does ${tool.name} cost`,
+        `${tool.name} plans`,
+      ],
+      alternates: {
+        canonical: `https://risclens.com/pricing/${slug}`,
+      }
+    };
+  }
+
+  const complianceTool = await getToolBySlug(slug);
+  if (!complianceTool) return { title: 'Pricing Not Found', robots: { index: false } };
+  const title = generatePricingTitleOptimized(complianceTool.name, complianceTool.pricing_starting || 'Contact Sales');
+  const description = generatePricingDescriptionOptimized(
+    complianceTool.name,
+    complianceTool.pricing_starting || 'Contact Sales',
+    complianceTool.target_market || undefined
+  );
 
   return {
     title,
     description,
     keywords: [
-      `${tool.name} pricing`,
-      `${tool.name} pricing ${CURRENT_YEAR}`,
-      `${tool.name} cost`,
-      `how much does ${tool.name} cost`,
-      `${tool.name} plans`,
+      `${complianceTool.name} pricing`,
+      `${complianceTool.name} pricing ${CURRENT_YEAR}`,
+      `${complianceTool.name} cost`,
+      `how much does ${complianceTool.name} cost`,
+      `${complianceTool.name} plans`,
     ],
     alternates: {
       canonical: `https://risclens.com/pricing/${slug}`,
@@ -120,11 +211,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   export async function generateStaticParams() {
     const supabase = getSupabaseAdmin();
-    // Only fetch pSEO pages that have valid content_json with toolName
-    const { data: pseoPages } = await supabase
-      .from('pseo_pages')
-      .select('slug, content_json')
-      .eq('category', 'pricing');
+    const [{ data: pseoPages }, { data: activeTools }] = await Promise.all([
+      supabase
+        .from('pseo_pages')
+        .select('slug, content_json')
+        .eq('category', 'pricing'),
+      supabase
+        .from('compliance_tools')
+        .select('slug')
+        .eq('is_active', true),
+    ]);
 
     // Filter out pSEO pages with missing or empty toolName
     const pseoSlugs = pseoPages
@@ -134,13 +230,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const staticSlugs = toolPricing.filter(t => t.slug).map((tool) => ({
       slug: tool.slug,
     }));
+    const activeToolSlugs = (activeTools || [])
+      .filter((tool) => Boolean(tool.slug))
+      .map((tool) => ({ slug: tool.slug }));
 
     // Merge and deduplicate
     const allSlugs = [...staticSlugs];
-    pseoSlugs.forEach(p => {
-      if (!allSlugs.find(s => s.slug === p.slug)) {
-        allSlugs.push(p);
-      }
+    [pseoSlugs, activeToolSlugs].forEach((group) => {
+      group.forEach((slugRow) => {
+        if (!allSlugs.find((existing) => existing.slug === slugRow.slug)) {
+          allSlugs.push(slugRow);
+        }
+      });
     });
 
     return allSlugs;
@@ -175,11 +276,29 @@ export default async function ToolPricingPage({ params }: PageProps) {
   }
 
   // 2. Fallback to static content
-  const tool = toolPricing.find(t => t.slug === slug);
+  const staticTool = toolPricing.find(t => t.slug === slug);
+  const complianceTool = staticTool ? null : await getToolBySlug(slug);
 
-  if (!tool) {
+  if (!staticTool && !complianceTool) {
     notFound();
   }
+
+  if (!staticTool && complianceTool) {
+    const content = buildFallbackPricingContent(complianceTool, slug);
+    return (
+      <ToolPricingPageContent
+        toolName={content.toolName}
+        toolSlug={slug}
+        heroDescription={content.heroDescription}
+        pricingTiers={content.pricingTiers}
+        hiddenCosts={content.hiddenCosts}
+        negotiationTips={content.negotiationTips}
+        comparisonLinks={content.comparisonLinks}
+      />
+    );
+  }
+
+    const tool = staticTool as NonNullable<typeof staticTool>;
 
     const otherGuides = toolPricing
       .filter(t => t.slug !== slug)
@@ -655,7 +774,7 @@ export default async function ToolPricingPage({ params }: PageProps) {
                       {comparisons.slice(0, 8).map((comp) => (
                         <Link 
                           key={comp.slug}
-                          href={`/compare/${tool.slug}-vs-${comp.slug}`}
+                          href={`/compare/${[tool.slug, comp.slug].sort().join('-vs-')}`}
                           className="block text-[14px] font-bold text-[#2563EB] hover:underline leading-tight"
                         >
                           {tool.name} vs {comp.name} Pricing
@@ -691,16 +810,16 @@ export default async function ToolPricingPage({ params }: PageProps) {
                       <Link href="/soc-2-readiness/saas" className="block text-[14px] font-bold text-slate-500 hover:text-[#2563EB] leading-snug">
                         SOC 2 Compliance for SaaS Companies | Complete Guide
                       </Link>
-                      <Link href="/soc-2-readiness-checklist/edtech" className="block text-[14px] font-bold text-slate-500 hover:text-[#2563EB] leading-snug">
-                        SOC 2 Compliance for EdTech Companies | Complete Guide
+                      <Link href="/soc-2-readiness/fintech" className="block text-[14px] font-bold text-slate-500 hover:text-[#2563EB] leading-snug">
+                        SOC 2 Compliance for Fintech Companies | Complete Guide
                       </Link>
-                      <Link href="/soc-2-readiness-checklist/marketplace" className="block text-[14px] font-bold text-slate-500 hover:text-[#2563EB] leading-snug">
-                        SOC 2 Compliance for E-commerce Companies | Complete Guide
+                      <Link href="/soc-2-readiness/startups" className="block text-[14px] font-bold text-slate-500 hover:text-[#2563EB] leading-snug">
+                        SOC 2 Compliance for Startup Teams | Complete Guide
                       </Link>
-                      <Link href="/compliance/directory/fintech" className="block text-[14px] font-bold text-slate-500 hover:text-[#2563EB] leading-snug">
+                      <Link href="/iso-27001/compliance/fintech" className="block text-[14px] font-bold text-slate-500 hover:text-[#2563EB] leading-snug">
                         ISO 27001 Compliance for Fintech Companies | Complete Guide
                       </Link>
-                      <Link href="/compliance/directory/healthcare" className="block text-[14px] font-bold text-slate-500 hover:text-[#2563EB] leading-snug">
+                      <Link href="/iso-27001/compliance/healthcare" className="block text-[14px] font-bold text-slate-500 hover:text-[#2563EB] leading-snug">
                         ISO 27001 Compliance for Healthcare Companies | Complete Guide
                       </Link>
                     </div>

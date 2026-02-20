@@ -11,6 +11,7 @@ import { VendorRiskQuestionnaire } from '@/components/ai-governance/tools/Vendor
 import { constructMetadata } from '@/lib/seo';
 import { getSupabaseAdmin } from '@/lib/supabase';
 import { generateGuideFAQs } from '@/lib/seo-enhancements';
+import { getDecisionSlugCandidates, getRoleSlugCandidates, normalizeFrameworkSlug } from '@/lib/pseo-slug-normalization';
 import { 
   Shield, 
   ArrowRight, 
@@ -62,25 +63,73 @@ export async function generateStaticParams() {
 
 async function getPageData(frameworkSlug: string, slug: string) {
   const supabase = getSupabaseAdmin();
+  const normalizedFrameworkSlug = normalizeFrameworkSlug(frameworkSlug);
   
   const { data: framework } = await supabase
     .from('pseo_frameworks')
     .select('*')
-    .eq('slug', frameworkSlug)
+    .eq('slug', normalizedFrameworkSlug)
     .single();
 
   if (!framework) return null;
 
-  const { data: page } = await supabase
+  const { data: exactPageRows } = await supabase
     .from('pseo_pages')
     .select('*')
     .eq('framework_id', framework.id)
     .eq('slug', slug)
-    .single();
+    .limit(1);
 
-  if (!page) return null;
+  const exactPage = exactPageRows?.[0];
+  if (exactPage) {
+    return { page: exactPage, framework, resolvedSlug: exactPage.slug };
+  }
 
-  return { page, framework };
+  const decisionCandidates = getDecisionSlugCandidates(slug, normalizedFrameworkSlug);
+  for (const decisionSlug of decisionCandidates) {
+    const { data: decision } = await supabase
+      .from('pseo_decision_types')
+      .select('id, slug')
+      .eq('slug', decisionSlug)
+      .single();
+    if (!decision) continue;
+
+    const { data: pageRows } = await supabase
+      .from('pseo_pages')
+      .select('*')
+      .eq('framework_id', framework.id)
+      .eq('decision_type_id', decision.id)
+      .limit(1);
+
+    const page = pageRows?.[0];
+    if (page) {
+      return { page, framework, resolvedSlug: decision.slug };
+    }
+  }
+
+  const roleCandidates = getRoleSlugCandidates(slug, normalizedFrameworkSlug);
+  for (const roleSlug of roleCandidates) {
+    const { data: role } = await supabase
+      .from('pseo_roles')
+      .select('id, slug')
+      .eq('slug', roleSlug)
+      .single();
+    if (!role) continue;
+
+    const { data: pageRows } = await supabase
+      .from('pseo_pages')
+      .select('*')
+      .eq('framework_id', framework.id)
+      .eq('role_id', role.id)
+      .limit(1);
+
+    const page = pageRows?.[0];
+    if (page) {
+      return { page, framework, resolvedSlug: role.slug };
+    }
+  }
+
+  return null;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -92,7 +141,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return constructMetadata({
     title: data.page.title,
     description: data.page.meta_description || `Expert guide to ${data.page.title}. Learn about requirements, implementation, and best practices.`,
-    path: `/${framework}/${slug}`,
+    path: `/${framework}/${data.resolvedSlug}`,
     category: data.page.category,
     keywords: [data.page.category, framework, data.page.title].filter(Boolean) as string[],
   });
@@ -113,11 +162,11 @@ export default async function ProgrammaticPage({ params }: Props) {
       <GeneralPageSchema
         title={page.title}
         description={page.meta_description || `Strategic guide for ${page.title}.`}
-        url={`https://risclens.com/${framework.slug}/${slug}`}
+        url={`https://risclens.com/${framework.slug}/${data.resolvedSlug}`}
         breadcrumbs={[
           { name: 'Home', item: 'https://risclens.com' },
           { name: `${framework.name} Hub`, item: `https://risclens.com/${framework.slug}` },
-          { name: page.title, item: `https://risclens.com/${framework.slug}/${slug}` },
+          { name: page.title, item: `https://risclens.com/${framework.slug}/${data.resolvedSlug}` },
         ]}
       />
       

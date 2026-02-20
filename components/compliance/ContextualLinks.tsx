@@ -37,7 +37,7 @@ const LINK_GRAPH: Record<LinkCategory, ContextualLink[]> = {
     { href: '/soc-2-cost-calculator', label: 'SOC 2 Cost Calculator', description: 'Estimate your compliance budget', category: 'framework' },
     { href: '/soc-2-readiness-calculator', label: 'Readiness Assessment', description: 'Check your compliance maturity', category: 'framework' },
     { href: '/soc-2/for/cto', label: 'SOC 2 for CTOs', description: 'Technical leadership guide', category: 'role' },
-    { href: '/soc-2/for/founders', label: 'SOC 2 for Founders', description: 'Executive decision framework', category: 'role' },
+    { href: '/soc-2/for/founder', label: 'SOC 2 for Founders', description: 'Executive decision framework', category: 'role' },
     { href: '/pricing/vanta', label: 'Vanta Pricing 2026', description: 'Current pricing breakdown', category: 'pricing' },
     { href: '/pricing/drata', label: 'Drata Pricing 2026', description: 'Cost comparison analysis', category: 'pricing' },
     { href: '/compare/vanta-alternatives', label: 'Vanta Alternatives', description: 'Platform comparison guide', category: 'alternatives' },

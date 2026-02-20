@@ -9,6 +9,7 @@ import {
   generateFallbackTitle,
   generateFallbackDescription 
 } from '@/lib/pseo-validation';
+import { getRoleSlugCandidates } from '@/lib/pseo-slug-normalization';
 
 interface Props {
   params: Promise<{ role: string }>;
@@ -24,15 +25,21 @@ export async function generateStaticParams() {
 
 async function getRolePage(role: string) {
   const supabase = getSupabaseAdmin();
+  const roleCandidates = getRoleSlugCandidates(role, 'soc-2');
+
   const { data, error } = await supabase
     .from('pseo_pages')
     .select('*')
-    .eq('slug', role)
     .eq('category', 'role')
-    .single();
+    .in('slug', roleCandidates);
 
-  if (error || !data) return null;
-  return data;
+  if (error || !data?.length) return null;
+
+  const bySlug = new Map(data.map((page) => [page.slug, page]));
+  const resolvedSlug = roleCandidates.find((candidate) => bySlug.has(candidate)) || data[0].slug;
+  const page = bySlug.get(resolvedSlug) || data[0];
+
+  return { page, resolvedSlug };
 }
 
 async function getAllRoles() {
@@ -48,7 +55,8 @@ async function getAllRoles() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { role } = await params;
-  const page = await getRolePage(role);
+  const resolved = await getRolePage(role);
+  const page = resolved?.page;
 
   // Validate page has required roleName
   const roleName = page?.content_json?.roleName;
@@ -63,14 +71,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: page.title || generateFallbackTitle(role, 'role'),
     description: page.meta_description || generateFallbackDescription(role, 'role'),
     alternates: {
-      canonical: `https://risclens.com/soc-2/for/${role}`,
+      canonical: `https://risclens.com/soc-2/for/${resolved?.resolvedSlug || role}`,
     },
   };
 }
 
 export default async function DynamicRolePage({ params }: Props) {
   const { role } = await params;
-  const page = await getRolePage(role);
+  const resolved = await getRolePage(role);
+  const page = resolved?.page;
 
   // Validate page has required roleName
   if (!page || !page.content_json?.roleName) {
@@ -106,7 +115,7 @@ export default async function DynamicRolePage({ params }: Props) {
   return (
     <RoleSOC2Page
       roleName={roleName}
-      roleSlug={role}
+      roleSlug={resolved?.resolvedSlug || role}
       heroDescription={getString(content, 'heroDescription', `A comprehensive guide for ${roleName}s on navigating SOC 2 compliance requirements and best practices.`)}
       keyPriorities={getArray(content, 'keyPriorities', fallbackKeyPriorities)}
       faqs={getArray(content, 'faqs', fallbackFaqs)}

@@ -8,6 +8,7 @@ import {
   getToolsForComparison,
   getToolComparisonBySlug,
   parseComparisonSlug,
+  generateComparisonSlug,
   generateComparisonData,
   generateComparisonTitle,
   generateComparisonDescription,
@@ -44,6 +45,14 @@ import { ExitIntentModal } from '@/components/LeadCaptureCTA';
 
 export const dynamicParams = true;
 export const revalidate = 86400; // 24 hours
+
+function toDisplayName(slug: string): string {
+  return slug
+    .split('-')
+    .filter(Boolean)
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(' ');
+}
 
 export async function generateStaticParams() {
   try {
@@ -97,7 +106,15 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     if (!parsed) return { title: 'Comparison | RiscLens' };
 
     const { toolA, toolB } = await getToolsForComparison(parsed.toolASlug, parsed.toolBSlug);
-    if (!toolA || !toolB) return { title: 'Comparison | RiscLens' };
+    const toolAName = toolA?.name || toDisplayName(parsed.toolASlug);
+    const toolBName = toolB?.name || toDisplayName(parsed.toolBSlug);
+    if (!toolA || !toolB) {
+      return {
+        title: `${toolAName} vs ${toolBName} Comparison | RiscLens`,
+        description: `Side-by-side comparison of ${toolAName} and ${toolBName} for SOC 2 and broader compliance automation workflows.`,
+        alternates: { canonical: `https://risclens.com/compare/${slug}` },
+      };
+    }
 
     // Use CTR-optimized title and description
     const title = generateComparisonTitleOptimized(toolA, toolB);
@@ -127,7 +144,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     const tools = await getAllTools();
     const tool = tools.find(t => t.slug === toolSlug);
     const alternatives = tool ? await getAlternativesFor(tool.slug) : [];
-    const toolName = tool?.name || toolSlug.replace(/-/g, ' ');
+    const toolName = tool?.name || toDisplayName(toolSlug);
 
     // Use CTR-optimized title and description
     const title = generateAlternativesTitleOptimized(toolName, alternatives.length || 10);
@@ -219,11 +236,14 @@ async function ComparisonPageWrapper({ slug }: { slug: string }) {
   const parsed = parseComparisonSlug(slug);
   if (!parsed) notFound();
 
+  const allTools = await getAllTools();
   const { toolA, toolB } = await getToolsForComparison(parsed.toolASlug, parsed.toolBSlug);
-  if (!toolA || !toolB) notFound();
+  const resolvedToolA = toolA || makeFallbackTool(parsed.toolASlug, toDisplayName(parsed.toolASlug));
+  const resolvedToolB = toolB || makeFallbackTool(parsed.toolBSlug, toDisplayName(parsed.toolBSlug));
 
-  const specializedData = await getToolComparisonBySlug(slug);
-  const generatedData = generateComparisonData(toolA, toolB);
+  const canonicalSlug = generateComparisonSlug(parsed.toolASlug, parsed.toolBSlug);
+  const specializedData = (await getToolComparisonBySlug(slug)) || (await getToolComparisonBySlug(canonicalSlug));
+  const generatedData = generateComparisonData(resolvedToolA, resolvedToolB);
   
   const { comparisonRows, pricingComparison, faqs } = specializedData 
     ? { 
@@ -233,16 +253,22 @@ async function ComparisonPageWrapper({ slug }: { slug: string }) {
       }
     : generatedData;
 
-  const verdict = specializedData?.verdict || generateVerdict(toolA, toolB);
-  const title = specializedData?.title || generateComparisonTitle(toolA, toolB);
-  const description = specializedData?.meta_description || generateComparisonDescription(toolA, toolB);
+  const verdict = specializedData?.verdict || generateVerdict(resolvedToolA, resolvedToolB);
+  const title = specializedData?.title || generateComparisonTitle(resolvedToolA, resolvedToolB);
+  const description = specializedData?.meta_description || generateComparisonDescription(resolvedToolA, resolvedToolB);
   
-  const internalLinks = await getComparisonInternalLinks(toolA.slug, toolB.slug);
+  const internalLinks = await getComparisonInternalLinks(resolvedToolA.slug, resolvedToolB.slug);
   const breadcrumbs = getBreadcrumbs(`/compare/${slug}`);
-  const alternativesA = (await getAlternativesFor(toolA.slug)).slice(0, 3);
-  const alternativesB = (await getAlternativesFor(toolB.slug)).slice(0, 3);
+  const alternativesAData = (await getAlternativesFor(resolvedToolA.slug)).slice(0, 3);
+  const alternativesBData = (await getAlternativesFor(resolvedToolB.slug)).slice(0, 3);
+  const alternativesA = alternativesAData.length
+    ? alternativesAData
+    : allTools.filter((toolRow) => toolRow.slug !== resolvedToolA.slug && toolRow.slug !== resolvedToolB.slug).slice(0, 3);
+  const alternativesB = alternativesBData.length
+    ? alternativesBData
+    : allTools.filter((toolRow) => toolRow.slug !== resolvedToolB.slug && toolRow.slug !== resolvedToolA.slug).slice(0, 3);
 
-  const comparisonSchema = generateComparisonSchema(toolA, toolB, `https://risclens.com/compare/${slug}`);
+  const comparisonSchema = generateComparisonSchema(resolvedToolA, resolvedToolB, `https://risclens.com/compare/${slug}`);
   const faqSchema = generateFAQSchema(faqs);
   const breadcrumbSchema = generateSchemaOrgBreadcrumbs(breadcrumbs);
 
@@ -253,8 +279,8 @@ async function ComparisonPageWrapper({ slug }: { slug: string }) {
       <Script id="breadcrumb-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <Header />
         <ComparisonView
-          toolA={toolA}
-          toolB={toolB}
+          toolA={resolvedToolA}
+          toolB={resolvedToolB}
           comparisonRows={comparisonRows}
           pricingComparison={pricingComparison}
           faqs={faqs}
@@ -272,6 +298,7 @@ async function ComparisonPageWrapper({ slug }: { slug: string }) {
 }
 
 function makeFallbackTool(slug: string, name?: string) {
+  const nowIso = new Date().toISOString();
   return {
     id: `fallback-${slug}`,
     slug,
@@ -308,9 +335,9 @@ function makeFallbackTool(slug: string, name?: string) {
     verdict: null,
     is_active: true,
     display_order: 0,
-    last_verified_at: '',
-    created_at: '',
-    updated_at: '',
+    last_verified_at: nowIso,
+    created_at: nowIso,
+    updated_at: nowIso,
   };
 }
 

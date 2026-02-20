@@ -6,13 +6,13 @@ import Footer from '@/components/Footer';
 import AssessmentCTA from '@/components/AssessmentCTA';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { AccuracyDisclaimer, LastVerifiedBadge } from '@/components/AccuracyGuards';
-import { getPSEOPageBySlug } from '@/lib/pseo';
 import { getIndustryGuideClusters } from '@/lib/pseo-internal-links';
 import { InternalLinks, InternalLinksInline } from '@/components/InternalLinks';
 import { getSupabaseAdmin } from '@/lib/supabase';
 import { SmartContent } from '@/components/seo/SmartContent';
 import { getAllTools } from '@/lib/compliance-tools';
 import { generateGuideFAQs, generateEnhancedFAQSchema } from '@/lib/seo-enhancements';
+import { getDecisionSlugCandidates, getRoleSlugCandidates, normalizeFrameworkSlug } from '@/lib/pseo-slug-normalization';
 
 export const dynamicParams = true;
 export const revalidate = 86400; // 24 hours
@@ -47,19 +47,91 @@ interface PageProps {
   };
 }
 
+async function getFrameworkPage(frameworkSlug: string, slug: string) {
+  const supabase = getSupabaseAdmin();
+  const normalizedFrameworkSlug = normalizeFrameworkSlug(frameworkSlug);
+
+  const { data: framework } = await supabase
+    .from('pseo_frameworks')
+    .select('id, slug')
+    .eq('slug', normalizedFrameworkSlug)
+    .single();
+
+  if (!framework) return null;
+
+  const selectClause = '*, pseo_frameworks(*), pseo_industries(*)';
+  const { data: exactRows } = await supabase
+    .from('pseo_pages')
+    .select(selectClause)
+    .eq('framework_id', framework.id)
+    .eq('slug', slug)
+    .limit(1);
+
+  const exact = exactRows?.[0];
+  if (exact) {
+    return { page: exact, resolvedSlug: exact.slug };
+  }
+
+  const decisionCandidates = getDecisionSlugCandidates(slug, normalizedFrameworkSlug);
+  for (const decisionSlug of decisionCandidates) {
+    const { data: decision } = await supabase
+      .from('pseo_decision_types')
+      .select('id, slug')
+      .eq('slug', decisionSlug)
+      .single();
+    if (!decision) continue;
+
+    const { data: rows } = await supabase
+      .from('pseo_pages')
+      .select(selectClause)
+      .eq('framework_id', framework.id)
+      .eq('decision_type_id', decision.id)
+      .limit(1);
+    const page = rows?.[0];
+    if (page) {
+      return { page, resolvedSlug: decision.slug };
+    }
+  }
+
+  const roleCandidates = getRoleSlugCandidates(slug, normalizedFrameworkSlug);
+  for (const roleSlug of roleCandidates) {
+    const { data: role } = await supabase
+      .from('pseo_roles')
+      .select('id, slug')
+      .eq('slug', roleSlug)
+      .single();
+    if (!role) continue;
+
+    const { data: rows } = await supabase
+      .from('pseo_pages')
+      .select(selectClause)
+      .eq('framework_id', framework.id)
+      .eq('role_id', role.id)
+      .limit(1);
+    const page = rows?.[0];
+    if (page) {
+      return { page, resolvedSlug: role.slug };
+    }
+  }
+
+  return null;
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const page = await getPSEOPageBySlug(params.slug);
-  if (!page) return {};
+  const resolved = await getFrameworkPage(params.framework, params.slug);
+  if (!resolved) return {};
+  const { page, resolvedSlug } = resolved;
 
   return {
     title: `${page.title} | Compliance Guide | RiscLens`,
     description: page.meta_description,
-    alternates: { canonical: `https://risclens.com/compliance/${params.framework}/${params.slug}` },
+    alternates: { canonical: `https://risclens.com/compliance/${params.framework}/${resolvedSlug}` },
   };
 }
 
 export default async function PSEOCompliancePage({ params }: PageProps) {
-  const page = await getPSEOPageBySlug(params.slug);
+  const resolved = await getFrameworkPage(params.framework, params.slug);
+  const page = resolved?.page;
 
   if (!page) {
     notFound();
