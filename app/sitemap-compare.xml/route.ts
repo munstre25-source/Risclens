@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { unstable_noStore as noStore } from 'next/cache';
 import {
     baseUrl,
     BUILD_DATE,
@@ -13,7 +14,6 @@ import {
     generatePricingRoutes,
     getResolvableComplianceToolSlugs
 } from '@/src/seo/routes';
-import { BUILD_CONFIG } from '@/lib/build-config';
 
 /**
  * Compare & Alternatives Sitemap
@@ -24,6 +24,7 @@ import { BUILD_CONFIG } from '@/lib/build-config';
  * - /pricing/[tool]
  */
 export async function GET() {
+    noStore();
     const entries: Array<{ url: string; lastmod: string; priority: number; changefreq: string }> = [];
 
     const staticCompareRoutes = COMMERCIAL_ROUTES.filter((route) =>
@@ -52,22 +53,17 @@ export async function GET() {
         try {
             const supabase = getSupabaseAdmin();
 
-            const { data: industries } = await supabase
-                .from('pseo_industries')
-                .select('slug')
-                .in('slug', BUILD_CONFIG.PRIORITY_INDUSTRIES);
+            const [{ data: industries }, { data: companies }] = await Promise.all([
+                supabase.from('pseo_industries').select('slug'),
+                supabase.from('company_signals').select('slug').eq('indexable', true),
+            ]);
 
-            const topTools = BUILD_CONFIG.PRIORITY_TOOLS;
+            const topTools = ['vanta', 'drata', 'secureframe', 'sprinto', 'thoropass'];
 
-            if (industries?.length) {
-                const prioritizedTools = toolSlugs
-                    .filter((slug) => topTools.includes(slug))
-                    .map((slug) => ({ slug }));
-
-                for (const c of prioritizedTools) {
-                    for (const i of industries) {
-                        // /compare/[company]-alternatives/for/[industry]
-                        const altPath = `/compare/${c.slug}-alternatives/for/${i.slug}`;
+            if (industries?.length && companies?.length) {
+                for (const company of companies) {
+                    for (const industry of industries) {
+                        const altPath = `/compare/${company.slug}-alternatives/for/${industry.slug}`;
                         const altMeta = getUrlPriority(altPath);
                         entries.push({
                             url: `${baseUrl}${altPath}`,
@@ -76,11 +72,11 @@ export async function GET() {
                             changefreq: altMeta.changeFrequency || 'weekly',
                         });
 
-                        // Add cross-comparisons for top tools
-                        for (const t2 of topTools) {
-                            if (c.slug !== t2) {
-                                const pairSlug = [c.slug, t2].sort().join('-vs-');
-                                const vsPath = `/compare/${pairSlug}/for/${i.slug}`;
+                        if (topTools.includes(company.slug)) {
+                            for (const peer of topTools) {
+                                if (company.slug === peer) continue;
+                                const pairSlug = [company.slug, peer].sort().join('-vs-');
+                                const vsPath = `/compare/${pairSlug}/for/${industry.slug}`;
                                 const vsMeta = getUrlPriority(vsPath);
                                 entries.push({
                                     url: `${baseUrl}${vsPath}`,

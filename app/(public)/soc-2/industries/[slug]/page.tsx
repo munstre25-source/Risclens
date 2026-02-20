@@ -14,6 +14,15 @@ interface PageProps {
   params: { slug: string };
 }
 
+const INDUSTRY_SLUG_ALIASES: Record<string, string> = {
+  'ai-governance-financial-services': 'fintech',
+  'ai-governance-healthcare': 'healthcare',
+  'ai-governance-hr': 'startups',
+  'ai-governance-marketing': 'saas',
+};
+
+const resolveIndustrySlug = (slug: string) => INDUSTRY_SLUG_ALIASES[slug] || slug;
+
 export async function generateStaticParams() {
   return industryCostLinks.map((industry) => ({
     slug: industry.slug,
@@ -21,17 +30,22 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const industry = industryCostLinks.find((i) => i.slug === params.slug);
+  const resolvedSlug = resolveIndustrySlug(params.slug);
+  const industry = industryCostLinks.find((i) => i.slug === resolvedSlug);
   if (!industry) return {};
 
   return {
     title: `SOC 2 Compliance for ${industry.label} | Industry Guide`,
     description: `Specific SOC 2 readiness requirements, cost estimates, and compliance roadmap for ${industry.label} companies. ${industry.blurb}`,
+    alternates: {
+      canonical: `https://risclens.com/soc-2/industries/${resolvedSlug}`,
+    },
   };
 }
 
 export default function IndustryDetailPage({ params }: PageProps) {
-  const industry = industryCostLinks.find((i) => i.slug === params.slug);
+  const resolvedSlug = resolveIndustrySlug(params.slug);
+  const industry = industryCostLinks.find((i) => i.slug === resolvedSlug);
 
   if (!industry) {
     notFound();
@@ -195,7 +209,7 @@ export default function IndustryDetailPage({ params }: PageProps) {
                 <p className="text-slate-600 mt-1">Compare SOC 2 requirements across different verticals.</p>
               </div>
               <div className="flex flex-wrap gap-3">
-                {industryCostLinks.filter(i => i.slug !== params.slug).slice(0, 4).map((i) => (
+                {industryCostLinks.filter(i => i.slug !== resolvedSlug).slice(0, 4).map((i) => (
                   <Link 
                     key={i.slug}
                     href={i.hubHref}
