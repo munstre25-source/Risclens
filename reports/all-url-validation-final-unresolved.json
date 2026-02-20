@@ -1,0 +1,84 @@
+{
+  "generatedAt": "2026-02-20T11:33:28.095Z",
+  "totalRechecked": 69,
+  "persistentUnresolved": 18,
+  "byStatus": {
+    "307": 1,
+    "404": 16,
+    "500": 1
+  },
+  "unresolved": [
+    {
+      "status": 404,
+      "url": "https://risclens.com/auditor-directory/bangalore"
+    },
+    {
+      "status": 404,
+      "url": "https://risclens.com/auditor-directory/london"
+    },
+    {
+      "status": 404,
+      "url": "https://risclens.com/auditor-directory/singapore"
+    },
+    {
+      "status": 307,
+      "url": "https://risclens.com/compare"
+    },
+    {
+      "status": 404,
+      "url": "https://risclens.com/auditor-directory/berlin"
+    },
+    {
+      "status": 404,
+      "url": "https://risclens.com/auditor-directory/sydney"
+    },
+    {
+      "status": 404,
+      "url": "https://risclens.com/learn/soc-2-readiness/business-continuity"
+    },
+    {
+      "status": 404,
+      "url": "https://risclens.com/learn/soc-2-readiness/mfa-and-authentication"
+    },
+    {
+      "status": 404,
+      "url": "https://risclens.com/learn/soc-2-readiness/policies-and-procedures"
+    },
+    {
+      "status": 404,
+      "url": "https://risclens.com/pricing/credo-ai-pricing"
+    },
+    {
+      "status": 404,
+      "url": "https://risclens.com/soc-2/industries/ai-governance-financial-services"
+    },
+    {
+      "status": 404,
+      "url": "https://risclens.com/pricing/onetrust-ai-governance-pricing"
+    },
+    {
+      "status": 404,
+      "url": "https://risclens.com/soc-2/industries/ai-governance-healthcare"
+    },
+    {
+      "status": 404,
+      "url": "https://risclens.com/pricing/ibm-watsonx-governance-pricing"
+    },
+    {
+      "status": 404,
+      "url": "https://risclens.com/pricing/holistic-ai-pricing"
+    },
+    {
+      "status": 404,
+      "url": "https://risclens.com/soc-2/industries/ai-governance-hr"
+    },
+    {
+      "status": 404,
+      "url": "https://risclens.com/soc-2/industries/ai-governance-marketing"
+    },
+    {
+      "status": 500,
+      "url": "https://risclens.com/compliance/directory"
+    }
+  ]
+}

@@ -1,0 +1,465 @@
+{
+  "generatedAt": "2026-02-20T11:32:33.947Z",
+  "baseUrl": "https://risclens.com",
+  "options": {
+    "concurrency": 100,
+    "timeoutMs": 12000
+  },
+  "totals": {
+    "checked": 34698,
+    "resolved": 34629,
+    "unresolved": 69
+  },
+  "unresolved": [
+    {
+      "url": "https://risclens.com/auditor-directory/bangalore",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404",
+      "finalUrl": "https://risclens.com/auditor-directory/bangalore",
+      "redirected": false
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/berlin",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404",
+      "finalUrl": "https://risclens.com/auditor-directory/berlin",
+      "redirected": false
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/london",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404",
+      "finalUrl": "https://risclens.com/auditor-directory/london",
+      "redirected": false
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/singapore",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404",
+      "finalUrl": "https://risclens.com/auditor-directory/singapore",
+      "redirected": false
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/sydney",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404",
+      "finalUrl": "https://risclens.com/auditor-directory/sydney",
+      "redirected": false
+    },
+    {
+      "url": "https://risclens.com/compare",
+      "status": 307,
+      "ok": false,
+      "reason": "status_307",
+      "finalUrl": "https://risclens.com/compare",
+      "redirected": false
+    },
+    {
+      "url": "https://risclens.com/compare/auditboard-alternatives/for/manufacturing",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/auditboard-alternatives/for/marketing-ai",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/automattic-alternatives/for/hr-tech",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/axiom-alternatives/for/ai-data",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/axiom-alternatives/for/ai-ml",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/axiom-alternatives/for/biotech",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/axiom-alternatives/for/crypto-web3",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/axiom-alternatives/for/cybersecurity",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/axiom-alternatives/for/defense-tech",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/axiom-alternatives/for/devtools",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/axiom-alternatives/for/digital-health",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/axiom-alternatives/for/ecommerce",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/axiom-alternatives/for/edtech",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/axiom-alternatives/for/fintech",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/axiom-alternatives/for/gaming",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/axiom-alternatives/for/govtech",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/axiom-alternatives/for/healthcare",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/axiom-alternatives/for/healthtech",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/axiom-alternatives/for/hr-tech",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/axiom-alternatives/for/insurance",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/axiom-alternatives/for/insurtech",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/axiom-alternatives/for/legaltech",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/axiom-alternatives/for/logistics",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/axiom-alternatives/for/manufacturing",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/axiom-alternatives/for/marketing-ai",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/axiom-alternatives/for/martech",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/axiom-alternatives/for/proptech",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/axiom-alternatives/for/saas",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/azure-alternatives/for/ai-data",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/azure-alternatives/for/ai-ml",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/azure-alternatives/for/biotech",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/azure-alternatives/for/crypto-web3",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/azure-alternatives/for/cybersecurity",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/azure-alternatives/for/defense-tech",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/azure-alternatives/for/devtools",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/azure-alternatives/for/digital-health",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/azure-alternatives/for/ecommerce",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/azure-alternatives/for/edtech",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/azure-alternatives/for/fintech",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/azure-alternatives/for/gaming",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/azure-alternatives/for/govtech",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/azure-alternatives/for/healthcare",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/azure-alternatives/for/healthtech",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/azure-alternatives/for/hr-tech",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/azure-alternatives/for/insurance",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/azure-alternatives/for/insurtech",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/azure-alternatives/for/legaltech",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/azure-alternatives/for/logistics",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/azure-alternatives/for/manufacturing",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/lever-alternatives/for/martech",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compare/lever-alternatives/for/proptech",
+      "status": null,
+      "ok": false,
+      "reason": "fetch failed"
+    },
+    {
+      "url": "https://risclens.com/compliance/directory",
+      "status": 500,
+      "ok": false,
+      "reason": "status_500",
+      "finalUrl": "https://risclens.com/compliance/directory",
+      "redirected": false
+    },
+    {
+      "url": "https://risclens.com/learn/soc-2-readiness/business-continuity",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404",
+      "finalUrl": "https://risclens.com/learn/soc-2-readiness/business-continuity",
+      "redirected": false
+    },
+    {
+      "url": "https://risclens.com/learn/soc-2-readiness/mfa-and-authentication",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404",
+      "finalUrl": "https://risclens.com/learn/soc-2-readiness/mfa-and-authentication",
+      "redirected": false
+    },
+    {
+      "url": "https://risclens.com/learn/soc-2-readiness/policies-and-procedures",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404",
+      "finalUrl": "https://risclens.com/learn/soc-2-readiness/policies-and-procedures",
+      "redirected": false
+    },
+    {
+      "url": "https://risclens.com/pricing/credo-ai-pricing",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404",
+      "finalUrl": "https://risclens.com/pricing/credo-ai-pricing",
+      "redirected": false
+    },
+    {
+      "url": "https://risclens.com/pricing/holistic-ai-pricing",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404",
+      "finalUrl": "https://risclens.com/pricing/holistic-ai-pricing",
+      "redirected": false
+    },
+    {
+      "url": "https://risclens.com/pricing/ibm-watsonx-governance-pricing",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404",
+      "finalUrl": "https://risclens.com/pricing/ibm-watsonx-governance-pricing",
+      "redirected": false
+    },
+    {
+      "url": "https://risclens.com/pricing/onetrust-ai-governance-pricing",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404",
+      "finalUrl": "https://risclens.com/pricing/onetrust-ai-governance-pricing",
+      "redirected": false
+    },
+    {
+      "url": "https://risclens.com/soc-2/industries/ai-governance-financial-services",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404",
+      "finalUrl": "https://risclens.com/soc-2/industries/ai-governance-financial-services",
+      "redirected": false
+    },
+    {
+      "url": "https://risclens.com/soc-2/industries/ai-governance-healthcare",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404",
+      "finalUrl": "https://risclens.com/soc-2/industries/ai-governance-healthcare",
+      "redirected": false
+    },
+    {
+      "url": "https://risclens.com/soc-2/industries/ai-governance-hr",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404",
+      "finalUrl": "https://risclens.com/soc-2/industries/ai-governance-hr",
+      "redirected": false
+    },
+    {
+      "url": "https://risclens.com/soc-2/industries/ai-governance-marketing",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404",
+      "finalUrl": "https://risclens.com/soc-2/industries/ai-governance-marketing",
+      "redirected": false
+    }
+  ]
+}
