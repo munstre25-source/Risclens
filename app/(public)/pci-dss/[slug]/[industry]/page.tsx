@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import MatrixPage from '@/components/compliance/MatrixPage';
 import { getSupabaseAdmin } from '@/lib/supabase';
+import { getDecisionSlugCandidates, normalizeIndustrySlug } from '@/lib/pseo-slug-normalization';
 
 interface Props {
   params: Promise<{ 
@@ -13,28 +14,27 @@ interface Props {
 async function getMatrixData(decisionSlug: string, industrySlug: string) {
   const supabase = getSupabaseAdmin();
   const frameworkSlug = 'pci-dss';
+  const normalizedIndustrySlug = normalizeIndustrySlug(industrySlug);
+  const decisionCandidates = getDecisionSlugCandidates(decisionSlug, frameworkSlug);
   
   const [frameworkRes, industryRes] = await Promise.all([
     supabase.from('pseo_frameworks').select('*').eq('slug', frameworkSlug).single(),
-    supabase.from('pseo_industries').select('*').eq('slug', industrySlug).single(),
+    supabase.from('pseo_industries').select('*').eq('slug', normalizedIndustrySlug).single(),
   ]);
 
   if (frameworkRes.error || industryRes.error) return null;
 
-  let { data: decision } = await supabase
-    .from('pseo_decision_types')
-    .select('*')
-    .eq('slug', decisionSlug)
-    .single();
-
-  if (!decision) {
-    const genericSlug = decisionSlug.replace(/^(soc-2|iso-27001|pci-dss|hipaa|gdpr)-/, '');
-    const { data: genericDecision } = await supabase
+  let decision: any = null;
+  for (const candidate of decisionCandidates) {
+    const { data } = await supabase
       .from('pseo_decision_types')
       .select('*')
-      .eq('slug', genericSlug)
+      .eq('slug', candidate)
       .single();
-    decision = genericDecision;
+    if (data) {
+      decision = data;
+      break;
+    }
   }
 
   if (!decision) return null;
@@ -51,7 +51,9 @@ async function getMatrixData(decisionSlug: string, industrySlug: string) {
     framework: frameworkRes.data,
     decision: decision,
     industry: industryRes.data,
-    page: page || null
+    page: page || null,
+    resolvedDecisionSlug: decision.slug,
+    resolvedIndustrySlug: normalizedIndustrySlug,
   };
 }
 
@@ -68,7 +70,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description,
     alternates: {
-      canonical: `https://risclens.com/pci-dss/${slug}/${industry}`,
+      canonical: `https://risclens.com/pci-dss/${data.resolvedDecisionSlug}/${data.resolvedIndustrySlug}`,
     },
   };
 }

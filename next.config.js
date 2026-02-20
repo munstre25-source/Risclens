@@ -7,6 +7,21 @@ const nextConfig = {
             destination: '/soc-2-readiness-calculator',
             permanent: true,
           },
+          {
+            source: '/compliance/directory/san-francisco',
+            destination: '/auditor-directory/san-francisco',
+            permanent: true,
+          },
+          {
+            source: '/compliance/directory/fintech',
+            destination: '/compliance/directory',
+            permanent: true,
+          },
+          {
+            source: '/compliance/directory/healthcare',
+            destination: '/compliance/directory',
+            permanent: true,
+          },
           // Fix: Redirect old /compare/ framework comparison URLs to correct location
           // These were incorrectly advertised in sitemap, causing 404s
           {

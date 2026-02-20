@@ -3,33 +3,57 @@ import { industryGuides } from '@/lib/soc2Industries';
 import { pentestPages } from '@/lib/pentestPages';
 import { comparisonPages } from '@/lib/soc2Comparisons';
 import { evidenceGuides } from '@/lib/soc2Evidence';
+import { toolPricing } from '@/src/content/pricing';
+import { hasSupabaseAdmin } from '@/lib/sitemap-utils';
+import { getSupabaseAdmin } from '@/lib/supabase';
 
-const COMPLIANCE_TOOL_SLUGS = [
-  'vanta', 'drata', 'secureframe', 'sprinto', 'thoropass', 'auditboard',
-  'hyperproof', 'scrut', 'scytale', 'strike-graph', 'logicgate', 'onetrust',
-  'a-lign', 'jupiterone', 'lacework', 'cynomi', 'apptega', 'workiva', 'resolver', 'anecdotes'
-];
+const FALLBACK_COMPLIANCE_TOOL_SLUGS = Array.from(
+  new Set(toolPricing.map((tool) => tool.slug).filter(Boolean))
+);
 
 const TECH_STACK_SLUGS = [
   'aws', 'azure', 'gcp', 'kubernetes', 'supabase', 'vercel'
 ];
 
-function generateComparisonRoutes(): string[] {
+export async function getResolvableComplianceToolSlugs(): Promise<string[]> {
+  if (!hasSupabaseAdmin) {
+    return FALLBACK_COMPLIANCE_TOOL_SLUGS;
+  }
+
+  try {
+    const supabase = getSupabaseAdmin();
+    const { data, error } = await supabase
+      .from('compliance_tools')
+      .select('slug')
+      .eq('is_active', true)
+      .order('display_order', { ascending: true });
+
+    if (error || !data?.length) {
+      return FALLBACK_COMPLIANCE_TOOL_SLUGS;
+    }
+
+    return Array.from(new Set(data.map((row) => row.slug).filter(Boolean)));
+  } catch {
+    return FALLBACK_COMPLIANCE_TOOL_SLUGS;
+  }
+}
+
+export function generateComparisonRoutes(toolSlugs: string[]): string[] {
   const routes: string[] = [];
-  for (let i = 0; i < COMPLIANCE_TOOL_SLUGS.length; i++) {
-    for (let j = i + 1; j < COMPLIANCE_TOOL_SLUGS.length; j++) {
-      routes.push(`/compare/${COMPLIANCE_TOOL_SLUGS[i]}-vs-${COMPLIANCE_TOOL_SLUGS[j]}`);
+  for (let i = 0; i < toolSlugs.length; i++) {
+    for (let j = i + 1; j < toolSlugs.length; j++) {
+      routes.push(`/compare/${[toolSlugs[i], toolSlugs[j]].sort().join('-vs-')}`);
     }
   }
   return routes;
 }
 
-function generateAlternativesRoutes(): string[] {
-  return COMPLIANCE_TOOL_SLUGS.map(slug => `/compare/${slug}-alternatives`);
+export function generateAlternativesRoutes(toolSlugs: string[]): string[] {
+  return toolSlugs.map(slug => `/compare/${slug}-alternatives`);
 }
 
-function generatePricingRoutes(): string[] {
-  return COMPLIANCE_TOOL_SLUGS.map(slug => `/pricing/${slug}`);
+export function generatePricingRoutes(toolSlugs: string[]): string[] {
+  return toolSlugs.map(slug => `/pricing/${slug}`);
 }
 
 function generateStackRoutes(): string[] {
@@ -124,9 +148,6 @@ export const COMMERCIAL_ROUTES = [
     ...pentestPages.map(p => `/penetration-testing/${p.slug}`),
     ...comparisonPages.map(c => `/soc-2-vs-iso-27001/${c.slug}`),
     ...evidenceGuides.map(e => `/soc-2-evidence/${e.slug}`),
-    ...generateComparisonRoutes(),
-    ...generateAlternativesRoutes(),
-    ...generatePricingRoutes(),
     ...generateStackRoutes(),
 
   '/penetration-testing/pricing',

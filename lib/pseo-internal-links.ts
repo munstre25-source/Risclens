@@ -472,7 +472,7 @@ export async function getIndustryGuideClusters(
       { href: '/soc-2-cost-calculator', text: 'SOC 2 Cost Calculator', priority: 'high' },
       { href: '/auditor-match', text: 'Auditor Selection Tool', priority: 'high' },
       { href: '/compare/market-intelligence', text: 'Market Intelligence Hub', priority: 'medium' },
-      { href: '/compliance/directory/san-francisco', text: 'Auditor Directory', priority: 'medium' },
+      { href: '/auditor-directory/san-francisco', text: 'Auditor Directory', priority: 'medium' },
     ],
   });
 

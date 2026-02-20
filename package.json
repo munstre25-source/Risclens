@@ -19,7 +19,9 @@
     "indexnow": "tsx scripts/submit-indexnow.ts",
     "postdeploy": "tsx scripts/submit-indexnow.ts",
     "audit:pseo": "tsx scripts/audit-pseo-pages.ts",
-    "fix:pseo": "tsx scripts/fix-pseo-content.ts"
+    "fix:pseo": "tsx scripts/fix-pseo-content.ts",
+    "restore:ahrefs-404": "tsx scripts/restore-ahrefs-404-content.ts",
+    "verify:ahrefs-404": "tsx scripts/verify-ahrefs-404-recovery.ts"
   },
   "dependencies": {
     "@radix-ui/react-progress": "^1.0.3",
