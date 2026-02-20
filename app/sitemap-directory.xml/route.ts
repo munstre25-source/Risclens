@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { unstable_noStore as noStore } from 'next/cache';
 import {
     baseUrl,
     getUrlPriority,
@@ -15,6 +16,7 @@ import { getValidPseoSlugs } from '@/lib/pseo-validation';
  * - /auditor-directory/[location]
  */
 export async function GET() {
+    noStore();
     const entries: Array<{ url: string; lastmod: string; priority: number; changefreq: string }> = [];
 
     const data = await getDirectoryData();
@@ -45,9 +47,26 @@ export async function GET() {
         }
     }
 
-    const locationPages = hasSupabaseAdmin ? await getValidPseoSlugs('directory', 'slug') : [];
-    for (const l of locationPages) {
-        const path = `/auditor-directory/${l.slug}`;
+    const locationSlugs = new Set<string>();
+    if (data?.locations) {
+        for (const location of data.locations) {
+            if (location.slug) {
+                locationSlugs.add(location.slug);
+            }
+        }
+    }
+
+    if (hasSupabaseAdmin) {
+        const locationPages = await getValidPseoSlugs('directory', 'slug');
+        for (const location of locationPages) {
+            if (location.slug) {
+                locationSlugs.add(location.slug);
+            }
+        }
+    }
+
+    for (const locationSlug of Array.from(locationSlugs)) {
+        const path = `/auditor-directory/${locationSlug}`;
         const { priority, changeFrequency } = getUrlPriority(path);
         entries.push({
             url: `${baseUrl}${path}`,

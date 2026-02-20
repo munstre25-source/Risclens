@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { unstable_noStore as noStore } from 'next/cache';
 import {
     baseUrl,
     BUILD_DATE,
@@ -14,6 +15,7 @@ import {
  * - ISO-42001, EU AI Act, NIST AI RMF related pages
  */
 export async function GET() {
+    noStore();
     const entries: Array<{ url: string; lastmod: string; priority: number; changefreq: string }> = [];
 
     // Get AI governance pSEO pages from DB

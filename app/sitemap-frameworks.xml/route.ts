@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
+import { unstable_noStore as noStore } from 'next/cache';
 import {
     baseUrl,
     BUILD_DATE,
     getUrlPriority,
     getFrameworkData
 } from '@/lib/sitemap-utils';
-import { BUILD_CONFIG } from '@/lib/build-config';
 
 /**
  * Framework Matrix Sitemap
@@ -13,19 +13,28 @@ import { BUILD_CONFIG } from '@/lib/build-config';
  * ~2,700+ pages for SOC-2, ISO-27001, HIPAA, GDPR, PCI-DSS, AI frameworks
  */
 export async function GET() {
+    noStore();
     const data = await getFrameworkData();
 
     const entries: Array<{ url: string; lastmod: string; priority: number; changefreq: string }> = [];
 
     if (data?.frameworks && data?.decisions && data?.industries) {
-        const matrixFrameworks = BUILD_CONFIG.PRIORITY_FRAMEWORKS;
-        const limitedDecisions = data.decisions.slice(0, BUILD_CONFIG.DECISIONS_PER_FRAMEWORK);
-        const limitedIndustries = data.industries.filter(i => BUILD_CONFIG.PRIORITY_INDUSTRIES.includes(i.slug));
+        const matrixFrameworks = new Set([
+            'soc-2',
+            'iso-27001',
+            'hipaa',
+            'gdpr',
+            'pci-dss',
+            'ai-governance',
+            'iso-42001',
+            'eu-ai-act',
+            'nist-ai-rmf',
+        ]);
 
         for (const f of data.frameworks) {
-            if (!matrixFrameworks.includes(f.slug)) continue;
-            for (const d of limitedDecisions) {
-                for (const i of limitedIndustries) {
+            if (!matrixFrameworks.has(f.slug)) continue;
+            for (const d of data.decisions) {
+                for (const i of data.industries) {
                     const path = `/${f.slug}/${d.slug}/${i.slug}`;
                     const { priority, changeFrequency } = getUrlPriority(path);
                     entries.push({

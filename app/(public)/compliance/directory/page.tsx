@@ -26,8 +26,8 @@ export const revalidate = 0;
 
 export default async function DirectoryPage() {
   const supabase = getSupabaseAdmin();
-  
-  const { data: companies, error } = await supabase
+
+  const { data: companyRows, error } = await supabase
     .from('company_signals')
     .select('name, slug, signal_score, domain, public_signals')
     .eq('indexable', true)
@@ -37,13 +37,15 @@ export default async function DirectoryPage() {
     console.error('Error fetching companies:', error);
   }
 
+  const companies = Array.isArray(companyRows) ? companyRows : [];
   const popularProfiles = companies?.slice(0, 12) || [];
 
     const getSignalsSummary = (signals: any) => {
+      const safeSignals = signals && typeof signals === 'object' ? signals : {};
       const parts = [];
-      if (signals.has_trust_page) parts.push("trust center");
-      if (signals.has_security_page) parts.push("security page");
-      if (signals.mentions_soc2) parts.push("SOC 2 mention (public)");
+      if (safeSignals.has_trust_page) parts.push("trust center");
+      if (safeSignals.has_security_page) parts.push("security page");
+      if (safeSignals.mentions_soc2) parts.push("SOC 2 mention (public)");
       
       if (parts.length === 0) return "Public security signals detected (public)";
       
@@ -112,7 +114,12 @@ export default async function DirectoryPage() {
 
         <h2 className="text-xl font-bold text-gray-900 mb-6">All Company Profiles</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {companies?.map((company) => (
+              {companies?.map((company) => {
+                const signals = company.public_signals && typeof company.public_signals === 'object'
+                  ? company.public_signals
+                  : {};
+
+                return (
                 <Link 
                   key={company.slug} 
                   href={`/compliance/directory/${company.slug}`}
@@ -137,13 +144,13 @@ export default async function DirectoryPage() {
                 <div className="mt-auto">
                   <div className="flex flex-wrap gap-2 mb-4">
 
-                  {company.public_signals.has_security_page && (
+                  {signals.has_security_page && (
                     <span className="px-2 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded">Security Page</span>
                   )}
-                  {company.public_signals.has_trust_page && (
+                  {signals.has_trust_page && (
                     <span className="px-2 py-1 bg-purple-50 text-purple-700 text-xs font-medium rounded">Trust Center</span>
                   )}
-                  {company.public_signals.mentions_soc2 && (
+                  {signals.mentions_soc2 && (
                     <span className="px-2 py-1 bg-green-50 text-green-700 text-xs font-medium rounded">SOC 2 Mention</span>
                   )}
                 </div>
@@ -156,7 +163,8 @@ export default async function DirectoryPage() {
                 </svg>
               </div>
             </Link>
-          ))}
+                  );
+              })}
         </div>
 
         {(!companies || companies.length === 0) && (

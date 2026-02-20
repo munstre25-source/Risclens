@@ -53,6 +53,40 @@ interface PageProps {
   }>;
 }
 
+const LEGACY_PRICING_SLUG_ALIASES: Record<string, string> = {
+  'credo-ai-pricing': 'credo-ai',
+  'holistic-ai-pricing': 'holistic-ai',
+  'onetrust-ai-governance-pricing': 'onetrust-ai-governance',
+  'ibm-watsonx-governance-pricing': 'ibm-watsonx-governance',
+};
+
+const LEGACY_PRICING_TOOL_NAMES: Record<string, string> = {
+  'onetrust-ai-governance': 'OneTrust AI Governance',
+  'ibm-watsonx-governance': 'IBM watsonx.governance',
+  'credo-ai': 'Credo AI',
+  'holistic-ai': 'Holistic AI',
+};
+
+function normalizePricingSlug(slug: string): string {
+  if (LEGACY_PRICING_SLUG_ALIASES[slug]) {
+    return LEGACY_PRICING_SLUG_ALIASES[slug];
+  }
+  if (slug.endsWith('-pricing')) {
+    return slug.replace(/-pricing$/, '');
+  }
+  return slug;
+}
+
+function getPricingDisplayName(slug: string): string {
+  if (LEGACY_PRICING_TOOL_NAMES[slug]) {
+    return LEGACY_PRICING_TOOL_NAMES[slug];
+  }
+
+  return slug
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
 async function getPseoPricingData(slug: string) {
   const supabase = getSupabaseAdmin();
   const { data } = await supabase
@@ -120,7 +154,7 @@ function buildFallbackPricingContent(tool: Awaited<ReturnType<typeof getToolBySl
   ];
 
   return {
-    toolName: tool?.name || slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
+    toolName: tool?.name || getPricingDisplayName(slug),
     toolSlug: slug,
     heroDescription:
       tool?.description ||
@@ -133,7 +167,8 @@ function buildFallbackPricingContent(tool: Awaited<ReturnType<typeof getToolBySl
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug: requestedSlug } = await params;
+  const slug = normalizePricingSlug(requestedSlug);
   
   // Try pSEO database first
   const pseoData = await getPseoPricingData(slug);
@@ -185,7 +220,30 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const complianceTool = await getToolBySlug(slug);
-  if (!complianceTool) return { title: 'Pricing Not Found', robots: { index: false } };
+  if (!complianceTool) {
+    if (requestedSlug !== slug) {
+      const toolName = getPricingDisplayName(slug);
+      const title = generatePricingTitleOptimized(toolName, 'Contact Sales');
+      const description = generatePricingDescriptionOptimized(toolName, 'Contact Sales');
+
+      return {
+        title,
+        description,
+        keywords: [
+          `${toolName} pricing`,
+          `${toolName} pricing ${CURRENT_YEAR}`,
+          `${toolName} cost`,
+          `how much does ${toolName} cost`,
+          `${toolName} plans`,
+        ],
+        alternates: {
+          canonical: `https://risclens.com/pricing/${slug}`,
+        }
+      };
+    }
+
+    return { title: 'Pricing Not Found', robots: { index: false } };
+  }
   const title = generatePricingTitleOptimized(complianceTool.name, complianceTool.pricing_starting || 'Contact Sales');
   const description = generatePricingDescriptionOptimized(
     complianceTool.name,
@@ -249,7 +307,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 
 export default async function ToolPricingPage({ params }: PageProps) {
-  const { slug } = await params;
+  const { slug: requestedSlug } = await params;
+  const slug = normalizePricingSlug(requestedSlug);
   
   // 1. Try pSEO database first
   const pseoData = await getPseoPricingData(slug);
@@ -280,6 +339,20 @@ export default async function ToolPricingPage({ params }: PageProps) {
   const complianceTool = staticTool ? null : await getToolBySlug(slug);
 
   if (!staticTool && !complianceTool) {
+    if (requestedSlug !== slug) {
+      const content = buildFallbackPricingContent(null, slug);
+      return (
+        <ToolPricingPageContent
+          toolName={content.toolName}
+          toolSlug={slug}
+          heroDescription={content.heroDescription}
+          pricingTiers={content.pricingTiers}
+          hiddenCosts={content.hiddenCosts}
+          negotiationTips={content.negotiationTips}
+          comparisonLinks={content.comparisonLinks}
+        />
+      );
+    }
     notFound();
   }
 

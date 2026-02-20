@@ -6,7 +6,14 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import controls from '@/src/content/soc2ReadinessControls';
 
-const getControl = (slug: string) => controls.find((c) => c.slug === slug);
+const CONTROL_SLUG_ALIASES: Record<string, string> = {
+  'mfa-and-authentication': 'mfa-authentication',
+  'business-continuity': 'business-continuity-planning',
+  'policies-and-procedures': 'security-awareness-training',
+};
+
+const resolveControlSlug = (slug: string) => CONTROL_SLUG_ALIASES[slug] || slug;
+const getControl = (slug: string) => controls.find((c) => c.slug === resolveControlSlug(slug));
 
 export async function generateStaticParams() {
   const slugs = controls.map((c) => ({ slug: c.slug }));
@@ -20,11 +27,12 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const control = getControl(params.slug);
   if (!control) return {};
-  const url = `https://risclens.com/learn/soc-2-readiness/${control.slug}`;
+  const canonicalSlug = resolveControlSlug(params.slug);
+  const url = `https://risclens.com/learn/soc-2-readiness/${canonicalSlug}`;
   return {
     title: `${control.title} | SOC 2 Readiness Control | RiscLens`,
     description: control.summary,
-    alternates: { canonical: `https://risclens.com/learn/soc-2-readiness/${control.slug}` },
+    alternates: { canonical: `https://risclens.com/learn/soc-2-readiness/${canonicalSlug}` },
     openGraph: {
       title: `${control.title} | SOC 2 Readiness Control | RiscLens`,
       description: control.summary,

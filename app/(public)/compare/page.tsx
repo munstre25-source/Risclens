@@ -1,6 +1,3 @@
 
-import { redirect } from 'next/navigation';
-
-export default function ComparePage() {
-  redirect('/compare/market-intelligence');
-}
+export { metadata } from './market-intelligence/page';
+export { default } from './market-intelligence/page';
