@@ -1,0 +1,4566 @@
+{
+  "generatedAt": "2026-02-20T09:44:02.389Z",
+  "inputFile": "/home/qpay/Risclens/href2.csv",
+  "baseUrl": "https://risclens.com",
+  "totals": {
+    "checked": 759,
+    "resolved": 0,
+    "unresolved": 759
+  },
+  "unresolved": [
+    {
+      "url": "https://risclens.com/ai-governance/risk-assessment/ai-data",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/hipaa/timeline",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pci-dss/certification-roadmap/ecommerce",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-42001/auditor-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-27001/certification-timeline/fintech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-27001/tool-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/soc-2/for/legal-counsel",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/soc-2/for/security-engineer",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-ai-rmf/tool-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/nist-csf/cto",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pricing/a-lign",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/gdpr/readiness-checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-42001/cto",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/soc-2-readiness",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-3/cost",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/jupiterone-vs-credo-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/directory/san-francisco",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/lacework-vs-wiz",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pricing/scrut",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-ai-rmf/checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-3/soc-3-compliance-for-logistics",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/nist-ai-rmf/measure-function",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/scottsdale",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/apptega-vs-scrut-automation",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pricing/logicgate",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/hipaa/timeline",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-27001/checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/eu-ai-act/timeline",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/hipaa/checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/ai-governance/ai-governance-compliance-for-healthtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/eu-ai-act/readiness",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/soc-2/checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-2/tool-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/hipaa/readiness-checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/eu-ai-act/cost",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/cary",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/compliance-ai-vs-metricstream",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-csf/readiness-checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-27001/readiness",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/hipaa/checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-csf/readiness",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/tisax/cost",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/nist-csf/checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-27001/backend-engineer",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/directory/fintech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/hipaa/devops",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/hipaa/backend-engineer",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/gdpr/cost",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pci-dss/cto",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/hipaa/ciso",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pci-dss/readiness-checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/readiness-checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-csf/auditor-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/pci-dss/auditor-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pricing/lacework",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/pci-dss/cost",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-2/soc-2-compliance-for-crypto-web3",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-2/cost",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/ai-governance/ai-governance-compliance-for-edtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/nist-csf/readiness-checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-42001/checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/gdpr/checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/pci-dss/tool-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/pci-dss/readiness-checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/gdpr/readiness",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-27001/readiness-checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/tisax/timeline",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/hipaa/tool-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/drata-vs-holistic-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/eu-ai-act/cost",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-ai-rmf/readiness",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/ai-compliance/stack",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pci-dss/timeline",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-27001/iso-27001-compliance-for-devtools",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/scytale-vs-holistic-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-ai-rmf/nist-ai-rmf-compliance-for-insurance",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/gdpr/timeline",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/hipaa/readiness-checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/jupiterone-vs-wiz",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/scrut-automation-vs-onetrust",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pricing/cynomi",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/ai-governance/framework",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-3/readiness",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-27001/tool-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/auditboard-vs-credo-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/pci-dss/timeline",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pricing/workiva",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-2/readiness-checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/hipaa/readiness",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/apptega-vs-snyk",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/nist-csf/backend-engineer",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/soc-2-readiness/healthcare",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/gdpr/tool-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-42001/readiness-checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pci-dss/ciso",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/pci-dss/pci-dss-compliance-for-crypto-web3",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-csf/nist-csf-compliance-for-devtools",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/nist-ai-rmf/cost",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/hipaa/cost",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/soc-2/backend-engineer",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-3/checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/hipaa/cto",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/ai-governance/ai-governance-compliance-for-marketing-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/gdpr/backend-engineer",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pci-dss/backend-engineer",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-ai-rmf/nist-ai-rmf-compliance-for-legaltech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pci-dss/tool-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/tisax/readiness",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-2/readiness",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-csf/cost",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/ai-compliance/compare/nist-ai-rmf-vs-iso-42001",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/eu-ai-act/timeline",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/nist-ai-rmf/checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/laika-vs-secureframe",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-csf/nist-csf-compliance-for-biotech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-ai-rmf/cost",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/lake-oswego",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-42001/tool-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/hipaa/hipaa-compliance-for-hr-tech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-ai-rmf/nist-ai-rmf-compliance-for-crypto-web3",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/nist-csf/cost",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/gdpr/gdpr-compliance-for-legaltech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/cost",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-ai-rmf/nist-ai-rmf-compliance-for-edtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/soc-2/readiness-checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/nist-csf/devops",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/wiz-vs-secureframe",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/eu-ai-act/checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/hyperproof-vs-wiz",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/directory/healthcare",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/tisax/timeline",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-csf/timeline",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-27001/readiness",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pci-dss/auditor-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/hipaa/tool-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-2/checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/auth0-vs-okta-ciam",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/gdpr/auditor-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/compliance-ai-vs-ascent",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/timeline",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/auditor-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/gdpr/gdpr-compliance-for-devtools",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/ai-governance/ai-governance-compliance-for-ai-ml",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-27001/readiness-checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/onetrust-vs-wiz",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/tisax/cost",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/coral-gables",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-27001/cost",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-3/soc-3-compliance-for-ecommerce",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pci-dss/checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pricing/regology",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pricing/snyk",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/tisax/tisax-compliance-for-martech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-27001/devops",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/soc-3/checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/gdpr/cost",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-2/soc-2-compliance-for-manufacturing",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-27001/iso-27001-compliance-for-logistics",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/secureframe-vs-ostendio",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/gdpr/auditor-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/bloomington",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/hipaa/hipaa-compliance-for-cybersecurity",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/nist-csf/tool-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/nist-ai-rmf/tool-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/soc-3/readiness",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/auth0-vs-vgs",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/tisax/tool-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/readiness",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-27001/iso-27001-compliance-for-proptech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/nist-csf/ciso",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/boulder",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/gdpr/cto",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/eu-ai-act/eu-ai-act-compliance-for-marketing-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-ai-rmf/nist-ai-rmf-compliance-for-healthtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/anecdotes-vs-snyk",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/tisax/tisax-compliance-for-devtools",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/auth0-vs-holistic-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-27001/cost",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-csf/tool-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/logicgate-vs-scrut-automation",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-csf/checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/pci-dss/pci-dss-compliance-for-logistics",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-27001/timeline",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/vanta-vs-ostendio",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/secureframe-vs-holistic-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-ai-rmf/nist-ai-rmf-compliance-for-defense-tech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/strike-graph-vs-ostendio",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/eu-ai-act/eu-ai-act-compliance-for-insurtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/sydney",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/soc-2/cost",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/pci-dss/readiness",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/tisax/readiness",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/cynomi-vs-credo-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-3/soc-3-compliance-for-defense-tech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/standard-fusion-vs-onetrust",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/ai-compliance/industries/insurance",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pricing/holistic-ai-pricing",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-27001/for/founders/saas",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/iso-42001-compliance-for-legaltech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/wiz-vs-onetrust",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/nist-ai-rmf/timeline",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-3/soc-3-compliance-for-govtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/tisax/tisax-compliance-for-govtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pricing/metricstream",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-42001/backend-engineer",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/tisax/tisax-compliance-for-manufacturing",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-42001/devops",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/soc-2/readiness",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-ai-rmf/nist-ai-rmf-compliance-for-govtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-42001/timeline",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/hipaa/cost",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-27001/iso-27001-compliance-for-cybersecurity",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/scrut-vs-wiz",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/soc-2/timeline",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pci-dss/devops",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/pci-dss/pci-dss-compliance-for-gaming",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/ai-governance/ai-governance-compliance-for-insurtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-ai-rmf/nist-ai-rmf-compliance-for-ecommerce",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pricing/onetrust-ai-governance-pricing",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-2/soc-2-compliance-for-insurance",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/gdpr/timeline",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/pci-dss/pci-dss-compliance-for-healthtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/auth0-vs-wiz",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-42001/cost",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/ai-governance/ai-governance-compliance-for-crypto-web3",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/eu-ai-act/checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/jupiterone-vs-ostendio",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/eu-ai-act/readiness",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/hipaa/auditor-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/compliance-ai-vs-regology",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/apptega-vs-vgs",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-ai-rmf/nist-ai-rmf-compliance-for-manufacturing",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/hipaa/hipaa-compliance-for-govtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/gdpr/gdpr-compliance-for-biotech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/gdpr/gdpr-compliance-for-hr-tech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/standard-fusion-vs-secureframe",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/jupiterone-vs-vgs",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-27001/checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/drata-vs-wiz",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/eu-ai-act/tool-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/workiva-vs-scrut-automation",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/hyperproof-vs-ostendio",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/decatur",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/a-lign-vs-wiz",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/gdpr/devops",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/hipaa/auditor-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pci-dss/cost",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pricing/credo-ai-pricing",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-27001/ciso",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/tisax/checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/anecdotes-vs-credo-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-27001/cto",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/soc-2/tool-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/sprinto-vs-ostendio",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/vgs-vs-apptega",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-ai-rmf/nist-ai-rmf-compliance-for-insurtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/tisax/tool-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/gdpr/readiness-checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/onetrust-vs-scrut-automation",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/eu-ai-act/implementation-timeline",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-2/auditor-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-3/tool-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/scrut-automation-vs-anecdotes",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/vgs-vs-hyperproof",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/tisax/tisax-compliance-for-insurance",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-27001/iso-27001-compliance-for-martech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-3/soc-3-compliance-for-gaming",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/iso-42001-compliance-for-healthtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/ai-governance/ai-governance-compliance-for-hr-tech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/scytale-vs-credo-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/a-lign-vs-vgs",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-ai-rmf/timeline",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/gdpr/gdpr-compliance-for-logistics",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-42001/ciso",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-3/soc-3-compliance-for-fintech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-2/timeline",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/iso-42001-compliance-for-fintech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-ai-rmf/nist-ai-rmf-compliance-for-biotech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/jupiterone-vs-holistic-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-27001/iso-27001-compliance-for-legaltech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/apptega-vs-standard-fusion",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/drata-vs-vgs",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/soc-3/timeline",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/learn/soc-2-readiness/policies-and-procedures",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-3/timeline",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/gdpr/checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/tool-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/scrut-vs-snyk",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/nist-csf/timeline",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-2/soc-2-compliance-for-digital-health",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/eu-ai-act/eu-ai-act-compliance-for-insurance",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/workiva-vs-standard-fusion",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/cynomi-vs-scrut-automation",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/eu-ai-act/eu-ai-act-compliance-for-cybersecurity",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/iso-42001-compliance-for-manufacturing",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/tisax/tisax-compliance-for-ecommerce",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/soc-3/cost",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-42001/readiness",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/iso-42001-compliance-for-martech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/beaverton",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/eu-ai-act/eu-ai-act-compliance-for-digital-health",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/soc-3/tool-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/standard-fusion-vs-apptega",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/iso-42001-compliance-for-ai-ml",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/ostendio-vs-secureframe",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/iso-42001-compliance-for-logistics",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-3/soc-3-compliance-for-ai-ml",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/auth0-vs-snyk",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/vgs-vs-drata",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/eu-ai-act/eu-ai-act-compliance-for-defense-tech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/drata-vs-scrut-automation",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pricing/okta-ciam",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-27001/auditor-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/st.-paul",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/thoropass-vs-snyk",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/pci-dss/pci-dss-compliance-for-proptech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/gdpr/readiness",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/nist-ai-rmf/govern-function",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/workiva-vs-wiz",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/secureframe-vs-snyk",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/workiva-vs-credo-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/hipaa/readiness",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/hipaa/hipaa-compliance-for-biotech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pricing/floqast",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/nist-csf/auditor-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/gdpr/ciso",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/tisax/tisax-compliance-for-logistics",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/pci-dss/pci-dss-compliance-for-martech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/eu-ai-act/eu-ai-act-compliance-for-healthtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/tisax/tisax-compliance-for-healthtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/strike-graph-vs-scrut-automation",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/eu-ai-act/conformity-assessment",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-3/soc-3-compliance-for-edtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/eu-ai-act/eu-ai-act-compliance-for-saas",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/eu-ai-act/tool-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/logicgate-vs-wiz",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/ai-governance/ai-governance-compliance-for-biotech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/resolver-vs-vgs",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/thoropass-vs-standard-fusion",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pci-dss/readiness",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/hyperproof-vs-vgs",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/vgs-vs-jupiterone",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/london",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/ai-governance/ai-governance-compliance-for-defense-tech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/learn/soc-2-readiness/mfa-and-authentication",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/cynomi-vs-holistic-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/scytale-vs-ostendio",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-ai-rmf/nist-ai-rmf-compliance-for-marketing-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/scrut-vs-ostendio",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pricing/ascent",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/resolver-vs-holistic-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/iso-42001-compliance-for-insurance",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-3/soc-3-compliance-for-hr-tech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/eu-ai-act/eu-ai-act-compliance-for-logistics",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/hipaa/compliance-checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/strike-graph-vs-credo-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/nist-ai-rmf/readiness",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-ai-rmf/nist-ai-rmf-compliance-for-cybersecurity",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/hipaa/hipaa-compliance-for-gaming",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/sprinto-vs-credo-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/hendersonville",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/eu-ai-act/eu-ai-act-compliance-for-healthcare",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-42001/gap-analysis-template",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/thoropass-vs-holistic-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/gdpr/gdpr-compliance-for-defense-tech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/tisax/tisax-compliance-for-legaltech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/hipaa/hipaa-compliance-for-insurance",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/iso-42001-compliance-for-gaming",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-ai-rmf/nist-ai-rmf-compliance-for-gaming",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/nist-csf/readiness",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/ai-compliance/compare",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-42001/implementation-guide",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/vgs-vs-vanta",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-3/soc-3-compliance-for-biotech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/thoropass-vs-ostendio",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-27001/iso-27001-compliance-for-marketing-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/standard-fusion-vs-drata",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/logicgate-vs-vgs",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/alpharetta",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/eu-ai-act/eu-ai-act-compliance-for-edtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-2/soc-2-compliance-for-marketing-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/nist-ai-rmf/map-function",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/pci-dss/checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/scrut-automation-vs-jupiterone",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/vanta-vs-wiz",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/secureframe-vs-credo-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pricing/clerk",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-2/soc-2-compliance-for-cybersecurity",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/hipaa/hipaa-compliance-for-logistics",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/compliance-ai-vs-cube",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/scrut-automation-vs-vanta",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/logicgate-vs-snyk",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/scrut-automation-vs-secureframe",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/iso-42001-compliance-for-devtools",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/tisax/tisax-compliance-for-crypto-web3",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/strike-graph-vs-wiz",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/strike-graph-vs-standard-fusion",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/anecdotes-vs-standard-fusion",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/scytale-vs-standard-fusion",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-2/soc-2-compliance-for-govtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-3/soc-3-compliance-for-cybersecurity",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/hyperproof-vs-standard-fusion",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/secureframe-vs-standard-fusion",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/iso-42001-compliance-for-saas",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/eu-ai-act/eu-ai-act-compliance-for-hr-tech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/iso-42001-compliance-for-biotech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/cynomi-vs-vgs",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/iso-42001-compliance-for-govtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/auditboard-vs-standard-fusion",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-ai-rmf/nist-ai-rmf-compliance-for-proptech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/vgs-vs-onetrust",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/lehi",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/ai-compliance/eu-ai-act-classifier",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/pci-dss/pci-dss-compliance-for-hr-tech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/research-triangle-park",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/apptega-vs-wiz",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/hipaa/hipaa-compliance-for-proptech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/ai-governance/ai-governance-compliance-for-fintech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/wiz-vs-drata",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/brentwood",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/compliance-ai-vs-credo-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/gdpr/gdpr-compliance-for-insurtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/nist-ai-rmf/manage-function",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/tisax/tisax-compliance-for-insurtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-3/soc-3-compliance-for-insurtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/workiva-vs-snyk",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/scytale-vs-vgs",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/tisax/checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/a-lign-vs-snyk",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/learn/soc-2-readiness/business-continuity",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-csf/nist-csf-compliance-for-crypto-web3",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-42001/controls-list",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/ai-governance/ai-governance-compliance-for-martech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/tisax/tisax-compliance-for-proptech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/logicgate-vs-ostendio",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-2/soc-2-compliance-for-legaltech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/wiz-vs-hyperproof",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/auth0-vs-firebase-auth",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/eu-ai-act/eu-ai-act-compliance-for-ecommerce",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-3/soc-3-compliance-for-martech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/pci-dss/pci-dss-compliance-for-manufacturing",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/gdpr/tool-selection",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/thoropass-vs-credo-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/gdpr/gdpr-compliance-for-marketing-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/secureframe-vs-wiz",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/ai-governance/committee",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/hipaa/hipaa-compliance-for-manufacturing",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/nist-ai-rmf/implementation",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/vgs-vs-secureframe",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/compliance-ai-vs-vgs",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/pci-dss/pci-dss-compliance-for-govtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/tisax/tisax-compliance-for-gaming",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-3/soc-3-compliance-for-marketing-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/franklin",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-3/soc-3-compliance-for-legaltech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/secureframe-vs-vgs",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-27001/iso-27001-compliance-for-crypto-web3",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-ai-rmf/nist-ai-rmf-compliance-for-ai-ml",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/hipaa/hipaa-compliance-for-crypto-web3",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/drata-vs-credo-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/ai-governance/roadmap",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/eu-ai-act/eu-ai-act-compliance-for-fintech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/scrut-vs-holistic-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/anecdotes-vs-holistic-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-3/soc-3-compliance-for-saas",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/anecdotes-vs-wiz",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-27001/for/cto/enterprise",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pricing/clausematch",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/compliance-ai-vs-wiz",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/ogden",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/resolver-vs-wiz",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/soc-2/industries/ai-governance-marketing",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/logicgate-vs-credo-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/standard-fusion-vs-jupiterone",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/logicgate-vs-holistic-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/scrut-vs-standard-fusion",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-3/soc-3-compliance-for-devtools",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/wiz-vs-vanta",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-27001/iso-27001-compliance-for-insurance",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/hillsboro",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pricing/diligent",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/iso-42001-compliance-for-defense-tech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/pci-dss/pci-dss-compliance-for-devtools",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/soc-2/industries/ai-governance-hr",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/auth0-vs-stytch",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/wiz-vs-anecdotes",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/scytale-vs-snyk",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-csf/nist-csf-compliance-for-healthtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/resolver-vs-standard-fusion",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/singapore",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/auth0-vs-scrut-automation",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-csf/nist-csf-compliance-for-proptech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/sprinto-vs-standard-fusion",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-csf/nist-csf-compliance-for-legaltech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/minnetonka",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/ai-governance/ai-governance-compliance-for-digital-health",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/drata-vs-ostendio",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/iso-42001-compliance-for-marketing-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/eu-ai-act/eu-ai-act-compliance-for-crypto-web3",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/iso-42001-compliance-for-insurtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-ai-rmf/nist-ai-rmf-compliance-for-fintech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/lacework-vs-scrut-automation",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/sandy-springs",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/lacework-vs-holistic-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-27001/iso-27001-compliance-for-defense-tech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/a-lign-vs-credo-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/tisax/tisax-compliance-for-biotech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/ai-compliance/stack/openai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/hipaa/hipaa-compliance-for-martech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-csf/nist-csf-compliance-for-logistics",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/compliance-ai-vs-scrut-automation",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/iso-42001-compliance-for-proptech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/auditboard-vs-metricstream",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/scrut-automation-vs-hyperproof",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/cynomi-vs-wiz",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/scrut-vs-credo-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/logicgate-vs-standard-fusion",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/a-lign-vs-holistic-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/vancouver",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-csf/nist-csf-compliance-for-govtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-csf/nist-csf-compliance-for-cybersecurity",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/vanta-vs-standard-fusion",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/cynomi-vs-ostendio",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-2/soc-2-compliance-for-proptech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-csf/nist-csf-compliance-for-insurance",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-27001/iso-27001-compliance-for-digital-health",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/eu-ai-act/high-risk-ai-systems",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/soc-2/industries/ai-governance-healthcare",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/thoropass-vs-vgs",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/pci-dss/pci-dss-compliance-for-marketing-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-2/soc-2-compliance-for-defense-tech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/apptega-vs-credo-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-csf/nist-csf-compliance-for-defense-tech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/golden",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/strike-graph-vs-vgs",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/lacework-vs-standard-fusion",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/wiz-vs-jupiterone",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/ostendio-vs-jupiterone",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pricing/ibm-watsonx-governance-pricing",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/auth0-vs-clerk",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/cynomi-vs-snyk",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/auditboard-vs-ostendio",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-ai-rmf/nist-ai-rmf-compliance-for-saas",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/onetrust-vs-snyk",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-27001/iso-27001-compliance-for-manufacturing",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/auditboard-vs-scrut-automation",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/lacework-vs-ostendio",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/gdpr/gdpr-compliance-for-manufacturing",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/ai-governance/ai-governance-compliance-for-proptech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-csf/nist-csf-compliance-for-manufacturing",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/ai-governance/tools",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/iso-42001-compliance-for-ecommerce",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pricing/stytch",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/a-lign-vs-ostendio",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-3/soc-3-compliance-for-manufacturing",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/ai-compliance/stack/anthropic",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/tisax/tisax-compliance-for-healthcare",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/a-lign-vs-scrut-automation",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/gdpr/gdpr-compliance-for-insurance",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/boca-raton",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/gdpr/gdpr-compliance-for-gaming",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-3/soc-3-compliance-for-healthcare",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-27001/iso-27001-compliance-for-biotech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/gdpr/gdpr-compliance-for-proptech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/iso-42001-compliance-for-healthcare",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/ai-governance/ai-governance-compliance-for-ecommerce",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/ostendio-vs-anecdotes",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/sprinto-vs-holistic-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/a-lign-vs-standard-fusion",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/tisax/tisax-compliance-for-hr-tech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/chandler",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/secureframe-vs-scrut-automation",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/berlin",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/tisax/tisax-compliance-for-fintech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/ostendio-vs-apptega",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/vanta-vs-snyk",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/eu-ai-act/eu-ai-act-compliance-for-ai-ml",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-csf/nist-csf-compliance-for-insurtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/provo",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/scytale-vs-wiz",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-2/soc-2-compliance-for-martech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-27001/for/compliance-manager/saas",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/ai-governance/ai-governance-compliance-for-devtools",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/sprinto-vs-wiz",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/eu-ai-act/penalties-fines",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/hipaa/hipaa-compliance-for-devtools",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/thoropass-vs-scrut-automation",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/west-palm-beach",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/drata-vs-laika",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/hipaa/hipaa-compliance-for-legaltech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/anecdotes-vs-vgs",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/auth0-vs-standard-fusion",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/bangalore",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/resolver-vs-scrut-automation",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/tisax/tisax-compliance-for-ai-ml",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/gdpr/gdpr-compliance-for-crypto-web3",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/iso-42001-compliance-for-hr-tech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/laika-vs-vanta",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-27001/iso-27001-compliance-for-gaming",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/nist-ai-rmf/playbook",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-3/soc-3-compliance-for-digital-health",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/pci-dss/pci-dss-compliance-for-biotech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/hipaa/hipaa-compliance-for-healthtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/ai-governance/ai-governance-compliance-for-govtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-42001/certification-cost",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/anecdotes-vs-scrut-automation",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pci-dss/for/cto/retail",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/drata-vs-snyk",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/park-city",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/ai-governance/ai-governance-compliance-for-gaming",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/vanta-vs-vgs",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/jupiterone-vs-snyk",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/soc-2/industries/ai-governance-financial-services",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/ai-governance/ai-governance-compliance-for-manufacturing",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/scrut-vs-vgs",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-3/soc-3-compliance-for-insurance",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pricing/cube",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-ai-rmf/nist-ai-rmf-compliance-for-healthcare",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/tisax/tisax-compliance-for-edtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/ai-compliance/industries",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-csf/nist-csf-compliance-for-marketing-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-42001/certification-timeline",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-27001/iso-27001-compliance-for-healthtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/vanta-vs-credo-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/vgs-vs-anecdotes",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/hyperproof-vs-credo-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/pci-dss/pci-dss-compliance-for-defense-tech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/resolver-vs-ostendio",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/eu-ai-act/eu-ai-act-compliance-for-govtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/iso-42001-compliance-for-edtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/ai-governance/ai-governance-compliance-for-legaltech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/jupiterone-vs-scrut-automation",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/ostendio-vs-hyperproof",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/eu-ai-act/eu-ai-act-compliance-for-proptech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/hyperproof-vs-holistic-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/auditboard-vs-wiz",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/pci-dss/pci-dss-compliance-for-digital-health",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/auditboard-vs-diligent",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/hipaa/hipaa-compliance-for-defense-tech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/workiva-vs-holistic-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/compliance-ai-vs-standard-fusion",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/jupiterone-vs-standard-fusion",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/hyperproof-vs-scrut-automation",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/vanta-vs-scrut-automation",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/standard-fusion-vs-anecdotes",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/sprinto-vs-vgs",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/onetrust-vs-holistic-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/scrut-automation-vs-apptega",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-csf/nist-csf-compliance-for-martech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/lacework-vs-vgs",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/ai-governance/ai-governance-compliance-for-logistics",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/iso-42001-compliance-for-cybersecurity",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/strike-graph-vs-snyk",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/auth0-vs-ostendio",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/eu-ai-act/eu-ai-act-compliance-for-biotech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/laika-vs-thoropass",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/standard-fusion-vs-vanta",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/compliance-ai-vs-holistic-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/onetrust-vs-vgs",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-ai-rmf/nist-ai-rmf-compliance-for-digital-health",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/workiva-vs-ostendio",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/hipaa/hipaa-compliance-for-digital-health",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/lacework-vs-credo-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/ai-governance/ai-governance-compliance-for-cybersecurity",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/tisax/tisax-compliance-for-defense-tech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/ai-governance/best-practices",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/scytale-vs-scrut-automation",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/sprinto-vs-snyk",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-2/soc-2-compliance-for-biotech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/gdpr/gdpr-compliance-for-healthtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/auditboard-vs-holistic-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/onetrust-vs-credo-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-2/soc-2-compliance-for-logistics",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-3/soc-3-compliance-for-proptech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/gdpr/gdpr-compliance-for-martech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/eu-ai-act/eu-ai-act-compliance-for-devtools",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/scrut-vs-scrut-automation",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/drata-vs-standard-fusion",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/eu-ai-act/general-purpose-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-2/soc-2-compliance-for-hr-tech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/apptega-vs-ostendio",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/gdpr/gdpr-compliance-for-cybersecurity",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/tisax/tisax-compliance-for-saas",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-27001/vs-soc-2",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/ai-governance/policy-template",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-csf/nist-csf-compliance-for-digital-health",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/eden-prairie",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/auditboard-vs-vgs",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/tempe",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-csf/nist-csf-compliance-for-gaming",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/tisax/tisax-compliance-for-cybersecurity",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-ai-rmf/nist-ai-rmf-compliance-for-hr-tech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/eu-ai-act/eu-ai-act-compliance-for-gaming",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-2/soc-2-compliance-for-insurtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/ostendio-vs-onetrust",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/auditboard-vs-snyk",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-27001/iso-27001-compliance-for-insurtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/vanta-vs-holistic-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/iso-42001/audit-preparation",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/strike-graph-vs-holistic-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/eu-ai-act/eu-ai-act-compliance-for-martech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-27001/iso-27001-compliance-for-govtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-ai-rmf/nist-ai-rmf-compliance-for-logistics",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/hyperproof-vs-snyk",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/hipaa/hipaa-compliance-for-marketing-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/fort-lauderdale",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/iso-42001-compliance-for-crypto-web3",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/pricing/firebase-auth",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/gdpr/gdpr-compliance-for-govtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/sprinto-vs-scrut-automation",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/eu-ai-act/eu-ai-act-compliance-for-legaltech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/wiz-vs-apptega",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/ai-governance/ai-governance-compliance-for-saas",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-csf/nist-csf-compliance-for-hr-tech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/workiva-vs-vgs",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-ai-rmf/nist-ai-rmf-compliance-for-martech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-2/soc-2-compliance-for-gaming",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/compliance-ai-vs-snyk",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/standard-fusion-vs-hyperproof",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/ai-governance/ai-governance-compliance-for-insurance",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/lacework-vs-snyk",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-2/soc-2-compliance-for-devtools",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/tisax/tisax-compliance-for-marketing-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/chapel-hill",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/tisax/tisax-compliance-for-digital-health",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-42001/iso-42001-compliance-for-digital-health",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/pci-dss/pci-dss-compliance-for-legaltech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/onetrust-vs-ostendio",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/murfreesboro",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/ostendio-vs-drata",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/nist-ai-rmf/nist-ai-rmf-compliance-for-devtools",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/thoropass-vs-wiz",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/compliance-ai-vs-clausematch",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/hipaa/hipaa-compliance-for-insurtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/iso-27001/iso-27001-compliance-for-hr-tech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/pci-dss/pci-dss-compliance-for-insurance",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/eu-ai-act/compliance-checklist",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/scrut-automation-vs-drata",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/auth0-vs-firebase",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/pci-dss/pci-dss-compliance-for-insurtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/marietta",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/resolver-vs-credo-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/onetrust-vs-standard-fusion",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-3/soc-3-compliance-for-crypto-web3",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/cynomi-vs-standard-fusion",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/compliance-ai-vs-ostendio",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/apptega-vs-holistic-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/auditboard-vs-floqast",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/eu-ai-act/eu-ai-act-compliance-for-manufacturing",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/auth0-vs-credo-ai",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/resolver-vs-snyk",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-2/soc-2-compliance-for-healthtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/anecdotes-vs-ostendio",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compare/ostendio-vs-vanta",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/auditor-directory/fort-collins",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/soc-3/soc-3-compliance-for-healthtech",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/pci-dss/pci-dss-compliance-for-cybersecurity",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    },
+    {
+      "url": "https://risclens.com/compliance/gdpr/gdpr-compliance-for-digital-health",
+      "status": 404,
+      "ok": false,
+      "reason": "status_404"
+    }
+  ]
+}
