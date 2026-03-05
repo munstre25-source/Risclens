@@ -42,9 +42,10 @@ import {
   CURRENT_YEAR,
 } from '@/lib/seo-enhancements';
 import { ExitIntentModal } from '@/components/LeadCaptureCTA';
+import { BUILD_CONFIG } from '@/lib/build-config';
 
-export const dynamicParams = true;
-export const revalidate = 86400; // 24 hours
+export const dynamicParams = BUILD_CONFIG.SOC2_DIRECTORY_FOCUS_MODE ? false : true;
+export const revalidate = BUILD_CONFIG.SOC2_DIRECTORY_FOCUS_MODE ? false : 86400;
 
 function toDisplayName(slug: string): string {
   return slug
@@ -55,6 +56,10 @@ function toDisplayName(slug: string): string {
 }
 
 export async function generateStaticParams() {
+  if (BUILD_CONFIG.SOC2_DIRECTORY_FOCUS_MODE) {
+    return [];
+  }
+
   try {
     const supabase = getSupabaseAdmin();
     const [comparisonSlugs, alternativesSlugs, pseoPages] = await Promise.all([

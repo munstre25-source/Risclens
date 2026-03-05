@@ -13,11 +13,16 @@ import { SmartContent } from '@/components/seo/SmartContent';
 import { getAllTools } from '@/lib/compliance-tools';
 import { generateGuideFAQs, generateEnhancedFAQSchema } from '@/lib/seo-enhancements';
 import { getDecisionSlugCandidates, getRoleSlugCandidates, normalizeFrameworkSlug } from '@/lib/pseo-slug-normalization';
+import { BUILD_CONFIG } from '@/lib/build-config';
 
-export const dynamicParams = true;
-export const revalidate = 86400; // 24 hours
+export const dynamicParams = BUILD_CONFIG.SOC2_DIRECTORY_FOCUS_MODE ? false : true;
+export const revalidate = BUILD_CONFIG.SOC2_DIRECTORY_FOCUS_MODE ? false : 86400;
 
 export async function generateStaticParams() {
+  if (BUILD_CONFIG.SOC2_DIRECTORY_FOCUS_MODE) {
+    return [];
+  }
+
   try {
     const supabase = getSupabaseAdmin();
     // Only pre-render the top 20 most important compliance pages

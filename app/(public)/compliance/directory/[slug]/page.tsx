@@ -14,7 +14,8 @@ import { AuthorByline, EditorialPolicyBadge } from '@/components/compliance/Auth
 import { FAQSection } from '@/components/FAQSection';
 import Link from 'next/link';
 import { Users, CheckCircle } from 'lucide-react';
-import { BUILD_CONFIG, limitStaticParams } from '@/lib/build-config';
+import { BUILD_CONFIG } from '@/lib/build-config';
+import { getTopDirectorySlugs } from '@/lib/seo-focus';
 import { 
   generateDirectoryTitle, 
   generateDirectoryDescription,
@@ -167,18 +168,8 @@ interface CompanySignals {
 export async function generateStaticParams() {
   if (!hasSupabaseAdmin) return [];
 
-  const supabase = getSupabaseAdmin();
-  // Only pre-render top companies (highest signal scores) to limit build time
-  const { data: companies } = await supabase
-    .from('company_signals')
-    .select('slug')
-    .eq('indexable', true)
-    .order('signal_score', { ascending: false })
-    .limit(BUILD_CONFIG.ROUTE_LIMITS.directory);
-
-  return companies?.map((company) => ({
-    slug: company.slug,
-  })) || [];
+  const slugs = await getTopDirectorySlugs(BUILD_CONFIG.DIRECTORY_BUILD_LIMIT);
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata(
@@ -304,8 +295,7 @@ function generateJsonLd(company: CompanySignals) {
   };
 }
 
-export const dynamicParams = true;
-export const revalidate = 86400; // 24 hours
+export const dynamicParams = false;
 
 export default async function Page({ params }: { params: { slug: string } }) {
   if (!hasSupabaseAdmin) {

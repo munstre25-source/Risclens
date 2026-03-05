@@ -27,10 +27,14 @@ import ComparisonView from '@/components/compliance/ComparisonView';
 import AlternativeCard from '@/components/AlternativeCard';
 import { BUILD_CONFIG, limitStaticParams, isPriorityTool, isPriorityIndustry } from '@/lib/build-config';
 
-export const dynamicParams = true;
-export const revalidate = BUILD_CONFIG.REVALIDATE_SECONDS;
+export const dynamicParams = BUILD_CONFIG.SOC2_DIRECTORY_FOCUS_MODE ? false : true;
+export const revalidate = BUILD_CONFIG.SOC2_DIRECTORY_FOCUS_MODE ? false : BUILD_CONFIG.REVALIDATE_SECONDS;
 
 export async function generateStaticParams() {
+  if (BUILD_CONFIG.SOC2_DIRECTORY_FOCUS_MODE) {
+    return [];
+  }
+
   try {
     const comparisonSlugs = await getAllComparisonSlugs();
     const { data: industries } = await getSupabaseAdmin()

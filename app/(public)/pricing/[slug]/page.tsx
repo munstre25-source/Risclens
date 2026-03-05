@@ -43,9 +43,10 @@ import {
 import { FAQSection } from '@/components/FAQSection';
 import { GeneralPageSchema } from '@/components/GeneralPageSchema';
 import { getToolBySlug } from '@/lib/compliance-tools';
+import { BUILD_CONFIG } from '@/lib/build-config';
 
-export const dynamicParams = true;
-export const revalidate = 86400; // 24 hours
+export const dynamicParams = BUILD_CONFIG.SOC2_DIRECTORY_FOCUS_MODE ? false : true;
+export const revalidate = BUILD_CONFIG.SOC2_DIRECTORY_FOCUS_MODE ? false : 86400;
 
 interface PageProps {
   params: Promise<{
@@ -268,6 +269,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
   export async function generateStaticParams() {
+    if (BUILD_CONFIG.SOC2_DIRECTORY_FOCUS_MODE) {
+      return [];
+    }
+
     const supabase = getSupabaseAdmin();
     const [{ data: pseoPages }, { data: activeTools }] = await Promise.all([
       supabase

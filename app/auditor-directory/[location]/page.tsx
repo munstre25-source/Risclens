@@ -10,9 +10,10 @@ import {
 } from '@/lib/pseo-validation';
 import { generateLocationFAQs } from '@/lib/seo-enhancements';
 import { getSupabaseAdmin } from '@/lib/supabase';
+import { BUILD_CONFIG } from '@/lib/build-config';
 
-export const dynamicParams = true;
-export const revalidate = 86400; // 24 hours
+export const dynamicParams = BUILD_CONFIG.SOC2_DIRECTORY_FOCUS_MODE ? false : true;
+export const revalidate = BUILD_CONFIG.SOC2_DIRECTORY_FOCUS_MODE ? false : 86400;
 
 const LOCATION_FALLBACKS: Record<string, { cityName: string; nearbyCities: Array<{ name: string; href: string }> }> = {
   bangalore: {
@@ -75,6 +76,10 @@ async function getDirectoryPageBySlug(location: string) {
 }
 
 export async function generateStaticParams() {
+  if (BUILD_CONFIG.SOC2_DIRECTORY_FOCUS_MODE) {
+    return [];
+  }
+
   const dynamicParams = await getValidPseoSlugs('directory', 'location');
   const fallbackParams = Object.keys(LOCATION_FALLBACKS).map((location) => ({ location }));
   const merged = [...dynamicParams];

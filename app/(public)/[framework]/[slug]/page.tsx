@@ -12,6 +12,8 @@ import { constructMetadata } from '@/lib/seo';
 import { getSupabaseAdmin } from '@/lib/supabase';
 import { generateGuideFAQs } from '@/lib/seo-enhancements';
 import { getDecisionSlugCandidates, getRoleSlugCandidates, normalizeFrameworkSlug } from '@/lib/pseo-slug-normalization';
+import { BUILD_CONFIG } from '@/lib/build-config';
+import { getTopSoc2FrameworkSlugs } from '@/lib/seo-focus';
 import { 
   Shield, 
   ArrowRight, 
@@ -25,10 +27,15 @@ interface Props {
   params: Promise<{ framework: string, slug: string }>;
 }
 
-export const dynamicParams = true;
-export const revalidate = 86400; // 24 hours
+export const dynamicParams = BUILD_CONFIG.SOC2_DIRECTORY_FOCUS_MODE ? false : true;
+export const revalidate = BUILD_CONFIG.SOC2_DIRECTORY_FOCUS_MODE ? false : 86400;
 
 export async function generateStaticParams() {
+  if (BUILD_CONFIG.SOC2_DIRECTORY_FOCUS_MODE) {
+    const slugs = await getTopSoc2FrameworkSlugs(BUILD_CONFIG.SOC2_BUILD_LIMIT);
+    return slugs.map((slug) => ({ framework: 'soc-2', slug }));
+  }
+
   try {
     const supabase = getSupabaseAdmin();
     
@@ -134,6 +141,9 @@ async function getPageData(frameworkSlug: string, slug: string) {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { framework, slug } = await params;
+  if (BUILD_CONFIG.SOC2_DIRECTORY_FOCUS_MODE && framework !== 'soc-2') {
+    return { title: 'Not Found' };
+  }
   const data = await getPageData(framework, slug);
 
   if (!data) return { title: 'Not Found' };
@@ -149,6 +159,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProgrammaticPage({ params }: Props) {
   const { framework: frameworkSlug, slug } = await params;
+  if (BUILD_CONFIG.SOC2_DIRECTORY_FOCUS_MODE && frameworkSlug !== 'soc-2') {
+    notFound();
+  }
   const data = await getPageData(frameworkSlug, slug);
 
   if (!data) notFound();
