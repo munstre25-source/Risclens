@@ -26,8 +26,8 @@ const REDIRECT_TO_COMPARE = [
   'vanta-vs-onetrust',
 ];
 
-export const dynamicParams = true;
-export const revalidate = 86400; // 24 hours
+export const dynamicParams = false;
+export const revalidate = false;
 
 export async function generateStaticParams() {
   const supabase = getSupabaseAdmin();

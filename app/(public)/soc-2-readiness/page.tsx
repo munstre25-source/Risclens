@@ -15,7 +15,7 @@ const defaultHighlights = [
   'Estimate timeline and budget before selecting auditors and tooling.',
 ];
 
-export const revalidate = 86400;
+export const revalidate = false;
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getContentPage('soc-2-readiness');

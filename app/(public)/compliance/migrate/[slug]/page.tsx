@@ -34,8 +34,8 @@ import {
   ChevronRight
 } from 'lucide-react';
 
-export const dynamicParams = true;
-export const revalidate = 86400; // 24 hours
+export const dynamicParams = false;
+export const revalidate = false;
 
 interface PageProps {
   params: Promise<{ slug: string }>;
